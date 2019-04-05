@@ -8,7 +8,7 @@ variables:
   integrationTestsAppSettingsTransform: ''
   dalWorkingDirectory: ''
   keyVaultName: vhcoreinfrahtdev # Used to get secrets for integration tests
-  secretsFilter: 'AzureServiceBusConnectionStringListen,tenantid,vh-bookings-api-identifieruris' # filters out secrets returned from key vault
+  secretsFilter: 'tenantid,vh-bookings-api-identifieruris' # filters out secrets returned from key vault
   infraKeyVaultName: 'vhcoreinfradev'
   infraSecretsFilter: 'vh-core-infra-AppInsightsKey'
 
