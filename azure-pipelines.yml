@@ -3,6 +3,7 @@ variables:
   solutionType: DotNetCore # angularDotNetCore, dotNetCore, angular
   apiDirectory: 'BookingQueueSubscriber/BookingQueueSubscriber'
   sonarCloudExtraProperties: |
+    sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
 
   coverletCoverageExclusions: ''
   integrationTestsAppSettingsTransform: ''
