@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber", "BookingQueueSubscriber\BookingQueueSubscriber.csproj", "{154CA68F-1D8F-49C0-8073-2DA8AA4F5BDA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4774AAF7-2F45-4AFB-BA0B-07BA77A44C5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.UnitTests", "BookingQueueSubscriber.UnitTests\BookingQueueSubscriber.UnitTests.csproj", "{F356930E-88E9-4B0E-AA46-179E12BCFCD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{154CA68F-1D8F-49C0-8073-2DA8AA4F5BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{154CA68F-1D8F-49C0-8073-2DA8AA4F5BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{154CA68F-1D8F-49C0-8073-2DA8AA4F5BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F356930E-88E9-4B0E-AA46-179E12BCFCD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F356930E-88E9-4B0E-AA46-179E12BCFCD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F356930E-88E9-4B0E-AA46-179E12BCFCD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F356930E-88E9-4B0E-AA46-179E12BCFCD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F356930E-88E9-4B0E-AA46-179E12BCFCD6} = {4774AAF7-2F45-4AFB-BA0B-07BA77A44C5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {84556641-2AEE-4531-BCAF-A1217A7925B5}
