@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BookingQueueSubscriber.UnitTests
 {
-    public class LoggerFake : Microsoft.Extensions.Logging.ILogger
+    public class LoggerFake : ILogger
     {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
