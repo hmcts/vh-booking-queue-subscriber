@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -10,10 +11,11 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         }
 
         public override MessageType MessageType => MessageType.HearingIsReadyForVideo;
-        
-        public override Task HandleAsync(IBookingsMessage bookingsMessage)
+
+        public override async Task HandleAsync(BookingsMessage bookingsMessage)
         {
-            throw new System.NotImplementedException();
+            var request = (BookNewConferenceRequest) bookingsMessage.Message;
+            await VideoApiService.BookNewConferenceAsync(request);
         }
     }
 }

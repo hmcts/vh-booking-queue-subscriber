@@ -11,7 +11,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public override MessageType MessageType => MessageType.ParticipantAdded;
         
-        public override Task HandleAsync(IBookingsMessage bookingsMessage)
+        public override Task HandleAsync(BookingsMessage bookingsMessage)
         {
             throw new System.NotImplementedException();
         }
