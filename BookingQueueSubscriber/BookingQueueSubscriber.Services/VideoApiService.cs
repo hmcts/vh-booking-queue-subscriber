@@ -12,7 +12,7 @@ namespace BookingQueueSubscriber.Services
 {
     public interface IVideoApiService
     {
-        Task<ConferenceDetailsResponse> BookNewConferenceAsync(BookNewConferenceRequest request);
+        Task BookNewConferenceAsync(BookNewConferenceRequest request);
     }
     
     public class VideoApiService : IVideoApiService
@@ -35,7 +35,7 @@ namespace BookingQueueSubscriber.Services
                 new TokenProvider(configLoader.ReadAzureAdSettings()));
         }
         
-        public async Task<ConferenceDetailsResponse> BookNewConferenceAsync(BookNewConferenceRequest request)
+        public async Task BookNewConferenceAsync(BookNewConferenceRequest request)
         {
             var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
@@ -46,11 +46,6 @@ namespace BookingQueueSubscriber.Services
                 var response =
                     await httpClient.PostAsync(_apiUriFactory.ConferenceEndpoints.BookNewConference, httpContent);
                 response.EnsureSuccessStatusCode();
-                var responseJson = await response.Content.ReadAsStringAsync();
-                var newConference =
-                    ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<ConferenceDetailsResponse>(responseJson);
-                return newConference;
-
             }
         }
     }
