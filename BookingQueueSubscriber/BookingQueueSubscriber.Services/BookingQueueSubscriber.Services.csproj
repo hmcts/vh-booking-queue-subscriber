@@ -10,7 +10,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\BookingQueueSubscriber.Common\BookingQueueSubscriber.Common.csproj" />
-        <ProjectReference Include="..\BookingQueueSubscriber.Services.Generator\BookingQueueSubscriber.Services.Generator.csproj" />
     </ItemGroup>
 
 </Project>

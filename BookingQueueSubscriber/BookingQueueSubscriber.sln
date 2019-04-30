@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.Services", "BookingQueueSubscriber.Services\BookingQueueSubscriber.Services.csproj", "{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.Services.Generator", "BookingQueueSubscriber.Services.Generator\BookingQueueSubscriber.Services.Generator.csproj", "{4F1D8068-7981-45C4-994C-D68FE896E4B8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +35,6 @@ Global
 		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F1D8068-7981-45C4-994C-D68FE896E4B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F1D8068-7981-45C4-994C-D68FE896E4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F1D8068-7981-45C4-994C-D68FE896E4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F1D8068-7981-45C4-994C-D68FE896E4B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
