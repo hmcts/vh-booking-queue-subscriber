@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -14,8 +15,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public override async Task HandleAsync(BookingsMessage bookingsMessage)
         {
-            var request = (BookNewConferenceRequest) bookingsMessage.Message;
-            await VideoApiService.BookNewConferenceAsync(request);
+            var hearing = (HearingDto) bookingsMessage.Message;
+            var request = new HearingToBookConferenceMapper().MapToBookNewConferenceRequest(hearing);
+            await VideoApiService.BookNewConferenceAsync(request).ConfigureAwait(true);
         }
     }
 }
