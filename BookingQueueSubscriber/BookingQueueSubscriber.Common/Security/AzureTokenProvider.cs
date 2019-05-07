@@ -5,17 +5,17 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace BookingQueueSubscriber.Common.Security
 {
-    public interface ITokenProvider
+    public interface IAzureTokenProvider
     {
         string GetClientAccessToken(string clientId, string clientSecret, string clientResource);
         AuthenticationResult GetAuthorisationResult(string clientId, string clientSecret, string clientResource);
     }
 
-    public class TokenProvider : ITokenProvider
+    public class AzureAzureTokenProvider : IAzureTokenProvider
     {
         private readonly AzureAdConfiguration _azureAdConfiguration;
 
-        public TokenProvider(IOptions<AzureAdConfiguration> azureAdConfiguration)
+        public AzureAzureTokenProvider(IOptions<AzureAdConfiguration> azureAdConfiguration)
         {
             _azureAdConfiguration = azureAdConfiguration.Value;
         }

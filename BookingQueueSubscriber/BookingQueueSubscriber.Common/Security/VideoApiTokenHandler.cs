@@ -8,8 +8,8 @@ namespace BookingQueueSubscriber.Common.Security
     {
         public VideoApiTokenHandler(IOptions<AzureAdConfiguration> azureAdConfiguration,
             IOptions<HearingServicesConfiguration> hearingServicesConfiguration, IMemoryCache memoryCache,
-            ITokenProvider tokenProvider) : base(azureAdConfiguration, hearingServicesConfiguration, memoryCache,
-            tokenProvider)
+            IAzureTokenProvider azureTokenProvider) : base(azureAdConfiguration, hearingServicesConfiguration, memoryCache,
+            azureTokenProvider)
         {
         }
         

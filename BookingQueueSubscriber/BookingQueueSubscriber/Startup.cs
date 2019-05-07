@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BookingQueueSubscriber;
+using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using Microsoft.Azure.ServiceBus.Primitives;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +23,7 @@ namespace BookingQueueSubscriber
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
-            services.AddScoped<ITokenProvider, TokenProvider>();
+            services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddScoped<IVideoApiService, VideoApiService>();
             

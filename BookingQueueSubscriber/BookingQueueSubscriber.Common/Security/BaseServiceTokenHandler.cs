@@ -9,7 +9,7 @@ namespace BookingQueueSubscriber.Common.Security
 {
     public abstract class BaseServiceTokenHandler : DelegatingHandler
     {
-        private readonly ITokenProvider _tokenProvider;
+        private readonly IAzureTokenProvider _azureTokenProvider;
         private readonly IMemoryCache _memoryCache;
         private readonly AzureAdConfiguration _azureAdConfiguration;
         protected readonly HearingServicesConfiguration HearingServicesConfiguration;
@@ -19,12 +19,12 @@ namespace BookingQueueSubscriber.Common.Security
         
         protected BaseServiceTokenHandler(IOptions<AzureAdConfiguration> azureAdConfiguration,
             IOptions<HearingServicesConfiguration> hearingServicesConfiguration, IMemoryCache memoryCache,
-            ITokenProvider tokenProvider)
+            IAzureTokenProvider azureTokenProvider)
         {
             _azureAdConfiguration = azureAdConfiguration.Value;
             HearingServicesConfiguration = hearingServicesConfiguration.Value;
             _memoryCache = memoryCache;
-            _tokenProvider = tokenProvider;
+            _azureTokenProvider = azureTokenProvider;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
@@ -33,7 +33,7 @@ namespace BookingQueueSubscriber.Common.Security
             var token = _memoryCache.Get<string>(TokenCacheKey);
             if (string.IsNullOrEmpty(token))
             {
-                var authenticationResult = _tokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
+                var authenticationResult = _azureTokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
                     _azureAdConfiguration.ClientSecret, ClientResource);
                 token = authenticationResult.AccessToken;
                 var tokenExpireDateTime = authenticationResult.ExpiresOn.DateTime.AddMinutes(-1);

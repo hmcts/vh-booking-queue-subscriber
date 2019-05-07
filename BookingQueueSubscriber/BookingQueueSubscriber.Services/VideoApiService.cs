@@ -32,7 +32,7 @@ namespace BookingQueueSubscriber.Services
             
             _apiTokenHandler = new VideoApiTokenHandler(configLoader.ReadAzureAdSettings(),
                 configLoader.ReadHearingServiceSettings(), memoryCache,
-                new TokenProvider(configLoader.ReadAzureAdSettings()));
+                new AzureAzureTokenProvider(configLoader.ReadAzureAdSettings()));
         }
         
         public async Task BookNewConferenceAsync(BookNewConferenceRequest request)
