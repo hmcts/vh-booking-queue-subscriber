@@ -4,8 +4,8 @@ variables:
   apiDirectory: 'BookingQueueSubscriber/BookingQueueSubscriber'
   sonarCloudExtraProperties: |
     sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
-
-  coverletCoverageExclusions: ''
+    sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/BookingQueueSubscriber.Common/ApiHelper/**, **/BookingQueueSubscriber.Common/Helper/Configuration/**, **/BookingQueueSubscriber.Common/Helper/Security/**
+  coverletCoverageExclusions: '[*]BookingQueueSubscriber.Common.*,[BookingQueueSubscriber.Services]BookingQueueSubscriber.Services.VideoApiService,[*]BookingQueueSubscriber.UnitTests.*,[BookingQueueSubscriber]BookingQueueSubscriber.Startup'
   integrationTestsAppSettingsTransform: ''
   dalWorkingDirectory: ''
   keyVaultName: vhcoreinfrahtdev # Used to get secrets for integration tests
