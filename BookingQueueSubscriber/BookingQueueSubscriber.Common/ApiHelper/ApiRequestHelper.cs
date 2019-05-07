@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -29,7 +30,8 @@ namespace BookingQueueSubscriber.Common.ApiHelper
             return JsonConvert.DeserializeObject<T>(response, new JsonSerializerSettings
             {
                 ContractResolver = contractResolver,
-                Formatting = Formatting.Indented
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects
             });
         }
     }

@@ -1,6 +1,6 @@
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public enum MessageType
+    public enum IntegrationEventType
     {
         HearingIsReadyForVideo,
         ParticipantAdded,

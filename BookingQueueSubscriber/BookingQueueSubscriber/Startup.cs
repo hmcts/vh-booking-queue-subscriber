@@ -10,20 +10,24 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
+using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
 {
     internal class Startup : IWebJobsStartup
     {
-        public void Configure(IWebJobsBuilder builder)
+        public void Configure(IWebJobsBuilder builder) =>
+            builder.AddDependencyInjection(ConfigureServices);
+        
+        private void ConfigureServices(IServiceCollection services)
         {
-            builder.Services.AddMemoryCache();
-            builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-            builder.Services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
-            builder.Services.AddScoped<IVideoApiService, VideoApiService>();
+            services.AddMemoryCache();
+            services.AddScoped<ITokenProvider, TokenProvider>();
+            services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
+            services.AddScoped<IVideoApiService, VideoApiService>();
             
-            RegisterMessageHandlers(builder.Services);
+            RegisterMessageHandlers(services);
         }
         
         private static void RegisterMessageHandlers(IServiceCollection serviceCollection)

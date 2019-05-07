@@ -1,7 +1,8 @@
+using System;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -11,13 +12,21 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
         }
 
-        public override MessageType MessageType => MessageType.HearingIsReadyForVideo;
+        public override IntegrationEventType IntegrationEventType => IntegrationEventType.HearingIsReadyForVideo;
+        public override Type BodyType => typeof(HearingIsReadyForVideoIntegrationEvent);
 
-        public override async Task HandleAsync(BookingsMessage bookingsMessage)
+        public override async Task HandleAsync(IntegrationEvent integrationEvent)
         {
-            var hearing = (HearingDto) bookingsMessage.Message;
-            var request = new HearingToBookConferenceMapper().MapToBookNewConferenceRequest(hearing);
-            await VideoApiService.BookNewConferenceAsync(request).ConfigureAwait(true);
+            var hearingReadyEvent = (HearingIsReadyForVideoIntegrationEvent) integrationEvent;
+            if (hearingReadyEvent == null)
+            {
+                throw new ArgumentNullException(nameof(integrationEvent),
+                    $"Expected message to be of type {typeof(HearingIsReadyForVideoIntegrationEvent)}");
+            }
+            var request =
+                new HearingToBookConferenceMapper().MapToBookNewConferenceRequest(hearingReadyEvent.Hearing,
+                    hearingReadyEvent.Participants);
+            await VideoApiService.BookNewConferenceAsync(request).ConfigureAwait(false);
         }
     }
 }

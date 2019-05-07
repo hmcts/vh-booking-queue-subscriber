@@ -11,6 +11,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
     {
         protected List<IMessageHandler> MessageHandlersList { get; set; }
         protected Mock<IVideoApiService> VideoApiServiceMock { get; set; }
+        
         [SetUp]
         public void Setup()
         {

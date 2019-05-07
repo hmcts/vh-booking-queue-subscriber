@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
@@ -15,44 +17,32 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_request_is_valid()
         {
             var messageHandler = new HearingReadyForVideoHandler(VideoApiServiceMock.Object);
-            var dto = CreateHearingDto();
-            var message = new BookingsMessage
-            {
-                EventType = MessageType.HearingIsReadyForVideo,
-                Message = dto
-            };
-            await messageHandler.HandleAsync(message);
+         
+            var integrationEvent = CreateEvent();
+            await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
         }
-        
-        [Test]
-        public void should_not_call_video_api_when_request_is_invalid()
+
+        private static HearingIsReadyForVideoIntegrationEvent CreateEvent()
         {
-            var messageHandler = new HearingReadyForVideoHandler(VideoApiServiceMock.Object);
-            var request = new AddParticipantsToConferenceRequest();
-            var message = new BookingsMessage
-            {
-                EventType = MessageType.HearingIsReadyForVideo,
-                Message = request
-            };
-            Assert.ThrowsAsync<InvalidCastException>(() => messageHandler.HandleAsync(message));
-            VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Never);
-        }
-        
-        private static HearingDto CreateHearingDto()
-        {
-            var participants = Builder<ParticipantDto>.CreateListOfSize(4)
-                .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build();
-            var dto = new HearingDto
+            var hearingDto = new HearingDto
             {
                 HearingId = Guid.NewGuid(),
                 CaseNumber = "Test1234",
                 CaseType = "Civil Money Claims",
+                CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
-                ScheduledDateTime = DateTime.UtcNow,
+                ScheduledDateTime = DateTime.UtcNow
+            };
+            var participants = Builder<ParticipantDto>.CreateListOfSize(4)
+                .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();
+            
+            var message = new HearingIsReadyForVideoIntegrationEvent
+            {
+                Hearing = hearingDto,
                 Participants = participants
             };
-            return dto;
+            return message;
         }
     }
 }

@@ -1,18 +1,23 @@
+using System;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Services.IntegrationEvents;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Core
 {
     public interface IMessageHandler
     {
-        MessageType MessageType { get; }
-        Task HandleAsync(BookingsMessage bookingsMessage);
+        IntegrationEventType IntegrationEventType { get; }
+        Type BodyType { get; }
+        Task HandleAsync(IntegrationEvent integrationEvent);
     }
     
     public abstract class MessageHandlerBase : IMessageHandler
     {
         protected IVideoApiService VideoApiService { get; }
-        public abstract MessageType MessageType { get; }
-        public abstract Task HandleAsync(BookingsMessage bookingsMessage);
+        public abstract IntegrationEventType IntegrationEventType { get; }
+        public abstract Type BodyType { get; }
+
+        public abstract Task HandleAsync(IntegrationEvent integrationEvent);
 
         protected MessageHandlerBase(IVideoApiService videoApiService)
         {

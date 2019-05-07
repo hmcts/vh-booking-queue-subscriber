@@ -1,8 +1,12 @@
+using System;
+using BookingQueueSubscriber.Services.IntegrationEvents;
+
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
     public class BookingsMessage
     {
-        public MessageType EventType { get; set; }
-        public object Message { get; set; }
+        public Guid Id { get; set; }
+        public DateTime Timestamp { get; set; }
+        public IntegrationEvent IntegrationEvent { get; set; }
     }
 }

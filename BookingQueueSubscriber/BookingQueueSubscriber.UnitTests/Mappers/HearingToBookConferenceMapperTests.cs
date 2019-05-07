@@ -15,31 +15,30 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
         {
             var mapper = new HearingToBookConferenceMapper();
             var hearingDto = CreateHearingDto();
+            var participants = Builder<ParticipantDto>.CreateListOfSize(4)
+                .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build();
 
-            var request = mapper.MapToBookNewConferenceRequest(hearingDto);
+            var request = mapper.MapToBookNewConferenceRequest(hearingDto, participants);
             
             request.Should().NotBeNull();
             request.Should().BeEquivalentTo(hearingDto, options => 
                 options
                     .Excluding(o => o.HearingId)
-                    .Excluding(o => o.Participants)
                 );
             request.HearingRefId.Should().Be(hearingDto.HearingId);
-            request.Participants.Count.Should().Be(hearingDto.Participants.Count);
+            request.Participants.Count.Should().Be(participants.Count);
         }
 
         private static HearingDto CreateHearingDto()
         {
-            var participants = Builder<ParticipantDto>.CreateListOfSize(4)
-                .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build();
             var dto = new HearingDto
             {
                 HearingId = Guid.NewGuid(),
                 CaseNumber = "Test1234",
                 CaseType = "Civil Money Claims",
+                CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
-                ScheduledDateTime = DateTime.UtcNow,
-                Participants = participants
+                ScheduledDateTime = DateTime.UtcNow
             };
             return dto;
         }

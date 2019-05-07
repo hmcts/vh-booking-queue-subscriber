@@ -6,7 +6,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Core
 {
     public interface IMessageHandlerFactory
     {
-        IMessageHandler Get(MessageType messageType);
+        IMessageHandler Get(IntegrationEventType integrationEventType);
     }
     
     public class MessageHandlerFactory : IMessageHandlerFactory
@@ -18,12 +18,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Core
             _messageHandlers = messageHandlers;
         }
         
-        public IMessageHandler Get(MessageType messageType)
+        public IMessageHandler Get(IntegrationEventType integrationEventType)
         {
-            var eventHandler = _messageHandlers.SingleOrDefault(x => x.MessageType == messageType);
+            var eventHandler = _messageHandlers.SingleOrDefault(x => x.IntegrationEventType == integrationEventType);
             if (eventHandler == null)
-                throw new ArgumentOutOfRangeException(nameof(messageType),
-                    $"MessageHandler cannot be found for messageType: {messageType.ToString()}");
+                throw new ArgumentOutOfRangeException(nameof(integrationEventType),
+                    $"MessageHandler cannot be found for messageType: {integrationEventType.ToString()}");
             return eventHandler;
         }
     }

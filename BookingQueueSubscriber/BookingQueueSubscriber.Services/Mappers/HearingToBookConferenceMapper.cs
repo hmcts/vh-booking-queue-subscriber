@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
@@ -6,10 +7,10 @@ namespace BookingQueueSubscriber.Services.Mappers
 {
     public class HearingToBookConferenceMapper
     {
-        public BookNewConferenceRequest MapToBookNewConferenceRequest(HearingDto hearingDto)
+        public BookNewConferenceRequest MapToBookNewConferenceRequest(HearingDto hearingDto, IEnumerable<ParticipantDto> participantDtos)
         {
             var participantMapper = new ParticipantToParticipantRequestMapper();
-            var participants = hearingDto.Participants.Select(participantMapper.MapToParticipantRequest).ToList();
+            var participants = participantDtos.Select(participantMapper.MapToParticipantRequest).ToList();
 
             var request = new BookNewConferenceRequest
             {
