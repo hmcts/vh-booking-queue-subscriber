@@ -5,24 +5,24 @@ namespace BookingQueueSubscriber.Common.Configuration
 {
     public class ConfigLoader
     {
-        private readonly IConfigurationRoot _configRoot;
+        public readonly IConfigurationRoot ConfigRoot;
 
         public ConfigLoader()
         {
             var configRootBuilder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddUserSecrets("F6705640-D918-4180-B98A-BAB7ADAA4817");
-            _configRoot = configRootBuilder.Build();
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+            ConfigRoot = configRootBuilder.Build();
         }
         
         public IOptions<AzureAdConfiguration> ReadAzureAdSettings()
         {
-            return Options.Create(_configRoot.GetSection("AzureAd").Get<AzureAdConfiguration>());
+            return Options.Create(ConfigRoot.GetSection("AzureAd").Get<AzureAdConfiguration>());
         }
         
         public IOptions<HearingServicesConfiguration> ReadHearingServiceSettings()
         {
-            return Options.Create(_configRoot.GetSection("VhServices").Get<HearingServicesConfiguration>());
+            return Options.Create(ConfigRoot.GetSection("VhServices").Get<HearingServicesConfiguration>());
         }
     }
 }

@@ -37,6 +37,7 @@ namespace BookingQueueSubscriber
             
             // execute handler
             await handler.HandleAsync(typedEvent).ConfigureAwait(false);
+            log.LogInformation($"Process message {bookingsMessage.Id} - {bookingsMessage.IntegrationEvent}");
         }
         
         private static IntegrationEvent DeserialiseSnakeCaseJsonToIntegrationEvent(string response, Type type) 
