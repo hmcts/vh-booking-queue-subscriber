@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using BookingQueueSubscriber;
 using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services;
@@ -9,7 +8,6 @@ using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyModel;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(Startup))]
@@ -20,7 +18,7 @@ namespace BookingQueueSubscriber
         public void Configure(IWebJobsBuilder builder) =>
             builder.AddDependencyInjection(ConfigureServices);
         
-        private void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
             services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
@@ -32,25 +30,25 @@ namespace BookingQueueSubscriber
         
         private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
         {
-            var eventHandlers = GetAllTypesOf<IMessageHandler>();
-            
-            foreach (var eventHandler in eventHandlers)
+            var messageHandlers = GetAllTypesOf<IMessageHandler>().ToList();
+            foreach (var messageHandler in messageHandlers)
             {
-                if (eventHandler.IsInterface || eventHandler.IsAbstract) continue;
-                var serviceType = eventHandler.GetInterfaces()[0];
-                serviceCollection.AddScoped(serviceType, eventHandler);
+                if (messageHandler.IsInterface || messageHandler.IsAbstract) continue;
+                var serviceType = messageHandler.GetInterfaces()[0];
+                serviceCollection.AddScoped(serviceType, messageHandler);
             }
         }
         
         private static IEnumerable<Type> GetAllTypesOf<T>()
         {
-            var platform = Environment.OSVersion.Platform.ToString();
-            var runtimeAssemblyNames = DependencyContext.Default.GetRuntimeAssemblyNames(platform);
-
-            return runtimeAssemblyNames
-                .Select(Assembly.Load)
-                .SelectMany(a => a.ExportedTypes)
-                .Where(t => typeof(T).IsAssignableFrom(t));
+            var @interface = typeof (T);
+            return @interface.IsInterface
+                ? AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(assembly => assembly.GetTypes())
+                    .Where(type => !type.IsInterface
+                                   && !type.IsAbstract 
+                                   && type.GetInterfaces().Contains(@interface))
+                : new Type[] {};
         }
     }
 }
