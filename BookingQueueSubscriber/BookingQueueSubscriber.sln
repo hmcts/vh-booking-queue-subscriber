@@ -9,6 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4774AAF7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.UnitTests", "BookingQueueSubscriber.UnitTests\BookingQueueSubscriber.UnitTests.csproj", "{F356930E-88E9-4B0E-AA46-179E12BCFCD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.Common", "BookingQueueSubscriber.Common\BookingQueueSubscriber.Common.csproj", "{53EEB5C6-83ED-45B0-A63A-7E5D977B1DB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.Services", "BookingQueueSubscriber.Services\BookingQueueSubscriber.Services.csproj", "{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,14 @@ Global
 		{F356930E-88E9-4B0E-AA46-179E12BCFCD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F356930E-88E9-4B0E-AA46-179E12BCFCD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F356930E-88E9-4B0E-AA46-179E12BCFCD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53EEB5C6-83ED-45B0-A63A-7E5D977B1DB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53EEB5C6-83ED-45B0-A63A-7E5D977B1DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53EEB5C6-83ED-45B0-A63A-7E5D977B1DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53EEB5C6-83ED-45B0-A63A-7E5D977B1DB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
