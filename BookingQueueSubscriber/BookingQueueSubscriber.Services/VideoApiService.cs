@@ -23,7 +23,6 @@ namespace BookingQueueSubscriber.Services
         private readonly IAzureTokenProvider _azureTokenProvider;
         private readonly AzureAdConfiguration _azureAdConfiguration;
         private readonly ApiUriFactory _apiUriFactory;
-        private readonly VideoApiTokenHandler _apiTokenHandler;
         private readonly HearingServicesConfiguration _hearingServices;
 
         private string _tokenCacheKey => "VideoApiServiceToken";
