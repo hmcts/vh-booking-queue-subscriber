@@ -1,4 +1,5 @@
 using System;
+using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using FluentAssertions;
@@ -17,10 +18,18 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             Type messageHandlerType)
         {
             var messageHandlerFactory = new MessageHandlerFactory(MessageHandlersList);
-
-
+            
             var handler = messageHandlerFactory.Get(integrationEventType);
             handler.Should().BeOfType(messageHandlerType);
+        }
+
+        [Test]
+        public void should_load_handler_for_message()
+        {
+            var messageHandlerFactory = new MessageHandlerFactory(MessageHandlersList);
+            var integrationEvent = new HearingIsReadyForVideoIntegrationEvent();
+            var handler = messageHandlerFactory.Get(integrationEvent.EventType);
+            handler.Should().BeOfType<HearingReadyForVideoHandler>();
         }
     }
 }

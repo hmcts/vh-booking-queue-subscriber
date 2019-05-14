@@ -25,7 +25,6 @@ namespace BookingQueueSubscriber
             services.AddMemoryCache();
             RegisterSettings(services);
             
-            services.AddTransient<VideoApiTokenHandler>();
             services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddScoped<IVideoApiService, VideoApiService>();
