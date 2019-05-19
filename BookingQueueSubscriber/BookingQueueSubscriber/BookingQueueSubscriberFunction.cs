@@ -25,6 +25,7 @@ namespace BookingQueueSubscriber
             var bookingsMessage =
                 ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<BookingsMessage>(bookingQueueItem);
             log.LogInformation($"event type {bookingsMessage.IntegrationEvent.EventType}");
+            log.LogInformation($"message handler factory {messageHandlerFactory}");
             var handler = messageHandlerFactory.Get(bookingsMessage.IntegrationEvent.EventType);
             log.LogDebug($"using handler {handler.GetType()}");
             
