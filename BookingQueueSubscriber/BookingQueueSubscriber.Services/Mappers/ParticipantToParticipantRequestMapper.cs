@@ -15,7 +15,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 DisplayName = participantDto.DisplayName,
                 UserRole = Enum.Parse<UserRole>(participantDto.UserRole),
                 CaseTypeGroup = participantDto.CaseGroupType.ToString(),
-                ParticipantRefId = participantDto.ParticipantId
+                ParticipantRefId = participantDto.ParticipantId,
+                Representee = participantDto.Representee
             };
 
             return request;

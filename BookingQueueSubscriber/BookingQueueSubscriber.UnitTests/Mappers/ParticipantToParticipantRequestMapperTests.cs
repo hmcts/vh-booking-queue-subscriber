@@ -31,6 +31,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Name.Should().Be(participantDto.Fullname);
             request.UserRole.ToString().Should().Be(participantDto.UserRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
+            request.Representee.Should().Be(participantDto.Representee);
         }
         
         private static ParticipantDto CreateParticipantDto()
