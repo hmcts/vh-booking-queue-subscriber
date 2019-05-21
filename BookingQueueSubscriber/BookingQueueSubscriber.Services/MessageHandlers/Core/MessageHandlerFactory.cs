@@ -7,6 +7,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Core
     public interface IMessageHandlerFactory
     {
         IMessageHandler Get(IntegrationEventType integrationEventType);
+        IEnumerable<IMessageHandler> MessageHandlers { get; }
     }
     
     public class MessageHandlerFactory : IMessageHandlerFactory
@@ -26,5 +27,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Core
                     $"MessageHandler cannot be found for messageType: {integrationEventType.ToString()}");
             return eventHandler;
         }
+
+        public IEnumerable<IMessageHandler> MessageHandlers => _messageHandlers;
     }
 }

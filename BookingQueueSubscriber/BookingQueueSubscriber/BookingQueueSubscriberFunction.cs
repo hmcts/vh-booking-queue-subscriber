@@ -21,6 +21,11 @@ namespace BookingQueueSubscriber
             ILogger log,
             [Inject]IMessageHandlerFactory messageHandlerFactory)
         {
+            log.LogDebug($"message: {bookingQueueItem}");
+            foreach (var messageHandler in messageHandlerFactory.MessageHandlers)
+            {
+                log.LogDebug($"handler: {messageHandler}");
+            }
             // get handler
             var bookingsMessage =
                 ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<BookingsMessage>(bookingQueueItem);
