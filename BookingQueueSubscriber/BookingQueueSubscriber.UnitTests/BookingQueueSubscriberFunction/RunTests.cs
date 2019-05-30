@@ -33,7 +33,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                      'display_name':'DisplayName1',
                      'hearing_role':'Claimant LIP',
                      'user_role':'Individual',
-                     'case_group_type':'partyGroup1',
+                     'case_group_type':'Claimant',
                      'representee':''
                   },
                   {
@@ -43,7 +43,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                      'display_name':'DisplayName2',
                      'hearing_role':'Solicitor',
                      'user_role':'Representative',
-                     'case_group_type':'partyGroup1',
+                     'case_group_type':'Claimant',
                      'representee':'Representee2'
                   },
                   {
@@ -53,7 +53,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                      'display_name':'DisplayName5',
                      'hearing_role':'Judge',
                      'user_role':'Judge',
-                     'case_group_type':'partyGroup0',
+                     'case_group_type':'Judge',
                      'representee':''
                   }
                ],
