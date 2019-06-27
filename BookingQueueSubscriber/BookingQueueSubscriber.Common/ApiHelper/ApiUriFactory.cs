@@ -28,5 +28,6 @@ namespace BookingQueueSubscriber.Common.ApiHelper
     {
         private string ApiRoot => "conferences";
         public string BookNewConference => $"{ApiRoot}";
+        public string UpdateConference => $"{ApiRoot}";
     }
 }

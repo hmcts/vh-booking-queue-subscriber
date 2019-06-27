@@ -6,5 +6,6 @@ namespace BookingQueueSubscriber.Common.Configuration
         public string ClientSecret { get; set; }
         public string Authority { get; set; }
         public string TenantId { get; set; }
+        public string VideoApiResourceId { get; set; }
     }
 }

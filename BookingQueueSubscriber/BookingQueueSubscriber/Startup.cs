@@ -17,6 +17,8 @@ namespace BookingQueueSubscriber
 {
     internal class Startup : IWebJobsStartup
     {
+        private static HearingServicesConfiguration _hearingServicesConfiguration;
+
         public void Configure(IWebJobsBuilder builder) =>
             builder.AddDependencyInjection(ConfigureServices);
         
@@ -27,8 +29,16 @@ namespace BookingQueueSubscriber
             
             services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
-            services.AddScoped<IVideoApiService, VideoApiService>();
-            
+            services.AddTransient<VideoServiceTokenHandler>();
+
+            services.AddHttpClient<IVideoApiService, VideoApiService>()
+                .AddHttpMessageHandler<VideoServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    httpClient.BaseAddress = new Uri(_hearingServicesConfiguration.VideoApiUrl);
+                    return new VideoApiService(httpClient);
+                });
+
             RegisterMessageHandlers(services);
         }
         
@@ -38,6 +48,7 @@ namespace BookingQueueSubscriber
             services.Configure<AzureAdConfiguration>(options => configLoader.ConfigRoot.Bind("AzureAd",options));
             services.Configure<HearingServicesConfiguration>(options =>
                 configLoader.ConfigRoot.Bind("VhServices", options));
+            _hearingServicesConfiguration = configLoader.ConfigRoot.Get<HearingServicesConfiguration>();
         }
         
         private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
