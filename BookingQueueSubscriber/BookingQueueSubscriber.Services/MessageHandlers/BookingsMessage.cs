@@ -7,6 +7,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     {
         public Guid Id { get; set; }
         public DateTime Timestamp { get; set; }
-        public IntegrationEvent IntegrationEvent { get; set; }
+        public IIntegrationEvent IntegrationEvent { get; set; }
     }
 }

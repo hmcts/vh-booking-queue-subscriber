@@ -1,22 +1,22 @@
-using System;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class ParticipantRemovedHandler : MessageHandlerBase
+    public class ParticipantRemovedHandler : IMessageHandler<ParticipantRemovedIntegrationEvent>
     {
-        public ParticipantRemovedHandler(IVideoApiService videoApiService) : base(videoApiService)
+        public ParticipantRemovedHandler(IVideoApiService videoApiService)
         {
         }
 
-        public override IntegrationEventType IntegrationEventType => IntegrationEventType.ParticipantRemoved;
-        public override Type BodyType { get; }
-        
-        public override Task HandleAsync(IntegrationEvent integrationEvent)
+        public Task HandleAsync(ParticipantRemovedIntegrationEvent eventMessage)
         {
             throw new System.NotImplementedException();
+        }
+        async Task IMessageHandler.HandleAsync(object integrationEvent)
+        {
+            await HandleAsync((ParticipantRemovedIntegrationEvent)integrationEvent);
         }
     }
 }

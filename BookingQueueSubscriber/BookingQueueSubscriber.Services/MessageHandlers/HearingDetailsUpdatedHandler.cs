@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
@@ -6,24 +5,18 @@ using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class HearingDetailsUpdatedHandler : MessageHandlerBase
+    public class HearingDetailsUpdatedHandler : IMessageHandler<HearingDetailsUpdatedIntegrationEvent>
     {
-        public HearingDetailsUpdatedHandler(IVideoApiService videoApiService) : base(videoApiService)
+        private readonly IVideoApiService _videoApiService;
+
+        public HearingDetailsUpdatedHandler(IVideoApiService videoApiService)
         {
+            _videoApiService = videoApiService;
         }
 
-        public override IntegrationEventType IntegrationEventType => IntegrationEventType.HearingDetailsUpdated;
-        public override Type BodyType => typeof(HearingDetailsUpdatedIntegrationEvent);
-
-        public override async Task HandleAsync(IntegrationEvent integrationEvent)
+        public async Task HandleAsync(HearingDetailsUpdatedIntegrationEvent eventMessage)
         {
-            if (!(integrationEvent is HearingDetailsUpdatedIntegrationEvent updatedIntegrationEvent))
-            {
-                throw new ArgumentNullException(nameof(integrationEvent),
-                    $"Expected message to be of type {typeof(HearingIsReadyForVideoIntegrationEvent)}");
-            }
-
-            var hearing = updatedIntegrationEvent.Hearing;
+            var hearing = eventMessage.Hearing;
             var request = new UpdateConferenceRequest
             {
                 HearingRefId = hearing.HearingId,
@@ -33,8 +26,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 ScheduledDateTime = hearing.ScheduledDateTime,
                 ScheduledDuration = hearing.ScheduledDuration
             };
-            
-            await VideoApiService.UpdateConferenceAsync(request).ConfigureAwait(false);
+
+            await _videoApiService.UpdateConferenceAsync(request).ConfigureAwait(false);
+        }
+
+        async Task IMessageHandler.HandleAsync(object integrationEvent)
+        {
+            await HandleAsync((HearingDetailsUpdatedIntegrationEvent)integrationEvent);
         }
     }
 }

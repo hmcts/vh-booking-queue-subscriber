@@ -6,34 +6,26 @@ using BookingQueueSubscriber.Services.MessageHandlers.Core;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class HearingReadyForVideoHandler : MessageHandlerBase
+    public class HearingReadyForVideoHandler : IMessageHandler<HearingIsReadyForVideoIntegrationEvent>
     {
-        public HearingReadyForVideoHandler(IVideoApiService videoApiService) : base(videoApiService)
+        private readonly IVideoApiService _videoApiService;
+
+        public HearingReadyForVideoHandler(IVideoApiService videoApiService)
         {
+            _videoApiService = videoApiService;
         }
 
-        public override IntegrationEventType IntegrationEventType => IntegrationEventType.HearingIsReadyForVideo;
-        public override Type BodyType => typeof(HearingIsReadyForVideoIntegrationEvent);
-
-        public override async Task HandleAsync(IntegrationEvent integrationEvent)
+        public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            var hearingReadyEvent = ValidateArgs(integrationEvent);
-            var request = 
-                new HearingToBookConferenceMapper().MapToBookNewConferenceRequest(hearingReadyEvent.Hearing,
-                    hearingReadyEvent.Participants);
-            await VideoApiService.BookNewConferenceAsync(request).ConfigureAwait(false);
+            var request = new HearingToBookConferenceMapper().MapToBookNewConferenceRequest(eventMessage.Hearing,
+                eventMessage.Participants);
+
+            await _videoApiService.BookNewConferenceAsync(request).ConfigureAwait(false);
         }
 
-        private HearingIsReadyForVideoIntegrationEvent ValidateArgs(IntegrationEvent integrationEvent)
+        async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
-            var hearingReadyEvent = (HearingIsReadyForVideoIntegrationEvent) integrationEvent;
-            if (hearingReadyEvent == null)
-            {
-                throw new ArgumentNullException(nameof(integrationEvent),
-                    $"Expected message to be of type {typeof(HearingIsReadyForVideoIntegrationEvent)}");
-            }
-
-            return hearingReadyEvent;
+            await HandleAsync((HearingIsReadyForVideoIntegrationEvent)integrationEvent);
         }
     }
 }

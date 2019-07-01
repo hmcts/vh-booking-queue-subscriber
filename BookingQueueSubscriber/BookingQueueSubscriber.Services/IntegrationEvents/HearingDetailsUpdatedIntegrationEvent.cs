@@ -3,9 +3,8 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 
 namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
-    public class HearingDetailsUpdatedIntegrationEvent : IntegrationEvent
+    public class HearingDetailsUpdatedIntegrationEvent : IIntegrationEvent
     {
         public HearingDto Hearing { get; set; }
-        public override IntegrationEventType EventType => IntegrationEventType.HearingDetailsUpdated;
     }
 }

@@ -1,30 +1,28 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using BookingQueueSubscriber.Services.IntegrationEvents;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Core
 {
     public interface IMessageHandlerFactory
     {
-        IMessageHandler Get(IntegrationEventType integrationEventType);
+        IMessageHandler Get<T>(T integrationEvent) where T: IIntegrationEvent;
     }
-    
-    public class MessageHandlerFactory : IMessageHandlerFactory
-    {
-        private readonly IEnumerable<IMessageHandler> _messageHandlers;
 
-        public MessageHandlerFactory(IEnumerable<IMessageHandler> messageHandlers)
+    public class MessageHandlerFactory : IMessageHandlerFactory 
+    {
+        private readonly IServiceProvider _serviceProvider;
+
+        public MessageHandlerFactory(IServiceProvider serviceProvider)
         {
-            _messageHandlers = messageHandlers;
+            _serviceProvider = serviceProvider;
         }
-        
-        public IMessageHandler Get(IntegrationEventType integrationEventType)
+
+        public IMessageHandler Get<T>(T integrationEvent) where T: IIntegrationEvent
         {
-            var eventHandler = _messageHandlers.SingleOrDefault(x => x.IntegrationEventType == integrationEventType);
-            if (eventHandler == null)
-                throw new ArgumentOutOfRangeException(nameof(integrationEventType),
-                    $"MessageHandler cannot be found for messageType: {integrationEventType.ToString()}");
-            return eventHandler;
+            var genericType = typeof(IMessageHandler<>).MakeGenericType(integrationEvent.GetType());
+            var service = _serviceProvider.GetService(genericType);
+
+            return (IMessageHandler) service;
         }
     }
 }

@@ -4,11 +4,10 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 
 namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
-    public class ParticipantAddedIntegrationEvent: IntegrationEvent
+    public class ParticipantAddedIntegrationEvent: IIntegrationEvent
     {
 
         public Guid HearingId { get; }
         public ParticipantDto Participant { get; }
-        public override IntegrationEventType EventType => IntegrationEventType.ParticipantAdded;
     }
 }

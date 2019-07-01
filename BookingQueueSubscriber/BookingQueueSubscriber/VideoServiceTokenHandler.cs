@@ -16,7 +16,7 @@ namespace BookingQueueSubscriber
 
         private const string TokenCacheKey = "VideoApiServiceToken";
 
-        protected VideoServiceTokenHandler(IOptions<AzureAdConfiguration> azureAdConfiguration,
+        public VideoServiceTokenHandler(IOptions<AzureAdConfiguration> azureAdConfiguration,
             IMemoryCache memoryCache,
             IAzureTokenProvider azureTokenProvider)
         {
