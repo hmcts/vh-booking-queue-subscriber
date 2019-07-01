@@ -1,8 +1,12 @@
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.ApiHelper;
+using BookingQueueSubscriber.Common.Configuration;
+using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using Newtonsoft.Json;
 
 namespace BookingQueueSubscriber.Services
 {
@@ -10,16 +14,20 @@ namespace BookingQueueSubscriber.Services
     {
         Task BookNewConferenceAsync(BookNewConferenceRequest request);
         Task UpdateConferenceAsync(UpdateConferenceRequest request);
+        Task DeleteConferenceAsync(Guid conferenceId);
+        Task<ConferenceDto> GetConferenceByHearingRefId(Guid hearingRefId);
     }
-    
+
     public class VideoApiService : IVideoApiService
     {
         private readonly HttpClient _httpClient;
         private readonly ApiUriFactory _apiUriFactory;
 
-        public VideoApiService(HttpClient httpClient)
+        public VideoApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration)
         {
             _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri(hearingServicesConfiguration.VideoApiUrl);
+
             _apiUriFactory = new ApiUriFactory();
         }
 
@@ -39,6 +47,20 @@ namespace BookingQueueSubscriber.Services
 
             var response = await _httpClient.PutAsync(_apiUriFactory.ConferenceEndpoints.UpdateConference, httpContent);
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task DeleteConferenceAsync(Guid conferenceId)
+        {
+            var response = await _httpClient.DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<ConferenceDto> GetConferenceByHearingRefId(Guid hearingRefId)
+        {
+            var response = await _httpClient.GetAsync(_apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId));
+            response.EnsureSuccessStatusCode();
+            var content = response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ConferenceDto>(content.Result);
         }
     }
 }

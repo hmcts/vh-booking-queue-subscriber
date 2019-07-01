@@ -17,38 +17,26 @@ namespace BookingQueueSubscriber
 {
     public class Startup : IWebJobsStartup
     {
-        private static HearingServicesConfiguration _hearingServicesConfiguration;
-
         public void Configure(IWebJobsBuilder builder) =>
             builder.AddDependencyInjection(ConfigureServices);
 
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
-            RegisterSettings(services);
-            
+            var configLoader = new ConfigLoader();
+            var adConfiguration = configLoader.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>();
+            services.AddSingleton(adConfiguration);
+            var hearingServicesConfiguration = configLoader.Configuration.GetSection("VhServices").Get<HearingServicesConfiguration>();
+            services.AddSingleton(hearingServicesConfiguration);
+
             services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddScoped<VideoServiceTokenHandler>();
 
             services.AddHttpClient<IVideoApiService, VideoApiService>()
-                .AddHttpMessageHandler<VideoServiceTokenHandler>()
-                .AddTypedClient(httpClient =>
-                {
-                    httpClient.BaseAddress = new Uri(_hearingServicesConfiguration.VideoApiUrl);
-                    return new VideoApiService(httpClient);
-                });
+                .AddHttpMessageHandler<VideoServiceTokenHandler>();
 
             RegisterMessageHandlers(services);
-        }
-        
-        private static void RegisterSettings(IServiceCollection services)
-        {
-            var configLoader = new ConfigLoader();
-            services.Configure<AzureAdConfiguration>(options => configLoader.ConfigRoot.Bind("AzureAd",options));
-            services.Configure<HearingServicesConfiguration>(options =>
-                configLoader.ConfigRoot.Bind("VhServices", options));
-            _hearingServicesConfiguration = configLoader.ConfigRoot.Get<HearingServicesConfiguration>();
         }
         
         private static void RegisterMessageHandlers(IServiceCollection serviceCollection)

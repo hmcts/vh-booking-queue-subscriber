@@ -15,9 +15,9 @@ namespace BookingQueueSubscriber.Common.Security
     {
         private readonly AzureAdConfiguration _azureAdConfiguration;
 
-        public AzureAzureTokenProvider(IOptions<AzureAdConfiguration> azureAdConfiguration)
+        public AzureAzureTokenProvider(AzureAdConfiguration azureAdConfiguration)
         {
-            _azureAdConfiguration = azureAdConfiguration.Value;
+            _azureAdConfiguration = azureAdConfiguration;
         }
 
         public string GetClientAccessToken(string clientId, string clientSecret, string clientResource)

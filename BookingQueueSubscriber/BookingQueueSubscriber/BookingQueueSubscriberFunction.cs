@@ -17,7 +17,7 @@ namespace BookingQueueSubscriber
             [Inject]IMessageHandlerFactory messageHandlerFactory)
         {
             // get handler
-            var bookingsMessage = MessageSerializer.Deserialise<BookingsMessage>(bookingQueueItem);
+            var bookingsMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
             var handler = messageHandlerFactory.Get(bookingsMessage.IntegrationEvent);
             log.LogDebug($"using handler {handler.GetType()}");
 

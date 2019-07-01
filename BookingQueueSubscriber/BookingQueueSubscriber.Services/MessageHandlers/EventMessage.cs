@@ -3,7 +3,7 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class BookingsMessage
+    public class EventMessage
     {
         public Guid Id { get; set; }
         public DateTime Timestamp { get; set; }

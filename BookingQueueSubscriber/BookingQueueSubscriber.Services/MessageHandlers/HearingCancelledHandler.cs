@@ -13,9 +13,10 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             _videoApiService = videoApiService;
         }
 
-        public Task HandleAsync(HearingCancelledIntegrationEvent eventMessage)
+        public async Task HandleAsync(HearingCancelledIntegrationEvent eventMessage)
         {
-            throw new System.NotImplementedException();
+            var conferenceDto = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId).ConfigureAwait(false);
+            await _videoApiService.DeleteConferenceAsync(conferenceDto.Id);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
