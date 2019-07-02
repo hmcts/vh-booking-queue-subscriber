@@ -5,13 +5,7 @@ namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
     public class ParticipantRemovedIntegrationEvent : IIntegrationEvent
     {
-        public ParticipantRemovedIntegrationEvent(Guid hearingId, Guid participantId)
-        {
-            HearingId = hearingId;
-            ParticipantId = participantId;
-        }
-
-        public Guid HearingId { get; }
-        public Guid ParticipantId { get; }
+        public Guid HearingId { get; set; }
+        public Guid ParticipantId { get; set; }
     }
 }

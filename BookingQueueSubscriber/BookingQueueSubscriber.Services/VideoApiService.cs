@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.ApiHelper;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 using Newtonsoft.Json;
 
@@ -15,7 +15,10 @@ namespace BookingQueueSubscriber.Services
         Task BookNewConferenceAsync(BookNewConferenceRequest request);
         Task UpdateConferenceAsync(UpdateConferenceRequest request);
         Task DeleteConferenceAsync(Guid conferenceId);
-        Task<ConferenceDto> GetConferenceByHearingRefId(Guid hearingRefId);
+        Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId);
+        Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request);
+        Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId);
+        Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request);
     }
 
     public class VideoApiService : IVideoApiService
@@ -55,12 +58,37 @@ namespace BookingQueueSubscriber.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<ConferenceDto> GetConferenceByHearingRefId(Guid hearingRefId)
+        public async Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId)
         {
             var response = await _httpClient.GetAsync(_apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId));
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<ConferenceDto>(content.Result);
+            return JsonConvert.DeserializeObject<ConferenceResponse>(content.Result);
+        }
+
+        public async Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request)
+        {
+            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
+            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync(_apiUriFactory.ParticipantsEndpoints.AddParticipantsToConference(conferenceId), httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId)
+        {
+            var response = await _httpClient.DeleteAsync(_apiUriFactory.ParticipantsEndpoints.RemoveParticipantFromConference(conferenceId, participantId));
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request)
+        {
+            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
+            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync(_apiUriFactory.ParticipantsEndpoints.UpdateParticipantDetails(
+                conferenceId, participantId), httpContent);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

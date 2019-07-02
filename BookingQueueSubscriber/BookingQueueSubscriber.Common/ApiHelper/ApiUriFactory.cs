@@ -22,6 +22,8 @@ namespace BookingQueueSubscriber.Common.ApiHelper
 
         public string RemoveParticipantFromConference(Guid conferenceId, Guid participantId) =>
             $"{ApiRoot}/{conferenceId}/participants/{participantId}";
+        public string UpdateParticipantDetails(Guid conferenceId, Guid participantId) =>
+            $"{ApiRoot}/{conferenceId}/participants/{participantId}";
     }
 
     public class ConferenceEndpoints

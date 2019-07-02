@@ -17,13 +17,13 @@ namespace BookingQueueSubscriber
             [Inject]IMessageHandlerFactory messageHandlerFactory)
         {
             // get handler
-            var bookingsMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
-            var handler = messageHandlerFactory.Get(bookingsMessage.IntegrationEvent);
+            var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
+            var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
             log.LogDebug($"using handler {handler.GetType()}");
 
             // execute handler
-            await handler.HandleAsync(bookingsMessage.IntegrationEvent).ConfigureAwait(false);
-            log.LogInformation($"Process message {bookingsMessage.Id} - {bookingsMessage.IntegrationEvent}");
+            await handler.HandleAsync(eventMessage.IntegrationEvent).ConfigureAwait(false);
+            log.LogInformation($"Process message {eventMessage.Id} - {eventMessage.IntegrationEvent}");
         }
     }
 }
