@@ -33,8 +33,15 @@ namespace BookingQueueSubscriber
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddScoped<VideoServiceTokenHandler>();
 
-            services.AddHttpClient<IVideoApiService, VideoApiService>()
-                .AddHttpMessageHandler<VideoServiceTokenHandler>();
+            if (hearingServicesConfiguration.EnableVideoApiStub)
+            {
+                services.AddScoped<IVideoApiService, VideoApiServiceFake>();
+            }
+            else
+            {
+                services.AddHttpClient<IVideoApiService, VideoApiService>()
+                    .AddHttpMessageHandler<VideoServiceTokenHandler>();
+            }
 
             RegisterMessageHandlers(services);
         }
