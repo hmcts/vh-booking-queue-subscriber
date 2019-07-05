@@ -10,13 +10,11 @@ variables:
     "AzureAd/TenantId":"$(tenantid)",
     "AzureAd/ClientId":"$(vh-booking-queue-subscriber-appid)",
     "AzureAd/ClientSecret":"$(vh-booking-queue-subscriber-key)",
-    "AzureAd/VideoApiResourceId":"$(vh-video-api-identifieruris)",
-    "VhServices/VideoApiUrl":"$(VideoApiUri)",
-    "VhServices/EnableVideoApiStub":"true"
+    "AzureAd/VideoApiResourceId":"$(vh-video-api-identifieruris)"
     '
   dalWorkingDirectory: ''
   keyVaultName: vhcoreinfrahtdev # Used to get secrets for integration tests
-  secretsFilter: 'tenantid,vh-bookings-api-identifieruris' # filters out secrets returned from key vault
+  secretsFilter: 'tenantid,vh-booking-queue-subscriber-appid,vh-booking-queue-subscriber-key,vh-video-api-identifieruris' # filters out secrets returned from key vault
   infraKeyVaultName: 'vhcoreinfradev'
   infraSecretsFilter: 'vh-core-infra-AppInsightsKey'
 
