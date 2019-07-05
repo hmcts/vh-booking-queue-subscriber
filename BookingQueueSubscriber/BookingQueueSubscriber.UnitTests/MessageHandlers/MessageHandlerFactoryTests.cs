@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
-    [Ignore("Fix these tests to make the build pass")]
     public class MessageHandlerFactoryTests : MessageHandlerTestBase
     {
         public class TestData
@@ -26,7 +25,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [TestCaseSource(nameof(GetEvents))]
         public void should_return_instance_of_message_handler_for_given_message_type(TestData data)
         {
-            var messageHandlerFactory = new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider);
+            var messageHandlerFactory = (IMessageHandlerFactory)ServiceProviderFactory.ServiceProvider.GetService(typeof(IMessageHandlerFactory));
 
             var handler = messageHandlerFactory.Get(data.IntegrationEvent);
             handler.Should().BeOfType(data.MessageHandlerType);
@@ -35,7 +34,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public void should_load_handler_for_message()
         {
-            var messageHandlerFactory = new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider);
+            var messageHandlerFactory = (IMessageHandlerFactory)ServiceProviderFactory.ServiceProvider.GetService(typeof(IMessageHandlerFactory));
             var integrationEvent = new HearingIsReadyForVideoIntegrationEvent();
             var handler = messageHandlerFactory.Get(integrationEvent);
             handler.Should().BeOfType<HearingReadyForVideoHandler>();
