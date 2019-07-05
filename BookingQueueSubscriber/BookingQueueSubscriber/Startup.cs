@@ -33,7 +33,7 @@ namespace BookingQueueSubscriber
                 BuildHearingServicesConfiguration(configLoader);
             services.AddSingleton(hearingServicesConfiguration);
 
-            services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
+            services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddScoped<VideoServiceTokenHandler>();
 

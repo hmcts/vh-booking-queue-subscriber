@@ -11,11 +11,11 @@ namespace BookingQueueSubscriber.Common.Security
         AuthenticationResult GetAuthorisationResult(string clientId, string clientSecret, string clientResource);
     }
 
-    public class AzureAzureTokenProvider : IAzureTokenProvider
+    public class AzureTokenProvider : IAzureTokenProvider
     {
         private readonly AzureAdConfiguration _azureAdConfiguration;
 
-        public AzureAzureTokenProvider(AzureAdConfiguration azureAdConfiguration)
+        public AzureTokenProvider(AzureAdConfiguration azureAdConfiguration)
         {
             _azureAdConfiguration = azureAdConfiguration;
         }
