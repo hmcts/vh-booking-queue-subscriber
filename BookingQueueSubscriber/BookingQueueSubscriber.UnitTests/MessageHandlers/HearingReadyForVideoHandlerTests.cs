@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
+using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 using FizzWare.NBuilder;
@@ -22,6 +23,17 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
         }
+
+        [Test]
+        public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
+        {
+            var messageHandler = (IMessageHandler)new HearingReadyForVideoHandler(VideoApiServiceMock.Object);
+
+            var integrationEvent = CreateEvent();
+            await messageHandler.HandleAsync(integrationEvent);
+            VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
+        }
+
 
         private static HearingIsReadyForVideoIntegrationEvent CreateEvent()
         {

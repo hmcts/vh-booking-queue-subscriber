@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
+using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 using Moq;
@@ -17,7 +18,24 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object);
 
-            var integrationEvent = new ParticipantsAddedIntegrationEvent
+            var integrationEvent = GetIntegrationEvent();
+            await messageHandler.HandleAsync(integrationEvent);
+            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()), Times.Once);
+        }
+
+        [Test]
+        public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
+        {
+            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object);
+
+            var integrationEvent = GetIntegrationEvent();
+            await messageHandler.HandleAsync(integrationEvent);
+            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()), Times.Once);
+        }
+
+        private ParticipantsAddedIntegrationEvent GetIntegrationEvent()
+        {
+            return new ParticipantsAddedIntegrationEvent
             {
                 HearingId = HearingId,
                 Participants = new List<ParticipantDto>
@@ -35,8 +53,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     }
                 }
             };
-            await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()), Times.Once);
         }
     }
 }
