@@ -55,15 +55,13 @@ namespace BookingQueueSubscriber.Services
 
         public async Task DeleteConferenceAsync(Guid conferenceId)
         {
-            var response =
-                await _httpClient.DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
+            var response = await _httpClient.DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId)
         {
-            var response =
-                await _httpClient.GetAsync(
+            var response = await _httpClient.GetAsync(
                     _apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId));
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync();
@@ -75,8 +73,7 @@ namespace BookingQueueSubscriber.Services
             var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-            var response =
-                await _httpClient.PutAsync(
+            var response = await _httpClient.PutAsync(
                     _apiUriFactory.ParticipantsEndpoints.AddParticipantsToConference(conferenceId), httpContent);
             response.EnsureSuccessStatusCode();
         }
