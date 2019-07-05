@@ -24,6 +24,7 @@ namespace BookingQueueSubscriber
         {
             services.AddMemoryCache();
             var configLoader = new ConfigLoader();
+            // need to check if bind works for both tests and host
             var adConfiguration = configLoader.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>() ?? BuildAdConfiguration(configLoader);
             services.AddSingleton(adConfiguration);
 
