@@ -25,8 +25,16 @@ namespace BookingQueueSubscriber
             services.AddMemoryCache();
             var configLoader = new ConfigLoader();
             var adConfiguration = configLoader.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>();
+            if (adConfiguration == null)
+            {
+                throw new Exception("adConfiguration is null");
+            }
             services.AddSingleton(adConfiguration);
             var hearingServicesConfiguration = configLoader.Configuration.GetSection("VhServices").Get<HearingServicesConfiguration>();
+            if (hearingServicesConfiguration == null)
+            {
+                throw new Exception("hearingServicesConfiguration is null");
+            }
             services.AddSingleton(hearingServicesConfiguration);
 
             services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
