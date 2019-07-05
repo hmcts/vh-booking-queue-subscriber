@@ -24,17 +24,12 @@ namespace BookingQueueSubscriber
         {
             services.AddMemoryCache();
             var configLoader = new ConfigLoader();
-            var adConfiguration = configLoader.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>();
-            if (adConfiguration == null)
-            {
-                throw new Exception("adConfiguration is null");
-            }
+            var adConfiguration = configLoader.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>() ?? BuildAdConfiguration(configLoader);
             services.AddSingleton(adConfiguration);
-            var hearingServicesConfiguration = configLoader.Configuration.GetSection("VhServices").Get<HearingServicesConfiguration>();
-            if (hearingServicesConfiguration == null)
-            {
-                throw new Exception("hearingServicesConfiguration is null");
-            }
+
+            var hearingServicesConfiguration =
+                configLoader.Configuration.GetSection("VhServices").Get<HearingServicesConfiguration>() ??
+                BuildHearingServicesConfiguration(configLoader);
             services.AddSingleton(hearingServicesConfiguration);
 
             services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
@@ -53,7 +48,23 @@ namespace BookingQueueSubscriber
 
             RegisterMessageHandlers(services);
         }
-        
+
+        private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
+        {
+            var values = configLoader.Configuration.GetSection("Values");
+            var hearingServicesConfiguration = new HearingServicesConfiguration();
+            values.GetSection("VhServices").Bind(hearingServicesConfiguration);
+            return hearingServicesConfiguration;
+        }
+
+        private static AzureAdConfiguration BuildAdConfiguration(ConfigLoader configLoader)
+        {
+            var values = configLoader.Configuration.GetSection("Values");
+            var azureAdConfiguration = new AzureAdConfiguration();
+            values.GetSection("AzureAd").Bind(azureAdConfiguration);
+            return azureAdConfiguration;
+        }
+
         private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
         {
             var messageHandlers = GetAllTypesOf(typeof(IMessageHandler<>)).ToList();
