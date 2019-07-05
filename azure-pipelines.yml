@@ -11,7 +11,8 @@ variables:
     "AzureAd/ClientId":"$(vh-booking-queue-subscriber-appid)",
     "AzureAd/ClientSecret":"$(vh-booking-queue-subscriber-key)",
     "AzureAd/VideoApiResourceId":"$(vh-video-api-identifieruris)",
-    "VhServices/VideoApiUrl":"$(VideoApiUri)"
+    "VhServices/VideoApiUrl":"$(VideoApiUri)",
+    "VhServices/EnableVideoApiStub":"true"
     '
   dalWorkingDirectory: ''
   keyVaultName: vhcoreinfrahtdev # Used to get secrets for integration tests
