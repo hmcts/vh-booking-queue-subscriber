@@ -10,4 +10,4 @@ Run the following command into a terminal in the same directory as the BookingQu
 cd BookingQueueSubscriber/BookingQueueSubscriber
 func azure functionapp fetch-app-settings vh-booking-queue-subscriber-dev
 ```
-replicating GitHub PR release status report new change
+replicating GitHub PR release status report new change blah blah    
