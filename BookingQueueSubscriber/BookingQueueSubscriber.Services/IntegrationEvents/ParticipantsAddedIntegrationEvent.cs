@@ -1,11 +1,12 @@
+﻿using System;
 using System.Collections.Generic;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 
 namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
-    public class HearingIsReadyForVideoIntegrationEvent : IIntegrationEvent
+    public class ParticipantsAddedIntegrationEvent: IIntegrationEvent
     {
-        public HearingDto Hearing { get; set; }
+        public Guid HearingId { get; set; }
         public IList<ParticipantDto> Participants { get; set; }
     }
 }

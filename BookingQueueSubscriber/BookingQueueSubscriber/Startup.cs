@@ -15,52 +15,73 @@ using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 [assembly: WebJobsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
 {
-    internal class Startup : IWebJobsStartup
+    public class Startup : IWebJobsStartup
     {
         public void Configure(IWebJobsBuilder builder) =>
             builder.AddDependencyInjection(ConfigureServices);
-        
-        private static void ConfigureServices(IServiceCollection services)
+
+        public static void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
-            RegisterSettings(services);
-            
-            services.AddScoped<IAzureTokenProvider, AzureAzureTokenProvider>();
+            var configLoader = new ConfigLoader();
+            // need to check if bind works for both tests and host
+            var adConfiguration = configLoader.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>() ?? BuildAdConfiguration(configLoader);
+            services.AddSingleton(adConfiguration);
+
+            var hearingServicesConfiguration =
+                configLoader.Configuration.GetSection("VhServices").Get<HearingServicesConfiguration>() ??
+                BuildHearingServicesConfiguration(configLoader);
+            services.AddSingleton(hearingServicesConfiguration);
+
+            services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
-            services.AddScoped<IVideoApiService, VideoApiService>();
-            
+            services.AddScoped<VideoServiceTokenHandler>();
+
+            if (hearingServicesConfiguration.EnableVideoApiStub)
+            {
+                services.AddScoped<IVideoApiService, VideoApiServiceFake>();
+            }
+            else
+            {
+                services.AddHttpClient<IVideoApiService, VideoApiService>()
+                    .AddHttpMessageHandler<VideoServiceTokenHandler>();
+            }
+
             RegisterMessageHandlers(services);
         }
-        
-        private static void RegisterSettings(IServiceCollection services)
+
+        private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
         {
-            var configLoader = new ConfigLoader();
-            services.Configure<AzureAdConfiguration>(options => configLoader.ConfigRoot.Bind("AzureAd",options));
-            services.Configure<HearingServicesConfiguration>(options =>
-                configLoader.ConfigRoot.Bind("VhServices", options));
+            var values = configLoader.Configuration.GetSection("Values");
+            var hearingServicesConfiguration = new HearingServicesConfiguration();
+            values.GetSection("VhServices").Bind(hearingServicesConfiguration);
+            return hearingServicesConfiguration;
         }
-        
+
+        private static AzureAdConfiguration BuildAdConfiguration(ConfigLoader configLoader)
+        {
+            var values = configLoader.Configuration.GetSection("Values");
+            var azureAdConfiguration = new AzureAdConfiguration();
+            values.GetSection("AzureAd").Bind(azureAdConfiguration);
+            return azureAdConfiguration;
+        }
+
         private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
         {
-            var messageHandlers = GetAllTypesOf<IMessageHandler>().ToList();
+            var messageHandlers = GetAllTypesOf(typeof(IMessageHandler<>)).ToList();
             foreach (var messageHandler in messageHandlers)
             {
-                if (messageHandler.IsInterface || messageHandler.IsAbstract) continue;
                 var serviceType = messageHandler.GetInterfaces()[0];
                 serviceCollection.AddScoped(serviceType, messageHandler);
             }
         }
-        
-        private static IEnumerable<Type> GetAllTypesOf<T>()
+
+        private static IEnumerable<Type> GetAllTypesOf(Type @interface)
         {
-            var @interface = typeof (T);
-            return @interface.IsInterface
-                ? AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(assembly => assembly.GetTypes())
-                    .Where(type => !type.IsInterface
-                                   && !type.IsAbstract 
-                                   && type.GetInterfaces().Contains(@interface))
-                : new Type[] {};
+            return @interface.Assembly.GetTypes().Where(t =>
+                t.GetInterfaces().Any(x =>
+                    x.IsGenericType &&
+                    x.GetGenericTypeDefinition() == @interface));
         }
     }
 }

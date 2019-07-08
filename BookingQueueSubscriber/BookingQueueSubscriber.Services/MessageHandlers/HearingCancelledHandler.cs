@@ -1,22 +1,27 @@
-using System;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class HearingCancelledHandler : MessageHandlerBase
+    public class HearingCancelledHandler : IMessageHandler<HearingCancelledIntegrationEvent>
     {
-        public HearingCancelledHandler(IVideoApiService videoApiService) : base(videoApiService)
+        private readonly IVideoApiService _videoApiService;
+
+        public HearingCancelledHandler(IVideoApiService videoApiService)
         {
+            _videoApiService = videoApiService;
         }
 
-        public override IntegrationEventType IntegrationEventType => IntegrationEventType.HearingCancelled;
-        public override Type BodyType { get; }
-
-        public override Task HandleAsync(IntegrationEvent integrationEvent)
+        public async Task HandleAsync(HearingCancelledIntegrationEvent eventMessage)
         {
-            throw new System.NotImplementedException();
+            var conferenceDto = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId).ConfigureAwait(false);
+            await _videoApiService.DeleteConferenceAsync(conferenceDto.Id);
+        }
+
+        async Task IMessageHandler.HandleAsync(object integrationEvent)
+        {
+            await HandleAsync((HearingCancelledIntegrationEvent)integrationEvent);
         }
     }
 }

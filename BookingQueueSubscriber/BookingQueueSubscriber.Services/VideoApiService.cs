@@ -1,41 +1,37 @@
 using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.ApiHelper;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Common.Security;
+using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace BookingQueueSubscriber.Services
 {
     public interface IVideoApiService
     {
         Task BookNewConferenceAsync(BookNewConferenceRequest request);
+        Task UpdateConferenceAsync(UpdateConferenceRequest request);
+        Task DeleteConferenceAsync(Guid conferenceId);
+        Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId);
+        Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request);
+        Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId);
+        Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request);
     }
-    
+
     public class VideoApiService : IVideoApiService
     {
-        private readonly IMemoryCache _memoryCache;
-        private readonly IAzureTokenProvider _azureTokenProvider;
-        private readonly AzureAdConfiguration _azureAdConfiguration;
+        private readonly HttpClient _httpClient;
         private readonly ApiUriFactory _apiUriFactory;
-        private readonly HearingServicesConfiguration _hearingServices;
 
-        private string _tokenCacheKey => "VideoApiServiceToken";
-
-        public VideoApiService(IMemoryCache memoryCache, IAzureTokenProvider azureTokenProvider,
-            IOptions<HearingServicesConfiguration> hearingServicesConfig,
-            IOptions<AzureAdConfiguration> azureAdConfiguration)
+        public VideoApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration)
         {
-            _memoryCache = memoryCache;
-            _azureTokenProvider = azureTokenProvider;
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri(hearingServicesConfiguration.VideoApiUrl);
+
             _apiUriFactory = new ApiUriFactory();
-            _hearingServices = hearingServicesConfig.Value;
-            _azureAdConfiguration = azureAdConfiguration.Value;
         }
 
         public async Task BookNewConferenceAsync(BookNewConferenceRequest request)
@@ -43,29 +39,61 @@ namespace BookingQueueSubscriber.Services
             var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-            var bearerToken = GetBearerToken();
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-                httpClient.BaseAddress = new Uri(_hearingServices.VideoApiUrl);
-                var response =
-                    await httpClient.PostAsync(_apiUriFactory.ConferenceEndpoints.BookNewConference, httpContent);
-                response.EnsureSuccessStatusCode();
-            }
+            var response =
+                await _httpClient.PostAsync(_apiUriFactory.ConferenceEndpoints.BookNewConference, httpContent);
+            response.EnsureSuccessStatusCode();
         }
 
-        private string GetBearerToken()
+        public async Task UpdateConferenceAsync(UpdateConferenceRequest request)
         {
-            var token = _memoryCache.Get<string>(_tokenCacheKey);
-            if (!string.IsNullOrEmpty(token)) return token;
-            
-            var authenticationResult = _azureTokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
-                _azureAdConfiguration.ClientSecret, _hearingServices.VideoApiResourceId);
-            token = authenticationResult.AccessToken;
-            var tokenExpireDateTime = authenticationResult.ExpiresOn.DateTime.AddMinutes(-1);
-            _memoryCache.Set(_tokenCacheKey, token, tokenExpireDateTime);
+            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
+            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-            return token;
+            var response = await _httpClient.PutAsync(_apiUriFactory.ConferenceEndpoints.UpdateConference, httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task DeleteConferenceAsync(Guid conferenceId)
+        {
+            var response = await _httpClient.DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId)
+        {
+            var response = await _httpClient.GetAsync(
+                    _apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId));
+            response.EnsureSuccessStatusCode();
+            var content = response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ConferenceResponse>(content.Result);
+        }
+
+        public async Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request)
+        {
+            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
+            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync(
+                    _apiUriFactory.ParticipantsEndpoints.AddParticipantsToConference(conferenceId), httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId)
+        {
+            var response = await _httpClient.DeleteAsync(
+                _apiUriFactory.ParticipantsEndpoints.RemoveParticipantFromConference(conferenceId, participantId));
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task UpdateParticipantDetails(Guid conferenceId, Guid participantId,
+            UpdateParticipantRequest request)
+        {
+            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
+            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PatchAsync(_apiUriFactory.ParticipantsEndpoints.UpdateParticipantDetails(
+                conferenceId, participantId), httpContent);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

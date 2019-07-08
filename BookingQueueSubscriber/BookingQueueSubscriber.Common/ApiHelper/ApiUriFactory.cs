@@ -22,11 +22,16 @@ namespace BookingQueueSubscriber.Common.ApiHelper
 
         public string RemoveParticipantFromConference(Guid conferenceId, Guid participantId) =>
             $"{ApiRoot}/{conferenceId}/participants/{participantId}";
+        public string UpdateParticipantDetails(Guid conferenceId, Guid participantId) =>
+            $"{ApiRoot}/{conferenceId}/participants/{participantId}";
     }
 
     public class ConferenceEndpoints
     {
         private string ApiRoot => "conferences";
         public string BookNewConference => $"{ApiRoot}";
+        public string UpdateConference => $"{ApiRoot}";
+        public string DeleteConference(Guid conferenceId) => $"{ApiRoot}/{conferenceId}";
+        public string GetConferenceByHearingRefId(Guid hearingRefId) => $"{ApiRoot}/{hearingRefId}";
     }
 }

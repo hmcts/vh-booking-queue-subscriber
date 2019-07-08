@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BookingQueueSubscriber.Services;
-using BookingQueueSubscriber.Services.MessageHandlers;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoApi;
 using Moq;
 using NUnit.Framework;
 
@@ -9,21 +10,28 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public abstract class MessageHandlerTestBase
     {
-        protected List<IMessageHandler> MessageHandlersList { get; set; }
         protected Mock<IVideoApiService> VideoApiServiceMock { get; set; }
-        
+        protected Guid ParticipantId { get; set; }
+        protected Guid HearingId { get; set; }
+
+
         [SetUp]
         public void Setup()
         {
+            ParticipantId = Guid.NewGuid();
+            HearingId = Guid.NewGuid();
             VideoApiServiceMock = new Mock<IVideoApiService>();
-            MessageHandlersList = new List<IMessageHandler>
+            var result = Task.FromResult(new ConferenceResponse
             {
-                new HearingReadyForVideoHandler(VideoApiServiceMock.Object),
-                new ParticipantAddedHandler(VideoApiServiceMock.Object),
-                new ParticipantRemovedHandler(VideoApiServiceMock.Object),
-                new HearingDetailsUpdatedHandler(VideoApiServiceMock.Object),
-                new HearingCancelledHandler(VideoApiServiceMock.Object)
-            };
+                HearingRefId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                Participants = new List<ParticipantResponse>
+                {
+                    new ParticipantResponse {Id = HearingId, RefId = ParticipantId}
+                }
+            });
+
+            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId)).Returns(result);
         }
     }
 }

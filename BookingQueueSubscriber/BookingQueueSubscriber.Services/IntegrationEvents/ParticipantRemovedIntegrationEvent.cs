@@ -3,17 +3,9 @@ using BookingQueueSubscriber.Services.MessageHandlers;
 
 namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
-    public class ParticipantRemovedIntegrationEvent : IntegrationEvent
+    public class ParticipantRemovedIntegrationEvent : IIntegrationEvent
     {
-        public ParticipantRemovedIntegrationEvent(Guid hearingId, Guid participantId)
-        {
-            HearingId = hearingId;
-            ParticipantId = participantId;
-        }
-
-        public Guid HearingId { get; }
-        public Guid ParticipantId { get; }
-
-        public override IntegrationEventType EventType => IntegrationEventType.ParticipantRemoved;
+        public Guid HearingId { get; set; }
+        public Guid ParticipantId { get; set; }
     }
 }
