@@ -6,6 +6,7 @@ using BookingQueueSubscriber.Common.ApiHelper;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace BookingQueueSubscriber.Services
@@ -24,11 +25,14 @@ namespace BookingQueueSubscriber.Services
     public class VideoApiService : IVideoApiService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger _log;
         private readonly ApiUriFactory _apiUriFactory;
 
-        public VideoApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration)
+        public VideoApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration,
+            ILoggerFactory factory)
         {
             _httpClient = httpClient;
+            _log = factory.CreateLogger<VideoApiService>();
             _httpClient.BaseAddress = new Uri(hearingServicesConfiguration.VideoApiUrl);
 
             _apiUriFactory = new ApiUriFactory();
@@ -36,6 +40,7 @@ namespace BookingQueueSubscriber.Services
 
         public async Task BookNewConferenceAsync(BookNewConferenceRequest request)
         {
+            _log.LogInformation($"Booking new conference for {request.HearingRefId}");
             var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
@@ -55,14 +60,16 @@ namespace BookingQueueSubscriber.Services
 
         public async Task DeleteConferenceAsync(Guid conferenceId)
         {
+            _log.LogInformation($"Deleting conference for {conferenceId}");
             var response = await _httpClient.DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId)
         {
-            var response = await _httpClient.GetAsync(
-                    _apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId));
+            _log.LogInformation($"Getting conference by hearing ref id {hearingRefId}");
+            var uriString = _apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId);
+            var response = await _httpClient.GetAsync(uriString);
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ConferenceResponse>(content.Result);

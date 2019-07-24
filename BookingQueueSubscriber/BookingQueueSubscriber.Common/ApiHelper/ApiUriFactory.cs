@@ -32,6 +32,6 @@ namespace BookingQueueSubscriber.Common.ApiHelper
         public string BookNewConference => $"{ApiRoot}";
         public string UpdateConference => $"{ApiRoot}";
         public string DeleteConference(Guid conferenceId) => $"{ApiRoot}/{conferenceId}";
-        public string GetConferenceByHearingRefId(Guid hearingRefId) => $"{ApiRoot}/{hearingRefId}";
+        public string GetConferenceByHearingRefId(Guid hearingRefId) => $"{ApiRoot}/hearings/{hearingRefId}";
     }
 }
