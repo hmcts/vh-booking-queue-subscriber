@@ -10,6 +10,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(Startup))]
@@ -36,6 +37,7 @@ namespace BookingQueueSubscriber
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddScoped<VideoServiceTokenHandler>();
+            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
 
             if (hearingServicesConfiguration.EnableVideoApiStub)
             {

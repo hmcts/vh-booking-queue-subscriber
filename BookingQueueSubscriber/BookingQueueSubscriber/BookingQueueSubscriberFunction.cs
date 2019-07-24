@@ -16,10 +16,11 @@ namespace BookingQueueSubscriber
             ILogger log,
             [Inject]IMessageHandlerFactory messageHandlerFactory)
         {
+            log.LogInformation(bookingQueueItem);
             // get handler
             var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
             var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
-            log.LogDebug($"using handler {handler.GetType()}");
+            log.LogInformation($"using handler {handler.GetType()}");
 
             // execute handler
             await handler.HandleAsync(eventMessage.IntegrationEvent).ConfigureAwait(false);
