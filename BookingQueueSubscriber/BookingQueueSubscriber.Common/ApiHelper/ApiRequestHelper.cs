@@ -18,5 +18,19 @@ namespace BookingQueueSubscriber.Common.ApiHelper
                 Formatting = Formatting.Indented
             });
         }
+        
+        public static T DeserialiseSnakeCaseJsonToResponse<T>(string response)
+        {
+            var contractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            };
+            
+            return JsonConvert.DeserializeObject<T>(response, new JsonSerializerSettings
+            {
+                ContractResolver = contractResolver,
+                Formatting = Formatting.Indented
+            });
+        }
     }
 }

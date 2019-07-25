@@ -61,7 +61,8 @@ namespace BookingQueueSubscriber.Services
         public async Task DeleteConferenceAsync(Guid conferenceId)
         {
             _log.LogInformation($"Deleting conference for {conferenceId}");
-            var response = await _httpClient.DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
+            var response = await _httpClient
+                .DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId)).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
@@ -69,14 +70,15 @@ namespace BookingQueueSubscriber.Services
         {
             _log.LogInformation($"Getting conference by hearing ref id {hearingRefId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId);
-            var response = await _httpClient.GetAsync(uriString);
+            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
-            var content = response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<ConferenceResponse>(content.Result);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<ConferenceResponse>(content);
         }
 
         public async Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request)
         {
+            _log.LogInformation($"Adding participants to conference: {conferenceId}");
             var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
@@ -88,7 +90,8 @@ namespace BookingQueueSubscriber.Services
         public async Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId)
         {
             var response = await _httpClient.DeleteAsync(
-                _apiUriFactory.ParticipantsEndpoints.RemoveParticipantFromConference(conferenceId, participantId));
+                    _apiUriFactory.ParticipantsEndpoints.RemoveParticipantFromConference(conferenceId, participantId))
+                .ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
@@ -99,7 +102,7 @@ namespace BookingQueueSubscriber.Services
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PatchAsync(_apiUriFactory.ParticipantsEndpoints.UpdateParticipantDetails(
-                conferenceId, participantId), httpContent);
+                conferenceId, participantId), httpContent).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
     }
