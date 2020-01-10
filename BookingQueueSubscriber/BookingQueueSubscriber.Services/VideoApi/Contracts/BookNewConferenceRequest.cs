@@ -12,5 +12,6 @@ namespace BookingQueueSubscriber.Services.VideoApi.Contracts
         public string CaseName { get; set; }
         public int ScheduledDuration { get; set; }
         public List<ParticipantRequest> Participants { get; set; }
+        public string HearingVenueName { get; set; }
     }
 }

@@ -44,7 +44,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 CaseType = "Civil Money Claims",
                 CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
-                ScheduledDateTime = DateTime.UtcNow
+                ScheduledDateTime = DateTime.UtcNow,
+                HearingVenueName = "MyVenue"
             };
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();
