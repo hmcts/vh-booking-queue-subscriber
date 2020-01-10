@@ -43,7 +43,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     CaseType = "caseType",
                     HearingId = Guid.NewGuid(),
                     ScheduledDateTime = DateTime.Now,
-                    ScheduledDuration = 30
+                    ScheduledDuration = 30,
+                    HearingVenueName = "MyVenue"
                 }
             };
         }

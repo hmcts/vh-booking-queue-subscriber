@@ -13,12 +13,11 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
         [Test]
         public void should_map_hearing_dto_to_book_new_conference_request()
         {
-            var mapper = new HearingToBookConferenceMapper();
             var hearingDto = CreateHearingDto();
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build();
 
-            var request = mapper.MapToBookNewConferenceRequest(hearingDto, participants);
+            var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(hearingDto, participants);
             
             request.Should().NotBeNull();
             request.Should().BeEquivalentTo(hearingDto, options => 
@@ -38,7 +37,8 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 CaseType = "Civil Money Claims",
                 CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
-                ScheduledDateTime = DateTime.UtcNow
+                ScheduledDateTime = DateTime.UtcNow,
+                HearingVenueName = "MyVenue"
             };
             return dto;
         }

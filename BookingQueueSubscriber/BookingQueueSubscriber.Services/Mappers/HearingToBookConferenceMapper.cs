@@ -5,9 +5,9 @@ using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
-    public class HearingToBookConferenceMapper
+    public static class HearingToBookConferenceMapper
     {
-        public BookNewConferenceRequest MapToBookNewConferenceRequest(HearingDto hearingDto, IEnumerable<ParticipantDto> participantDtos)
+        public static BookNewConferenceRequest MapToBookNewConferenceRequest(HearingDto hearingDto, IEnumerable<ParticipantDto> participantDtos)
         {
             var participantMapper = new ParticipantToParticipantRequestMapper();
             var participants = participantDtos.Select(participantMapper.MapToParticipantRequest).ToList();
@@ -20,8 +20,10 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ScheduledDuration = hearingDto.ScheduledDuration,
                 ScheduledDateTime = hearingDto.ScheduledDateTime,
                 HearingRefId = hearingDto.HearingId,
-                Participants = participants
+                Participants = participants,
+                HearingVenueName = hearingDto.HearingVenueName
             };
+            
             return request;
         }
     }

@@ -17,7 +17,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            var request = new HearingToBookConferenceMapper().MapToBookNewConferenceRequest(eventMessage.Hearing,
+            var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants);
 
             await _videoApiService.BookNewConferenceAsync(request).ConfigureAwait(false);
