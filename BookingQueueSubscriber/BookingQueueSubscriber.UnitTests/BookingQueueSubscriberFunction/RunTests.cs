@@ -243,5 +243,34 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
               new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
         }
+
+        [Test]
+        public void should_throw_exception_when_message_cannot_be_parsed()
+        {
+          var message = @"
+          {
+            'id': 'ab013e39-d159-4836-848e-034d2ebbe37a',
+            'timestamp': '2019-07-02T21:57:57.7904475Z',
+            'integration_event': {
+              'hearing_id': '769d17f6-85f1-4624-bc07-ffdac8ddb619',
+              'participant': {
+                'participant_id': 'af9afb87-5cf8-4813-b3dc-0ea96f77e752',
+                'fullname': 'Mr. Garnet Bosco',
+                'username': 'pinkie_kuhlman@weimannbechtelar.co.uk',
+                'display_name': 'Raegan Pollich V',
+                'hearing_role': 'Solicitor',
+                'user_role': 'Representative',
+                'case_group_type': 'defendant',
+                'representee': 'Bobby Upton'
+              }
+            }
+          }";
+          var logger = new LoggerFake();
+          var errorMessageMatch = "Unable to deserialize into EventMessage";
+          Func<Task> f = async () => { await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, logger,
+            new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)); };
+          f.Should().ThrowAsync<Exception>().WithMessage(errorMessageMatch);
+          logger.Messages.Should().ContainMatch($"{errorMessageMatch}*");
+        }
     }
 }

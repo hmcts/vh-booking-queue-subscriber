@@ -24,9 +24,9 @@ namespace BookingQueueSubscriber
             {
                 eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                log.LogCritical($"Unable to deserialize into EventMessage \r\n {bookingQueueItem}");
+                log.LogCritical(e, $"Unable to deserialize into EventMessage \r\n {bookingQueueItem}");
                 throw;
             }
             
