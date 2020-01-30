@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers;
@@ -18,7 +19,17 @@ namespace BookingQueueSubscriber
         {
             log.LogInformation(bookingQueueItem);
             // get handler
-            var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
+            EventMessage eventMessage;
+            try
+            {
+                eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
+            }
+            catch (Exception)
+            {
+                log.LogCritical($"Unable to deserialize into EventMessage \r\n {bookingQueueItem}");
+                throw;
+            }
+            
             var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
             log.LogInformation($"using handler {handler.GetType()}");
 

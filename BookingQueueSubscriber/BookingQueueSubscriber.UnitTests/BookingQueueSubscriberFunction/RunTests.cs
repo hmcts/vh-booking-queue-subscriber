@@ -1,16 +1,33 @@
-﻿using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+﻿using System;
+using System.Threading.Tasks;
+using BookingQueueSubscriber.Services;
+using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
-using Moq;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
 {
     public class RunTests : MessageHandlerTestBase
     {
+        private readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
+        private VideoApiServiceFake _videoApiService;
+
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+          _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+          _videoApiService.ClearRequests();
+        }
 
         [Test]
-        public void should_handle_hearing_ready_for_video_integration_event()
+        public async Task should_handle_hearing_ready_for_video_integration_event()
         {
             var message = @"
             {
@@ -88,13 +105,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                 'event_type': 'hearingIsReadyForVideo'
               }
             }";
-            VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()));
-            Assert.DoesNotThrow(() => BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)));
+            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
+                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+
+            _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 
         [Test]
-        public void should_handle_hearing_cancelled_integration_event()
+        public async Task should_handle_hearing_cancelled_integration_event()
         {
             var message = @"{
               '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
@@ -107,12 +125,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
               }
             }";
 
-            Assert.DoesNotThrow(() => BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)));
+            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
+                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            
+            _videoApiService.DeleteConferenceCount.Should().Be(1);
         }
 
         [Test]
-        public void should_handle_hearing_details_updated_integration_event()
+        public async Task should_handle_hearing_details_updated_integration_event()
         {
             var message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
@@ -131,13 +151,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     }
   }
 }";
-            Assert.DoesNotThrow(() => BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)));
+            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
+                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            _videoApiService.UpdateConferenceCount.Should().Be(1);
         }
 
 
         [Test]
-        public void should_handle_participants_added_integration_event()
+        public async Task should_handle_participants_added_integration_event()
         {
             var message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
@@ -161,12 +182,13 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     ]
   }
 }";
-            Assert.DoesNotThrow(() => BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message,
-                new LoggerFake(), new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)));
+            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
+              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
         }
 
         [Test]
-        public void should_handle_participant_removed_integration_event()
+        public async Task should_handle_participant_removed_integration_event()
         {
             var message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
@@ -178,12 +200,19 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     'participant_id': 'ea801426-0ea2-4eab-aaf0-647ae146397a'
   }
 }";
-            Assert.DoesNotThrow(() => BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message,
-                new LoggerFake(), new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)));
+
+            _videoApiService.InitConferenceResponse();
+            _videoApiService.ConferenceResponse.Id = Guid.Parse("9e4bb2b7-3187-419c-a7c8-b1e17a3cbb6f");
+            _videoApiService.ConferenceResponse.HearingRefId = Guid.Parse("015a0b0e-a16d-4076-a2b2-328b1d26212b");
+            _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("ea801426-0ea2-4eab-aaf0-647ae146397a");
+            
+            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
+              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            _videoApiService.RemoveParticipantFromConferenceCount.Should().Be(1);
         }
 
         [Test]
-        public void should_handle_participant_updated_integration_event()
+        public async Task should_handle_participant_updated_integration_event()
         {
             var message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
@@ -205,8 +234,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     }
   }
 }";
-            Assert.DoesNotThrow(() => BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message,
-                new LoggerFake(), new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)));
+            _videoApiService.InitConferenceResponse();
+            _videoApiService.ConferenceResponse.Id = Guid.Parse("ab013e39-d159-4836-848e-034d2ebbe37a");
+            _videoApiService.ConferenceResponse.HearingRefId = Guid.Parse("769d17f6-85f1-4624-bc07-ffdac8ddb619");
+            _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("af9afb87-5cf8-4813-b3dc-0ea96f77e752");
+            
+            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
+              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
         }
     }
 }

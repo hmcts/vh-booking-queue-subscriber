@@ -13,7 +13,6 @@
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6" />
     <PackageReference Include="Microsoft.TestPlatform" Version="16.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="NBuilder" Version="6.1.0" />
@@ -22,5 +21,10 @@
   <ItemGroup>
     <ProjectReference Include="..\BookingQueueSubscriber.Services\BookingQueueSubscriber.Services.csproj" />
     <ProjectReference Include="..\BookingQueueSubscriber\BookingQueueSubscriber.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
