@@ -13,7 +13,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
     {
         [TestCase(typeof(AzureAdConfiguration), typeof(AzureAdConfiguration))]
         [TestCase(typeof(HearingServicesConfiguration), typeof(HearingServicesConfiguration))]
-        [TestCase(typeof(IVideoApiService), typeof(VideoApiService))]
+        [TestCase(typeof(IVideoApiService), typeof(VideoApiServiceFake))]
         [TestCase(typeof(IMessageHandlerFactory), typeof(MessageHandlerFactory))]
         [TestCase(typeof(IMessageHandler<HearingCancelledIntegrationEvent>), typeof(HearingCancelledHandler))]
         [TestCase(typeof(IMessageHandler<HearingDetailsUpdatedIntegrationEvent>), typeof(HearingDetailsUpdatedHandler))]
