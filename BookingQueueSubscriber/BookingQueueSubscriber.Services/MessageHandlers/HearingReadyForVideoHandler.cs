@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;

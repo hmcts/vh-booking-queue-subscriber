@@ -1,12 +1,10 @@
 {
-  "bindings": [
-    {
-      "queueName": "booking",
-      "connection": "ServiceBusConnection",
-      "name": "bookingQueueItem",
-      "type": "serviceBusTrigger",
-      "direction": "in"
-    }
-  ],
+  "bindings": [{
+    "queueName": "booking",
+    "connection": "ServiceBusConnection",
+    "name": "bookingQueueItem",
+    "type": "serviceBusTrigger",
+    "direction": "in"
+  }],
   "disabled": false
 }

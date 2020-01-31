@@ -7,7 +7,6 @@ using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace BookingQueueSubscriber.Services
 {

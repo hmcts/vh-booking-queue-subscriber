@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
 using Moq;
 using NUnit.Framework;
 
