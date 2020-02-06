@@ -343,3 +343,5 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
+local.settings.json
