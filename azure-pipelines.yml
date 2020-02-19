@@ -33,6 +33,7 @@ trigger:
     include:
     - master
     - release/*
+    - hotfix/*
   tags:
     include:
     - v*
