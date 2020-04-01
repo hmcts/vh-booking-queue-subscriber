@@ -45,7 +45,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
                 ScheduledDateTime = DateTime.UtcNow,
-                HearingVenueName = "MyVenue"
+                HearingVenueName = "MyVenue",
+                RecordAudio = true
             };
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();

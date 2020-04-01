@@ -21,7 +21,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ScheduledDateTime = hearingDto.ScheduledDateTime,
                 HearingRefId = hearingDto.HearingId,
                 Participants = participants,
-                HearingVenueName = hearingDto.HearingVenueName
+                HearingVenueName = hearingDto.HearingVenueName,
+                RecordAudio = hearingDto.RecordAudio
             };
             
             return request;

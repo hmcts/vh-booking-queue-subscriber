@@ -25,7 +25,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 CaseType = hearing.CaseType,
                 ScheduledDateTime = hearing.ScheduledDateTime,
                 ScheduledDuration = hearing.ScheduledDuration,
-                HearingVenueName = hearing.HearingVenueName
+                HearingVenueName = hearing.HearingVenueName,
+                RecordAudio = hearing.RecordAudio
             };
 
             await _videoApiService.UpdateConferenceAsync(request).ConfigureAwait(false);

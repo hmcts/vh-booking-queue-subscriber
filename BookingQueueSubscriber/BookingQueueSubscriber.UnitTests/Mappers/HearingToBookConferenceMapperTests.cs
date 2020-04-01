@@ -38,7 +38,8 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
                 ScheduledDateTime = DateTime.UtcNow,
-                HearingVenueName = "MyVenue"
+                HearingVenueName = "MyVenue",
+                RecordAudio = true
             };
             return dto;
         }
