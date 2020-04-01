@@ -22,8 +22,9 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Should().NotBeNull();
             request.Should().BeEquivalentTo(hearingDto, options => 
                 options
-                    .Excluding(o => o.HearingId)
+                    .Excluding(o => o.HearingId).ExcludingMissingMembers()
                 );
+            request.AudioRecordingRequired.Should().Be(hearingDto.RecordAudio);
             request.HearingRefId.Should().Be(hearingDto.HearingId);
             request.Participants.Count.Should().Be(participants.Count);
         }

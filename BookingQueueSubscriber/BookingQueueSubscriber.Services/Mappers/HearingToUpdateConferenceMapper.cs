@@ -16,7 +16,7 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ScheduledDateTime = hearing.ScheduledDateTime,
                 ScheduledDuration = hearing.ScheduledDuration,
                 HearingVenueName = hearing.HearingVenueName,
-                RecordAudio = hearing.RecordAudio
+                AudioRecordingRequired = hearing.RecordAudio
             };
         }
     }
