@@ -43,7 +43,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                   'scheduled_duration': 1,
                   'case_type': 'Civil Money Claims',
                   'case_number': 'Number1',
-                  'case_name': 'Name1'
+                  'case_name': 'Name1',
+                  'record_audio': true
                 },
                 'participants': [
                   {
@@ -147,7 +148,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
       'scheduled_duration': 100,
       'case_type': 'Civil Money Claims',
       'case_number': 'CaseNumber',
-      'case_name': 'CaseName'
+      'case_name': 'CaseName',
+      'record_audio': true
     }
   }
 }";
