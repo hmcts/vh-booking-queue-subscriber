@@ -13,6 +13,6 @@ namespace BookingQueueSubscriber.Services.VideoApi.Contracts
         public int ScheduledDuration { get; set; }
         public List<ParticipantRequest> Participants { get; set; }
         public string HearingVenueName { get; set; }
-        public bool RecordAudio { get; set; }
+        public bool AudioRecordingRequired { get; set; }
     }
 }
