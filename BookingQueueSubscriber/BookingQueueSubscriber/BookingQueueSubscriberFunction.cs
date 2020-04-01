@@ -34,7 +34,7 @@ namespace BookingQueueSubscriber
             log.LogInformation($"using handler {handler.GetType()}");
 
             // execute handler
-            await handler.HandleAsync(eventMessage.IntegrationEvent).ConfigureAwait(false);
+            await handler.HandleAsync(eventMessage.IntegrationEvent);
             log.LogInformation($"Process message {eventMessage.Id} - {eventMessage.IntegrationEvent}");
         }
     }

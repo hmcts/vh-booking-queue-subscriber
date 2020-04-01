@@ -4,9 +4,9 @@ using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
-    public class ParticipantToParticipantRequestMapper
+    public static class ParticipantToParticipantRequestMapper
     {
-        public ParticipantRequest MapToParticipantRequest(ParticipantDto participantDto)
+        public static ParticipantRequest MapToParticipantRequest(ParticipantDto participantDto)
         {
             var request = new ParticipantRequest
             {

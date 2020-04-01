@@ -61,7 +61,7 @@ namespace BookingQueueSubscriber.Services
         {
             _log.LogInformation($"Deleting conference for {conferenceId}");
             var response = await _httpClient
-                .DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId)).ConfigureAwait(false);
+                .DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
             response.EnsureSuccessStatusCode();
         }
 
@@ -69,9 +69,9 @@ namespace BookingQueueSubscriber.Services
         {
             _log.LogInformation($"Getting conference by hearing ref id {hearingRefId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId);
-            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
+            var response = await _httpClient.GetAsync(uriString);
             response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
             return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<ConferenceResponse>(content);
         }
 
@@ -89,8 +89,7 @@ namespace BookingQueueSubscriber.Services
         public async Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId)
         {
             var response = await _httpClient.DeleteAsync(
-                    _apiUriFactory.ParticipantsEndpoints.RemoveParticipantFromConference(conferenceId, participantId))
-                .ConfigureAwait(false);
+                    _apiUriFactory.ParticipantsEndpoints.RemoveParticipantFromConference(conferenceId, participantId));
             response.EnsureSuccessStatusCode();
         }
 
@@ -101,7 +100,7 @@ namespace BookingQueueSubscriber.Services
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PatchAsync(_apiUriFactory.ParticipantsEndpoints.UpdateParticipantDetails(
-                conferenceId, participantId), httpContent).ConfigureAwait(false);
+                conferenceId, participantId), httpContent);
             response.EnsureSuccessStatusCode();
         }
     }

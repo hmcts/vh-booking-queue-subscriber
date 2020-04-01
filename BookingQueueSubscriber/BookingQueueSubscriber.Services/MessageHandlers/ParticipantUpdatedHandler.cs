@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
+using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
@@ -21,13 +22,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var participantResponse = conferenceResponse.Participants.SingleOrDefault(x => x.RefId == eventMessage.Participant.ParticipantId);
             if (participantResponse != null)
             {
-                await _videoApiService.UpdateParticipantDetails(conferenceResponse.Id, participantResponse.Id,
-                    new UpdateParticipantRequest
-                    {
-                        Fullname = eventMessage.Participant.Fullname,
-                        DisplayName = eventMessage.Participant.DisplayName,
-                        Representee = eventMessage.Participant.Representee
-                    });
+                var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(eventMessage.Participant);
+                await _videoApiService.UpdateParticipantDetails(conferenceResponse.Id, participantResponse.Id, request);
             }
         }
 
