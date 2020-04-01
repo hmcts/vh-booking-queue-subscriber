@@ -15,7 +15,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingCancelledIntegrationEvent eventMessage)
         {
-            var conferenceDto = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId).ConfigureAwait(false);
+            var conferenceDto = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
             await _videoApiService.DeleteConferenceAsync(conferenceDto.Id);
         }
 

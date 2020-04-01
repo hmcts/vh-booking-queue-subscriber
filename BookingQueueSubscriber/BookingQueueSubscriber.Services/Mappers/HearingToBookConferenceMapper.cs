@@ -9,8 +9,7 @@ namespace BookingQueueSubscriber.Services.Mappers
     {
         public static BookNewConferenceRequest MapToBookNewConferenceRequest(HearingDto hearingDto, IEnumerable<ParticipantDto> participantDtos)
         {
-            var participantMapper = new ParticipantToParticipantRequestMapper();
-            var participants = participantDtos.Select(participantMapper.MapToParticipantRequest).ToList();
+            var participants = participantDtos.Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList();
 
             var request = new BookNewConferenceRequest
             {
@@ -21,7 +20,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ScheduledDateTime = hearingDto.ScheduledDateTime,
                 HearingRefId = hearingDto.HearingId,
                 Participants = participants,
-                HearingVenueName = hearingDto.HearingVenueName
+                HearingVenueName = hearingDto.HearingVenueName,
+                RecordAudio = hearingDto.RecordAudio
             };
             
             return request;

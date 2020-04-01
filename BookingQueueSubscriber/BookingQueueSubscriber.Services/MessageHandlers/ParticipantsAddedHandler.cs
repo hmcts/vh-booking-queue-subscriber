@@ -21,8 +21,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
             await _videoApiService.AddParticipantsToConference(conference.Id, new AddParticipantsToConferenceRequest
             {
-                Participants = eventMessage.Participants.Select(x => 
-                    new ParticipantToParticipantRequestMapper().MapToParticipantRequest(x)).ToList()
+                Participants = eventMessage.Participants
+                    .Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList()
             });
         }
 

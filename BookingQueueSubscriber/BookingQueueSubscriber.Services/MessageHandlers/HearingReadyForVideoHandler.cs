@@ -19,7 +19,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants);
 
-            await _videoApiService.BookNewConferenceAsync(request).ConfigureAwait(false);
+            await _videoApiService.BookNewConferenceAsync(request);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

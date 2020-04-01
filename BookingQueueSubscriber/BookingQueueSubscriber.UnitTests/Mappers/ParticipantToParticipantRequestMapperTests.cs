@@ -12,10 +12,9 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
         [Test]
         public void should_map_participant_dto_to_participant_request()
         {
-            var mapper = new ParticipantToParticipantRequestMapper();
             var participantDto = CreateParticipantDto();
 
-            var request = mapper.MapToParticipantRequest(participantDto);
+            var request = ParticipantToParticipantRequestMapper.MapToParticipantRequest(participantDto);
             
             request.Should().NotBeNull();
             request.Should().BeEquivalentTo(participantDto, options => 

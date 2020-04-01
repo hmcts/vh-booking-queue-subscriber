@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
+using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -16,19 +16,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingDetailsUpdatedIntegrationEvent eventMessage)
         {
-            var hearing = eventMessage.Hearing;
-            var request = new UpdateConferenceRequest
-            {
-                HearingRefId = hearing.HearingId,
-                CaseName = hearing.CaseName,
-                CaseNumber = hearing.CaseNumber,
-                CaseType = hearing.CaseType,
-                ScheduledDateTime = hearing.ScheduledDateTime,
-                ScheduledDuration = hearing.ScheduledDuration,
-                HearingVenueName = hearing.HearingVenueName
-            };
+            var request = HearingToUpdateConferenceMapper.MapToUpdateConferenceRequest(eventMessage.Hearing);
 
-            await _videoApiService.UpdateConferenceAsync(request).ConfigureAwait(false);
+            await _videoApiService.UpdateConferenceAsync(request);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
