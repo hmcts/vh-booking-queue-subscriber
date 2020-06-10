@@ -10,6 +10,8 @@ namespace BookingQueueSubscriber.Services.Mappers
             return new UpdateParticipantRequest
             {
                 Fullname = participant.Fullname,
+                FirstName = participant.FirstName,
+                LastName = participant.LastName,
                 DisplayName = participant.DisplayName,
                 Representee = participant.Representee
             };

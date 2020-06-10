@@ -29,7 +29,16 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), Times.Once);
+            
+            VideoApiServiceMock.Verify(x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.Is<UpdateParticipantRequest>
+            (
+                request => 
+                    request.DisplayName == integrationEvent.Participant.DisplayName &&
+                    request.FirstName == integrationEvent.Participant.FirstName &&
+                    request.LastName == integrationEvent.Participant.LastName &&
+                    request.Representee == integrationEvent.Participant.Representee &&
+                    request.Fullname == integrationEvent.Participant.Fullname
+            )), Times.Once);
         }
 
         private ParticipantUpdatedIntegrationEvent GetIntegrationEvent()
@@ -37,12 +46,14 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             return new ParticipantUpdatedIntegrationEvent { HearingId = HearingId, Participant = new ParticipantDto
             {
                 CaseGroupType = CaseRoleGroup.Applicant,
-                DisplayName = "name",
+                DisplayName = "displayName",
                 Fullname = "fullname",
+                FirstName = "firstName",
+                LastName = "lastName",
                 HearingRole = "hearingRole",
                 ParticipantId = ParticipantId,
                 Representee = "representee",
-                UserRole = "userole",
+                UserRole = "useRole",
                 Username = "username"
             }};
         }

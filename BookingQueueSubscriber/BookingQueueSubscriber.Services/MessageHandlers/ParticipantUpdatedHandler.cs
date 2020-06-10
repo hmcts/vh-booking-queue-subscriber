@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -20,6 +19,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
             var participantResponse = conferenceResponse.Participants.SingleOrDefault(x => x.RefId == eventMessage.Participant.ParticipantId);
+            
             if (participantResponse != null)
             {
                 var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(eventMessage.Participant);
