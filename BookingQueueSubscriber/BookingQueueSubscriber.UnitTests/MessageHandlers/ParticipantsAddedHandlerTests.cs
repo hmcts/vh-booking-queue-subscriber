@@ -30,7 +30,21 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()), Times.Once);
+            
+            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.Is<AddParticipantsToConferenceRequest>
+            (
+                request => 
+                    request.Participants.Count == 1 &&
+                    request.Participants[0].Name == integrationEvent.Participants[0].Fullname &&
+                    request.Participants[0].Username == integrationEvent.Participants[0].Username &&
+                    request.Participants[0].FirstName == integrationEvent.Participants[0].FirstName &&
+                    request.Participants[0].LastName == integrationEvent.Participants[0].LastName &&
+                    request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
+                    request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
+                    request.Participants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
+                    request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
+                    request.Participants[0].Representee == integrationEvent.Participants[0].Representee
+            )), Times.Once);
         }
 
         private ParticipantsAddedIntegrationEvent GetIntegrationEvent()
@@ -43,8 +57,10 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     new ParticipantDto
                     {
                         CaseGroupType = CaseRoleGroup.Applicant,
-                        DisplayName = "name",
+                        DisplayName = "displayName",
                         Fullname = "fullname",
+                        FirstName = "firstName",
+                        LastName = "lastName",
                         HearingRole = "hearingRole",
                         ParticipantId = ParticipantId,
                         Representee = "representee",
