@@ -12,6 +12,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Fullname = participant.Fullname,
                 FirstName = participant.FirstName,
                 LastName = participant.LastName,
+                ContactEmail = participant.ContactEmail,
+                ContactTelephone = participant.ContactTelephone,
                 DisplayName = participant.DisplayName,
                 Representee = participant.Representee
             };
