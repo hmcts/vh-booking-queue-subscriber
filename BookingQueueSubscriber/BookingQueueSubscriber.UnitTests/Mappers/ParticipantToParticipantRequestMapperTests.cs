@@ -30,6 +30,8 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Name.Should().Be(participantDto.Fullname);
             request.FirstName.Should().Be(participantDto.FirstName);
             request.LastName.Should().Be(participantDto.LastName);
+            request.ContactEmail.Should().Be(participantDto.ContactEmail);
+            request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
             request.UserRole.ToString().Should().Be(participantDto.UserRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.Representee.Should().Be(participantDto.Representee);

@@ -7,5 +7,7 @@ namespace BookingQueueSubscriber.Services.VideoApi.Contracts
         public string LastName { get; set; }
         public string Representee { get; set; }
         public string Fullname { get; set; }
+        public string ContactEmail { get; set; }
+        public string ContactTelephone { get; set; }
     }
 }
