@@ -6,6 +6,7 @@ using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoApi;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;

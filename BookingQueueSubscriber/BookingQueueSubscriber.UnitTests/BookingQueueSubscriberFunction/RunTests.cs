@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
