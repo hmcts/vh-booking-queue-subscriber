@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.VideoApi;
 using Moq;
 using NUnit.Framework;

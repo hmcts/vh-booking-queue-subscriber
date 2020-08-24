@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
@@ -114,6 +113,26 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                     'user_role': 'Judge',
                     'case_group_type': 'judge',
                     'representee': ''
+                  }
+                ],
+                'Endpoints': [
+                  {
+                    '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',
+                    'display_name': 'end point one',
+                    'sip': 'sip 12345',
+                    'pin': '1234'
+                  },
+                  {
+                    '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',
+                    'display_name': 'end point two',
+                    'sip': 'sip 67890',
+                    'pin': '1234'
+                  },
+                  {
+                    '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',
+                    'display_name': 'end point three',
+                    'sip': 'sip 6543',
+                    'pin': '1234'
                   }
                 ],
                 'event_type': 'hearingIsReadyForVideo'

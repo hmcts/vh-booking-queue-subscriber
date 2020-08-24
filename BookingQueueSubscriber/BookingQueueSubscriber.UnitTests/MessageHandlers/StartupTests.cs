@@ -1,6 +1,5 @@
 using System;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
@@ -16,8 +17,10 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             var hearingDto = CreateHearingDto();
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build();
+            var endpoints = CreateEndpoints();
 
-            var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(hearingDto, participants);
+            var request = HearingToBookConferenceMapper
+                .MapToBookNewConferenceRequest(hearingDto, participants, endpoints);
             
             request.Should().NotBeNull();
             request.Should().BeEquivalentTo(hearingDto, options => 
@@ -27,6 +30,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.AudioRecordingRequired.Should().Be(hearingDto.RecordAudio);
             request.HearingRefId.Should().Be(hearingDto.HearingId);
             request.Participants.Count.Should().Be(participants.Count);
+            request.Endpoints.Count.Should().Be(endpoints.Count);
         }
 
         private static HearingDto CreateHearingDto()
@@ -43,6 +47,16 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 RecordAudio = true
             };
             return dto;
+        }
+
+        private List<EndpointDto> CreateEndpoints()
+        {
+            return new List<EndpointDto>
+            {
+                new EndpointDto{DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234"},
+                new EndpointDto{DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678"},
+                new EndpointDto{DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012"}
+            };
         }
     }
 }
