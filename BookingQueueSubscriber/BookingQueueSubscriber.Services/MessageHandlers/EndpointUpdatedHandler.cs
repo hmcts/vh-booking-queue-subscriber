@@ -6,11 +6,11 @@ using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class EndpointUpdateHandler : IMessageHandler<EndpointUpdatedIntegrationEvent>
+    public class EndpointUpdatedHandler : IMessageHandler<EndpointUpdatedIntegrationEvent>
     {
         private readonly IVideoApiService _videoApiService;
 
-        public EndpointUpdateHandler(IVideoApiService videoApiService)
+        public EndpointUpdatedHandler(IVideoApiService videoApiService)
         {
             _videoApiService = videoApiService;
         }
