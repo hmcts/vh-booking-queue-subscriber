@@ -50,11 +50,14 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             };
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();
+
+            var endpoints = Builder<EndpointDto>.CreateListOfSize(4).Build().ToList();
             
             var message = new HearingIsReadyForVideoIntegrationEvent
             {
                 Hearing = hearingDto,
-                Participants = participants
+                Participants = participants,
+                Endpoints = endpoints
             };
             return message;
         }

@@ -1,9 +1,9 @@
 using System;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoApi;
 using FluentAssertions;
 using NUnit.Framework;
 

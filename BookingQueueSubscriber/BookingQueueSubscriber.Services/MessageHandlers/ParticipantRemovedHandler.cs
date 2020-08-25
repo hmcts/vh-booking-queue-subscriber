@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoApi;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {

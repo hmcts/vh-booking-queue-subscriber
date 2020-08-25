@@ -4,23 +4,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.ApiHelper;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 using Microsoft.Extensions.Logging;
 
-namespace BookingQueueSubscriber.Services
+namespace BookingQueueSubscriber.Services.VideoApi
 {
-    public interface IVideoApiService
-    {
-        Task BookNewConferenceAsync(BookNewConferenceRequest request);
-        Task UpdateConferenceAsync(UpdateConferenceRequest request);
-        Task DeleteConferenceAsync(Guid conferenceId);
-        Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId);
-        Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request);
-        Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId);
-        Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request);
-    }
-
     public class VideoApiService : IVideoApiService
     {
         private readonly HttpClient _httpClient;
@@ -101,6 +89,35 @@ namespace BookingQueueSubscriber.Services
 
             var response = await _httpClient.PatchAsync(_apiUriFactory.ParticipantsEndpoints.UpdateParticipantDetails(
                 conferenceId, participantId), httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request)
+        {
+            _log.LogInformation($"Adding endpoint to conference: {conferenceId}");
+            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
+            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(
+                _apiUriFactory.EndpointForJvsEndpoints.AddEndpoint(conferenceId), httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveEndpointFromConference(Guid conferenceId, Guid endpointId)
+        {
+            _log.LogInformation($"Removing endpoint to conference: {conferenceId}, Endpoint: {endpointId}");
+            var response = await _httpClient.DeleteAsync(
+                _apiUriFactory.EndpointForJvsEndpoints.RemoveEndpoint(conferenceId, endpointId));
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task UpdateEndpointInConference(Guid conferenceId, Guid endpointId, UpdateEndpointRequest request)
+        {
+            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
+            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PatchAsync(_apiUriFactory.EndpointForJvsEndpoints.UpdateEndpoint(
+                conferenceId, endpointId), httpContent);
             response.EnsureSuccessStatusCode();
         }
     }
