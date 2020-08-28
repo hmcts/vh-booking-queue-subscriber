@@ -103,21 +103,22 @@ namespace BookingQueueSubscriber.Services.VideoApi
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task RemoveEndpointFromConference(Guid conferenceId, Guid endpointId)
+        public async Task RemoveEndpointFromConference(Guid conferenceId, string sip)
         {
-            _log.LogInformation($"Removing endpoint to conference: {conferenceId}, Endpoint: {endpointId}");
+            _log.LogInformation($"Removing endpoint to conference: {conferenceId}, Endpoint: {sip}");
             var response = await _httpClient.DeleteAsync(
-                _apiUriFactory.EndpointForJvsEndpoints.RemoveEndpoint(conferenceId, endpointId));
+                _apiUriFactory.EndpointForJvsEndpoints.RemoveEndpoint(conferenceId, sip));
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task UpdateEndpointInConference(Guid conferenceId, Guid endpointId, UpdateEndpointRequest request)
+        public async Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request)
         {
             var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
             var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PatchAsync(_apiUriFactory.EndpointForJvsEndpoints.UpdateEndpoint(
-                conferenceId, endpointId), httpContent);
+            var response = await _httpClient.PatchAsync(_apiUriFactory.EndpointForJvsEndpoints.UpdateEndpoint(conferenceId,
+                    sip), 
+                httpContent);
             response.EnsureSuccessStatusCode();
         }
     }

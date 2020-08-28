@@ -86,13 +86,13 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task RemoveEndpointFromConference(Guid conferenceId, Guid endpointId)
+        public Task RemoveEndpointFromConference(Guid conferenceId, string sip)
         {
             RemoveEndpointFromConferenceCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task UpdateEndpointInConference(Guid conferenceId, Guid endpointId, UpdateEndpointRequest request)
+        public Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request)
         {
             UpdateEndpointInConferenceCount++;
             return Task.FromResult(HttpStatusCode.OK);

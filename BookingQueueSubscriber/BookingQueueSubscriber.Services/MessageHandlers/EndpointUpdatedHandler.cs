@@ -19,7 +19,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
             
-            await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.EndpointId, new UpdateEndpointRequest
+            await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip, new UpdateEndpointRequest
             {
                 DisplayName = eventMessage.DisplayName
             });

@@ -14,7 +14,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId);
         Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request);
         Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request);
-        Task RemoveEndpointFromConference(Guid conferenceId, Guid endpointId);
-        Task UpdateEndpointInConference(Guid conferenceId, Guid endpointId, UpdateEndpointRequest request);
+        Task RemoveEndpointFromConference(Guid conferenceId, string sip);
+        Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request);
     }
 }

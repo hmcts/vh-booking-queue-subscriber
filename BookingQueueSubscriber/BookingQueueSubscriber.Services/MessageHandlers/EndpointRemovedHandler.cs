@@ -18,7 +18,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
             
-            await _videoApiService.RemoveEndpointFromConference(conference.Id, eventMessage.EndpointId);
+            await _videoApiService.RemoveEndpointFromConference(conference.Id, eventMessage.Sip);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
