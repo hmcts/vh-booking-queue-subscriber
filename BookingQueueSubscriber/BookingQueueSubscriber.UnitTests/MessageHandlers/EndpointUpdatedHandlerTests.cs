@@ -18,7 +18,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateEndpointRequest>()), Times.Once);
+            VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<UpdateEndpointRequest>()), Times.Once);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
 
-            VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<Guid>(), It.Is<UpdateEndpointRequest>
+            VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(), It.Is<UpdateEndpointRequest>
             (
                 request => request.DisplayName == integrationEvent.DisplayName
             )), Times.Once);
@@ -40,7 +40,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             return new EndpointUpdatedIntegrationEvent
             {
                 HearingId = HearingId,
-                EndpointId = Guid.NewGuid(),
+                Sip = Guid.NewGuid().ToString(),
                 DisplayName = "two"
             };
         }

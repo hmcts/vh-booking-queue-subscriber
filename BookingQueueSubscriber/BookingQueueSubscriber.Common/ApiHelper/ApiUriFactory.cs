@@ -41,7 +41,7 @@ namespace BookingQueueSubscriber.Common.ApiHelper
     {
         private string ApiRoot => "conferences";
         public string AddEndpoint(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/endpoints";
-        public string RemoveEndpoint(Guid conferenceId, Guid endpointId) => $"{ApiRoot}/{conferenceId}/endpoints/{endpointId}";
-        public string UpdateEndpoint(Guid conferenceId, Guid endpointId) => $"{ApiRoot}/{conferenceId}/endpoints/{endpointId}/displayname";
+        public string RemoveEndpoint(Guid conferenceId, string sip) => $"{ApiRoot}/{conferenceId}/endpoints/{sip}";
+        public string UpdateEndpoint(Guid conferenceId, string sip) => $"{ApiRoot}/{conferenceId}/endpoints/{sip}/displayname";
     }
 }

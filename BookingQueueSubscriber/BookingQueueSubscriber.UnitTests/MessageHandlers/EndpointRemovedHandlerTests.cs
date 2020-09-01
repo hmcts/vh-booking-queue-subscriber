@@ -17,7 +17,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.RemoveEndpointFromConference(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
+            VideoApiServiceMock.Verify(x => x.RemoveEndpointFromConference(It.IsAny<Guid>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
 
-            VideoApiServiceMock.Verify(x => x.RemoveEndpointFromConference(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
+            VideoApiServiceMock.Verify(x => x.RemoveEndpointFromConference(It.IsAny<Guid>(), It.IsAny<string>()), Times.Once);
         }
 
         private EndpointRemovedIntegrationEvent GetIntegrationEvent()
@@ -36,7 +36,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             return new EndpointRemovedIntegrationEvent
             {
                 HearingId = HearingId,
-                EndpointId = Guid.NewGuid()
+                Sip = Guid.NewGuid().ToString()
             };
         } 
     }
