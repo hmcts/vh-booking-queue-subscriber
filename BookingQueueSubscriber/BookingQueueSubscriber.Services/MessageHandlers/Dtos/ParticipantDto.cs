@@ -26,6 +26,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         Applicant = 3,
         Respondent = 4,
         Observer = 5,
-        PanelMember = 6
+        PanelMember = 6,
+        None = 7
     }
 }
