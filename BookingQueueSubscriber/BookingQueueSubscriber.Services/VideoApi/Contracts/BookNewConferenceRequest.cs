@@ -14,5 +14,6 @@ namespace BookingQueueSubscriber.Services.VideoApi.Contracts
         public List<ParticipantRequest> Participants { get; set; }
         public string HearingVenueName { get; set; }
         public bool AudioRecordingRequired { get; set; }
+        public List<AddEndpointRequest> Endpoints { get; set; }
     }
 }

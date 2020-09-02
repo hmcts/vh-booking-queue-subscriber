@@ -14,6 +14,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Username = participantDto.Username,
                 FirstName = participantDto.FirstName,
                 LastName = participantDto.LastName,
+                ContactEmail = participantDto.ContactEmail,
+                ContactTelephone = participantDto.ContactTelephone,
                 DisplayName = participantDto.DisplayName,
                 UserRole = Enum.Parse<UserRole>(participantDto.UserRole),
                 CaseTypeGroup = participantDto.CaseGroupType.ToString(),

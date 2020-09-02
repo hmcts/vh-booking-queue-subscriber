@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoApi;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -17,7 +18,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
-                eventMessage.Participants);
+                eventMessage.Participants, eventMessage.Endpoints);
 
             await _videoApiService.BookNewConferenceAsync(request);
         }

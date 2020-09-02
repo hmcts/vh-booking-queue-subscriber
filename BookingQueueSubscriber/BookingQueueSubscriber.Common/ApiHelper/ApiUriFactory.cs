@@ -6,11 +6,13 @@ namespace BookingQueueSubscriber.Common.ApiHelper
     {
         public ParticipantsEndpoints ParticipantsEndpoints { get; }
         public ConferenceEndpoints ConferenceEndpoints { get; }
+        public EndpointForJvsEndpoints EndpointForJvsEndpoints { get; }
 
         public ApiUriFactory()
         {
             ParticipantsEndpoints = new ParticipantsEndpoints();
             ConferenceEndpoints = new ConferenceEndpoints();
+            EndpointForJvsEndpoints = new EndpointForJvsEndpoints();
         }
     }
 
@@ -33,5 +35,13 @@ namespace BookingQueueSubscriber.Common.ApiHelper
         public string UpdateConference => $"{ApiRoot}";
         public string DeleteConference(Guid conferenceId) => $"{ApiRoot}/{conferenceId}";
         public string GetConferenceByHearingRefId(Guid hearingRefId) => $"{ApiRoot}/hearings/{hearingRefId}";
+    }
+
+    public class EndpointForJvsEndpoints
+    {
+        private string ApiRoot => "conferences";
+        public string AddEndpoint(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/endpoints";
+        public string RemoveEndpoint(Guid conferenceId, string sip) => $"{ApiRoot}/{conferenceId}/endpoints/{sip}";
+        public string UpdateEndpoint(Guid conferenceId, string sip) => $"{ApiRoot}/{conferenceId}/endpoints/{sip}/displayname";
     }
 }

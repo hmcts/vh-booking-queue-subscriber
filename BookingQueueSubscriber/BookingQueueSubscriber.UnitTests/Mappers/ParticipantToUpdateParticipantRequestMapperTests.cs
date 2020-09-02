@@ -21,6 +21,8 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Fullname.Should().Be(participantDto.Fullname);
             request.FirstName.Should().Be(participantDto.FirstName);
             request.LastName.Should().Be(participantDto.LastName);
+            request.ContactEmail.Should().Be(participantDto.ContactEmail);
+            request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
             request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
         }

@@ -37,6 +37,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request.FirstName == integrationEvent.Participant.FirstName &&
                     request.LastName == integrationEvent.Participant.LastName &&
                     request.Representee == integrationEvent.Participant.Representee &&
+                    request.ContactEmail == integrationEvent.Participant.ContactEmail &&
+                    request.ContactTelephone == integrationEvent.Participant.ContactTelephone &&
                     request.Fullname == integrationEvent.Participant.Fullname
             )), Times.Once);
         }
@@ -50,6 +52,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 Fullname = "fullname",
                 FirstName = "firstName",
                 LastName = "lastName",
+                ContactEmail = "test@email.com",
+                ContactTelephone = "012748465859",
                 HearingRole = "hearingRole",
                 ParticipantId = ParticipantId,
                 Representee = "representee",

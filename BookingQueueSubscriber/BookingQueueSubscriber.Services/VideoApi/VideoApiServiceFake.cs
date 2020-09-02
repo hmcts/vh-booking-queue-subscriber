@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
-namespace BookingQueueSubscriber.Services
+namespace BookingQueueSubscriber.Services.VideoApi
 {
     public class VideoApiServiceFake : IVideoApiService
     {
@@ -18,6 +17,9 @@ namespace BookingQueueSubscriber.Services
         public int AddParticipantsToConferenceCount { get; private set; }
         public int RemoveParticipantFromConferenceCount { get; private set; }
         public int UpdateParticipantDetailsCount { get; private set; }
+        public int AddEndpointToConferenceCount { get; set; }
+        public int RemoveEndpointFromConferenceCount { get; set; }
+        public int UpdateEndpointInConferenceCount { get; set; }
 
         public Task BookNewConferenceAsync(BookNewConferenceRequest request)
         {
@@ -75,6 +77,24 @@ namespace BookingQueueSubscriber.Services
         public Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request)
         {
             UpdateParticipantDetailsCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request)
+        {
+            AddEndpointToConferenceCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task RemoveEndpointFromConference(Guid conferenceId, string sip)
+        {
+            RemoveEndpointFromConferenceCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request)
+        {
+            UpdateEndpointInConferenceCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
 

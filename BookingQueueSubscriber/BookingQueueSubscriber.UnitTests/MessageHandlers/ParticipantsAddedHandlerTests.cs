@@ -39,6 +39,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request.Participants[0].Username == integrationEvent.Participants[0].Username &&
                     request.Participants[0].FirstName == integrationEvent.Participants[0].FirstName &&
                     request.Participants[0].LastName == integrationEvent.Participants[0].LastName &&
+                    request.Participants[0].ContactEmail == integrationEvent.Participants[0].ContactEmail &&
+                    request.Participants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
                     request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
                     request.Participants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
@@ -61,6 +63,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                         Fullname = "fullname",
                         FirstName = "firstName",
                         LastName = "lastName",
+                        ContactEmail = "test@email.com",
+                        ContactTelephone = "012748465859",
                         HearingRole = "hearingRole",
                         ParticipantId = ParticipantId,
                         Representee = "representee",

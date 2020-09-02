@@ -1,35 +1,35 @@
-using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
-using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class ParticipantsAddedHandler : IMessageHandler<ParticipantsAddedIntegrationEvent>
+    public class EndpointAddedHandler : IMessageHandler<EndpointAddedIntegrationEvent>
     {
         private readonly IVideoApiService _videoApiService;
 
-        public ParticipantsAddedHandler(IVideoApiService videoApiService)
+        public EndpointAddedHandler(IVideoApiService videoApiService)
         {
             _videoApiService = videoApiService;
         }
 
-        public async Task HandleAsync(ParticipantsAddedIntegrationEvent eventMessage)
+        public async Task HandleAsync(EndpointAddedIntegrationEvent eventMessage)
         {
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
-            await _videoApiService.AddParticipantsToConference(conference.Id, new AddParticipantsToConferenceRequest
+            
+            await _videoApiService.AddEndpointToConference(conference.Id, new AddEndpointRequest
             {
-                Participants = eventMessage.Participants
-                    .Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList()
+                DisplayName = eventMessage.Endpoint.DisplayName,
+                SipAddress = eventMessage.Endpoint.Sip,
+                Pin = eventMessage.Endpoint.Pin
             });
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
-            await HandleAsync((ParticipantsAddedIntegrationEvent)integrationEvent);
+            await HandleAsync((EndpointAddedIntegrationEvent)integrationEvent);
         }
     }
 }
