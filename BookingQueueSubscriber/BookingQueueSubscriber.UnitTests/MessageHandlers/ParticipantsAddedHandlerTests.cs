@@ -43,6 +43,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request.Participants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
                     request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
+                    request.Participants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
                     request.Participants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
                     request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
                     request.Participants[0].Representee == integrationEvent.Participants[0].Representee

@@ -23,7 +23,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                     .Excluding(o => o.Fullname)
                     .Excluding(o => o.UserRole)
                     .Excluding(o => o.CaseGroupType)
-                    .Excluding(o => o.HearingRole)
                     .Excluding(o => o.Representee)
             );
             request.ParticipantRefId.Should().Be(participantDto.ParticipantId);
@@ -33,6 +32,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.ContactEmail.Should().Be(participantDto.ContactEmail);
             request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
             request.UserRole.ToString().Should().Be(participantDto.UserRole);
+            request.HearingRole.Should().Be(participantDto.HearingRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.Representee.Should().Be(participantDto.Representee);
         }
@@ -41,6 +41,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
         {
             return Builder<ParticipantDto>.CreateNew()
                 .With(x => x.UserRole = UserRole.Individual.ToString())
+                .With(x => x.HearingRole = "Claimant")
                 .Build();
         }
     }
