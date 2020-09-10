@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
@@ -16,8 +17,11 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
         {
             var hearingDto = CreateHearingDto();
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
-                .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build();
-            var endpoints = CreateEndpoints();
+                .TheFirst(1).With(x => x.UserRole = UserRole.Judge.ToString())
+                .TheNext(2).With(x => x.UserRole = UserRole.Individual.ToString())
+                .TheRest().With(x => x.UserRole = UserRole.Representative.ToString())
+                .Build();
+            var endpoints = CreateEndpoints(participants);
 
             var request = HearingToBookConferenceMapper
                 .MapToBookNewConferenceRequest(hearingDto, participants, endpoints);
@@ -31,6 +35,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.HearingRefId.Should().Be(hearingDto.HearingId);
             request.Participants.Count.Should().Be(participants.Count);
             request.Endpoints.Count.Should().Be(endpoints.Count);
+            request.Endpoints.First(x => x.DisplayName == "one").DefenceAdvocate.Should().NotBeEmpty();
         }
 
         private static HearingDto CreateHearingDto()
@@ -49,13 +54,18 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             return dto;
         }
 
-        private List<EndpointDto> CreateEndpoints()
+        private List<EndpointDto> CreateEndpoints(IList<ParticipantDto> participantDtos)
         {
+            var rep = participantDtos.First(x => x.UserRole == UserRole.Representative.ToString());
+
             return new List<EndpointDto>
             {
-                new EndpointDto{DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234"},
-                new EndpointDto{DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678"},
-                new EndpointDto{DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012"}
+                new EndpointDto
+                {
+                    DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234", DefenceAdvocate = rep.Username
+                },
+                new EndpointDto {DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678"},
+                new EndpointDto {DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012"}
             };
         }
     }

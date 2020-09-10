@@ -34,7 +34,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             (
                 request => request.DisplayName == integrationEvent.Endpoint.DisplayName &&
                            request.SipAddress == integrationEvent.Endpoint.Sip &&
-                           request.Pin == integrationEvent.Endpoint.Pin
+                           request.Pin == integrationEvent.Endpoint.Pin && 
+                           request.DefenceAdvocate == integrationEvent.Endpoint.DefenceAdvocate
             )), Times.Once);
         }
 
