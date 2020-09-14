@@ -23,7 +23,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 DisplayName = eventMessage.Endpoint.DisplayName,
                 SipAddress = eventMessage.Endpoint.Sip,
-                Pin = eventMessage.Endpoint.Pin
+                Pin = eventMessage.Endpoint.Pin,
+                DefenceAdvocate = eventMessage.Endpoint.DefenceAdvocateUsername
             });
         }
 

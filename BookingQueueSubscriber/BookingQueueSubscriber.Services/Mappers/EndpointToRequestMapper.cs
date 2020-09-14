@@ -11,7 +11,8 @@ namespace BookingQueueSubscriber.Services.Mappers
             {
                 SipAddress = source.Sip,
                 DisplayName = source.DisplayName,
-                Pin = source.Pin
+                Pin = source.Pin,
+                DefenceAdvocate = source.DefenceAdvocateUsername
             };
         }
     }

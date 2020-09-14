@@ -21,7 +21,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             
             await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip, new UpdateEndpointRequest
             {
-                DisplayName = eventMessage.DisplayName
+                DisplayName = eventMessage.DisplayName,
+                DefenceAdvocate = eventMessage.DefenceAdvocate
             });
         }
 
