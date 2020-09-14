@@ -127,7 +127,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                     'display_name': 'end point two',
                     'sip': 'sip 67890',
                     'pin': '1234',
-                    'defence_advocate': 'angie_bartell@jastmraz.biz'
+                    'defence_advocate_username': 'angie_bartell@jastmraz.biz'
                   },
                   {
                     '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',

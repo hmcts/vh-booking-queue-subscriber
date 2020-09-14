@@ -62,7 +62,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             {
                 new EndpointDto
                 {
-                    DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234", DefenceAdvocate = rep.Username
+                    DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234", DefenceAdvocateUsername = rep.Username
                 },
                 new EndpointDto {DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678"},
                 new EndpointDto {DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012"}
