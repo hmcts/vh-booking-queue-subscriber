@@ -49,10 +49,6 @@ parameters:
   - name: AzureAd:TenantId
     value: tenantid
     secret: true
-  - name: Services:BookingsApiUrl
-    value: $(bookings_api_url)
-  - name: Services:VideoApiUrl
-    value: $(video_api_url)
   - name: UsernameStem
     value: $(UsernameStem)
 
@@ -71,10 +67,6 @@ parameters:
   - name: AzureAd:TenantId
     value: tenantid
     secret: true
-  - name: Services:BookingsApiUrl
-    value: $(bookings_api_url)
-  - name: Services:VideoApiUrl
-    value: $(video_api_url)
   - name: UsernameStem
     value: $(UsernameStem)
 
