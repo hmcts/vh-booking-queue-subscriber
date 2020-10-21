@@ -30,7 +30,7 @@ namespace BookingQueueSubscriber
             services.AddSingleton(adConfiguration);
 
             var hearingServicesConfiguration =
-                configLoader.Configuration.GetSection("VhServices").Get<HearingServicesConfiguration>() ??
+                configLoader.Configuration.GetSection("VhServices").Get<ServicesConfiguration>() ??
                 BuildHearingServicesConfiguration(configLoader);
             services.AddSingleton(hearingServicesConfiguration);
 
@@ -52,10 +52,10 @@ namespace BookingQueueSubscriber
             RegisterMessageHandlers(services);
         }
 
-        private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
+        private static ServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
         {
             var values = configLoader.Configuration.GetSection("Values");
-            var hearingServicesConfiguration = new HearingServicesConfiguration();
+            var hearingServicesConfiguration = new ServicesConfiguration();
             values.GetSection("VhServices").Bind(hearingServicesConfiguration);
             return hearingServicesConfiguration;
         }

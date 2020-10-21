@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="VH.AcceptanceTests.Common" Version="1.0.291" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\Environments\" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookingQueueSubscriber.Common\BookingQueueSubscriber.Common.csproj" />
+    <ProjectReference Include="..\BookingQueueSubscriber.Services.BookingsApi\BookingQueueSubscriber.Services.BookingsApi.csproj" />
+    <ProjectReference Include="..\BookingQueueSubscriber.Services.VideoApi\BookingQueueSubscriber.Services.VideoApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
