@@ -1,7 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+      <TargetFramework>netstandard2.1</TargetFramework>
+      <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+      <RestoreLockedMode>true</RestoreLockedMode>
+      <NoWarn>NU1603</NoWarn>
+      <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+      <ProjectGuid>0E3CC11A-C8AF-4AB2-A1D8-6375ACDC51B9</ProjectGuid>
     </PropertyGroup>
 
     <ItemGroup>
