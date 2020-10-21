@@ -112,8 +112,8 @@ extends:
     testParameters:
       baseAgent: windows-latest
       coreProjectPath: BookingQueueSubscriber/BookingQueueSubscriber
-      unitTestProjectPath: BookingQueueSubscriber.UnitTests
-      integTestProjectPath: BookingQueueSubscriber.IntegrationTests
+      unitTestProjectPath: BookingQueueSubscriber/BookingQueueSubscriber.UnitTests
+      integTestProjectPath: BookingQueueSubscriber/BookingQueueSubscriber.IntegrationTests
       secrets_KeyVault: $(pr_Secret_KeyVault)
       secrets_Subscription: $(pr_Secret_Subscription)
       RunUnitTests: ${{ parameters.RunUnitTests }}
