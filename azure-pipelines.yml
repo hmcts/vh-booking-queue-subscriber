@@ -1,75 +1,105 @@
 parameters:
-- name: PackageApp
-  displayName: Package App
-  type: boolean
-  default: true
+  - name: PackageApp
+    displayName: Package App
+    type: boolean
+    default: true
 
-- name: PackageACTests
-  displayName: Package Acceptance Tests
-  type: boolean
-  default: true
+  - name: PackageACTests
+    displayName: Package Acceptance Tests
+    type: boolean
+    default: true
 
-- name: RunUnitTests
-  displayName: Run Unit Tests
-  type: boolean
-  default: true
+  - name: RunUnitTests
+    displayName: Run Unit Tests
+    type: boolean
+    default: true
 
-- name: RunIntegTests
-  displayName: Run Integration Tests
-  type: boolean
-  default: false
+  - name: RunIntegTests
+    displayName: Run Integration Tests
+    type: boolean
+    default: false
 
-- name: RunSonarCloudTests
-  displayName: Run Sonar Cloud Analysis
-  type: boolean
-  default: true
+  - name: RunSonarCloudTests
+    displayName: Run Sonar Cloud Analysis
+    type: boolean
+    default: true
 
-- name: RunMutationTests
-  displayName: Run Mutation Tests
-  type: boolean
-  default: false
+  - name: RunMutationTests
+    displayName: Run Mutation Tests
+    type: boolean
+    default: false
 
-- name: RunACTests
-  displayName: Run Acceptance Tests
-  type: boolean
-  default: true
+  - name: RunACTests
+    displayName: Run Acceptance Tests
+    type: boolean
+    default: true
 
-- name: testSettings
-  type: object
-  default:
-  - name: AzureAd:ClientId
-    value: vh-booking-queue-subscriber-appid
-    secret: true
-  - name: AzureAd:ClientSecret
-    value: vh-booking-queue-subscriber-key
-    secret: true
-  - name: AzureAd:TenantId
-    value: tenantid
-    secret: true
-  - name: UsernameStem
-    value: $(UsernameStem)
+  - name: testSettings
+    type: object
+    default:
+    # AzureAd
+    - name: AzureAd:Authority
+      value: $(Authority)
+    - name: AzureAd:ClientId
+      value: vh-booking-queue-subscriber-appid
+      secret: true
+    - name: AzureAd:ClientSecret
+      value: vh-booking-queue-subscriber-key
+      secret: true
+    - name: AzureAd:TenantId
+      value: tenantid
+      secret: true
 
-- name: appSettings
-  type: object
-  default:
-  - name: ApplicationInsights:InstrumentationKey
-    value: vh-core-infra-AppInsightsKey
-    secret: true
-  - name: AzureAd:ClientId
-    value: vh-booking-queue-subscriber-appid
-    secret: true
-  - name: AzureAd:ClientSecret
-    value: vh-booking-queue-subscriber-key
-    secret: true
-  - name: AzureAd:TenantId
-    value: tenantid
-    secret: true
+    # Testing
+    - name: UsernameStem
+      value: $(UsernameStem)
+
+    # VhServices
+    - name: VhServices:BookingsApiUrl
+      value: $(bookings_api_url)
+    - name: VhServices:VideoApiUrl
+      value: $(video_api_url)
+
+  - name: appSettings
+    type: object
+    default:
+    - name: ApplicationInsights:InstrumentationKey
+      value: vh-core-infra-AppInsightsKey
+      secret: true
+    - name: AppInsightsKey
+      value: vh-core-infra-AppInsightsKey
+      secret: true
+    - name: IsLive
+      value: $(IsLive)
+
+    # AzureAd
+    - name: AzureAd:Authority
+      value: $(Authority)
+    - name: AzureAd:ClientId
+      value: vh-booking-queue-subscriber-appid
+      secret: true
+    - name: AzureAd:ClientSecret
+      value: vh-booking-queue-subscriber-key
+      secret: true
+    - name: AzureAd:TenantId
+      value: tenantid
+      secret: true
+
+    # Testing
+    - name: UsernameStem
+      value: $(UsernameStem)
+
+    # VhServices
+    - name: VhServices:BookingsApiUrl
+      value: $(bookings_api_url)
+    - name: VhServices:VideoApiUrl
+      value: $(video_api_url)
 
 variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
-  - group: vh-preview
   - group: vh-booking-queue-subscriber
+  - group: vh-preview
 
 trigger:
   branches:
@@ -160,10 +190,6 @@ extends:
           resourceGroup: vh-video-api-$(environment)
           healthEndpoint: $(video_api_url)healthcheck/health
       acceptanceTestSettings:
-        - name: Services:BookingsApiUrl
-          value: $(bookings_api_url)
-        - name: Services:VideoApiUrl
-          value: $(video_api_url)
         - ${{ each setting in parameters.testSettings }}:
           - name: ${{ setting.name }}
             value: ${{ setting.value }}
