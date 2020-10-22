@@ -22,7 +22,7 @@ parameters:
 - name: RunSonarCloudTests
   displayName: Run Sonar Cloud Analysis
   type: boolean
-  default: false
+  default: true
 
 - name: RunMutationTests
   displayName: Run Mutation Tests
@@ -37,9 +37,6 @@ parameters:
 - name: testSettings
   type: object
   default:
-  - name: ApplicationInsights:InstrumentationKey
-    value: vh-core-infra-AppInsightsKey
-    secret: true
   - name: AzureAd:ClientId
     value: vh-booking-queue-subscriber-appid
     secret: true
@@ -128,6 +125,9 @@ extends:
             secret: ${{ setting.secret }}
             type: ${{ setting.type }}
       variables:
+        - group: vh-domains-and-urls
+        - group: vh-apps-settings-generic
+        - group: vh-preview
         - group: vh-booking-queue-subscriber
       coverletCoverageExclusions:
         - "[BookingQueueSubscriber.*Tests?]*"
@@ -153,9 +153,9 @@ extends:
       appSettings: ${{ parameters.appSettings }}
       acceptanceTestSettings:
         - name: Services:BookingsApiUrl
-          value: $(bookings_api_url_staging)
+          value: $(bookings_api_url)
         - name: Services:VideoApiUrl
-          value: $(video_api_url_staging)
+          value: $(video_api_url)
         - ${{ each setting in parameters.testSettings }}:
           - name: ${{ setting.name }}
             value: ${{ setting.value }}
