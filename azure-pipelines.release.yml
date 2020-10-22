@@ -35,7 +35,7 @@ parameters:
 variables:
 - group: vh-domains-and-urls
 - group: vh-apps-settings-generic
-- group: vh-test-api
+- group: vh-booking-queue-subscriber
 - ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
   - ${{ if containsValue(parameters.prodEnvs, parameters.environment) }}:
     - group: vh-prod
@@ -59,7 +59,7 @@ resources:
       endpoint: hmcts_shaed
   pipelines:
   - pipeline: CI
-    source: hmcts.vh-test-api
+    source: hmcts.vh-booking-queue-subscriber
     trigger:
       enabled: true
       branches:

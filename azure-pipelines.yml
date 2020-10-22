@@ -74,6 +74,7 @@ variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
   - group: vh-preview
+  - group: vh-booking-queue-subscriber
 
 trigger:
   branches:
@@ -127,7 +128,7 @@ extends:
             secret: ${{ setting.secret }}
             type: ${{ setting.type }}
       variables:
-        - group: vh-test-api
+        - group: vh-booking-queue-subscriber
       coverletCoverageExclusions:
         - "[BookingQueueSubscriber.*Tests?]*"
         - "[BookingQueueSubscriber.API]Startup"
@@ -141,7 +142,6 @@ extends:
     ACTest: ${{ parameters.RunACTests }}
     releaseParameters:
       environment: Preview
-
       subscription: $(pr_Subscription)
       secrets_KeyVault: $(pr_Secret_KeyVault)
       secrets_Subscription: $(pr_Secret_Subscription)
@@ -149,7 +149,7 @@ extends:
       appName: vh-booking-queue-subscriber-$(environment)
       resourceGroup: vh-booking-queue-subscriber-$(environment)
       variables:
-        - group: vh-test-api
+        - group: vh-booking-queue-subscriber
       appSettings: ${{ parameters.appSettings }}
       acceptanceTestSettings:
         - name: Services:BookingsApiUrl
