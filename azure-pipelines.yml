@@ -64,8 +64,6 @@ parameters:
   - name: AzureAd:TenantId
     value: tenantid
     secret: true
-  - name: UsernameStem
-    value: $(UsernameStem)
 
 variables:
   - group: vh-domains-and-urls
@@ -149,8 +147,18 @@ extends:
       appName: vh-booking-queue-subscriber-$(environment)
       resourceGroup: vh-booking-queue-subscriber-$(environment)
       variables:
+        - group: vh-domains-and-urls
+        - group: vh-apps-settings-generic
+        - group: vh-preview
         - group: vh-booking-queue-subscriber
       appSettings: ${{ parameters.appSettings }}
+      dependentApps:
+        - name: vh-bookings-api-$(environment)
+          resourceGroup: vh-bookings-api-$(environment)
+          healthEndpoint: $(bookings_api_url)healthcheck/health
+        - name: vh-video-api-$(environment)
+          resourceGroup: vh-video-api-$(environment)
+          healthEndpoint: $(video_api_url)healthcheck/health
       acceptanceTestSettings:
         - name: Services:BookingsApiUrl
           value: $(bookings_api_url)
