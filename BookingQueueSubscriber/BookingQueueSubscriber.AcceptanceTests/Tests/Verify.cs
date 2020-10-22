@@ -49,7 +49,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
 
                 if (!conferenceParticipant.User_role_name.Equals("Representative")) continue;
                 conferenceParticipant.Organisation.Should().NotBeNullOrWhiteSpace();
-                conferenceParticipant.Reference.Should().NotBeNullOrWhiteSpace();
             }
         }
 

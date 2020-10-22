@@ -83,7 +83,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             {
                 Display_name = $"{participant.Display_name} {HearingData.UPDATED_TEXT}",
                 Organisation_name = $"{participant.Organisation} {HearingData.UPDATED_TEXT}",
-                Reference = $"{participant.Reference} {HearingData.UPDATED_TEXT}",
                 Representee = $"{participant.Representee} {HearingData.UPDATED_TEXT}",
                 Telephone_number = UserData.UPDATED_TELEPHONE_NUMBER,
                 Title = $"{participant.Title} {HearingData.UPDATED_TEXT}"

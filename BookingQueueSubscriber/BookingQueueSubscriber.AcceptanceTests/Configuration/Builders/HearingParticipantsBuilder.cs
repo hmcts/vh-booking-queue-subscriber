@@ -69,7 +69,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 Telephone_number = UserData.TELEPHONE_NUMBER,
                 Case_role_name = userType,
                 Hearing_role_name = userType,
-                Reference = null,
                 Representee = null,
                 Organisation_name = null
             };
@@ -84,7 +83,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             {
                 participant.Case_role_name = RoleData.CASE_ROLE_NAME;
                 participant.Hearing_role_name = RoleData.REPRESENTATIVE_HEARING_ROLE_NAME;
-                participant.Reference = UserData.REFERENCE;
                 participant.Representee = "Individual";
                 participant.Organisation_name = UserData.ORGANISATION;
             }

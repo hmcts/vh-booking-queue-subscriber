@@ -4726,10 +4726,6 @@ namespace BookingQueueSubscriber.Services.BookingsApi
         [Newtonsoft.Json.JsonProperty("username", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Username { get; set; }
     
-        /// <summary>Gets or sets the reference</summary>
-        [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Reference { get; set; }
-    
         /// <summary>Gets or sets the organisation name.</summary>
         [Newtonsoft.Json.JsonProperty("organisation", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Organisation { get; set; }
@@ -4793,10 +4789,6 @@ namespace BookingQueueSubscriber.Services.BookingsApi
         [Newtonsoft.Json.JsonProperty("hearing_role_name", Required = Newtonsoft.Json.Required.AllowNull)]
         public string Hearing_role_name { get; set; }
     
-        /// <summary>The reference for a representative participant</summary>
-        [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Reference { get; set; }
-    
         /// <summary>The representee of a representative</summary>
         [Newtonsoft.Json.JsonProperty("representee", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Representee { get; set; }
@@ -4854,10 +4846,6 @@ namespace BookingQueueSubscriber.Services.BookingsApi
         /// <summary>Participant Organisation</summary>
         [Newtonsoft.Json.JsonProperty("organisation_name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Organisation_name { get; set; }
-    
-        /// <summary>Reference</summary>
-        [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Reference { get; set; }
     
         /// <summary>Representee</summary>
         [Newtonsoft.Json.JsonProperty("representee", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
