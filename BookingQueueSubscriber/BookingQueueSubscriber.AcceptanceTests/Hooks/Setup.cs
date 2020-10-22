@@ -1,4 +1,5 @@
-﻿using AcceptanceTests.Common.Configuration;
+﻿using System;
+using AcceptanceTests.Common.Configuration;
 using BookingQueueSubscriber.AcceptanceTests.Configuration;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
@@ -34,6 +35,43 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
         {
             var azureOptions = Options.Create(_configRoot.GetSection("AzureAd").Get<AzureAdConfiguration>());
             _context.Config.AzureAdConfiguration = azureOptions.Value;
+
+            if (_context.Config.AzureAdConfiguration.Authority == null)
+            {
+                Console.WriteLine("Authority is not set");
+            }
+            else
+            {
+                Console.WriteLine($"Authority is set {_context.Config.AzureAdConfiguration.Authority}");
+            }
+
+            if(_context.Config.AzureAdConfiguration.ClientId == null)
+            {
+                Console.WriteLine("ClientId is not set");
+            }
+            else
+            {
+                Console.WriteLine($"ClientId is set {_context.Config.AzureAdConfiguration.ClientId}");
+            }
+
+            if(_context.Config.AzureAdConfiguration.ClientSecret == null)
+            {
+                Console.WriteLine("ClientSecret is not set");
+            }
+            else
+            {
+                Console.WriteLine($"ClientSecret is set {_context.Config.AzureAdConfiguration.ClientSecret}");
+            }
+
+            if(_context.Config.AzureAdConfiguration.TenantId == null)
+            {
+                Console.WriteLine("TenantId is not set");
+            }
+            else
+            {
+                Console.WriteLine($"TenantId is set {_context.Config.AzureAdConfiguration.TenantId}");
+            }
+
             _context.Config.AzureAdConfiguration.Authority.Should().NotBeNullOrEmpty();
             _context.Config.AzureAdConfiguration.ClientId.Should().NotBeNullOrEmpty();
             _context.Config.AzureAdConfiguration.ClientSecret.Should().NotBeNullOrEmpty();
