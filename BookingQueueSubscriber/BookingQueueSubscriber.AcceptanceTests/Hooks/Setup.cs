@@ -57,7 +57,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
 
         private IOptions<ServicesConfiguration> RegisterServices()
         {
-            var services = Options.Create(_configRoot.GetSection("Services").Get<ServicesConfiguration>());
+            var services = Options.Create(_configRoot.GetSection("VhServices").Get<ServicesConfiguration>());
             _context.Config.Services = services.Value;
             _context.Config.Services.BookingsApiUrl.Should().NotBeNullOrEmpty("BookingsApiUrl is set");
             _context.Config.Services.VideoApiUrl.Should().NotBeNullOrEmpty("VideoApiUrl is set");
@@ -80,8 +80,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
                 azureOptions.ClientId, azureOptions.ClientSecret,
                 services.Value.VideoApiUrl.TrimEnd('/'));
 
-            _context.Tokens.BookingsApiBearerToken.Should().NotBeNullOrEmpty();
-            _context.Tokens.VideoApiBearerToken.Should().NotBeNullOrEmpty();
+            _context.Tokens.BookingsApiBearerToken.Should().NotBeNullOrEmpty("BookingsApiBearerToken is set");
+            _context.Tokens.VideoApiBearerToken.Should().NotBeNullOrEmpty("VideoApiBearerToken is set");
         }
     }
 }
