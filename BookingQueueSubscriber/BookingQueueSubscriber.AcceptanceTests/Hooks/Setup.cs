@@ -23,9 +23,9 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
 
         public TestContext RegisterSecrets()
         {
-            var azureOptions = RegisterAzureSecrets();
-            var services = RegisterServices();
             RegisterUsernameStem();
+            var services = RegisterServices();
+            var azureOptions = RegisterAzureSecrets();
             GenerateBearerTokens(azureOptions.Value, services);
             return _context;
         }
