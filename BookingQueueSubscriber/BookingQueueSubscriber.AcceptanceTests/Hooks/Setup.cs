@@ -51,7 +51,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
         {
             if (_context.Config.AzureAdConfiguration.Authority.Contains(_context.Config.AzureAdConfiguration.TenantId))
             {
-                _context.Config.AzureAdConfiguration.Authority = _context.Config.AzureAdConfiguration.Authority.Replace(_context.Config.AzureAdConfiguration.TenantId, string.Empty).TrimEnd('/');
+                _context.Config.AzureAdConfiguration.Authority = _context.Config.AzureAdConfiguration.Authority.Replace(_context.Config.AzureAdConfiguration.TenantId, string.Empty);
             }
         }
 
