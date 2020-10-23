@@ -69,8 +69,6 @@ parameters:
   - name: AppInsightsKey
     value: vh-core-infra-AppInsightsKey
     secret: true
-  - name: IsLive
-    value: $(IsLive)
 
   # AzureAd
   - name: AzureAd:Authority
