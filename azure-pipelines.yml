@@ -55,9 +55,9 @@ parameters:
       value: $(UsernameStem)
 
     # VhServices
-    - name: Services:BookingsApiUrl
+    - name: VhServices:BookingsApiUrl
       value: $(bookings_api_url)
-    - name: Services:VideoApiUrl
+    - name: VhServices:VideoApiUrl
       value: $(video_api_url)
 
   - name: appSettings
@@ -84,12 +84,12 @@ parameters:
       secret: true
 
     # VhServices
-    - name: Services:BookingsApiUrl
+    - name: VhServices:BookingsApiUrl
       value: $(bookings_api_url)
     - name: VhServices:VideoApiResourceId   
       value: vh-video-api-identifieruris
       secret: true
-    - name: Services:VideoApiUrl
+    - name: VhServices:VideoApiUrl
       value: $(video_api_url)      
 
 variables:

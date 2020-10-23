@@ -30,7 +30,7 @@ namespace BookingQueueSubscriber
             services.AddSingleton(adConfiguration);
 
             var hearingServicesConfiguration =
-                configLoader.Configuration.GetSection("Services").Get<ServicesConfiguration>() ??
+                configLoader.Configuration.GetSection("VhServices").Get<ServicesConfiguration>() ??
                 BuildHearingServicesConfiguration(configLoader);
             services.AddSingleton(hearingServicesConfiguration);
 
