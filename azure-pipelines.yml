@@ -60,39 +60,6 @@ parameters:
     - name: VhServices:VideoApiUrl
       value: $(video_api_url)
 
-  - name: appSettings
-    type: object
-    default:
-    - name: ApplicationInsights:InstrumentationKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-    - name: AppInsightsKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-
-     # AzureAd
-    - name: AzureAd:Authority
-      value: $(Authority)
-    - name: AzureAd:ClientId
-      value: vh-booking-queue-subscriber-appid
-      secret: true
-    - name: AzureAd:ClientSecret
-      value: vh-booking-queue-subscriber-key
-      secret: true
-    - name: AzureAd:TenantId
-      value: tenantid
-      secret: true
-
-    # Testing
-    - name: UsernameStem
-      value: $(UsernameStem)
-
-    # VhServices
-    - name: VhServices:BookingsApiUrl
-      value: $(bookings_api_url)
-    - name: VhServices:VideoApiUrl
-      value: $(video_api_url)
-
 variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic

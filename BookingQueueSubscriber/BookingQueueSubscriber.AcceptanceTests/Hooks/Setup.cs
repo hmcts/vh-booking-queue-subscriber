@@ -34,10 +34,10 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
         {
             var azureOptions = Options.Create(_configRoot.GetSection("AzureAd").Get<AzureAdConfiguration>());
             _context.Config.AzureAdConfiguration = azureOptions.Value;
-            _context.Config.AzureAdConfiguration.Authority.Should().NotBeNullOrEmpty("Authority not set");
-            _context.Config.AzureAdConfiguration.ClientId.Should().NotBeNullOrEmpty("ClientId not set");
-            _context.Config.AzureAdConfiguration.ClientSecret.Should().NotBeNullOrEmpty("ClientSecret not set");
-            _context.Config.AzureAdConfiguration.TenantId.Should().NotBeNullOrEmpty("TenantId not set");
+            _context.Config.AzureAdConfiguration.Authority.Should().NotBeNullOrEmpty("Authority is set");
+            _context.Config.AzureAdConfiguration.ClientId.Should().NotBeNullOrEmpty("ClientId is set");
+            _context.Config.AzureAdConfiguration.ClientSecret.Should().NotBeNullOrEmpty("ClientSecret is set");
+            _context.Config.AzureAdConfiguration.TenantId.Should().NotBeNullOrEmpty("TenantId is set");
             return azureOptions;
         }
 
@@ -45,15 +45,15 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
         {
             var services = Options.Create(_configRoot.GetSection("Services").Get<ServicesConfiguration>());
             _context.Config.Services = services.Value;
-            _context.Config.Services.BookingsApiUrl.Should().NotBeNullOrEmpty("BookingsApiUrl not set");
-            _context.Config.Services.VideoApiUrl.Should().NotBeNullOrEmpty("VideoApiUrl not set");
+            _context.Config.Services.BookingsApiUrl.Should().NotBeNullOrEmpty("BookingsApiUrl is set");
+            _context.Config.Services.VideoApiUrl.Should().NotBeNullOrEmpty("VideoApiUrl is set");
             return services;
         }
 
         private void RegisterUsernameStem()
         {
             _context.Config.UsernameStem = _configRoot.GetValue<string>("UsernameStem");
-            _context.Config.UsernameStem.Should().NotBeNullOrEmpty("UsernameStem not set");
+            _context.Config.UsernameStem.Should().NotBeNullOrEmpty("UsernameStem is set");
         }
 
         private void GenerateBearerTokens(AzureAdConfiguration azureOptions, IOptions<ServicesConfiguration> services)
