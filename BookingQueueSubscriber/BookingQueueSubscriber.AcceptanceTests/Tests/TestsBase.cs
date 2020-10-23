@@ -19,7 +19,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
 {
     public class TestsBase
     {
-        protected const int RETRIES = 5; // 5 retries ^2 will execute after 2 seconds, then 4, 8, 16 then finally 32 (1 min in total)
+        protected const int RETRIES = 4; // 4 retries ^2 will execute after 2 seconds, then 4, 8, then finally 16 (30 seconds in total)
         protected TestContext Context;
         protected HttpResponseMessage Response;
         protected string Json;

@@ -49,10 +49,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
 
         private void RemoveTenantIdFromAuthorityIfExists()
         {
-            if (_context.Config.AzureAdConfiguration.Authority.Contains(_context.Config.AzureAdConfiguration.TenantId))
-            {
-                _context.Config.AzureAdConfiguration.Authority = _context.Config.AzureAdConfiguration.Authority.Replace(_context.Config.AzureAdConfiguration.TenantId, string.Empty);
-            }
+            _context.Config.AzureAdConfiguration.Authority = _context.Config.AzureAdConfiguration.Authority.Replace(_context.Config.AzureAdConfiguration.TenantId, string.Empty);
         }
 
         private IOptions<ServicesConfiguration> RegisterServices()
