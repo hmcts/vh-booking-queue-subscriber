@@ -16,9 +16,14 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
         public Setup()
         {
             _context = new TestContext();
-            _configRoot = ConfigurationManager.BuildConfig("F6705640-D918-4180-B98A-BAB7ADAA4817");
+            _configRoot = ConfigurationManager.BuildConfig("F6705640-D918-4180-B98A-BAB7ADAA4817", GetTargetEnvironment());
             _context.Config = new Config();
             _context.Tokens = new Tokens();
+        }
+
+        private static string GetTargetEnvironment()
+        {
+            return NUnit.Framework.TestContext.Parameters["TargetEnvironment"] ?? "";
         }
 
         public TestContext RegisterSecrets()
