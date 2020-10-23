@@ -89,9 +89,27 @@ extends:
         - name: ApplicationInsights:InstrumentationKey
           value: vh-core-infra-AppInsightsKey
           secret: true
-        - name: ApplicationInsights:InstrumentationKey
+        - name: AppInsightsKey
           value: vh-core-infra-AppInsightsKey
           secret: true
+        - name: AzureAd:Authority
+          value: $(Authority)
+        - name: AzureAd:ClientId
+          value: vh-booking-queue-subscriber-appid
+          secret: true
+        - name: AzureAd:ClientSecret
+          value: vh-booking-queue-subscriber-key
+          secret: true
+        - name: AzureAd:TenantId
+          value: tenantid
+          secret: true
+        - name: Services:BookingsApiUrl
+          value: $(bookings_api_url)
+        - name: VhServices:VideoApiResourceId   
+          value: vh-video-api-identifieruris
+          secret: true
+        - name: Services:VideoApiUrl
+          value: $(video_api_url)   
       acceptanceTestSettings:
         - name: ApplicationInsights:InstrumentationKey
           value: vh-core-infra-AppInsightsKey

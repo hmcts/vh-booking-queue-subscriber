@@ -55,9 +55,9 @@ parameters:
       value: $(UsernameStem)
 
     # VhServices
-    - name: VhServices:BookingsApiUrl
+    - name: Services:BookingsApiUrl
       value: $(bookings_api_url)
-    - name: VhServices:VideoApiUrl
+    - name: Services:VideoApiUrl
       value: $(video_api_url)
 
   - name: appSettings
@@ -69,8 +69,8 @@ parameters:
     - name: AppInsightsKey
       value: vh-core-infra-AppInsightsKey
       secret: true
-
-     # AzureAd
+    
+    # AzureAd
     - name: AzureAd:Authority
       value: $(Authority)
     - name: AzureAd:ClientId
@@ -83,15 +83,14 @@ parameters:
       value: tenantid
       secret: true
 
-    # Testing
-    - name: UsernameStem
-      value: $(UsernameStem)
-
     # VhServices
-    - name: VhServices:BookingsApiUrl
+    - name: Services:BookingsApiUrl
       value: $(bookings_api_url)
-    - name: VhServices:VideoApiUrl
-      value: $(video_api_url)
+    - name: VhServices:VideoApiResourceId   
+      value: vh-video-api-identifieruris
+      secret: true
+    - name: Services:VideoApiUrl
+      value: $(video_api_url)      
 
 variables:
   - group: vh-domains-and-urls
