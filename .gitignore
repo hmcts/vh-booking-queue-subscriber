@@ -344,4 +344,7 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
+# Local environment settings files
+/BookingQueueSubscriber/BookingQueueSubscriber.AcceptanceTests/Configuration/Environments/
+
 local.settings.json

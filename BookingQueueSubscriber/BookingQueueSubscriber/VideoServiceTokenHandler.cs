@@ -12,14 +12,16 @@ namespace BookingQueueSubscriber
         private readonly IMemoryCache _memoryCache;
         private readonly IAzureTokenProvider _azureTokenProvider;
         private readonly AzureAdConfiguration _azureAdConfiguration;
+        private readonly ServicesConfiguration _servicesConfiguration;
 
         private const string TokenCacheKey = "VideoApiServiceToken";
 
-        public VideoServiceTokenHandler(AzureAdConfiguration azureAdConfiguration,
+        public VideoServiceTokenHandler(AzureAdConfiguration azureAdConfiguration, ServicesConfiguration servicesSonConfiguration,
             IMemoryCache memoryCache,
             IAzureTokenProvider azureTokenProvider)
         {
             _azureAdConfiguration = azureAdConfiguration;
+            _servicesConfiguration = servicesSonConfiguration;
             _memoryCache = memoryCache;
             _azureTokenProvider = azureTokenProvider;
         }
@@ -31,7 +33,7 @@ namespace BookingQueueSubscriber
             if (string.IsNullOrEmpty(token))
             {
                 var authenticationResult = _azureTokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
-                    _azureAdConfiguration.ClientSecret, _azureAdConfiguration.VideoApiResourceId);
+                    _azureAdConfiguration.ClientSecret, _servicesConfiguration.VideoApiResourceId);
                 token = authenticationResult.AccessToken;
                 var tokenExpireDateTime = authenticationResult.ExpiresOn.DateTime.AddMinutes(-1);
                 _memoryCache.Set(TokenCacheKey, token, tokenExpireDateTime);

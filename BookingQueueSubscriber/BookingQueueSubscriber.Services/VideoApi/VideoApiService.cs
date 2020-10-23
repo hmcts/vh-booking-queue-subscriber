@@ -15,12 +15,12 @@ namespace BookingQueueSubscriber.Services.VideoApi
         private readonly ILogger _log;
         private readonly ApiUriFactory _apiUriFactory;
 
-        public VideoApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration,
+        public VideoApiService(HttpClient httpClient, ServicesConfiguration servicesConfiguration,
             ILoggerFactory factory)
         {
             _httpClient = httpClient;
             _log = factory.CreateLogger<VideoApiService>();
-            _httpClient.BaseAddress = new Uri(hearingServicesConfiguration.VideoApiUrl);
+            _httpClient.BaseAddress = new Uri(servicesConfiguration.VideoApiUrl);
 
             _apiUriFactory = new ApiUriFactory();
         }
