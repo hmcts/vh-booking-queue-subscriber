@@ -30,22 +30,22 @@ parameters:
   default:
     - Prod
     - Preprod
- 
+
 # Set variables once
 variables:
-- group: vh-domains-and-urls
-- group: vh-apps-settings-generic
-- group: vh-booking-queue-subscriber
-- ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
-  - ${{ if containsValue(parameters.prodEnvs, parameters.environment) }}:
-    - group: vh-prod
-  - ${{ if not(containsValue(parameters.prodEnvs, parameters.environment)) }}:
-    - group: vh-preview
-- ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
-  - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}:
-    - group: vh-prod
-  - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
-    - group: vh-preview
+  - group: vh-domains-and-urls
+  - group: vh-apps-settings-generic
+  - group: vh-booking-queue-subscriber
+  - ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
+    - ${{ if containsValue(parameters.prodEnvs, parameters.environment) }}:
+      - group: vh-prod
+    - ${{ if not(containsValue(parameters.prodEnvs, parameters.environment)) }}:
+      - group: vh-preview
+  - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+    - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}:
+      - group: vh-prod
+    - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
+      - group: vh-preview
 
 trigger: none
 pr: none
@@ -60,72 +60,117 @@ resources:
   pipelines:
   - pipeline: CI
     source: hmcts.vh-booking-queue-subscriber
-    trigger:
-      enabled: true
+    trigger: 
       branches:
-        - master
-        - hotfix/*
-        - release/*
+      - master
+      - hotfix/*
+      - release/*
 
-extends:
-  template: templates/vh-release.yml@templates
-  parameters:
-    ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
-      environments:
-        - ${{ parameters.environment }}
-      deploymentBranch: ${{ parameters.deploymentBranch }}
-    ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
-      deploymentBranch: resources.pipeline.CI.sourceBranch
-    releaseParameters:
-      runACTests: false
-      runZapTests: ${{ parameters.RunZap }}
-      subscription: $(env_Subscription)
-      secrets_KeyVault: $(env_Secret_KeyVault)
-      secrets_Subscription: $(env_Secret_Subscription)
-      devOpsResource: vh_booking_queue_subscriber
-      appName: vh-booking-queue-subscriber-$(environment)
-      resourceGroup: vh-booking-queue-subscriber-$(environment)
-      appSettings:
-        - name: ApplicationInsights:InstrumentationKey
-          value: vh-core-infra-AppInsightsKey
-          secret: true
-        - name: AppInsightsKey
-          value: vh-core-infra-AppInsightsKey
-          secret: true
-        - name: AzureAd:Authority
-          value: $(Authority)
-        - name: AzureAd:ClientId
-          value: vh-booking-queue-subscriber-appid
-          secret: true
-        - name: AzureAd:ClientSecret
-          value: vh-booking-queue-subscriber-key
-          secret: true
-        - name: AzureAd:TenantId
-          value: tenantid
-          secret: true
-        - name: Services:BookingsApiUrl
-          value: $(bookings_api_url)
-        - name: VhServices:VideoApiResourceId   
-          value: vh-video-api-identifieruris
-          secret: true
-        - name: Services:VideoApiUrl
-          value: $(video_api_url)   
-      acceptanceTestSettings:
-        - name: ApplicationInsights:InstrumentationKey
-          value: vh-core-infra-AppInsightsKey
-          secret: true
-        - name: AzureAd:ClientId
-          value: vh-booking-queue-subscriber-appid
-          secret: true
-        - name: AzureAd:ClientSecret
-          value: vh-booking-queue-subscriber-key
-          secret: true
-        - name: AzureAd:TenantId
-          value: tenantid
-          secret: true
-        - name: Services:BookingsApiUrl
-          value: $(bookings_api_url)
-        - name: Services:VideoApiUrl
-          value: $(video_api_url)
-        - name: UsernameStem
-          value: $(UsernameStem)
+stages:
+  - template: templates/vh-release.yml@templates
+    parameters:
+      ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
+        environments:
+          - ${{ parameters.environment }}
+        deploymentBranch: ${{ parameters.deploymentBranch }}
+      ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+        deploymentBranch: resources.pipeline.CI.sourceBranch
+      releaseParameters:
+        runZapTests: ${{ parameters.RunZap }}
+        subscription: $(env_Subscription)
+        secrets_KeyVault: $(env_Secret_KeyVault)
+        secrets_Subscription: $(env_Secret_Subscription)
+        devOpsResource: vh_booking_queue_subscriber
+        deploymentSlot: production
+        appName: vh_booking_queue_subscriber-$(environment)
+        resourceGroup: vh_booking_queue_subscriber-$(environment)
+        testCaseFilter:
+        dependentApps:
+        - name: vh-bookings-api-$(environment)
+          resourceGroup: vh-bookings-api-$(environment)
+          healthEndpoint: $(bookings_api_url)healthcheck/health
+        - name: vh-video-api-$(environment)
+          resourceGroup: vh-video-api-$(environment)
+          healthEndpoint: $(video_api_url)healthcheck/health
+        variables:
+          - group: vh-wowza-dev
+            env:
+             - Preview
+             - Dev
+             - AAT
+             - Sandbox
+             - Test1
+             - Test2
+          - group: vh-wowza-demo
+            env:
+             - Demo
+          - group: vh-wowza-preprod
+            env:
+             - Preprod
+          - group: vh-wowza-prod
+            env:
+             - Prod
+          - group: KinlyConfiguration_Test
+            env:
+             - Preview
+             - Dev
+             - AAT
+             - Sandbox
+             - Test1
+             - Test2
+          - group: KinlyConfiguration_Test2
+            env:
+             - Demo
+          - group: KinlyConfiguration_Preprod
+            env:
+             - Preprod
+          - group: KinlyConfiguration_Prod
+            env:
+             - Prod
+          - name: AppUri
+            value: $(AppUri_Prod)
+            env:
+             - Prod
+        appSettings:
+          - name: ApplicationInsights:InstrumentationKey
+            value: vh-core-infra-AppInsightsKey
+            secret: true
+          - name: AppInsightsKey
+            value: vh-core-infra-AppInsightsKey
+            secret: true
+          - name: AzureAd:Authority
+            value: $(Authority)
+          - name: AzureAd:ClientId
+            value: vh-booking-queue-subscriber-appid
+            secret: true
+          - name: AzureAd:ClientSecret
+            value: vh-booking-queue-subscriber-key
+            secret: true
+          - name: AzureAd:TenantId
+            value: tenantid
+            secret: true
+          - name: Services:BookingsApiUrl
+            value: $(bookings_api_url)
+          - name: VhServices:VideoApiResourceId   
+            value: vh-video-api-identifieruris
+            secret: true
+          - name: Services:VideoApiUrl
+            value: $(video_api_url)   
+        acceptanceTestSettings:
+          - name: AzureAd:Authority
+            value: $(Authority)
+          - name: AzureAd:ClientId
+            value: vh-booking-queue-subscriber-appid
+            secret: true
+          - name: AzureAd:ClientSecret
+            value: vh-booking-queue-subscriber-key
+            secret: true
+          - name: AzureAd:TenantId
+            value: tenantid
+            secret: true
+          - name: Services:BookingsApiUrl
+            value: $(bookings_api_url)
+          - name: Services:VideoApiUrl
+            value: $(video_api_url)
+          - name: UsernameStem
+            value: $(UsernameStem)
