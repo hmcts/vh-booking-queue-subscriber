@@ -8,9 +8,11 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
     {
         private readonly List<ParticipantRequest> _participants;
         private readonly string _usernameStem;
+        private bool _isCacdHearing;
 
-        public HearingParticipantsBuilder(string usernameStem)
+        public HearingParticipantsBuilder(string usernameStem, bool isCacdHearing)
         {
+            _isCacdHearing = isCacdHearing;
             _participants = new List<ParticipantRequest>();
             _usernameStem = usernameStem;
         }
@@ -45,6 +47,12 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             return this;
         }
 
+        public HearingParticipantsBuilder AddWinger()
+        {
+            _participants.Add(AddParticipant("Winger"));
+            return this;
+        }
+
         public HearingParticipantsBuilder AddUser(string userType, int number)
         {
             _participants.Add(AddParticipant(userType, number));
@@ -75,16 +83,21 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 
             if (userType.Equals("Individual"))
             {
-                participant.Case_role_name = RoleData.CASE_ROLE_NAME;
-                participant.Hearing_role_name = RoleData.INDV_HEARING_ROLE_NAME;
+                participant.Case_role_name = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
+                participant.Hearing_role_name = _isCacdHearing ? RoleData.APPELLANT_CASE_ROLE_NAME : RoleData.INDV_HEARING_ROLE_NAME;
             }
 
             if (userType.Equals("Representative"))
             {
-                participant.Case_role_name = RoleData.CASE_ROLE_NAME;
-                participant.Hearing_role_name = RoleData.REPRESENTATIVE_HEARING_ROLE_NAME;
+                participant.Case_role_name = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
+                participant.Hearing_role_name = _isCacdHearing ? RoleData.CACD_REP_HEARING_ROLE_NAME : RoleData.REPRESENTATIVE_HEARING_ROLE_NAME;
                 participant.Representee = "Individual";
                 participant.Organisation_name = UserData.ORGANISATION;
+            }
+
+            if (userType.Equals("Winger"))
+            {
+                participant.Case_role_name = RoleData.CACD_CASE_ROLE_NAME;
             }
 
             return participant;

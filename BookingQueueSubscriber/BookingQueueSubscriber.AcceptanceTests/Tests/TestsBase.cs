@@ -135,7 +135,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             Conference = response;
         }
 
-        private async Task<ConferenceDetailsResponse> GetConferenceByHearingIdPollingAsync(Guid hearingRefId)
+        protected async Task<ConferenceDetailsResponse> GetConferenceByHearingIdPollingAsync(Guid hearingRefId)
         {
             var uri = $"{Context.Config.Services.VideoApiUrl}{VideoApiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId)}";
             CreateNewVideoApiClient();

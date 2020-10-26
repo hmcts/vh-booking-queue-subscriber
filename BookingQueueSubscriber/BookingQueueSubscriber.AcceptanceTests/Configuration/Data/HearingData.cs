@@ -4,6 +4,8 @@
     {
         public const bool AUDIO_RECORDING_REQUIRED = false;
         public const string AUTOMATED_CASE_NAME_PREFIX = "Automated Test";
+        public const string CACD_CASE_TYPE_NAME = "Court of Appeal Criminal Division";
+        public const string CACD_HEARING_TYPE_NAME = "Appn for leave to appeal to SC";
         public const string CANCELLATION_REASON = "Cancellation reason";
         public const string CASE_TYPE_NAME = "Civil Money Claims";
         public static string CREATED_BY(string usernameStem) => $"automation_test@{usernameStem}";
