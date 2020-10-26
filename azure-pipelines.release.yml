@@ -82,8 +82,8 @@ stages:
         secrets_Subscription: $(env_Secret_Subscription)
         devOpsResource: vh_booking_queue_subscriber
         deploymentSlot: production
-        appName: vh_booking_queue_subscriber-$(environment)
-        resourceGroup: vh_booking_queue_subscriber-$(environment)
+        appName: vh-booking-queue-subscriber-$(environment)
+        resourceGroup: vh-booking-queue-subscriber-$(environment)
         testCaseFilter:
         dependentApps:
         - name: vh-bookings-api-$(environment)

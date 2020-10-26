@@ -19,6 +19,31 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
     public class HearingsSubscriberTests : TestsBase
     {
         [Test]
+        public async Task Should_create_cacd_conference_from_hearing()
+        {
+            var bookingUri = BookingsApiUriFactory.HearingsEndpoints.BookNewHearing;
+            var request = new BookHearingRequestBuilder(Context.Config.UsernameStem).CacdHearing().Build();
+
+            await SendPostRequest(bookingUri, RequestHelper.Serialise(request));
+            VerifyResponse(HttpStatusCode.Created, true);
+
+            var bookingsResponse = RequestHelper.Deserialise<HearingDetailsResponse>(Json);
+            bookingsResponse.Should().NotBeNull();
+            Hearing = bookingsResponse;
+
+            var confirmRequest = new UpdateBookingStatusRequestBuilder()
+                .UpdatedBy(HearingData.CREATED_BY(Context.Config.UsernameStem))
+                .Build();
+
+            var updateUri = BookingsApiUriFactory.HearingsEndpoints.UpdateHearingStatus(Hearing.Id);
+            await SendPatchRequest(updateUri, RequestHelper.Serialise(confirmRequest));
+
+            var response = await GetConferenceByHearingIdPollingAsync(Hearing.Id);
+            response.Should().NotBeNull();
+            Verify.ConferenceDetailsResponse(response, Hearing);
+        }
+
+        [Test]
         public async Task Should_update_conference_when_hearing_updated()
         {
             var updateUri = BookingsApiUriFactory.HearingsEndpoints.UpdateHearingDetails(Hearing.Id);
