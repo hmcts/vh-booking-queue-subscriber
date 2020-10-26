@@ -149,12 +149,12 @@ stages:
           - name: AzureAd:TenantId
             value: tenantid
             secret: true
-          - name: Services:BookingsApiUrl
+          - name: VhServices:BookingsApiUrl
             value: $(bookings_api_url)
           - name: VhServices:VideoApiResourceId   
             value: vh-video-api-identifieruris
             secret: true
-          - name: Services:VideoApiUrl
+          - name: VhServices:VideoApiUrl
             value: $(video_api_url)   
         acceptanceTestSettings:
           - name: AzureAd:Authority
@@ -168,9 +168,9 @@ stages:
           - name: AzureAd:TenantId
             value: tenantid
             secret: true
-          - name: Services:BookingsApiUrl
+          - name: VhServices:BookingsApiUrl
             value: $(bookings_api_url)
-          - name: Services:VideoApiUrl
+          - name: VhServices:VideoApiUrl
             value: $(video_api_url)
           - name: UsernameStem
             value: $(UsernameStem)
