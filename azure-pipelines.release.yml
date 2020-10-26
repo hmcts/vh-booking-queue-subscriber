@@ -33,9 +33,9 @@ parameters:
 
 # Set variables once
 variables:
-- group: vh-domains-and-urls
-- group: vh-apps-settings-generic
-- group: vh-booking-queue-subscriber
+  - group: vh-domains-and-urls
+  - group: vh-apps-settings-generic
+  - group: vh-booking-queue-subscriber
   - ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
     - ${{ if containsValue(parameters.prodEnvs, parameters.environment) }}:
       - group: vh-prod
