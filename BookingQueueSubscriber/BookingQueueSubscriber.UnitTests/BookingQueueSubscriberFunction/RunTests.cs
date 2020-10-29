@@ -57,7 +57,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                     'contact_telephone': '01234567890',
                     'username': 'angie_bartell@jastmraz.biz',
                     'display_name': 'DisplayName1',
-                    'hearing_role': 'Claimant LIP',
+                    'hearing_role': 'Litigant in person',
                     'user_role': 'Individual',
                     'case_group_type': 'claimant',
                     'representee': ''
@@ -83,7 +83,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                     'contact_email': 'tst@email.com',
                     'contact_telephone': '01234567890',
                     'display_name': 'DisplayName3',
-                    'hearing_role': 'Defendant LIP',
+                    'hearing_role': 'Litigant in person',
                     'user_role': 'Individual',
                     'case_group_type': 'defendant',
                     'representee': ''
@@ -213,7 +213,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         'contact_telephone': '01234567890',
         'username': 'harley@kshlerin.biz',
         'display_name': 'DisplayName1',
-        'hearing_role': 'Defendant LIP',
+        'hearing_role': 'Litigant in person',
         'user_role': 'Individual',
         'case_group_type': 'defendant',
         'representee': ''
