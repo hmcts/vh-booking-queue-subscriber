@@ -29,6 +29,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         PanelMember = 6,
         Appellant = 7,
         State = 8,
-        None = 9
+        None = 9,
+        HomeOffice = 10
     }
 }
