@@ -53,6 +53,12 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             return this;
         }
 
+        public HearingParticipantsBuilder AddJudicialOfficeHolder()
+        {
+            _participants.Add(AddParticipant("Judicial Office Holder"));
+            return this;
+        }
+
         public HearingParticipantsBuilder AddUser(string userType, int number)
         {
             _participants.Add(AddParticipant(userType, number));

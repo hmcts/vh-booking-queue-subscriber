@@ -43,6 +43,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 .AddIndividual()
                 .AddRep()
                 .AddWinger()
+                .AddJudicialOfficeHolder()
                 .Build();
             return this;
         }
@@ -55,6 +56,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 .AddRep()
                 .AddObserver()
                 .AddPanelMember()
+                .AddJudicialOfficeHolder()
                 .Build();
         }
 
