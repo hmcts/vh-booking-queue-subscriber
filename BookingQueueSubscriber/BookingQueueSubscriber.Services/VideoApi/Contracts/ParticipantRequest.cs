@@ -28,7 +28,6 @@ namespace BookingQueueSubscriber.Services.VideoApi.Contracts
         Judge = 4,
         Individual = 5,
         Representative = 6,
-        [Display(Name="Judicial Office Holder")]
         JudicialOfficeHolder = 7
     }
 }
