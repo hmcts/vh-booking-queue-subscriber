@@ -103,8 +103,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 
             if (userType.Equals("Winger"))
             {
-                participant.Case_role_name = RoleData.WINGER_ROLE_NAME.ToLower();
-                participant.Hearing_role_name = RoleData.WINGER_ROLE_NAME.ToLower();
+                participant.Case_role_name = RoleData.WINGER_ROLE_NAME;
+                participant.Hearing_role_name = RoleData.WINGER_ROLE_NAME;
             }
 
             return participant;

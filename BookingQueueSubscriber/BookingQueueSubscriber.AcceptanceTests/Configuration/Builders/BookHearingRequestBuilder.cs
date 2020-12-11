@@ -42,7 +42,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 .AddJudge()
                 .AddIndividual()
                 .AddRep()
-                .AddWinger()
                 .AddJudicialOfficeHolder()
                 .Build();
             return this;
