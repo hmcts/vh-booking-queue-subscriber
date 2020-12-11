@@ -55,7 +55,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 .AddRep()
                 .AddObserver()
                 .AddPanelMember()
-                .AddJudicialOfficeHolder()
                 .Build();
         }
 
