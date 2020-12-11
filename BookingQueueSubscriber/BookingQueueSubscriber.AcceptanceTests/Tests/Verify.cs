@@ -47,7 +47,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
                 conferenceParticipant.Title.Should().NotBeNullOrWhiteSpace();
                 conferenceParticipant.Username.Should().Be(hearingParticipant.Username);
 
-                if (!conferenceParticipant.User_role_name.Equals("Representative")) continue;
+                if (!conferenceParticipant.User_role_name.Equals("Representative") ||
+                    conferenceParticipant.Case_role_name.ToLower() == "none") continue;
                 conferenceParticipant.Organisation.Should().NotBeNullOrWhiteSpace();
             }
         }
