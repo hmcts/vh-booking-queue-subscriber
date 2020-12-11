@@ -17,7 +17,7 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ContactEmail = participantDto.ContactEmail,
                 ContactTelephone = participantDto.ContactTelephone,
                 DisplayName = participantDto.DisplayName,
-                UserRole = Enum.Parse<UserRole>(participantDto.UserRole),
+                UserRole = GetUserRole(participantDto.UserRole),
                 HearingRole = participantDto.HearingRole,
                 CaseTypeGroup = participantDto.CaseGroupType.ToString(),
                 ParticipantRefId = participantDto.ParticipantId,
@@ -25,6 +25,19 @@ namespace BookingQueueSubscriber.Services.Mappers
             };
 
             return request;
+        }
+
+        private static UserRole GetUserRole(string dtoUserRole)
+        {
+            if (dtoUserRole == "Judicial Office Holder")
+            {
+                return UserRole.JudicialOfficeHolder;
+            }
+
+            else
+            {
+                return Enum.Parse<UserRole>(dtoUserRole);
+            }
         }
     }
 }
