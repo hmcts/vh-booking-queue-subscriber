@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {
@@ -32,7 +31,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         State = 8,
         None = 9,
         HomeOffice = 10,
-        [Display(Name = "winger")]
         Winger = 11
     }
 }
