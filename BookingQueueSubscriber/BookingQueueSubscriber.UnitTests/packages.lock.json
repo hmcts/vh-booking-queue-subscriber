@@ -2323,8 +2323,7 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "1.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "3.1.9",
-          "System.ComponentModel.Annotations": "5.0.0"
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.9"
         }
       }
     }
