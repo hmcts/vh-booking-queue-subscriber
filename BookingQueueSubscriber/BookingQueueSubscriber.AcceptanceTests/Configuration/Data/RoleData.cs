@@ -8,6 +8,6 @@
         public const string CASE_ROLE_NAME = "Claimant";
         public const string INDV_HEARING_ROLE_NAME = "Litigant in person";
         public const string REPRESENTATIVE_HEARING_ROLE_NAME = "Representative";
-        public const string WINGER_HEARING_ROLE_NAME = "Winger";
+        public const string WINGER_ROLE_NAME = "Winger";
     }
 }
