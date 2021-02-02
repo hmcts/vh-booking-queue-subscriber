@@ -26,7 +26,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
 
             var request = new AddParticipantsToHearingRequest()
             {
-                AdditionalProperties = new Dictionary<string, object>(),
                 Participants = new HearingParticipantsBuilder(Context.Config.UsernameStem, false).AddUser("Individual", 2).Build()
             };
 

@@ -52,7 +52,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             {
                 new CaseRequest()
                 {
-                    AdditionalProperties = Hearing.Cases.First().AdditionalProperties,
                     Is_lead_case = Hearing.Cases.First().Is_lead_case,
                     Name = $"{Hearing.Cases.First().Name} {HearingData.UPDATED_TEXT}",
                     Number = $"{Hearing.Cases.First().Number} {HearingData.UPDATED_TEXT}"
@@ -61,7 +60,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
 
             var request = new UpdateHearingRequest()
             {
-                AdditionalProperties = Hearing.AdditionalProperties,
                 Audio_recording_required = !Hearing.Audio_recording_required,
                 Cases = caseRequests,
                 Hearing_room_name = $"{Hearing.Hearing_room_name} {HearingData.UPDATED_TEXT}",

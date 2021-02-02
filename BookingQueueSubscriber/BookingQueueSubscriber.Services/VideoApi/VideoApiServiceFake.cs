@@ -57,7 +57,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
                 Id = Guid.NewGuid(),
                 Participants = new List<ParticipantResponse>
                 {
-                    new ParticipantResponse {Id = Guid.NewGuid(), RefId = Guid.NewGuid()}
+                    new ParticipantResponse {Id = Guid.NewGuid(), ParticipantRefIid = Guid.NewGuid()}
                 }
             };
         }
