@@ -26,7 +26,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 Id = Guid.NewGuid(),
                 Participants = new List<ParticipantResponse>
                 {
-                    new ParticipantResponse {Id = HearingId, RefId = ParticipantId}
+                    new ParticipantResponse {Id = HearingId, ParticipantRefIid = ParticipantId}
                 }
             });
 

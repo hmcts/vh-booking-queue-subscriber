@@ -39,7 +39,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request.Representee == integrationEvent.Participant.Representee &&
                     request.ContactEmail == integrationEvent.Participant.ContactEmail &&
                     request.ContactTelephone == integrationEvent.Participant.ContactTelephone &&
-                    request.Fullname == integrationEvent.Participant.Fullname
+                    request.Fullname == integrationEvent.Participant.Fullname &&
+                    request.Username == integrationEvent.Participant.Username
             )), Times.Once);
         }
 
