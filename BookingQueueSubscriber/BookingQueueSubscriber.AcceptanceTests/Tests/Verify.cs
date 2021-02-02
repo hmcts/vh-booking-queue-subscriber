@@ -34,7 +34,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
                 var conferenceParticipant =
                     conferenceParticipants.First(x => x.Last_name.Equals(hearingParticipant.Last_name));
 
-                conferenceParticipant.AdditionalProperties.Should().BeEmpty();
                 conferenceParticipant.Case_role_name.Should().NotBeNullOrWhiteSpace();
                 conferenceParticipant.Contact_email.Should().Be(hearingParticipant.Contact_email);
                 conferenceParticipant.Display_name.Should().Be(hearingParticipant.Display_name);

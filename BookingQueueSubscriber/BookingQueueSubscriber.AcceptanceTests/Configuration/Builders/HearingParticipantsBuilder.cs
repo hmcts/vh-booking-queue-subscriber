@@ -66,7 +66,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 
             var participant = new ParticipantRequest()
             {
-                AdditionalProperties = new Dictionary<string, object>(),
                 Title = UserData.TITLE,
                 First_name = firstname,
                 Middle_names = UserData.MIDDLE_NAME,
