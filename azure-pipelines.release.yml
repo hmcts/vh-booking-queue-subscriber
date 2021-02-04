@@ -138,8 +138,6 @@ stages:
           - name: AppInsightsKey
             value: vh-core-infra-AppInsightsKey
             secret: true
-          - name: AzureAd:Authority
-            value: $(Authority)
           - name: AzureAd:ClientId
             value: vh-booking-queue-subscriber-appid
             secret: true
@@ -157,8 +155,6 @@ stages:
           - name: VhServices:VideoApiUrl
             value: $(video_api_url)   
         acceptanceTestSettings:
-          - name: AzureAd:Authority
-            value: $(Authority)
           - name: AzureAd:ClientId
             value: vh-booking-queue-subscriber-appid
             secret: true
