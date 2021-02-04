@@ -93,40 +93,6 @@ stages:
           resourceGroup: vh-video-api-$(environment)
           healthEndpoint: $(video_api_url)healthcheck/health
         variables:
-          - group: vh-wowza-dev
-            env:
-             - Preview
-             - Dev
-             - AAT
-             - Sandbox
-             - Test1
-             - Test2
-          - group: vh-wowza-demo
-            env:
-             - Demo
-          - group: vh-wowza-preprod
-            env:
-             - Preprod
-          - group: vh-wowza-prod
-            env:
-             - Prod
-          - group: KinlyConfiguration_Test
-            env:
-             - Preview
-             - Dev
-             - AAT
-             - Sandbox
-             - Test1
-             - Test2
-          - group: KinlyConfiguration_Test2
-            env:
-             - Demo
-          - group: KinlyConfiguration_Preprod
-            env:
-             - Preprod
-          - group: KinlyConfiguration_Prod
-            env:
-             - Prod
           - name: AppUri
             value: $(AppUri_Prod)
             env:
@@ -168,5 +134,3 @@ stages:
             value: $(bookings_api_url)
           - name: VhServices:VideoApiUrl
             value: $(video_api_url)
-          - name: UsernameStem
-            value: $(UsernameStem)

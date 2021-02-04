@@ -145,11 +145,6 @@ extends:
             value: ${{ setting.value }}
             secret: ${{ setting.secret }}
             type: ${{ setting.type }}
-      variables:
-        - group: vh-domains-and-urls
-        - group: vh-apps-settings-generic
-        - group: vh-preview
-        - group: vh-booking-queue-subscriber
       coverletCoverageExclusions:
         - "[BookingQueueSubscriber.*Tests?]*"
         - "[BookingQueueSubscriber.API]Startup"
@@ -157,8 +152,8 @@ extends:
         - "[Testing.Common]*"
       sonarCloud_ExtraProperties: |
         sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/Coverage/coverage.opencover.xml
-        sonar.coverage.exclusions="**/BookingQueueSubscriber/Swagger/**, **/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.IntegrationTests/**, **/BookingQueueSubscriber.UnitTests/**, **/BookingQueueSubscriber/Helper/**, **/BookingQueueSubscriber/ConfigureServicesExtensions.cs, **/BookingQueueSubscriber/Extensions/**"
-        sonar.cpd.exclusions="**/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber/Swagger/**"
+        sonar.coverage.exclusions=**/BookingQueueSubscriber/Swagger/**,**/Program.cs,**/Startup.cs,**/BookingQueueSubscriber.Common/**,**/BookingQueueSubscriber.Common/**,**/BookingQueueSubscriber.IntegrationTests/**,**/BookingQueueSubscriber.UnitTests/**,**/BookingQueueSubscriber/Helper/**,**/BookingQueueSubscriber/ConfigureServicesExtensions.cs,**/BookingQueueSubscriber/Extensions/**
+        sonar.cpd.exclusions=**/Program.cs,**/Startup.cs,**/BookingQueueSubscriber.Common/**,**/BookingQueueSubscriber/Swagger/**
       StrykerBreak: 75
     ACTest: ${{ parameters.RunACTests }}
     releaseParameters:
@@ -169,12 +164,9 @@ extends:
       devOpsResource: vh_booking_queue_subscriber
       appName: vh-booking-queue-subscriber-$(environment)
       resourceGroup: vh-booking-queue-subscriber-$(environment)
-      variables:
-        - group: vh-domains-and-urls
-        - group: vh-apps-settings-generic
-        - group: vh-preview
-        - group: vh-booking-queue-subscriber
       appSettings: ${{ parameters.appSettings }}
+      variables:
+        - group: vh-booking-queue-subscriber
       dependentApps:
         - name: vh-bookings-api-$(environment)
           resourceGroup: vh-bookings-api-$(environment)
