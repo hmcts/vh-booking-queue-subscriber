@@ -40,6 +40,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
             var azureOptions = Options.Create(_configRoot.GetSection("AzureAd").Get<AzureAdConfiguration>());
             _context.Config.AzureAdConfiguration = azureOptions.Value;
             _context.Config.AzureAdConfiguration.Authority.Should().NotBeNullOrEmpty("Authority is set");
+            _context.Config.AzureAdConfiguration.Authority.Should().NotContain(
+                _context.Config.AzureAdConfiguration.TenantId, "Authority should not contain the tenant id value");
             _context.Config.AzureAdConfiguration.ClientId.Should().NotBeNullOrEmpty("ClientId is set");
             _context.Config.AzureAdConfiguration.ClientSecret.Should().NotBeNullOrEmpty("ClientSecret is set");
             _context.Config.AzureAdConfiguration.TenantId.Should().NotBeNullOrEmpty("TenantId is set");
