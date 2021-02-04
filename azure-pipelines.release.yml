@@ -119,7 +119,9 @@ stages:
             value: vh-video-api-identifieruris
             secret: true
           - name: VhServices:VideoApiUrl
-            value: $(video_api_url)   
+            value: $(video_api_url)
+          - name: VhServices:EnableVideoApiStub
+            value: false  
         acceptanceTestSettings:
           - name: AzureAd:ClientId
             value: vh-booking-queue-subscriber-appid
