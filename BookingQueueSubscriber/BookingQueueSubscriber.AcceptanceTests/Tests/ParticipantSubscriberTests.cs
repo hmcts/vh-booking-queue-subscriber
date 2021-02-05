@@ -75,23 +75,23 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_update_participant_in_hearing_and_conference()
         {
-            var participant = Hearing.Participants.First(x => x.User_role_name.Equals("Representative"));
-            var uri = BookingsApiUriFactory.HearingsParticipantsEndpoints.UpdateParticipantDetails(Hearing.Id, participant.Id);
+            // var participant = Hearing.Participants.First(x => x.User_role_name.Equals("Representative"));
+            var hearingId = Guid.Parse("68e46a4f-1b4f-4227-b456-a11acd6292cd");
+            var participantId = Guid.Parse("62c8dec2-c601-4c8a-9d10-b2e7a2b141e8");
+            var uri = BookingsApiUriFactory.HearingsParticipantsEndpoints.UpdateParticipantDetails(hearingId, participantId);
 
             var request = new UpdateParticipantRequest
             {
-                Display_name = $"{participant.Display_name} {HearingData.UPDATED_TEXT}",
-                Organisation_name = $"{participant.Organisation} {HearingData.UPDATED_TEXT}",
-                Representee = $"{participant.Representee} {HearingData.UPDATED_TEXT}",
+                Display_name = $"Dev Test Observer 2 {HearingData.UPDATED_TEXT}",
                 Telephone_number = UserData.UPDATED_TELEPHONE_NUMBER,
-                Title = $"{participant.Title} {HearingData.UPDATED_TEXT}"
+                Title = $"{HearingData.UPDATED_TEXT}"
             };
 
             await SendPutRequest(uri, RequestHelper.Serialise(request));
             VerifyResponse(HttpStatusCode.OK, true);
 
             var conferenceDetails = await PollForConferenceParticipantUpdated(Hearing.Id, HearingData.UPDATED_TEXT);
-            var updatedParticipant = conferenceDetails.Participants.First(x => x.Username.Equals(participant.Username));
+            var updatedParticipant = conferenceDetails.Participants.First(x => x.Username.Equals("dev345.test345.observer345@hearings.reform.hmcts.net"));
             updatedParticipant.Display_name.Should().Be(request.Display_name);
             updatedParticipant.Representee.Should().Be(request.Representee);
             updatedParticipant.Contact_telephone.Should().Be(request.Telephone_number);
