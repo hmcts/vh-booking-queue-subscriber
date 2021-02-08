@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using VideoApi.Contract.Requests;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.VideoApi
 {
     public class VideoApiServiceFake : IVideoApiService
     {
-
-        public ConferenceResponse ConferenceResponse { get; set; }
+        public ConferenceDetailsResponse ConferenceResponse { get; set; }
         public int BookNewConferenceCount { get; private set; }
         public int UpdateConferenceCount { get; private set; }
         public int DeleteConferenceCount { get; private set; }
@@ -39,7 +39,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId)
+        public Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId)
         {
             GetConferenceByHearingRefIdCount++;
             if (ConferenceResponse == null)
@@ -51,13 +51,12 @@ namespace BookingQueueSubscriber.Services.VideoApi
 
         public void InitConferenceResponse()
         {
-            ConferenceResponse = new ConferenceResponse
+            ConferenceResponse = new ConferenceDetailsResponse
             {
-                HearingRefId = Guid.NewGuid(),
                 Id = Guid.NewGuid(),
-                Participants = new List<ParticipantResponse>
+                Participants = new List<ParticipantDetailsResponse>
                 {
-                    new ParticipantResponse {Id = Guid.NewGuid(), ParticipantRefIid = Guid.NewGuid()}
+                    new ParticipantDetailsResponse {Id = Guid.NewGuid()}
                 }
             };
         }

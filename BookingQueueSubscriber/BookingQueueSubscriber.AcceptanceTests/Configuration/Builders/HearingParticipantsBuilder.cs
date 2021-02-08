@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
-using BookingQueueSubscriber.Services.BookingsApi;
+using BookingsApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 {
@@ -67,37 +67,37 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             var participant = new ParticipantRequest()
             {
                 Title = UserData.TITLE,
-                First_name = firstname,
-                Middle_names = UserData.MIDDLE_NAME,
-                Last_name = lastname,
-                Display_name =  $"{firstname} {lastname}",
-                Contact_email = SetContactEmail(firstname, lastname),
+                FirstName = firstname,
+                MiddleNames = UserData.MIDDLE_NAME,
+                LastName = lastname,
+                DisplayName =  $"{firstname} {lastname}",
+                ContactEmail = SetContactEmail(firstname, lastname),
                 Username = SetUsername(firstname, lastname),
-                Telephone_number = UserData.TELEPHONE_NUMBER,
-                Case_role_name = userType,
-                Hearing_role_name = userType,
+                TelephoneNumber = UserData.TELEPHONE_NUMBER,
+                CaseRoleName = userType,
+                HearingRoleName = userType,
                 Representee = null,
-                Organisation_name = null
+                OrganisationName = null
             };
 
             if (userType.Equals("Individual"))
             {
-                participant.Case_role_name = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
-                participant.Hearing_role_name = _isCacdHearing ? RoleData.APPELLANT_CASE_ROLE_NAME : RoleData.INDV_HEARING_ROLE_NAME;
+                participant.CaseRoleName = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
+                participant.HearingRoleName = _isCacdHearing ? RoleData.APPELLANT_CASE_ROLE_NAME : RoleData.INDV_HEARING_ROLE_NAME;
             }
 
             if (userType.Equals("Representative"))
             {
-                participant.Case_role_name = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
-                participant.Hearing_role_name = _isCacdHearing ? RoleData.CACD_REP_HEARING_ROLE_NAME : RoleData.REPRESENTATIVE_HEARING_ROLE_NAME;
+                participant.CaseRoleName = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
+                participant.HearingRoleName = _isCacdHearing ? RoleData.CACD_REP_HEARING_ROLE_NAME : RoleData.REPRESENTATIVE_HEARING_ROLE_NAME;
                 participant.Representee = "Individual";
-                participant.Organisation_name = UserData.ORGANISATION;
+                participant.OrganisationName = UserData.ORGANISATION;
             }
 
             if (userType.Equals("Winger"))
             {
-                participant.Case_role_name = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.WINGER_ROLE_NAME;
-                participant.Hearing_role_name =
+                participant.CaseRoleName = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.WINGER_ROLE_NAME;
+                participant.HearingRoleName =
                     _isCacdHearing ? RoleData.CACD_REP_HEARING_ROLE_NAME : RoleData.WINGER_ROLE_NAME;
             }
 

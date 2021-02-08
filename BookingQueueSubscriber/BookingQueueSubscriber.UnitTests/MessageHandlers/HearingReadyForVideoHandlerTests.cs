@@ -5,10 +5,11 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using VideoApi.Contract.Requests;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using VideoApi.Contract.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {

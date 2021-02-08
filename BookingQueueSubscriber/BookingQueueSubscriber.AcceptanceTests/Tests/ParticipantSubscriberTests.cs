@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using AcceptanceTests.Common.Api.Helpers;
-using AcceptanceTests.Common.Api.Uris;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Builders;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
-using BookingQueueSubscriber.Services.BookingsApi;
-using BookingQueueSubscriber.Services.VideoApi;
+using BookingsApi.Contract.Requests;
 using FluentAssertions;
 using NUnit.Framework;
 using Polly;
-using UpdateParticipantRequest = BookingQueueSubscriber.Services.BookingsApi.UpdateParticipantRequest;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Tests
 {
@@ -22,15 +16,11 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_add_participant_to_hearing_and_conference()
         {
-            var uri = BookingsApiUriFactory.HearingsParticipantsEndpoints.AddParticipantsToHearing(Hearing.Id);
-
             var request = new AddParticipantsToHearingRequest()
             {
                 Participants = new HearingParticipantsBuilder(Context.Config.UsernameStem, false).AddUser("Individual", 2).Build()
             };
-
-            await SendPostRequest(uri, RequestHelper.Serialise(request));
-            VerifyResponse(HttpStatusCode.NoContent, true);
+            await BookingApiClient.AddParticipantsToHearingAsync(Hearing.Id, request);
 
             var conferenceDetails = await PollForConferenceParticipantPresence(Hearing.Id, request.Participants.First().Username, true);
             var participant = conferenceDetails.Participants.First(x => x.Username == request.Participants.First().Username);
@@ -40,82 +30,71 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_remove_participant_from_hearing_and_conference()
         {
-            var participant = Hearing.Participants.First(x => x.User_role_name.Equals("Individual"));
-            var uri = BookingsApiUriFactory.HearingsParticipantsEndpoints.RemoveParticipantFromHearing(Hearing.Id, participant.Id);
-
-            await SendDeleteRequest(uri);
-            VerifyResponse(HttpStatusCode.NoContent, true);
-
+            var participant = Hearing.Participants.First(x => x.UserRoleName.Equals("Individual"));
+            
+            await BookingApiClient.RemoveParticipantFromHearingAsync(Hearing.Id, participant.Id);
+            
             var conferenceDetails = await PollForConferenceParticipantPresence(Hearing.Id, participant.Username, false);
             conferenceDetails.Participants.Any(x => x.Username.Equals(participant.Username)).Should().BeFalse();
-        }
-
-        private async Task<ConferenceDetailsResponse> PollForConferenceParticipantPresence(Guid hearingRefId, string username, bool expected)
-        {
-            var uri = $"{Context.Config.Services.VideoApiUrl}{VideoApiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId)}";
-            CreateNewVideoApiClient();
-
-            var policy = Policy
-                .HandleResult<HttpResponseMessage>(r => r.Content.ReadAsStringAsync().Result.Contains(username).Equals(!expected))
-                .WaitAndRetryAsync(RETRIES, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-            try
-            {
-                var result = await policy.ExecuteAsync(async () => await Client.GetAsync(uri));
-                var conferenceResponse = RequestHelper.Deserialise<ConferenceDetailsResponse>(await result.Content.ReadAsStringAsync());
-                conferenceResponse.Case_name.Should().NotBeNullOrWhiteSpace();
-                return conferenceResponse;
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"Encountered error '{e.Message}' after {Math.Pow(2, RETRIES +1)} seconds.");
-            }
         }
 
         [Test]
         public async Task Should_update_participant_in_hearing_and_conference()
         {
-            var participant = Hearing.Participants.First(x => x.User_role_name.Equals("Representative"));
-            var uri = BookingsApiUriFactory.HearingsParticipantsEndpoints.UpdateParticipantDetails(Hearing.Id, participant.Id);
-
+            var participant = Hearing.Participants.First(x => x.UserRoleName.Equals("Representative"));
+            
             var request = new UpdateParticipantRequest
             {
-                Display_name = $"{participant.Display_name} {HearingData.UPDATED_TEXT}",
-                Organisation_name = $"{participant.Organisation} {HearingData.UPDATED_TEXT}",
+                DisplayName = $"{participant.DisplayName} {HearingData.UPDATED_TEXT}",
+                OrganisationName = $"{participant.Organisation} {HearingData.UPDATED_TEXT}",
                 Representee = $"{participant.Representee} {HearingData.UPDATED_TEXT}",
-                Telephone_number = UserData.UPDATED_TELEPHONE_NUMBER,
+                TelephoneNumber = UserData.UPDATED_TELEPHONE_NUMBER,
                 Title = $"{participant.Title} {HearingData.UPDATED_TEXT}"
             };
 
-            await SendPutRequest(uri, RequestHelper.Serialise(request));
-            VerifyResponse(HttpStatusCode.OK, true);
+            await BookingApiClient.UpdateParticipantDetailsAsync(Hearing.Id, participant.Id, request);
 
-            var conferenceDetails = await PollForConferenceParticipantUpdated(Hearing.Id, HearingData.UPDATED_TEXT);
+            var conferenceDetails = await PollForConferenceParticipantUpdated(Hearing.Id, participant.Id,HearingData.UPDATED_TEXT);
             var updatedParticipant = conferenceDetails.Participants.First(x => x.Username.Equals(participant.Username));
-            updatedParticipant.Display_name.Should().Be(request.Display_name);
+            updatedParticipant.DisplayName.Should().Be(request.DisplayName);
             updatedParticipant.Representee.Should().Be(request.Representee);
-            updatedParticipant.Contact_telephone.Should().Be(request.Telephone_number);
+            updatedParticipant.ContactTelephone.Should().Be(request.TelephoneNumber);
         }
-
-        private async Task<ConferenceDetailsResponse> PollForConferenceParticipantUpdated(Guid hearingRefId, string updatedText)
+        
+        private async Task<ConferenceDetailsResponse> PollForConferenceParticipantPresence(Guid hearingRefId, string username, bool expected)
         {
-            var uri = $"{Context.Config.Services.VideoApiUrl}{VideoApiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId)}";
-            CreateNewVideoApiClient();
-
             var policy = Policy
-                .HandleResult<HttpResponseMessage>(r => r.Content.ReadAsStringAsync().Result.Contains(updatedText).Equals(false))
-                .WaitAndRetryAsync(RETRIES, retryAttempt =>
+                .HandleResult<ConferenceDetailsResponse>(conf => conf.Participants.Any(p => p.Username == username) != expected)
+                .WaitAndRetryAsync(Retries, retryAttempt =>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
             try
             {
-                var result = await policy.ExecuteAsync(async () => await Client.GetAsync(uri));
-                var conferenceResponse = RequestHelper.Deserialise<ConferenceDetailsResponse>(await result.Content.ReadAsStringAsync());
-                conferenceResponse.Case_name.Should().NotBeNullOrWhiteSpace();
+                var conferenceResponse = await policy.ExecuteAsync(async () =>
+                    await VideoApiClient.GetConferenceByHearingRefIdAsync(hearingRefId, false));
+                conferenceResponse.CaseName.Should().NotBeNullOrWhiteSpace();
                 return conferenceResponse;
             }
             catch (Exception e)
             {
-                throw new Exception($"Encountered error '{e.Message}' after {Math.Pow(2, RETRIES +1)} seconds.");
+                throw new Exception($"Encountered error '{e.Message}' after {Math.Pow(2, Retries +1)} seconds.");
+            }
+        }
+
+        private async Task<ConferenceDetailsResponse> PollForConferenceParticipantUpdated(Guid hearingRefId, Guid participantId, string updatedText)
+        {
+            var policy = Policy
+                .HandleResult<ConferenceDetailsResponse>(conf => !conf.Participants.First(x=> x.RefId == participantId).DisplayName.Contains(updatedText))
+                .WaitAndRetryAsync(Retries, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            try
+            {
+                var conferenceResponse = await policy.ExecuteAsync(async () => await VideoApiClient.GetConferenceByHearingRefIdAsync(hearingRefId, false));
+                conferenceResponse.CaseName.Should().NotBeNullOrWhiteSpace();
+                return conferenceResponse;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Encountered error '{e.Message}' after {Math.Pow(2, Retries +1)} seconds.");
             }
         }
     }

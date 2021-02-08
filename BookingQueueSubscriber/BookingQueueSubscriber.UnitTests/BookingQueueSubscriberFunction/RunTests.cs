@@ -242,8 +242,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
 
             _videoApiService.InitConferenceResponse();
             _videoApiService.ConferenceResponse.Id = Guid.Parse("9e4bb2b7-3187-419c-a7c8-b1e17a3cbb6f");
-            _videoApiService.ConferenceResponse.HearingRefId = Guid.Parse("015a0b0e-a16d-4076-a2b2-328b1d26212b");
-            _videoApiService.ConferenceResponse.Participants[0].ParticipantRefIid = Guid.Parse("ea801426-0ea2-4eab-aaf0-647ae146397a");
+            _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("ea801426-0ea2-4eab-aaf0-647ae146397a");
             
             await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
               new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
@@ -279,8 +278,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
 }";
             _videoApiService.InitConferenceResponse();
             _videoApiService.ConferenceResponse.Id = Guid.Parse("ab013e39-d159-4836-848e-034d2ebbe37a");
-            _videoApiService.ConferenceResponse.HearingRefId = Guid.Parse("769d17f6-85f1-4624-bc07-ffdac8ddb619");
-            _videoApiService.ConferenceResponse.Participants[0].ParticipantRefIid = Guid.Parse("af9afb87-5cf8-4813-b3dc-0ea96f77e752");
+            _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("af9afb87-5cf8-4813-b3dc-0ea96f77e752");
             
             await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
               new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));

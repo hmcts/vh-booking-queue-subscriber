@@ -1,36 +1,51 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using AcceptanceTests.Common.Api.Helpers;
-using AcceptanceTests.Common.Api.Uris;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Builders;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
 using BookingQueueSubscriber.AcceptanceTests.Hooks;
-using BookingQueueSubscriber.Services.BookingsApi;
-using BookingQueueSubscriber.Services.VideoApi;
+using BookingsApi.Client;
+using BookingsApi.Contract.Enums;
+using BookingsApi.Contract.Responses;
 using FluentAssertions;
 using NUnit.Framework;
 using Polly;
+using VideoApi.Client;
+using VideoApi.Contract.Responses;
 using TestContext = BookingQueueSubscriber.AcceptanceTests.Hooks.TestContext;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Tests
 {
     public class TestsBase
     {
-        protected const int RETRIES = 4; // 4 retries ^2 will execute after 2 seconds, then 4, 8, then finally 16 (30 seconds in total)
+        protected const int Retries = 4; // 4 retries ^2 will execute after 2 seconds, then 4, 8, then finally 16 (30 seconds in total)
         protected TestContext Context;
-        protected HttpResponseMessage Response;
-        protected string Json;
         protected HearingDetailsResponse Hearing;
         protected ConferenceDetailsResponse Conference;
-        protected HttpClient Client;
+        protected BookingsApiClient BookingApiClient;
+        protected VideoApiClient VideoApiClient;
 
         [OneTimeSetUp]
         public void BeforeTestRun()
         {
             Context = new Setup().RegisterSecrets();
+            InitApiClient(Context);
+        }
+
+        private void InitApiClient(TestContext context)
+        {
+            NUnit.Framework.TestContext.Out.WriteLine("Initialising API Client");
+            var bookingsHttpClient = new HttpClient();
+            bookingsHttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("bearer", context.Tokens.BookingsApiBearerToken);
+            BookingApiClient = BookingsApiClient.GetClient(context.Config.Services.BookingsApiUrl, bookingsHttpClient);
+            
+            var videoHttpClient = new HttpClient();
+            videoHttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("bearer", context.Tokens.VideoApiBearerToken);
+            VideoApiClient = VideoApiClient.GetClient(context.Config.Services.VideoApiUrl, videoHttpClient);
         }
 
         [SetUp]
@@ -42,120 +57,44 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [TearDown]
         public async Task AfterEveryTest()
         {
-            if (Hearing != null)
+            if (Hearing != null && (Hearing.Status == BookingStatus.Created || Hearing.Status == BookingStatus.Booked))
             {
-                var uri = BookingsApiUriFactory.HearingsEndpoints.RemoveHearing(Hearing.Id);
-                await SendDeleteRequest(uri);
+                await BookingApiClient.RemoveHearingAsync(Hearing.Id);
             }
-        }
-
-        [OneTimeTearDown]
-        public void AfterTestRun()
-        {
-            Client?.Dispose();
-        }
-
-        protected void VerifyResponse(HttpStatusCode statusCode, bool isSuccess)
-        {
-            Response.StatusCode.Should().Be(statusCode);
-            Response.IsSuccessStatusCode.Should().Be(isSuccess);
-        }
-
-        protected void CreateNewBookingsApiClient()
-        {
-            Client?.Dispose();
-            Client = new HttpClient {BaseAddress = new Uri(Context.Config.Services.BookingsApiUrl)};
-            Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Context.Tokens.BookingsApiBearerToken}");
-        }
-
-        protected void CreateNewVideoApiClient()
-        {
-            Client?.Dispose();
-            Client = new HttpClient { BaseAddress = new Uri(Context.Config.Services.VideoApiUrl) };
-            Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Context.Tokens.VideoApiBearerToken}");
-        }
-
-        protected async Task SendPatchRequest(string uri, string request)
-        {
-            var content = new StringContent(request, Encoding.UTF8, "application/json");
-            CreateNewBookingsApiClient();
-            var fullUri = new Uri($"{Context.Config.Services.BookingsApiUrl}{uri}");
-            Response = await Client.PatchAsync(fullUri, content);
-            Json = await Response.Content.ReadAsStringAsync();
-        }
-
-        protected async Task SendPostRequest(string uri, string request)
-        {
-            var content = new StringContent(request, Encoding.UTF8, "application/json");
-            CreateNewBookingsApiClient();
-            var fullUri = new Uri($"{Context.Config.Services.BookingsApiUrl}{uri}");
-            Response = await Client.PostAsync(fullUri, content);
-            Json = await Response.Content.ReadAsStringAsync();
-        }
-
-        protected async Task SendPutRequest(string uri, string request)
-        {
-            var content = new StringContent(request, Encoding.UTF8, "application/json");
-            CreateNewBookingsApiClient();
-            var fullUri = new Uri($"{Context.Config.Services.BookingsApiUrl}{uri}");
-            Response = await Client.PutAsync(fullUri, content);
-            Json = await Response.Content.ReadAsStringAsync();
-        }
-
-        protected async Task SendDeleteRequest(string uri)
-        {
-            CreateNewBookingsApiClient();
-            var fullUri = new Uri($"{Context.Config.Services.BookingsApiUrl}{uri}");
-            Response = await Client.DeleteAsync(fullUri);
-            Json = await Response.Content.ReadAsStringAsync();
         }
 
         protected async Task CreateAndConfirmHearing()
         {
-            var bookingUri = BookingsApiUriFactory.HearingsEndpoints.BookNewHearing;
             var request = new BookHearingRequestBuilder(Context.Config.UsernameStem).Build();
-
-            await SendPostRequest(bookingUri, RequestHelper.Serialise(request));
-            VerifyResponse(HttpStatusCode.Created, true);
-
-            var bookingsResponse = RequestHelper.Deserialise<HearingDetailsResponse>(Json);
-            bookingsResponse.Should().NotBeNull();
-            Hearing = bookingsResponse;
+            Hearing = await BookingApiClient.BookNewHearingAsync(request);
 
             var confirmRequest = new UpdateBookingStatusRequestBuilder()
                 .UpdatedBy(HearingData.CREATED_BY(Context.Config.UsernameStem))
                 .Build();
 
-            var updateUri = BookingsApiUriFactory.HearingsEndpoints.UpdateHearingStatus(Hearing.Id);
-            await SendPatchRequest(updateUri, RequestHelper.Serialise(confirmRequest));
+            await BookingApiClient.UpdateBookingStatusAsync(Hearing.Id, confirmRequest);
 
-            var response = await GetConferenceByHearingIdPollingAsync(Hearing.Id);
-            response.Should().NotBeNull();
-            Verify.ConferenceDetailsResponse(response, Hearing);
-            Conference = response;
+            Conference = await GetConferenceByHearingIdPollingAsync(Hearing.Id);
+            Verify.ConferenceDetailsResponse(Conference, Hearing);
         }
 
         protected async Task<ConferenceDetailsResponse> GetConferenceByHearingIdPollingAsync(Guid hearingRefId)
         {
-            var uri = $"{Context.Config.Services.VideoApiUrl}{VideoApiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId)}";
-            CreateNewVideoApiClient();
-
             var policy = Policy
-                .HandleResult<HttpResponseMessage>(message => !message.IsSuccessStatusCode)
-                .WaitAndRetryAsync(RETRIES, retryAttempt =>
+                .Handle<VideoApiException>(e => e.StatusCode == (int) HttpStatusCode.NotFound)
+                .OrResult<ConferenceDetailsResponse>(message => message == null)
+                .WaitAndRetryAsync(Retries, retryAttempt =>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
             try
             {
-                var result = await policy.ExecuteAsync(async () => await Client.GetAsync(uri));
-                result.StatusCode.Should().Be(HttpStatusCode.OK);
-                var conferenceResponse = RequestHelper.Deserialise<ConferenceDetailsResponse>(await result.Content.ReadAsStringAsync());
+                var conferenceResponse = await policy.ExecuteAsync(async () => await VideoApiClient.GetConferenceByHearingRefIdAsync(hearingRefId, false));
                 conferenceResponse.Should().NotBeNull();
-                conferenceResponse.Case_name.Should().NotBeNullOrWhiteSpace();
+                conferenceResponse.CaseName.Should().NotBeNullOrWhiteSpace();
                 return conferenceResponse;
             }
             catch (Exception e)
             {
-                throw new Exception($"Encountered error '{e.Message}' after {Math.Pow(2, RETRIES +1)} seconds.");
+                throw new Exception($"Encountered error '{e.Message}' after {Math.Pow(2, Retries +1)} seconds.");
             }
         }
     }

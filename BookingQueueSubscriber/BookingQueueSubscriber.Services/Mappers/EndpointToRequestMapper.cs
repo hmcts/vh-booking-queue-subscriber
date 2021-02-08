@@ -1,5 +1,5 @@
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
