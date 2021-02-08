@@ -11,9 +11,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     public class ParticipantUpdatedHandler : IMessageHandler<ParticipantUpdatedIntegrationEvent>
     {
         private readonly IVideoApiService _videoApiService;
-        private ILogger<EndpointRemovedHandler> _logger;
+        private readonly ILogger<ParticipantUpdatedHandler> _logger;
 
-        public ParticipantUpdatedHandler(IVideoApiService videoApiService, ILogger<EndpointRemovedHandler> logger)
+        public ParticipantUpdatedHandler(IVideoApiService videoApiService, ILogger<ParticipantUpdatedHandler> logger)
         {
             _videoApiService = videoApiService;
             _logger = logger;
@@ -27,7 +27,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             
             if (participantResponse != null)
             {
-                _logger.LogError("Found participant {Participant} in hearing {Hearing}",
+                _logger.LogDebug("Found participant {Participant} in hearing {Hearing}",
                     eventMessage.Participant.ParticipantId, eventMessage.HearingId);
                 var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(eventMessage.Participant);
                 await _videoApiService.UpdateParticipantDetails(conferenceResponse.Id, participantResponse.Id, request);

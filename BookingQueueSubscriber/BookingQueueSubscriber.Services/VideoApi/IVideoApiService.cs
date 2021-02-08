@@ -9,7 +9,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         Task BookNewConferenceAsync(BookNewConferenceRequest request);
         Task UpdateConferenceAsync(UpdateConferenceRequest request);
         Task DeleteConferenceAsync(Guid conferenceId);
-        Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId);
+        Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId, bool includeClosed = false);
         Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request);
         Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId);
         Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request);

@@ -30,7 +30,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 }
             });
 
-            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId)).Returns(result);
+            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId, It.IsAny<bool>())).Returns(result);
         }
     }
 }

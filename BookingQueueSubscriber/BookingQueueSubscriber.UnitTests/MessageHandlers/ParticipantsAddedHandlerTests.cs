@@ -6,6 +6,7 @@ using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -13,41 +14,49 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class ParticipantsAddedHandlerTests : MessageHandlerTestBase
     {
+        private readonly Mock<ILogger<ParticipantsAddedHandler>> _loggerMock =
+            new Mock<ILogger<ParticipantsAddedHandler>>();
+
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
         {
-            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object);
+            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object, _loggerMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()), Times.Once);
+            VideoApiServiceMock.Verify(
+                x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()),
+                Times.Once);
         }
 
         [Test]
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object);
+            var messageHandler =
+                (IMessageHandler) new ParticipantsAddedHandler(VideoApiServiceMock.Object, _loggerMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            
-            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.Is<AddParticipantsToConferenceRequest>
-            (
-                request => 
-                    request.Participants.Count == 1 &&
-                    request.Participants[0].Name == integrationEvent.Participants[0].Fullname &&
-                    request.Participants[0].Username == integrationEvent.Participants[0].Username &&
-                    request.Participants[0].FirstName == integrationEvent.Participants[0].FirstName &&
-                    request.Participants[0].LastName == integrationEvent.Participants[0].LastName &&
-                    request.Participants[0].ContactEmail == integrationEvent.Participants[0].ContactEmail &&
-                    request.Participants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
-                    request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
-                    request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
-                    request.Participants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
-                    request.Participants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
-                    request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
-                    request.Participants[0].Representee == integrationEvent.Participants[0].Representee
-            )), Times.Once);
+
+            VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(),
+                It.Is<AddParticipantsToConferenceRequest>
+                (
+                    request =>
+                        request.Participants.Count == 1 &&
+                        request.Participants[0].Name == integrationEvent.Participants[0].Fullname &&
+                        request.Participants[0].Username == integrationEvent.Participants[0].Username &&
+                        request.Participants[0].FirstName == integrationEvent.Participants[0].FirstName &&
+                        request.Participants[0].LastName == integrationEvent.Participants[0].LastName &&
+                        request.Participants[0].ContactEmail == integrationEvent.Participants[0].ContactEmail &&
+                        request.Participants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
+                        request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
+                        request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
+                        request.Participants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
+                        request.Participants[0].CaseTypeGroup ==
+                        integrationEvent.Participants[0].CaseGroupType.ToString() &&
+                        request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
+                        request.Participants[0].Representee == integrationEvent.Participants[0].Representee
+                )), Times.Once);
         }
 
         private ParticipantsAddedIntegrationEvent GetIntegrationEvent()

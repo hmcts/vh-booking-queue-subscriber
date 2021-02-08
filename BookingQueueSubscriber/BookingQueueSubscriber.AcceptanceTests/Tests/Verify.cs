@@ -60,7 +60,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         public static void UpdatedConference(ConferenceDetailsResponse conferenceDetails, UpdateHearingRequest request)
         {
             conferenceDetails.Should().BeEquivalentTo(request, options => options
-                .Excluding(x => x.AdditionalProperties)
                 .Excluding(x => x.Cases)
                 .Excluding(x => x.Hearing_room_name)
                 .Excluding(x => x.Other_information)

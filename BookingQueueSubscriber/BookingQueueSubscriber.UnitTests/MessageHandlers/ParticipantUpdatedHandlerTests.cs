@@ -13,7 +13,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class ParticipantUpdatedHandlerTests : MessageHandlerTestBase
     {
-        private readonly Mock<ILogger<EndpointRemovedHandler>> _loggerMock = new Mock<ILogger<EndpointRemovedHandler>>();
+        private readonly Mock<ILogger<ParticipantUpdatedHandler>> _loggerMock = new Mock<ILogger<ParticipantUpdatedHandler>>();
 
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
