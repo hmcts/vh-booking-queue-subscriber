@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using AcceptanceTests.Common.Data.Helpers;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
-using BookingQueueSubscriber.Services.BookingsApi;
+using BookingsApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 {
@@ -19,24 +18,24 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             _usernameStem = usernameStem;
             _request = new BookNewHearingRequest
             {
-                Audio_recording_required = HearingData.AUDIO_RECORDING_REQUIRED,
-                Case_type_name = HearingData.CASE_TYPE_NAME,
-                Created_by = EmailData.NON_EXISTENT_USERNAME,
+                AudioRecordingRequired = HearingData.AUDIO_RECORDING_REQUIRED,
+                CaseTypeName = HearingData.CASE_TYPE_NAME,
+                CreatedBy = EmailData.NON_EXISTENT_USERNAME,
                 Endpoints = new List<EndpointRequest>(),
-                Hearing_room_name = HearingData.HEARING_ROOM_NAME,
-                Hearing_type_name = HearingData.HEARING_TYPE_NAME,
-                Hearing_venue_name = HearingData.VENUE_NAME,
-                Other_information = HearingData.OTHER_INFORMATION,
-                Questionnaire_not_required = HearingData.QUESTIONNAIRE_NOT_REQUIRED,
-                Scheduled_date_time = DateTime.UtcNow.AddMinutes(5),
-                Scheduled_duration = HearingData.SCHEDULED_DURATION
+                HearingRoomName = HearingData.HEARING_ROOM_NAME,
+                HearingTypeName = HearingData.HEARING_TYPE_NAME,
+                HearingVenueName = HearingData.VENUE_NAME,
+                OtherInformation = HearingData.OTHER_INFORMATION,
+                QuestionnaireNotRequired = HearingData.QUESTIONNAIRE_NOT_REQUIRED,
+                ScheduledDateTime = DateTime.UtcNow.AddMinutes(5),
+                ScheduledDuration = HearingData.SCHEDULED_DURATION
             };
         }
 
         public BookHearingRequestBuilder CacdHearing()
         {
-            _request.Case_type_name = HearingData.CACD_CASE_TYPE_NAME;
-            _request.Hearing_type_name = HearingData.CACD_HEARING_TYPE_NAME;
+            _request.CaseTypeName = HearingData.CACD_CASE_TYPE_NAME;
+            _request.HearingTypeName = HearingData.CACD_HEARING_TYPE_NAME;
             _request.Participants = new HearingParticipantsBuilder(_usernameStem, true)
                 .AddJudge()
                 .AddIndividual()
@@ -65,7 +64,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             {
                 new CaseRequest()
                 {
-                    Is_lead_case = HearingData.IS_LEAD_CASE,
+                    IsLeadCase = HearingData.IS_LEAD_CASE,
                     Name = $"BQS {HearingData.AUTOMATED_CASE_NAME_PREFIX} {GenerateRandom.Letters(_randomNumber)}",
                     Number = GenerateRandom.CaseNumber(_randomNumber)
                 }

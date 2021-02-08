@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,12 +7,11 @@ using AcceptanceTests.Common.Api.Helpers;
 using AcceptanceTests.Common.Api.Uris;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Builders;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
-using BookingQueueSubscriber.Services.BookingsApi;
-using BookingQueueSubscriber.Services.VideoApi;
+using BookingsApi.Contract.Requests;
 using FluentAssertions;
 using NUnit.Framework;
 using Polly;
-using UpdateParticipantRequest = BookingQueueSubscriber.Services.BookingsApi.UpdateParticipantRequest;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Tests
 {
@@ -40,7 +38,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_remove_participant_from_hearing_and_conference()
         {
-            var participant = Hearing.Participants.First(x => x.User_role_name.Equals("Individual"));
+            var participant = Hearing.Participants.First(x => x.UserRoleName.Equals("Individual"));
             var uri = BookingsApiUriFactory.HearingsParticipantsEndpoints.RemoveParticipantFromHearing(Hearing.Id, participant.Id);
 
             await SendDeleteRequest(uri);
@@ -63,7 +61,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             {
                 var result = await policy.ExecuteAsync(async () => await Client.GetAsync(uri));
                 var conferenceResponse = RequestHelper.Deserialise<ConferenceDetailsResponse>(await result.Content.ReadAsStringAsync());
-                conferenceResponse.Case_name.Should().NotBeNullOrWhiteSpace();
+                conferenceResponse.CaseName.Should().NotBeNullOrWhiteSpace();
                 return conferenceResponse;
             }
             catch (Exception e)
@@ -75,15 +73,15 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_update_participant_in_hearing_and_conference()
         {
-            var participant = Hearing.Participants.First(x => x.User_role_name.Equals("Representative"));
+            var participant = Hearing.Participants.First(x => x.UserRoleName.Equals("Representative"));
             var uri = BookingsApiUriFactory.HearingsParticipantsEndpoints.UpdateParticipantDetails(Hearing.Id, participant.Id);
 
             var request = new UpdateParticipantRequest
             {
-                Display_name = $"{participant.Display_name} {HearingData.UPDATED_TEXT}",
-                Organisation_name = $"{participant.Organisation} {HearingData.UPDATED_TEXT}",
+                DisplayName = $"{participant.DisplayName} {HearingData.UPDATED_TEXT}",
+                OrganisationName = $"{participant.Organisation} {HearingData.UPDATED_TEXT}",
                 Representee = $"{participant.Representee} {HearingData.UPDATED_TEXT}",
-                Telephone_number = UserData.UPDATED_TELEPHONE_NUMBER,
+                TelephoneNumber = UserData.UPDATED_TELEPHONE_NUMBER,
                 Title = $"{participant.Title} {HearingData.UPDATED_TEXT}"
             };
 
@@ -92,9 +90,9 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
 
             var conferenceDetails = await PollForConferenceParticipantUpdated(Hearing.Id, HearingData.UPDATED_TEXT);
             var updatedParticipant = conferenceDetails.Participants.First(x => x.Username.Equals(participant.Username));
-            updatedParticipant.Display_name.Should().Be(request.Display_name);
+            updatedParticipant.DisplayName.Should().Be(request.DisplayName);
             updatedParticipant.Representee.Should().Be(request.Representee);
-            updatedParticipant.Contact_telephone.Should().Be(request.Telephone_number);
+            updatedParticipant.ContactTelephone.Should().Be(request.TelephoneNumber);
         }
 
         private async Task<ConferenceDetailsResponse> PollForConferenceParticipantUpdated(Guid hearingRefId, string updatedText)
@@ -110,7 +108,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             {
                 var result = await policy.ExecuteAsync(async () => await Client.GetAsync(uri));
                 var conferenceResponse = RequestHelper.Deserialise<ConferenceDetailsResponse>(await result.Content.ReadAsStringAsync());
-                conferenceResponse.Case_name.Should().NotBeNullOrWhiteSpace();
+                conferenceResponse.CaseName.Should().NotBeNullOrWhiteSpace();
                 return conferenceResponse;
             }
             catch (Exception e)

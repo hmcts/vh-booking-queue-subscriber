@@ -1,6 +1,7 @@
 using System;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using VideoApi.Contract.Enums;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {

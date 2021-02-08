@@ -1,5 +1,6 @@
 ﻿using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
-using BookingQueueSubscriber.Services.BookingsApi;
+using BookingsApi.Contract.Requests;
+using BookingsApi.Contract.Requests.Enums;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 {
@@ -14,14 +15,14 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 
         public UpdateBookingStatusRequestBuilder WithStatus(UpdateBookingStatus status)
         {
-            _request.Cancel_reason = HearingData.CANCELLATION_REASON;
+            _request.CancelReason = HearingData.CANCELLATION_REASON;
             _request.Status = status;
             return this;
         }
 
         public UpdateBookingStatusRequestBuilder UpdatedBy(string username)
         {
-            _request.Updated_by = username;
+            _request.UpdatedBy = username;
             return this;
         }
 

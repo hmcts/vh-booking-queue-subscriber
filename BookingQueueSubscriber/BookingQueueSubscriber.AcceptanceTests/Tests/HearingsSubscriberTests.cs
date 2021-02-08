@@ -8,11 +8,13 @@ using AcceptanceTests.Common.Api.Helpers;
 using AcceptanceTests.Common.Api.Uris;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Builders;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
-using BookingQueueSubscriber.Services.BookingsApi;
-using BookingQueueSubscriber.Services.VideoApi;
+using BookingsApi.Contract.Requests;
+using BookingsApi.Contract.Requests.Enums;
+using BookingsApi.Contract.Responses;
 using FluentAssertions;
 using NUnit.Framework;
 using Polly;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Tests
 {
@@ -52,7 +54,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             {
                 new CaseRequest()
                 {
-                    Is_lead_case = Hearing.Cases.First().Is_lead_case,
+                    IsLeadCase = Hearing.Cases.First().IsLeadCase,
                     Name = $"{Hearing.Cases.First().Name} {HearingData.UPDATED_TEXT}",
                     Number = $"{Hearing.Cases.First().Number} {HearingData.UPDATED_TEXT}"
                 }
@@ -60,15 +62,15 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
 
             var request = new UpdateHearingRequest()
             {
-                Audio_recording_required = !Hearing.Audio_recording_required,
+                AudioRecordingRequired = !Hearing.AudioRecordingRequired,
                 Cases = caseRequests,
-                Hearing_room_name = $"{Hearing.Hearing_room_name} {HearingData.UPDATED_TEXT}",
-                Hearing_venue_name = Hearing.Hearing_venue_name.Equals(HearingData.VENUE_NAME) ? HearingData.VENUE_NAME_ALTERNATIVE : HearingData.VENUE_NAME,
-                Other_information = $"{Hearing.Other_information} {HearingData.UPDATED_TEXT}",
-                Questionnaire_not_required = !Hearing.Questionnaire_not_required,
-                Scheduled_date_time = Hearing.Scheduled_date_time.AddMinutes(10),
-                Scheduled_duration = Hearing.Scheduled_duration / 2,
-                Updated_by = EmailData.NON_EXISTENT_USERNAME
+                HearingRoomName = $"{Hearing.HearingRoomName} {HearingData.UPDATED_TEXT}",
+                HearingVenueName = Hearing.HearingVenueName.Equals(HearingData.VENUE_NAME) ? HearingData.VENUE_NAME_ALTERNATIVE : HearingData.VENUE_NAME,
+                OtherInformation = $"{Hearing.OtherInformation} {HearingData.UPDATED_TEXT}",
+                QuestionnaireNotRequired = !Hearing.QuestionnaireNotRequired,
+                ScheduledDateTime = Hearing.ScheduledDateTime.AddMinutes(10),
+                ScheduledDuration = Hearing.ScheduledDuration / 2,
+                UpdatedBy = EmailData.NON_EXISTENT_USERNAME
             };
 
             await SendPutRequest(updateUri, RequestHelper.Serialise(request));
@@ -97,7 +99,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             {
                 var result = await policy.ExecuteAsync(async () => await Client.GetAsync(uri));
                 var conferenceResponse = RequestHelper.Deserialise<ConferenceDetailsResponse>(await result.Content.ReadAsStringAsync());
-                conferenceResponse.Case_name.Should().NotBeNullOrWhiteSpace();
+                conferenceResponse.CaseName.Should().NotBeNullOrWhiteSpace();
                 return conferenceResponse;
             }
             catch (Exception e)
@@ -141,11 +143,11 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         public async Task Should_delete_conference_when_hearing_cancelled()
         {
             var uri = BookingsApiUriFactory.HearingsEndpoints.UpdateHearingStatus(Hearing.Id);
-            const string UPDATED_BY = "updated_by_user@email.com";
+            const string updatedBy = "updated_by_user@email.com";
 
             var request = new UpdateBookingStatusRequestBuilder()
                 .WithStatus(UpdateBookingStatus.Cancelled)
-                .UpdatedBy(UPDATED_BY)
+                .UpdatedBy(updatedBy)
                 .Build();
 
             await SendPatchRequest(uri, RequestHelper.Serialise(request));

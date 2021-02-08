@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.ApiHelper;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using VideoApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 
 namespace BookingQueueSubscriber.Services.VideoApi

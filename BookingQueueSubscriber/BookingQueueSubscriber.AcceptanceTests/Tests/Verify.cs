@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BookingQueueSubscriber.Services.BookingsApi;
-using BookingQueueSubscriber.Services.VideoApi;
+using BookingsApi.Contract.Requests;
+using BookingsApi.Contract.Responses;
 using FluentAssertions;
+using VideoApi.Contract.Enums;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Tests
 {
@@ -10,18 +12,18 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
     {
         public static void ConferenceDetailsResponse(ConferenceDetailsResponse response, HearingDetailsResponse hearing)
         {
-            response.Audio_recording_required.Should().Be(hearing.Audio_recording_required);
-            response.Case_name.Should().Be(hearing.Cases.First().Name);
-            response.Case_number.Should().Be(hearing.Cases.First().Number);
-            response.Case_type.Should().Be(hearing.Case_type_name);
-            response.Closed_date_time.Should().BeNull();
-            response.Current_status.Should().Be(ConferenceState.NotStarted);
-            response.Hearing_id.Should().Be(hearing.Id);
-            response.Hearing_venue_name.Should().Be(hearing.Hearing_venue_name);
+            response.AudioRecordingRequired.Should().Be(hearing.AudioRecordingRequired);
+            response.CaseName.Should().Be(hearing.Cases.First().Name);
+            response.CaseNumber.Should().Be(hearing.Cases.First().Number);
+            response.CaseType.Should().Be(hearing.CaseTypeName);
+            response.ClosedDateTime.Should().BeNull();
+            response.CurrentStatus.Should().Be(ConferenceState.NotStarted);
+            response.HearingId.Should().Be(hearing.Id);
+            response.HearingVenueName.Should().Be(hearing.HearingVenueName);
             response.Id.Should().NotBeEmpty();
-            response.Scheduled_date_time.Should().Be(hearing.Scheduled_date_time);
-            response.Scheduled_duration.Should().Be(hearing.Scheduled_duration);
-            response.Started_date_time.Should().BeNull();
+            response.ScheduledDateTime.Should().Be(hearing.ScheduledDateTime);
+            response.ScheduledDuration.Should().Be(hearing.ScheduledDuration);
+            response.StartedDateTime.Should().BeNull();
             VerifyConferenceParticipants(response.Participants, hearing.Participants);
         }
 
@@ -32,22 +34,22 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             foreach (var hearingParticipant in hearingParticipants)
             {
                 var conferenceParticipant =
-                    conferenceParticipants.First(x => x.Last_name.Equals(hearingParticipant.Last_name));
+                    conferenceParticipants.First(x => x.LastName.Equals(hearingParticipant.LastName));
 
-                conferenceParticipant.Case_role_name.Should().NotBeNullOrWhiteSpace();
-                conferenceParticipant.Contact_email.Should().Be(hearingParticipant.Contact_email);
-                conferenceParticipant.Display_name.Should().Be(hearingParticipant.Display_name);
-                conferenceParticipant.First_name.Should().Be(hearingParticipant.First_name);
-                conferenceParticipant.Hearing_role_name.Should().NotBeNullOrWhiteSpace();
+                conferenceParticipant.CaseRoleName.Should().NotBeNullOrWhiteSpace();
+                conferenceParticipant.ContactEmail.Should().Be(hearingParticipant.ContactEmail);
+                conferenceParticipant.DisplayName.Should().Be(hearingParticipant.DisplayName);
+                conferenceParticipant.FirstName.Should().Be(hearingParticipant.FirstName);
+                conferenceParticipant.HearingRoleName.Should().NotBeNullOrWhiteSpace();
                 conferenceParticipant.Id.Should().NotBeEmpty();
-                conferenceParticipant.Middle_names.Should().BeNullOrWhiteSpace();
-                conferenceParticipant.Last_name.Should().Be(hearingParticipant.Last_name);
-                conferenceParticipant.Telephone_number.Should().NotBeNullOrWhiteSpace();
+                conferenceParticipant.MiddleNames.Should().BeNullOrWhiteSpace();
+                conferenceParticipant.LastName.Should().Be(hearingParticipant.LastName);
+                conferenceParticipant.TelephoneNumber.Should().NotBeNullOrWhiteSpace();
                 conferenceParticipant.Title.Should().NotBeNullOrWhiteSpace();
                 conferenceParticipant.Username.Should().Be(hearingParticipant.Username);
 
-                if (!conferenceParticipant.User_role_name.Equals("Representative") ||
-                    conferenceParticipant.Case_role_name.ToLower() == "none") continue;
+                if (!conferenceParticipant.UserRoleName.Equals("Representative") ||
+                    conferenceParticipant.CaseRoleName.ToLower() == "none") continue;
                 conferenceParticipant.Organisation.Should().NotBeNullOrWhiteSpace();
             }
         }
@@ -60,16 +62,15 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         public static void UpdatedConference(ConferenceDetailsResponse conferenceDetails, UpdateHearingRequest request)
         {
             conferenceDetails.Should().BeEquivalentTo(request, options => options
-                .Excluding(x => x.AdditionalProperties)
                 .Excluding(x => x.Cases)
-                .Excluding(x => x.Hearing_room_name)
-                .Excluding(x => x.Other_information)
-                .Excluding(x => x.Questionnaire_not_required)
-                .Excluding(x => x.Updated_by)
+                .Excluding(x => x.HearingRoomName)
+                .Excluding(x => x.OtherInformation)
+                .Excluding(x => x.QuestionnaireNotRequired)
+                .Excluding(x => x.UpdatedBy)
             );
 
-            conferenceDetails.Case_name.Should().Be(request.Cases.First().Name);
-            conferenceDetails.Case_number.Should().Be(request.Cases.First().Number);
+            conferenceDetails.CaseName.Should().Be(request.Cases.First().Name);
+            conferenceDetails.CaseNumber.Should().Be(request.Cases.First().Number);
         }
 
         public static void ParticipantDetails(ParticipantDetailsResponse participant, AddParticipantsToHearingRequest request)

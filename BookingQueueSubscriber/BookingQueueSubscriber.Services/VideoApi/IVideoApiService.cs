@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoApi
 {

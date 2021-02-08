@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingQueueSubscriber.Services.VideoApi.Contracts;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {

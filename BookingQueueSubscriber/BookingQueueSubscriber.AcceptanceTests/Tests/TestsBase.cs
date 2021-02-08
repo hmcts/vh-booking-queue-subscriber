@@ -8,11 +8,11 @@ using AcceptanceTests.Common.Api.Uris;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Builders;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
 using BookingQueueSubscriber.AcceptanceTests.Hooks;
-using BookingQueueSubscriber.Services.BookingsApi;
-using BookingQueueSubscriber.Services.VideoApi;
+using BookingsApi.Contract.Responses;
 using FluentAssertions;
 using NUnit.Framework;
 using Polly;
+using VideoApi.Contract.Responses;
 using TestContext = BookingQueueSubscriber.AcceptanceTests.Hooks.TestContext;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Tests
@@ -150,7 +150,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
                 result.StatusCode.Should().Be(HttpStatusCode.OK);
                 var conferenceResponse = RequestHelper.Deserialise<ConferenceDetailsResponse>(await result.Content.ReadAsStringAsync());
                 conferenceResponse.Should().NotBeNull();
-                conferenceResponse.Case_name.Should().NotBeNullOrWhiteSpace();
+                conferenceResponse.CaseName.Should().NotBeNullOrWhiteSpace();
                 return conferenceResponse;
             }
             catch (Exception e)
