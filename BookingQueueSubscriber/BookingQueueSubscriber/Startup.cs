@@ -11,6 +11,7 @@ using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using VideoApi.Client;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(Startup))]
@@ -39,14 +40,24 @@ namespace BookingQueueSubscriber
             services.AddScoped<VideoServiceTokenHandler>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
 
+            var container = services.BuildServiceProvider();
+            
             if (hearingServicesConfiguration.EnableVideoApiStub)
             {
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
             }
             else
             {
-                services.AddHttpClient<IVideoApiService, VideoApiService>()
-                    .AddHttpMessageHandler<VideoServiceTokenHandler>();
+                services.AddScoped<IVideoApiService, VideoApiService>();
+                services.AddHttpClient<IVideoApiClient, VideoApiClient>()
+                    .AddHttpMessageHandler(() => container.GetService<VideoServiceTokenHandler>())
+                    .AddTypedClient(httpClient =>
+                    {
+                        var client = VideoApiClient.GetClient(httpClient);
+                        client.BaseUrl = hearingServicesConfiguration.VideoApiUrl;
+                        client.ReadResponseAsString = true;
+                        return (IVideoApiClient) client;
+                    });
             }
 
             RegisterMessageHandlers(services);

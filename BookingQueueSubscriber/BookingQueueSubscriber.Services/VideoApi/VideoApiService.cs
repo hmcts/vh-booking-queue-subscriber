@@ -1,125 +1,86 @@
 using System;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Common.ApiHelper;
 using BookingQueueSubscriber.Common.Configuration;
 using VideoApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
+using VideoApi.Client;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.VideoApi
 {
     public class VideoApiService : IVideoApiService
     {
-        private readonly HttpClient _httpClient;
-        private readonly ILogger _log;
-        private readonly ApiUriFactory _apiUriFactory;
+        private readonly IVideoApiClient _apiClient;
+        private readonly ILogger<VideoApiService> _log;
 
-        public VideoApiService(HttpClient httpClient, ServicesConfiguration servicesConfiguration,
+        public VideoApiService(IVideoApiClient apiClient, ServicesConfiguration servicesConfiguration,
             ILoggerFactory factory)
         {
-            _httpClient = httpClient;
+            _apiClient = apiClient;
             _log = factory.CreateLogger<VideoApiService>();
-            _httpClient.BaseAddress = new Uri(servicesConfiguration.VideoApiUrl);
-
-            _apiUriFactory = new ApiUriFactory();
         }
 
-        public async Task BookNewConferenceAsync(BookNewConferenceRequest request)
+        public Task BookNewConferenceAsync(BookNewConferenceRequest request)
         {
-            _log.LogInformation($"Booking new conference for {request.HearingRefId}");
-            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
-            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-            var response =
-                await _httpClient.PostAsync(_apiUriFactory.ConferenceEndpoints.BookNewConference, httpContent);
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Booking new conference for hearing {Hearing}", request.HearingRefId);
+            return _apiClient.BookNewConferenceAsync(request);
         }
 
-        public async Task UpdateConferenceAsync(UpdateConferenceRequest request)
+        public Task UpdateConferenceAsync(UpdateConferenceRequest request)
         {
-            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
-            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync(_apiUriFactory.ConferenceEndpoints.UpdateConference, httpContent);
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Updating conference with hearing id {Hearing}", request.HearingRefId);
+            return _apiClient.UpdateConferenceAsync(request);
         }
 
-        public async Task DeleteConferenceAsync(Guid conferenceId)
+        public Task DeleteConferenceAsync(Guid conferenceId)
         {
-            _log.LogInformation($"Deleting conference for {conferenceId}");
-            var response = await _httpClient
-                .DeleteAsync(_apiUriFactory.ConferenceEndpoints.DeleteConference(conferenceId));
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Deleting conference id {ConferenceId}", conferenceId);
+            return _apiClient.RemoveConferenceAsync(conferenceId);
         }
 
-        public async Task<ConferenceResponse> GetConferenceByHearingRefId(Guid hearingRefId)
+        public Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId)
         {
-            _log.LogInformation($"Getting conference by hearing ref id {hearingRefId}");
-            var uriString = _apiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId);
-            var response = await _httpClient.GetAsync(uriString);
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<ConferenceResponse>(content);
+            _log.LogInformation("Getting conference by hearing ref id {HearingId}", hearingRefId);
+            return _apiClient.GetConferenceByHearingRefIdAsync(hearingRefId, true);
         }
 
-        public async Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request)
+        public Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request)
         {
-            _log.LogInformation($"Adding participants to conference: {conferenceId}");
-            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
-            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync(
-                    _apiUriFactory.ParticipantsEndpoints.AddParticipantsToConference(conferenceId), httpContent);
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Adding participants to conference {ConferenceId}", conferenceId);
+            return _apiClient.AddParticipantsToConferenceAsync(conferenceId, request);
         }
 
-        public async Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId)
+        public Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId)
         {
-            var response = await _httpClient.DeleteAsync(
-                    _apiUriFactory.ParticipantsEndpoints.RemoveParticipantFromConference(conferenceId, participantId));
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Removing participant {ParticipantId} from conference {ConferenceId}", participantId,
+                conferenceId);
+            return _apiClient.RemoveParticipantFromConferenceAsync(conferenceId, participantId);
         }
 
-        public async Task UpdateParticipantDetails(Guid conferenceId, Guid participantId,
+        public Task UpdateParticipantDetails(Guid conferenceId, Guid participantId,
             UpdateParticipantRequest request)
         {
-            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
-            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PatchAsync(_apiUriFactory.ParticipantsEndpoints.UpdateParticipantDetails(
-                conferenceId, participantId), httpContent);
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Updating participant {ParticipantId} in conference {ConferenceId}", participantId,
+                conferenceId);
+            return _apiClient.UpdateParticipantDetailsAsync(conferenceId, participantId, request);
         }
 
-        public async Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request)
+        public Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request)
         {
-            _log.LogInformation($"Adding endpoint to conference: {conferenceId}");
-            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
-            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync(
-                _apiUriFactory.EndpointForJvsEndpoints.AddEndpoint(conferenceId), httpContent);
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Adding endpoint to conference: {ConferenceId}", conferenceId);
+            return _apiClient.AddEndpointToConferenceAsync(conferenceId, request);
         }
 
-        public async Task RemoveEndpointFromConference(Guid conferenceId, string sip)
+        public Task RemoveEndpointFromConference(Guid conferenceId, string sip)
         {
-            _log.LogInformation($"Removing endpoint to conference: {conferenceId}, Endpoint: {sip}");
-            var response = await _httpClient.DeleteAsync(
-                _apiUriFactory.EndpointForJvsEndpoints.RemoveEndpoint(conferenceId, sip));
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Removing endpoint {Sip} from conference {ConferenceId}", sip, conferenceId);
+            return _apiClient.RemoveEndpointFromConferenceAsync(conferenceId, sip);
         }
 
-        public async Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request)
+        public Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request)
         {
-            var jsonBody = ApiRequestHelper.SerialiseRequestToSnakeCaseJson(request);
-            var httpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PatchAsync(_apiUriFactory.EndpointForJvsEndpoints.UpdateEndpoint(conferenceId,
-                    sip), 
-                httpContent);
-            response.EnsureSuccessStatusCode();
+            _log.LogInformation("Updating endpoint {Sip} in conference {ConferenceId}", sip, conferenceId);
+            return _apiClient.UpdateDisplayNameForEndpointAsync(conferenceId, sip, request);
         }
     }
 }

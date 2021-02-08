@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.VideoApi;
 using Moq;
 using NUnit.Framework;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -20,13 +21,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             ParticipantId = Guid.NewGuid();
             HearingId = Guid.NewGuid();
             VideoApiServiceMock = new Mock<IVideoApiService>();
-            var result = Task.FromResult(new ConferenceResponse
+            var result = Task.FromResult(new ConferenceDetailsResponse
             {
-                HearingRefId = Guid.NewGuid(),
                 Id = Guid.NewGuid(),
-                Participants = new List<ParticipantResponse>
+                Participants = new List<ParticipantDetailsResponse>
                 {
-                    new ParticipantResponse {Id = HearingId, ParticipantRefIid = ParticipantId}
+                    new ParticipantDetailsResponse {Id = Guid.NewGuid(),  RefId= ParticipantId}
                 }
             });
 

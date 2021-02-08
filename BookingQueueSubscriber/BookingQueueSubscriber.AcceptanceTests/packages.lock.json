@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v3.1": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.21.29, )",
-        "resolved": "1.21.29",
-        "contentHash": "nlFgXGEPRWz35OeZm5W5GSmAv4N9u3TmOYQmEOFZcRM960JgTVMN8TGByQQzQh7+sLAT3xr/jedzzhx2xFeWsA==",
+        "requested": "[1.21.30, )",
+        "resolved": "1.21.30",
+        "contentHash": "G4Fk+YiDA8GrSgEaNFPzAL6rXFJ0k0q/+Tx3m45de4NN3Oib7XscfYGJYKLroQnXtggZZi1JPgsfZKKyVvyWXA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -93,9 +93,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[1.23.16-pullrequest0325-0002, )",
-        "resolved": "1.23.16-pullrequest0325-0002",
-        "contentHash": "nsMDoUiG7jg2siY542PK5TrPa1v6nVO6MppDI/PWfqF9YetYYvN/084w866G9cMVUR0yOaZFz0oFlc0EUzF7MA==",
+        "requested": "[1.23.16, )",
+        "resolved": "1.23.16",
+        "contentHash": "3zmgyxFV7bDdySTnf3VMaAROnIhNomCmHs8C6PMkETUqS7xI+e/VCI4pOWH9iUGeQCoof6H5+qCR1MFGwAYTFw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -1912,12 +1912,6 @@
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.9",
           "Microsoft.Extensions.Configuration.Json": "3.1.9",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.8",
-          "Newtonsoft.Json": "12.0.3"
-        }
-      },
-      "bookingqueuesubscriber.services.bookingsapi": {
-        "type": "Project",
-        "dependencies": {
           "Newtonsoft.Json": "12.0.3"
         }
       }

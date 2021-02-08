@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AcceptanceTests.Common.Data.Helpers;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
 using BookingsApi.Contract.Requests;
@@ -45,15 +46,19 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             return this;
         }
 
-        public void AddParticipants()
+        public BookHearingRequestBuilder AddParticipants()
         {
-            _request.Participants ??= new HearingParticipantsBuilder(_usernameStem, false)
-                .AddJudge()
-                .AddIndividual()
-                .AddRep()
-                .AddObserver()
-                .AddPanelMember()
-                .Build();
+            if (!_request.Participants.Any())
+            {
+                _request.Participants = new HearingParticipantsBuilder(_usernameStem, false)
+                    .AddJudge()
+                    .AddIndividual()
+                    .AddRep()
+                    .AddObserver()
+                    .AddPanelMember()
+                    .Build();
+            }
+            return this;
         }
 
         public BookNewHearingRequest Build()

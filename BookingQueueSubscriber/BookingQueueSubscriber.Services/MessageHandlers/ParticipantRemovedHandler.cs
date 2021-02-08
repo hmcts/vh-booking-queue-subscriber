@@ -18,7 +18,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(ParticipantRemovedIntegrationEvent eventMessage)
         {
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
-            var participantResponse = conference.Participants.SingleOrDefault(x => x.ParticipantRefIid == eventMessage.ParticipantId);
+            var participantResponse = conference.Participants.SingleOrDefault(x => x.RefId == eventMessage.ParticipantId);
             if (participantResponse != null)
             {
                 await _videoApiService.RemoveParticipantFromConference(conference.Id, participantResponse.Id);
