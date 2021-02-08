@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BookingQueueSubscriber.Services.VideoApi.Contracts
 {
     public class UpdateParticipantRequest
@@ -10,5 +12,7 @@ namespace BookingQueueSubscriber.Services.VideoApi.Contracts
         public string ContactEmail { get; set; }
         public string ContactTelephone { get; set; }
         public string Username { get; set; }
+        
+        public IEnumerable<UpdateParticipantRequest> LinkedParticipants { get; set; }
     }
 }

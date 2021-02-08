@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {
@@ -16,6 +17,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         public string UserRole { get; set; }
         public CaseRoleGroup CaseGroupType { get; set; }
         public string Representee { get; set; }
+        public List<ParticipantDto> LinkedParticipants { get; set; }
     }
 
     public enum CaseRoleGroup

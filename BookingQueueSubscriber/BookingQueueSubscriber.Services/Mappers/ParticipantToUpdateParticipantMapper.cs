@@ -1,3 +1,4 @@
+using System.Linq;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
@@ -7,7 +8,7 @@ namespace BookingQueueSubscriber.Services.Mappers
     {
         public static UpdateParticipantRequest MapToParticipantRequest(ParticipantDto participant)
         {
-            return new UpdateParticipantRequest
+            var request = new UpdateParticipantRequest
             {
                 Fullname = participant.Fullname,
                 FirstName = participant.FirstName,
@@ -18,6 +19,11 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Representee = participant.Representee,
                 Username = participant.Username
             };
+            if (participant.LinkedParticipants != null && participant.LinkedParticipants.Any())
+            {
+                request.LinkedParticipants = participant?.LinkedParticipants.Select(MapToParticipantRequest);
+            } 
+            return request;
         }
     }
 }

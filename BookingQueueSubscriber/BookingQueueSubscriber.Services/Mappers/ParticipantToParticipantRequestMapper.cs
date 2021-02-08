@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi.Contracts;
 
@@ -23,7 +25,10 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ParticipantRefId = participantDto.ParticipantId,
                 Representee = participantDto.Representee
             };
-
+            if (participantDto.LinkedParticipants != null && participantDto.LinkedParticipants.Any())
+            {
+                request.LinkedParticipants = participantDto?.LinkedParticipants.Select(MapToParticipantRequest);
+            }
             return request;
         }
 

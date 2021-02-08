@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BookingQueueSubscriber.Services.VideoApi.Contracts
 {
@@ -16,6 +17,7 @@ namespace BookingQueueSubscriber.Services.VideoApi.Contracts
         public string HearingRole { get; set; }
         public string CaseTypeGroup { get; set; }
         public string Representee { get; set; }
+        public IEnumerable<ParticipantRequest> LinkedParticipants { get; set; }
     }
     
     public enum UserRole
