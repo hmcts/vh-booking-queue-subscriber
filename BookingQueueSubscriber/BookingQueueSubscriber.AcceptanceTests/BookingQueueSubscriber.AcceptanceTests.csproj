@@ -7,6 +7,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <ProjectGuid>6EEA13B3-DFCA-483A-A400-39BF1D774C0D</ProjectGuid>
+    <UserSecretsId>0A28103E-8F77-4BCB-85A6-2D3279598623</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,7 @@
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="VH.AcceptanceTests.Common" Version="1.0.291" />
+    <PackageReference Include="VH.AcceptanceTests.Common" Version="1.21.15" />
     <PackageReference Include="VideoApi.Client" Version="1.23.16" />
   </ItemGroup>
 
@@ -32,38 +33,6 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.aat.json" Condition="Exists('Configuration\Environments\appsettings.aat.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.aat.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.demo.json" Condition="Exists('Configuration\Environments\appsettings.demo.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.demo.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.dev.json" Condition="Exists('Configuration\Environments\appsettings.dev.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.dev.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.local.json" Condition="Exists('Configuration\Environments\appsettings.local.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.local.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.preprod.json" Condition="Exists('Configuration\Environments\appsettings.preprod.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.preprod.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.preview.json" Condition="Exists('Configuration\Environments\appsettings.preview.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.preview.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.sandbox.json" Condition="Exists('Configuration\Environments\appsettings.sandbox.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.sandbox.json</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Configuration\Environments\appsettings.test1.json" Condition="Exists('Configuration\Environments\appsettings.test1.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>appsettings.test1.json</TargetPath>
-    </ContentWithTargetPath>
   </ItemGroup>
 
 </Project>
