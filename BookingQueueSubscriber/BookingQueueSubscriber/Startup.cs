@@ -37,7 +37,7 @@ namespace BookingQueueSubscriber
 
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
-            services.AddScoped<VideoServiceTokenHandler>();
+            services.AddTransient<VideoServiceTokenHandler>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
 
             var container = services.BuildServiceProvider();
