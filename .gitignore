@@ -348,3 +348,4 @@ ASALocalRun/
 /BookingQueueSubscriber/BookingQueueSubscriber.AcceptanceTests/Configuration/Environments/
 
 local.settings.json
+.DS_Store

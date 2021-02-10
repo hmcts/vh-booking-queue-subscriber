@@ -38,8 +38,6 @@ parameters:
     type: object
     default:
     # AzureAd
-    - name: AzureAd:Authority
-      value: $(Authority)
     - name: AzureAd:ClientId
       value: vh-booking-queue-subscriber-appid
       secret: true
@@ -71,8 +69,6 @@ parameters:
       secret: true
     
     # AzureAd
-    - name: AzureAd:Authority
-      value: $(Authority)
     - name: AzureAd:ClientId
       value: vh-booking-queue-subscriber-appid
       secret: true
