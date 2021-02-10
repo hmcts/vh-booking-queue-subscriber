@@ -39,7 +39,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId)
+        public Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId, bool includeClosed = false)
         {
             GetConferenceByHearingRefIdCount++;
             if (ConferenceResponse == null)

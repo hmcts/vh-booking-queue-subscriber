@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(ParticipantUpdatedIntegrationEvent eventMessage)
         {
-            var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
+            var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId, true);
             var participantResponse = conferenceResponse.Participants.SingleOrDefault(x => x.RefId == eventMessage.Participant.ParticipantId);
             
             if (participantResponse != null)

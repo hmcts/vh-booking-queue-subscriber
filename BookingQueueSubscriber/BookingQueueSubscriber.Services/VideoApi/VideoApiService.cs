@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Common.Configuration;
 using VideoApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using VideoApi.Client;
@@ -13,8 +12,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         private readonly IVideoApiClient _apiClient;
         private readonly ILogger<VideoApiService> _log;
 
-        public VideoApiService(IVideoApiClient apiClient, ServicesConfiguration servicesConfiguration,
-            ILoggerFactory factory)
+        public VideoApiService(IVideoApiClient apiClient, ILoggerFactory factory)
         {
             _apiClient = apiClient;
             _log = factory.CreateLogger<VideoApiService>();
@@ -38,10 +36,10 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return _apiClient.RemoveConferenceAsync(conferenceId);
         }
 
-        public Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId)
+        public Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId, bool includeClosed = false)
         {
             _log.LogInformation("Getting conference by hearing ref id {HearingId}", hearingRefId);
-            return _apiClient.GetConferenceByHearingRefIdAsync(hearingRefId, true);
+            return _apiClient.GetConferenceByHearingRefIdAsync(hearingRefId, includeClosed);
         }
 
         public Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request)

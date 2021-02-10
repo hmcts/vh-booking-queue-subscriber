@@ -26,11 +26,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 Id = Guid.NewGuid(),
                 Participants = new List<ParticipantDetailsResponse>
                 {
-                    new ParticipantDetailsResponse {Id = Guid.NewGuid(),  RefId= ParticipantId}
+                    new ParticipantDetailsResponse {Id = Guid.NewGuid(), RefId = ParticipantId}
                 }
             });
 
-            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId)).Returns(result);
+            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId, It.IsAny<bool>())).Returns(result);
         }
     }
 }
