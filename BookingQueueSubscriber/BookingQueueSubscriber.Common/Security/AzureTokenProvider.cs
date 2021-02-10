@@ -30,7 +30,7 @@ namespace BookingQueueSubscriber.Common.Security
             AuthenticationResult result;
             var credential = new ClientCredential(clientId, clientSecret);
             var authContext =
-                new AuthenticationContext($"{_azureAdConfiguration.Authority.Replace(_azureAdConfiguration.TenantId, string.Empty)}{_azureAdConfiguration.TenantId}");
+                new AuthenticationContext($"{_azureAdConfiguration.Authority}{_azureAdConfiguration.TenantId}");
 
             try
             {

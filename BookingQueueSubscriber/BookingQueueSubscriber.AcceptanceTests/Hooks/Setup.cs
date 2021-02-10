@@ -1,5 +1,4 @@
-﻿using System;
-using AcceptanceTests.Common.Configuration;
+﻿using AcceptanceTests.Common.Configuration;
 using AcceptanceTests.Common.Exceptions;
 using BookingQueueSubscriber.AcceptanceTests.Configuration;
 using BookingQueueSubscriber.Common.Configuration;
@@ -40,13 +39,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
             _context.Config.AzureAdConfiguration.ClientId.Should().NotBeNullOrEmpty("ClientId is set");
             _context.Config.AzureAdConfiguration.ClientSecret.Should().NotBeNullOrEmpty("ClientSecret is set");
             _context.Config.AzureAdConfiguration.TenantId.Should().NotBeNullOrEmpty("TenantId is set");
-            RemoveTenantIdFromAuthorityIfExists();
             return azureOptions;
-        }
-
-        private void RemoveTenantIdFromAuthorityIfExists()
-        {
-            _context.Config.AzureAdConfiguration.Authority = _context.Config.AzureAdConfiguration.Authority.Replace(_context.Config.AzureAdConfiguration.TenantId, string.Empty);
         }
 
         private IOptions<ServicesConfiguration> RegisterServices()

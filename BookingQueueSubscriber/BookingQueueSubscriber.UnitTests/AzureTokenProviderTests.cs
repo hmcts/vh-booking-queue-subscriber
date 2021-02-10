@@ -10,7 +10,7 @@ namespace BookingQueueSubscriber.UnitTests
         [Test]
         public void should_get_access_token()
         {
-            var azureTokenProvider = new AzureTokenProvider(new AzureAdConfiguration{ Authority = "https://login.bbc.com/", TenantId = "teanantid"});
+            var azureTokenProvider = new AzureTokenProvider(new AzureAdConfiguration{ TenantId = "teanantid"});
             Assert.Throws<AggregateException>(() => azureTokenProvider.GetClientAccessToken("1234", "1234", "1234"));
         }
     }
