@@ -94,40 +94,6 @@ stages:
           resourceGroup: vh-video-api-$(environment)
           healthEndpoint: $(video_api_url)healthcheck/health
         variables:
-          - group: vh-wowza-dev
-            env:
-             - Preview
-             - Dev
-             - AAT
-             - Sandbox
-             - Test1
-             - Test2
-          - group: vh-wowza-demo
-            env:
-             - Demo
-          - group: vh-wowza-preprod
-            env:
-             - Preprod
-          - group: vh-wowza-prod
-            env:
-             - Prod
-          - group: KinlyConfiguration_Test
-            env:
-             - Preview
-             - Dev
-             - AAT
-             - Sandbox
-             - Test1
-             - Test2
-          - group: KinlyConfiguration_Test2
-            env:
-             - Demo
-          - group: KinlyConfiguration_Preprod
-            env:
-             - Preprod
-          - group: KinlyConfiguration_Prod
-            env:
-             - Prod
           - name: AppUri
             value: $(AppUri_Prod)
             env:
@@ -139,8 +105,6 @@ stages:
           - name: AppInsightsKey
             value: vh-core-infra-AppInsightsKey
             secret: true
-          - name: AzureAd:Authority
-            value: $(Authority)
           - name: AzureAd:ClientId
             value: vh-booking-queue-subscriber-appid
             secret: true
@@ -150,8 +114,6 @@ stages:
           - name: AzureAd:TenantId
             value: tenantid
             secret: true
-          - name: VhServices:BookingsApiUrl
-            value: $(bookings_api_url)
           - name: VhServices:VideoApiResourceId   
             value: vh-video-api-identifieruris
             secret: true
