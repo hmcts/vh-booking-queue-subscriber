@@ -4,7 +4,7 @@ ARG RUNTIME_VERSION=latest
 FROM mcr.microsoft.com/dotnet/core/sdk:${SDK_VERSION} AS build
 RUN mkdir -p /home/site/wwwroot
 COPY . .
-RUN dotnet restore BookingQueueSubscriber
+RUN dotnet restore --configfile nuget.config BookingQueueSubscriber
 RUN dotnet build BookingQueueSubscriber -c Release
 
 FROM build AS publish
