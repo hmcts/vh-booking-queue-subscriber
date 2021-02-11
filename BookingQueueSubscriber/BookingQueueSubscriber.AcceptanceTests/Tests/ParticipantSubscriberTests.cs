@@ -16,6 +16,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_add_participant_to_hearing_and_conference()
         {
+            await CreateAndConfirmHearing();
+
             var request = new AddParticipantsToHearingRequest()
             {
                 Participants = new HearingParticipantsBuilder(Context.Config.UsernameStem, false).AddUser("Individual", 2).Build()
@@ -30,6 +32,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_remove_participant_from_hearing_and_conference()
         {
+            await CreateAndConfirmHearing();
+
             var participant = Hearing.Participants.First(x => x.UserRoleName.Equals("Individual"));
             
             await BookingApiClient.RemoveParticipantFromHearingAsync(Hearing.Id, participant.Id);
@@ -41,6 +45,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_update_participant_in_hearing_and_conference()
         {
+            await CreateAndConfirmHearing();
+
             var participant = Hearing.Participants.First(x => x.UserRoleName.Equals("Representative"));
             
             var request = new UpdateParticipantRequest
