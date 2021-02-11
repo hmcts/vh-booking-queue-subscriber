@@ -58,6 +58,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             if (Hearing != null && (Hearing.Status == BookingStatus.Created || Hearing.Status == BookingStatus.Booked))
             {
                 await BookingApiClient.RemoveHearingAsync(Hearing.Id);
+                Hearing = null;
             }
 
             if (!Hearings.IsNullOrEmpty())
@@ -69,6 +70,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
                         await BookingApiClient.RemoveHearingAsync((Guid)hearingId);
                     }
                 }
+
+                Hearings.Clear();
             }
         }
 
