@@ -30,7 +30,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_create_multi_day_conference_from_hearing()
         {
-            var request = new BookHearingRequestBuilder(Context.Config.UsernameStem).Build();
+            var request = new BookHearingRequestBuilder(Context.Config.UsernameStem).MoveScheduledDateIfWeekend().Build();
             var initialHearing = await BookingApiClient.BookNewHearingAsync(request);
             Hearings.Add(initialHearing);
 
