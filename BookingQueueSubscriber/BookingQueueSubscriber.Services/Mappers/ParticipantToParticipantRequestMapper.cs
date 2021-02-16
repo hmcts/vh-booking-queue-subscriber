@@ -1,30 +1,35 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
+using LinkedParticipantType = VideoApi.Contract.Enums.LinkedParticipantType;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
     public static class ParticipantToParticipantRequestMapper
     {
-        public static ParticipantRequest MapToParticipantRequest(ParticipantDto participantDto)
+        public static ParticipantRequest MapToParticipantRequest(ParticipantDto participant)
         {
             var request = new ParticipantRequest
             {
-                Name = participantDto.Fullname,
-                Username = participantDto.Username,
-                FirstName = participantDto.FirstName,
-                LastName = participantDto.LastName,
-                ContactEmail = participantDto.ContactEmail,
-                ContactTelephone = participantDto.ContactTelephone,
-                DisplayName = participantDto.DisplayName,
-                UserRole = GetUserRole(participantDto.UserRole),
-                HearingRole = participantDto.HearingRole,
-                CaseTypeGroup = participantDto.CaseGroupType.ToString(),
-                ParticipantRefId = participantDto.ParticipantId,
-                Representee = participantDto.Representee
+                Name = participant.Fullname,
+                Username = participant.Username,
+                FirstName = participant.FirstName,
+                LastName = participant.LastName,
+                ContactEmail = participant.ContactEmail,
+                ContactTelephone = participant.ContactTelephone,
+                DisplayName = participant.DisplayName,
+                UserRole = GetUserRole(participant.UserRole),
+                HearingRole = participant.HearingRole,
+                CaseTypeGroup = participant.CaseGroupType.ToString(),
+                ParticipantRefId = participant.ParticipantId,
+                Representee = participant.Representee,
+                LinkedParticipants = LinkedParticipantToRequestMapper
+                    .MapToLinkedParticipantRequestList(participant.LinkedParticipants)
             };
-
+            
             return request;
         }
 
