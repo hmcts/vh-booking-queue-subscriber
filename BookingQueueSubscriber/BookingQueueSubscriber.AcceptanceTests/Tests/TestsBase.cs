@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,6 +11,7 @@ using BookingQueueSubscriber.AcceptanceTests.Hooks;
 using BookingsApi.Client;
 using BookingsApi.Contract.Enums;
 using BookingsApi.Contract.Responses;
+using Castle.Core.Internal;
 using FluentAssertions;
 using NUnit.Framework;
 using Polly;
@@ -22,6 +25,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
     {
         protected const int Retries = 4; // 4 retries ^2 will execute after 2 seconds, then 4, 8, then finally 16 (30 seconds in total)
         protected TestContext Context;
+        protected List<HearingDetailsResponse> Hearings = new List<HearingDetailsResponse>();
         protected HearingDetailsResponse Hearing;
         protected ConferenceDetailsResponse Conference;
         protected BookingsApiClient BookingApiClient;
@@ -48,26 +52,43 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
             VideoApiClient = VideoApiClient.GetClient(context.Config.Services.VideoApiUrl, videoHttpClient);
         }
 
-        [SetUp]
-        public async Task BeforeEveryTest()
-        {
-            await CreateAndConfirmHearing();
-        }
-
         [TearDown]
         public async Task AfterEveryTest()
         {
             if (Hearing != null && (Hearing.Status == BookingStatus.Created || Hearing.Status == BookingStatus.Booked))
             {
                 await BookingApiClient.RemoveHearingAsync(Hearing.Id);
+                Hearing = null;
+            }
+
+            if (!Hearings.IsNullOrEmpty())
+            {
+                foreach (var hearingId in Hearings.Select(x => x.GroupId).Distinct())
+                {
+                    if (hearingId!= null)
+                    {
+                        await BookingApiClient.RemoveHearingAsync((Guid)hearingId);
+                    }
+                }
+
+                Hearings.Clear();
             }
         }
 
         protected async Task CreateAndConfirmHearing()
         {
+            await CreateHearing();
+            await ConfirmHearing();
+        }
+
+        private async Task CreateHearing()
+        {
             var request = new BookHearingRequestBuilder(Context.Config.UsernameStem).Build();
             Hearing = await BookingApiClient.BookNewHearingAsync(request);
+        }
 
+        protected async Task ConfirmHearing()
+        {
             var confirmRequest = new UpdateBookingStatusRequestBuilder()
                 .UpdatedBy(HearingData.CREATED_BY(Context.Config.UsernameStem))
                 .Build();

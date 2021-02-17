@@ -5,9 +5,11 @@ using System.Net;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Builders;
 using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
+using BookingQueueSubscriber.AcceptanceTests.Helpers;
 using BookingsApi.Contract.Enums;
 using BookingsApi.Contract.Requests;
 using BookingsApi.Contract.Requests.Enums;
+using BookingsApi.Contract.Responses;
 using FluentAssertions;
 using NUnit.Framework;
 using Polly;
@@ -19,8 +21,88 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
     public class HearingsSubscriberTests : TestsBase
     {
         [Test]
+        public async Task Should_create_single_day_conference_from_hearing()
+        {
+            await CreateAndConfirmHearing();
+            Verify.ConferenceDetailsResponse(Conference, Hearing);
+        }
+
+        [Test]
+        public async Task Should_create_multi_day_conference_from_hearing()
+        {
+            var request = new BookHearingRequestBuilder(Context.Config.UsernameStem).MoveScheduledDateIfWeekend().Build();
+            var initialHearing = await BookingApiClient.BookNewHearingAsync(request);
+            Hearings.Add(initialHearing);
+
+            const int numberOfDays = 2;
+            var numberOfDaysNotIncludingWeekends = CalculateDaysWithoutWeekend(numberOfDays, initialHearing.ScheduledDateTime);
+            var start = initialHearing.ScheduledDateTime;
+            var end = initialHearing.ScheduledDateTime.AddDays(numberOfDaysNotIncludingWeekends);
+            var dates = DateListMapper.GetListOfWorkingDates(start, end);
+            dates.Count.Should().Be(numberOfDays);
+            // Add the initial hearing day
+            const int totalNumberOfDays = numberOfDays + 1;
+
+            var multiHearingsRequest = new CloneHearingRequest()
+            {
+                Dates = dates
+            };
+
+            await BookingApiClient.CloneHearingAsync(initialHearing.Id, multiHearingsRequest);
+
+            var anyParticipant = initialHearing.Participants.First();
+
+            var multiDays = await PollForAllMultiDayHearings(anyParticipant.Username, initialHearing.Cases.Single().Name, totalNumberOfDays);
+            Hearings.AddRange(multiDays);
+            multiDays.Count.Should().Be(totalNumberOfDays);
+
+            foreach (var day in multiDays)
+            {
+                await ConfirmMultiDayHearing(day);
+            }
+        }
+
+        private static int CalculateDaysWithoutWeekend(int days, DateTime startDateTime)
+        {
+            if (startDateTime.AddDays(2).DayOfWeek == DayOfWeek.Saturday ||
+                startDateTime.AddDays(2).DayOfWeek == DayOfWeek.Sunday)
+            {
+                days += 2;
+            }
+
+            return days;
+        }
+
+        private async Task<List<HearingDetailsResponse>> PollForAllMultiDayHearings(string username, string expectedCaseName, int expectedNumberOfHearings)
+        {
+            var policy = Policy
+                .HandleResult<List<HearingDetailsResponse>>(responses => responses.Where(x => x.Cases.Single().Name.StartsWith(expectedCaseName)).ToList().Count != expectedNumberOfHearings)
+                .WaitAndRetryAsync(Retries, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+            var allHearingsForUser = await policy.ExecuteAsync(async () => await BookingApiClient.GetHearingsByUsernameAsync(username) as List<HearingDetailsResponse>);
+            var multiDayHearingsOnly = allHearingsForUser.Where(x => x.Cases.Single().Name.StartsWith(expectedCaseName)).ToList();
+            multiDayHearingsOnly.Count.Should().Be(expectedNumberOfHearings);
+            return multiDayHearingsOnly;
+        }
+
+        private async Task ConfirmMultiDayHearing(HearingDetailsResponse hearing)
+        {
+            var confirmRequest = new UpdateBookingStatusRequestBuilder()
+                .UpdatedBy(HearingData.CREATED_BY(Context.Config.UsernameStem))
+                .Build();
+
+            await BookingApiClient.UpdateBookingStatusAsync(hearing.Id, confirmRequest);
+
+            Conference = await GetConferenceByHearingIdPollingAsync(hearing.Id);
+            Verify.ConferenceDetailsResponse(Conference, hearing);
+        }
+
+        [Test]
         public async Task Should_create_cacd_conference_from_hearing()
         {
+            await CreateAndConfirmHearing();
+
             var request = new BookHearingRequestBuilder(Context.Config.UsernameStem).CacdHearing().Build();
 
             var hearing = await BookingApiClient.BookNewHearingAsync(request);
@@ -38,6 +120,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_update_conference_when_hearing_updated()
         {
+            await CreateAndConfirmHearing();
+
             var caseRequests = new List<CaseRequest>
             {
                 new CaseRequest
@@ -71,8 +155,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
 
         private async Task<ConferenceDetailsResponse> GetUpdatedConferenceDetailsPollingAsync(Guid hearingRefId)
         {
-            // var uri = $"{Context.Config.Services.VideoApiUrl}{VideoApiUriFactory.ConferenceEndpoints.GetConferenceByHearingRefId(hearingRefId)}";
-
             var policy = Policy
                 .HandleResult<ConferenceDetailsResponse>(conf => conf != null)
                 .OrResult(conf => !conf.HearingVenueName.Contains(HearingData.UPDATED_TEXT))
@@ -93,6 +175,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_delete_conference_when_hearing_deleted()
         {
+            await CreateAndConfirmHearing();
             await BookingApiClient.RemoveHearingAsync(Hearing.Id);
             var result = await PollForConferenceDeleted(Hearing.Id);
             Hearing.Status = BookingStatus.Cancelled;
@@ -102,6 +185,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         [Test]
         public async Task Should_delete_conference_when_hearing_cancelled()
         {
+            await CreateAndConfirmHearing();
+
             const string updatedBy = "updated_by_user@email.com";
 
             var request = new UpdateBookingStatusRequestBuilder()

@@ -61,6 +61,21 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             return this;
         }
 
+        public BookHearingRequestBuilder MoveScheduledDateIfWeekend()
+        {
+            if (_request.ScheduledDateTime.DayOfWeek == DayOfWeek.Saturday)
+            {
+                _request.ScheduledDateTime = DateTime.UtcNow.AddDays(2);
+            }
+
+            if (_request.ScheduledDateTime.DayOfWeek == DayOfWeek.Sunday)
+            {
+                _request.ScheduledDateTime = DateTime.UtcNow.AddDays(1);
+            }
+
+            return this;
+        }
+
         public BookNewHearingRequest Build()
         {
             AddParticipants();
