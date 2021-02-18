@@ -65,7 +65,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                         Fullname = "fullname",
                         FirstName = "firstName",
                         LastName = "lastName",
-                        ContactEmail = "test@email.com",
+                        ContactEmail = "test@hmcts.net",
                         ContactTelephone = "012748465859",
                         HearingRole = "hearingRole",
                         ParticipantId = ParticipantId,
