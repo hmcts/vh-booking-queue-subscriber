@@ -7,10 +7,10 @@
         public const string CACD_CASE_TYPE_NAME = "Court of Appeal Criminal Division";
         public const string CACD_HEARING_TYPE_NAME = "Appn for leave to appeal to SC";
         public const string CANCELLATION_REASON = "Cancellation reason";
-        public const string CASE_TYPE_NAME = "Civil Money Claims";
+        public const string CASE_TYPE_NAME = "Generic";
         public static string CREATED_BY(string usernameStem) => $"automation_test@{usernameStem}";
         public const string HEARING_ROOM_NAME = "Room 1";
-        public const string HEARING_TYPE_NAME = "Application to Set Judgment Aside";
+        public const string HEARING_TYPE_NAME = "Automated Test";
         public const bool IS_LEAD_CASE = false;
         public const string OTHER_INFORMATION = "Other information";
         public const bool QUESTIONNAIRE_NOT_REQUIRED = true;
@@ -18,6 +18,5 @@
         public const string UPDATED_TEXT = "UPDATED";
         public const string VENUE_NAME = "Birmingham Civil and Family Justice Centre";
         public const string VENUE_NAME_ALTERNATIVE = "Manchester Civil and Family Justice Centre";
-        public const string VIDEO_EVENT_REASON = "Automated test";
     }
 }

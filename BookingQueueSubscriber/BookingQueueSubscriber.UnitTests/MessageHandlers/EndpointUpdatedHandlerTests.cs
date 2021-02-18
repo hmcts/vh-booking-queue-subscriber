@@ -44,7 +44,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 HearingId = HearingId,
                 Sip = Guid.NewGuid().ToString(),
                 DisplayName = "two",
-                DefenceAdvocate = "defence_advocate@test.com"
+                DefenceAdvocate = "test@hmcts.net"
             };
         }
     }
