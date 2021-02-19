@@ -15,9 +15,9 @@ namespace BookingQueueSubscriber
         public static async Task Run([ServiceBusTrigger("%queueName%", Connection = "ServiceBusConnection")]
             string bookingQueueItem,
             ILogger log,
-            [Inject]IMessageHandlerFactory messageHandlerFactory)
+            [Inject] IMessageHandlerFactory messageHandlerFactory)
         {
-            log.LogInformation(bookingQueueItem);
+            log.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
             // get handler
             EventMessage eventMessage;
             try
@@ -26,16 +26,17 @@ namespace BookingQueueSubscriber
             }
             catch (Exception e)
             {
-                log.LogCritical(e, $"Unable to deserialize into EventMessage \r\n {bookingQueueItem}");
+                log.LogCritical(e, "Unable to deserialize into EventMessage \r\n {BookingQueueItem}", bookingQueueItem);
                 throw;
             }
-            
+
             var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
-            log.LogInformation($"using handler {handler.GetType()}");
+            log.LogInformation("using handler {Handler}", handler.GetType());
 
             // execute handler
             await handler.HandleAsync(eventMessage.IntegrationEvent);
-            log.LogInformation($"Process message {eventMessage.Id} - {eventMessage.IntegrationEvent}");
+            log.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
+                eventMessage.IntegrationEvent);
         }
     }
 }
