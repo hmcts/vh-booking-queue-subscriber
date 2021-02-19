@@ -81,7 +81,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
         {
             return Builder<ParticipantDto>.CreateNew()
                 .With(x => x.UserRole = UserRole.Individual.ToString())
-                .With(x => x.HearingRole = "Claimant")
+                .With(x => x.HearingRole = "Applicant")
                 .Build();
         }
         

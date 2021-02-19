@@ -42,7 +42,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             {
                 HearingId = Guid.NewGuid(),
                 CaseNumber = "Test1234",
-                CaseType = "Civil Money Claims",
+                CaseType = "Generic",
                 CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
                 ScheduledDateTime = DateTime.UtcNow,

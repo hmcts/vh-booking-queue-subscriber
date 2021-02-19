@@ -8,7 +8,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
     {
         private readonly List<ParticipantRequest> _participants;
         private readonly string _usernameStem;
-        private bool _isCacdHearing;
+        private readonly bool _isCacdHearing;
 
         public HearingParticipantsBuilder(string usernameStem, bool isCacdHearing)
         {
@@ -122,7 +122,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 
         private static string ContactEmailStem(string emailStem)
         {
-            return emailStem.Substring(16);
+            return emailStem[16..];
         }
 
         public List<ParticipantRequest> Build()

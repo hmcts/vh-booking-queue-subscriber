@@ -27,9 +27,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         }
 
         [Test]
-        public async Task should_handle_hearing_ready_for_video_integration_event()
+        public async Task Should_handle_hearing_ready_for_video_integration_event()
         {
-            var message = @"
+            const string message = @"
             {
               '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
               'id': '46c99f98-e3b4-440b-a3f3-bd8733ef1b7d',
@@ -41,7 +41,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                   'hearing_id': '719817d3-5a20-40c5-bfe6-afce48ed48f3',
                   'scheduled_date_time': '2019-07-01T23:00:00Z',
                   'scheduled_duration': 1,
-                  'case_type': 'Civil Money Claims',
+                  'case_type': 'Generic',
                   'case_number': 'Number1',
                   'case_name': 'Name1',
                   'record_audio': true
@@ -53,60 +53,60 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                     'fullname': 'Title1 FirstName1 LastName1',
                     'first_name': 'FirstName1',
                     'last_name': 'LastName1',
-                    'contact_email': 'tst@email.com',
+                    'contact_email': 'tst@hmcts.net',
                     'contact_telephone': '01234567890',
-                    'username': 'angie_bartell@jastmraz.biz',
+                    'username': 'angie_bartell@hmcts.net',
                     'display_name': 'DisplayName1',
                     'hearing_role': 'Litigant in person',
                     'user_role': 'Individual',
-                    'case_group_type': 'claimant',
+                    'case_group_type': 'Applicant',
                     'representee': ''
                   },
                   {
                     '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
                     'participant_id': 'f260f24d-177f-4192-828f-09756c63be75',
                     'fullname': 'Title2 FirstName2 LastName2',
-                    'username': 'remington.dibbert@stehr.info',
-                    'contact_email': 'tst@email.com',
+                    'username': 'remington.dibbert@hmcts.net',
+                    'contact_email': 'tst@hmcts.net',
                     'contact_telephone': '01234567890',
                     'display_name': 'DisplayName2',
                     'hearing_role': 'Solicitor',
                     'user_role': 'Representative',
-                    'case_group_type': 'claimant',
+                    'case_group_type': 'Applicant',
                     'representee': 'Representee2'
                   },
                   {
                     '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
                     'participant_id': 'f69a902f-d5d2-4d4f-968f-3028201396a7',
                     'fullname': 'Title3 FirstName3 LastName3',
-                    'username': 'samir.mclaughlin@ankunding.ca',
-                    'contact_email': 'tst@email.com',
+                    'username': 'samir.mclaughlin@hmcts.net',
+                    'contact_email': 'tst@hmcts.net',
                     'contact_telephone': '01234567890',
                     'display_name': 'DisplayName3',
                     'hearing_role': 'Litigant in person',
                     'user_role': 'Individual',
-                    'case_group_type': 'defendant',
+                    'case_group_type': 'Respondent',
                     'representee': ''
                   },
                   {
                     '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
                     'participant_id': '9bbcb92b-3d77-4182-b379-792cdf9e9712',
                     'fullname': 'Title4 FirstName4 LastName4',
-                    'username': 'sister@marvin.info',
-                    'contact_email': 'tst@email.com',
+                    'username': 'sister@mhmcts.net',
+                    'contact_email': 'tst@hmcts.net',
                     'contact_telephone': '01234567890',
                     'display_name': 'DisplayName4',
                     'hearing_role': 'Solicitor',
                     'user_role': 'Representative',
-                    'case_group_type': 'defendant',
+                    'case_group_type': 'Respondent',
                     'representee': 'Representee4'
                   },
                   {
                     '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
                     'participant_id': '98bbaa74-af7c-48c9-a9ad-ac8c61423dfe',
                     'fullname': 'Title5 FirstName5 LastName5',
-                    'username': 'lloyd_spinka@miller.com',
-                    'contact_email': 'tst@email.com',
+                    'username': 'lloyd_spinka@hmcts.net',
+                    'contact_email': 'tst@hmcts.net',
                     'contact_telephone': '01234567890',
                     'display_name': 'DisplayName5',
                     'hearing_role': 'Judge',
@@ -127,7 +127,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                     'display_name': 'end point two',
                     'sip': 'sip 67890',
                     'pin': '1234',
-                    'defence_advocate_username': 'angie_bartell@jastmraz.biz'
+                    'defence_advocate_username': 'angie_bartell@hmcts.net'
                   },
                   {
                     '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',
@@ -146,9 +146,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         }
 
         [Test]
-        public async Task should_handle_hearing_cancelled_integration_event()
+        public async Task Should_handle_hearing_cancelled_integration_event()
         {
-            var message = @"{
+            const string message = @"{
               '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
               'id': '2e96da15-e99f-4f5c-aaf1-42f853513d63',
               'timestamp': '2019-07-01T14:03:58.0834843Z',
@@ -166,9 +166,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         }
 
         [Test]
-        public async Task should_handle_hearing_details_updated_integration_event()
+        public async Task Should_handle_hearing_details_updated_integration_event()
         {
-            var message = @"{
+            const string message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
   'id': '689a75e1-4f44-470a-9860-9681424e8047',
   'timestamp': '2019-07-02T21:38:59.5195551Z',
@@ -179,7 +179,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
       'hearing_id': '9e53d84b-cb75-4ff2-a52d-a443960f7430',
       'scheduled_date_time': '2019-07-05T10:45:00Z',
       'scheduled_duration': 100,
-      'case_type': 'Civil Money Claims',
+      'case_type': 'Generic',
       'case_number': 'CaseNumber',
       'case_name': 'CaseName',
       'record_audio': true
@@ -193,9 +193,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
 
 
         [Test]
-        public async Task should_handle_participants_added_integration_event()
+        public async Task Should_handle_participants_added_integration_event()
         {
-            var message = @"{
+            const string message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
   'id': '9250401b-eaec-4b57-81fa-d79026df3e3c',
   'timestamp': '2019-07-02T21:44:11.2088463Z',
@@ -209,13 +209,13 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         'fullname': 'Mr. Elliott Davis',
         'first_name': 'FirstName1',
         'last_name': 'LastName1',
-        'contact_email': 'tst@email.com',
+        'contact_email': 'tst@hmcts.net',
         'contact_telephone': '01234567890',
         'username': 'harley@kshlerin.biz',
         'display_name': 'DisplayName1',
         'hearing_role': 'Litigant in person',
         'user_role': 'Individual',
-        'case_group_type': 'defendant',
+        'case_group_type': 'Respondent',
         'representee': ''
       }
     ]
@@ -227,9 +227,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         }
 
         [Test]
-        public async Task should_handle_participant_removed_integration_event()
+        public async Task Should_handle_participant_removed_integration_event()
         {
-            var message = @"{
+            const string message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
   'id': '9e4bb2b7-3187-419c-a7c8-b1e17a3cbb6f',
   'timestamp': '2019-07-02T21:48:08.8808044Z',
@@ -250,9 +250,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         }
 
         [Test]
-        public async Task should_handle_participant_updated_integration_event()
+        public async Task Should_handle_participant_updated_integration_event()
         {
-            var message = @"{
+            const string message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
   'id': 'ab013e39-d159-4836-848e-034d2ebbe37a',
   'timestamp': '2019-07-02T21:57:57.7904475Z',
@@ -265,13 +265,13 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
       'fullname': 'Mr. Garnet Bosco',
       'first_name': 'FirstName1',
       'last_name': 'LastName1',
-                    'contact_email': 'tst@email.com',
+                    'contact_email': 'tst@hmcts.net',
                     'contact_telephone': '01234567890',
-      'username': 'pinkie_kuhlman@weimannbechtelar.co.uk',
+      'username': 'pinkie_kuhlman@hmcts.net',
       'display_name': 'Raegan Pollich V',
       'hearing_role': 'Solicitor',
       'user_role': 'Representative',
-      'case_group_type': 'defendant',
+      'case_group_type': 'Respondent',
       'representee': 'Bobby Upton'
     }
   }
@@ -286,9 +286,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         }
 
         [Test]
-        public void should_throw_exception_when_message_cannot_be_parsed()
+        public void Should_throw_exception_when_message_cannot_be_parsed()
         {
-          var message = @"
+          const string message = @"
           {
             'id': 'ab013e39-d159-4836-848e-034d2ebbe37a',
             'timestamp': '2019-07-02T21:57:57.7904475Z',
@@ -299,17 +299,17 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
                 'fullname': 'Mr. Garnet Bosco',
                 'first_name': 'FirstName1',
                 'last_name': 'LastName1',
-                'username': 'pinkie_kuhlman@weimannbechtelar.co.uk',
+                'username': 'pinkie_kuhlman@hmcts.net',
                 'display_name': 'Raegan Pollich V',
                 'hearing_role': 'Solicitor',
                 'user_role': 'Representative',
-                'case_group_type': 'defendant',
+                'case_group_type': 'Respondent',
                 'representee': 'Bobby Upton'
               }
             }
           }";
           var logger = new LoggerFake();
-          var errorMessageMatch = "Unable to deserialize into EventMessage";
+          const string errorMessageMatch = "Unable to deserialize into EventMessage";
           Func<Task> f = async () => { await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, logger,
             new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)); };
           f.Should().ThrowAsync<Exception>().WithMessage(errorMessageMatch);

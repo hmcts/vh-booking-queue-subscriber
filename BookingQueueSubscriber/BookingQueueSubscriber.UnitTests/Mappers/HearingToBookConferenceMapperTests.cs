@@ -44,7 +44,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             {
                 HearingId = Guid.NewGuid(),
                 CaseNumber = "Test1234",
-                CaseType = "Civil Money Claims",
+                CaseType = "Generic",
                 CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
                 ScheduledDateTime = DateTime.UtcNow,
@@ -54,7 +54,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             return dto;
         }
 
-        private List<EndpointDto> CreateEndpoints(IList<ParticipantDto> participantDtos)
+        private static List<EndpointDto> CreateEndpoints(IEnumerable<ParticipantDto> participantDtos)
         {
             var rep = participantDtos.First(x => x.UserRole == UserRole.Representative.ToString());
 
