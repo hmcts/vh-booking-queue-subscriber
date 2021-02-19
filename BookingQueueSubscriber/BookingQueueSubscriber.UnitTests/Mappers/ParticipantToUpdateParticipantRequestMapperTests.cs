@@ -51,7 +51,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
             request.Username.Should().Be(participantDto.Username);
-            var linkedParticipant = request.LinkedParticipants.FirstOrDefault();
+            var linkedParticipant = request.LinkedParticipants.First();
             linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);

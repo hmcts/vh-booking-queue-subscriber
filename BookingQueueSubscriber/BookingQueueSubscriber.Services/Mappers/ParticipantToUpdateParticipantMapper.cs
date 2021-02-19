@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Requests;
 
@@ -9,7 +7,7 @@ namespace BookingQueueSubscriber.Services.Mappers
     {
         public static UpdateParticipantRequest MapToParticipantRequest(ParticipantDto participant)
         {
-            var updatedParticipant = new UpdateParticipantRequest
+            return new UpdateParticipantRequest
             {
                 Fullname = participant.Fullname,
                 FirstName = participant.FirstName,
@@ -22,7 +20,6 @@ namespace BookingQueueSubscriber.Services.Mappers
                 LinkedParticipants = LinkedParticipantToRequestMapper
                     .MapToLinkedParticipantRequestList(participant.LinkedParticipants)
             };
-            return updatedParticipant;
         }
     }
 }

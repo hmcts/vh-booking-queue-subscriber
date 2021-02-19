@@ -71,7 +71,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.HearingRole.Should().Be(participantDto.HearingRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.Representee.Should().Be(participantDto.Representee);
-            var linkedParticipant = request.LinkedParticipants.FirstOrDefault();
+            var linkedParticipant = request.LinkedParticipants.First();
             linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
