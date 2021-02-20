@@ -11,7 +11,7 @@ java:
   livenessPeriod: 120
   aadIdentityName: vh-aad-identity
   keyVaults:
-    vh-booking-queue-subscriber:
+    vh-booking-queue:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
       usePodIdentity: true
