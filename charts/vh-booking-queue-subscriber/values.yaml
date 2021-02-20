@@ -1,0 +1,32 @@
+---
+java:
+  image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:20210219.3'
+  applicationPort: 8080
+  replicas: 2
+  ingressHost: vh-booking-queue-subscriber.{{ .Values.global.environment }}.platform.hmcts.net
+  releaseNameOverride: vh-booking-queue-subscriber
+  readinessPath: /healthcheck/health
+  livenessPath: /healthcheck/health
+  livenessDelay: 360
+  livenessPeriod: 120
+  aadIdentityName: vh-aad-identity
+  keyVaults:
+    vh-booking-queue-subscriber:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - azuread--clientsecret
+        - azuread--clientid
+        - applicationinsights-instrumentationkey
+  environment:
+    ASPNETCORE_URLS: http://+:8080
+    AZUREAD__TENANTID: "fb6e0e22-0da3-4c35-972a-9d61eb256508"
+    DISABLEHTTPSREDIRECTION: true
+    Logging__LogLevel__Default: debug
+    Logging__LogLevel__System: debug
+    Logging__LogLevel__Microsoft: debug
+    USERNAMESTEM: "hearings.reform.hmcts.net"
+    VHSERVICES__BOOKINGSAPIURL:	https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net
+    VHSERVICES__VIDEOAPIRESOURCEID:	https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
+    VHSERVICES__VIDEOAPIURL:	https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
