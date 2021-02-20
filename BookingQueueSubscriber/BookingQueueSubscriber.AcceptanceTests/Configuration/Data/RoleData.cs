@@ -9,5 +9,6 @@
         public const string INDV_HEARING_ROLE_NAME = "Litigant in person";
         public const string REPRESENTATIVE_HEARING_ROLE_NAME = "Representative";
         public const string WINGER_ROLE_NAME = "Winger";
+        public const string INTERPRETER_HEARING_ROLE_NAME = "Interpreter";
     }
 }

@@ -23,9 +23,9 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             return this;
         }
 
-        public HearingParticipantsBuilder AddIndividual()
+        public HearingParticipantsBuilder AddIndividual(int number =1)
         {
-            _participants.Add(AddParticipant("Individual"));
+            _participants.Add(AddParticipant("Individual",number));
             return this;
         }
 
@@ -50,6 +50,12 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
         public HearingParticipantsBuilder AddWinger()
         {
             _participants.Add(AddParticipant("Winger"));
+            return this;
+        }
+
+        public HearingParticipantsBuilder AddInterpreter()
+        {
+            _participants.Add(AddParticipant("Interpreter"));
             return this;
         }
 
@@ -99,6 +105,12 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 participant.CaseRoleName = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.WINGER_ROLE_NAME;
                 participant.HearingRoleName =
                     _isCacdHearing ? RoleData.CACD_REP_HEARING_ROLE_NAME : RoleData.WINGER_ROLE_NAME;
+            }
+
+            if (userType.Equals("Interpreter"))
+            {
+                participant.CaseRoleName = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
+                participant.HearingRoleName =  RoleData.INTERPRETER_HEARING_ROLE_NAME;
             }
 
             return participant;
