@@ -4,12 +4,21 @@
     ".NETCoreApp,Version=v3.1": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.24.9, )",
-        "resolved": "1.24.9",
-        "contentHash": "8PosGMod+kaaqIGuz7x779SE8ezj5xpkuvmf8yIuTqdcIS8WVQKwAWV92k7t0Nb94IVZxBchJclhy1hkwF6/AQ==",
+        "requested": "[1.24.12, )",
+        "resolved": "1.24.12",
+        "contentHash": "jaqWL5JpxpevxZfGxrnK19Q5tt+Sr4CeNsOvz4WIRgFatns/oTho3JIiAXwD1+7gkWNaUbwMzFu/axnvUA665g==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
+        }
+      },
+      "Faker.NETCore": {
+        "type": "Direct",
+        "requested": "[1.0.2, )",
+        "resolved": "1.0.2",
+        "contentHash": "teRWZFwtBSuMRo2jxB4/DfCo3nprjMtjb7tjBfhrnz+BPhQMivW9cVo06kLr4GAJjrCOvCNQ2sJckRwGvMmK0Q==",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
         }
       },
       "FluentAssertions": {
@@ -68,9 +77,9 @@
       },
       "VH.AcceptanceTests.Common": {
         "type": "Direct",
-        "requested": "[1.21.16, )",
-        "resolved": "1.21.16",
-        "contentHash": "BTovTS784/+cSqItLuSrLM+2zy7Y5SxTlxB5rs0e0VBrvRpbyO1uosyCQ8zXOfyl0rEmY2dLsPXs3vjzdPM9xg==",
+        "requested": "[1.21.18, )",
+        "resolved": "1.21.18",
+        "contentHash": "0XopzLBh8cMhO0tO7ls7aJqU3rclnwW+iWe0FwQzhNpg0Cm7n6pHrLFVLVdB70o+vqDXazGbkzxfgcXTV7PQbA==",
         "dependencies": {
           "Appium.WebDriver": "4.2.1",
           "Azure.Storage.Blobs": "12.7.0",
@@ -102,9 +111,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[1.23.32, )",
-        "resolved": "1.23.32",
-        "contentHash": "iTWT7jRPp5grOn3G/uEiU5hyrq4NKDeZ5LcUyvmgdxwRWL+YDwN3UNF7XZZSpi9lE9BD8gu77w69N0FBeZX8sQ==",
+        "requested": "[1.23.33, )",
+        "resolved": "1.23.33",
+        "contentHash": "Pq2kfIOY/bBruG75OwsmvQao6sSKtf52H0qykNHfUBwmlo/Uc26P9FRTehQ5K64u/YvUk1ymINtAdApBiOgfqw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"

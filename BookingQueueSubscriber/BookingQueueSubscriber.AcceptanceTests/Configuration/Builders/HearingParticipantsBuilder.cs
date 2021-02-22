@@ -67,8 +67,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 
         private ParticipantRequest AddParticipant(string userType, int number = 1)
         {
-            var firstname = $"{UserData.AUTOMATED_FIRST_NAME_PREFIX}_{UserData.BOOKING_QUEUE_SUBSCRIBER_NAME_PREFIX}";
-            var lastname = $"{userType} {number}";
+            var firstname = $"{UserData.AUTOMATED_FIRST_NAME_PREFIX}__{Faker.Name.First()}_{UserData.BOOKING_QUEUE_SUBSCRIBER_NAME_PREFIX}";
+            var lastname = $"{Faker.Name.Last()}_{userType} {number}";
 
             var participant = new ParticipantRequest()
             {
