@@ -70,11 +70,11 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
         {
             _context.Tokens.BookingsApiBearerToken = new AzureTokenProvider(azureOptions).GetClientAccessToken(
                 azureOptions.ClientId, azureOptions.ClientSecret,
-                services.Value.BookingsApiUrl.TrimEnd('/'));
+                services.Value.BookingsApiResourceId.TrimEnd('/'));
 
             _context.Tokens.VideoApiBearerToken = new AzureTokenProvider(azureOptions).GetClientAccessToken(
                 azureOptions.ClientId, azureOptions.ClientSecret,
-                services.Value.VideoApiUrl.TrimEnd('/'));
+                services.Value.VideoApiResourceId.TrimEnd('/'));
 
             _context.Tokens.BookingsApiBearerToken.Should().NotBeNullOrEmpty("BookingsApiBearerToken is set");
             _context.Tokens.VideoApiBearerToken.Should().NotBeNullOrEmpty("VideoApiBearerToken is set");
