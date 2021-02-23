@@ -111,6 +111,9 @@ stages:
           secret: true
 
         # VhServices
+        - name: VhServices:BookingsApiResourceId
+          value: vh-bookings-api-identifieruris
+          secret: true
         - name: VhServices:BookingsApiUrl
           value: $(bookings_api_url)
         - name: VhServices:VideoApiResourceId   
@@ -129,8 +132,14 @@ stages:
           - name: AzureAd:TenantId
             value: tenantid
             secret: true
+          - name: VhServices:BookingsApiResourceId
+            value: vh-bookings-api-identifieruris
+            secret: true
           - name: VhServices:BookingsApiUrl
             value: $(bookings_api_url)
+          - name: VhServices:VideoApiResourceId   
+            value: vh-video-api-identifieruris
+            secret: true
           - name: VhServices:VideoApiUrl
             value: $(video_api_url)
           - name: UsernameStem

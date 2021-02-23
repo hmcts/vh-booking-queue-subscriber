@@ -80,6 +80,9 @@ parameters:
       secret: true
 
     # VhServices
+    - name: VhServices:BookingsApiResourceId
+      value: vh-bookings-api-identifieruris
+      secret: true
     - name: VhServices:BookingsApiUrl
       value: $(bookings_api_url)
     - name: VhServices:VideoApiResourceId   
