@@ -8,6 +8,12 @@
         "maxConcurrentCalls": 32,
         "maxAutoRenewDuration": "00:5:00"
       }
+    },
+    "http": {
+      "routePrefix": "api",
+      "maxOutstandingRequests": 200,
+      "maxConcurrentRequests": 100,
+      "dynamicThrottlesEnabled": true
     }
   }
 }
