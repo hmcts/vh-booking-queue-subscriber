@@ -17,7 +17,7 @@ namespace BookingQueueSubscriber
     {
         [FunctionName("HealthCheck")]
         public async Task<IActionResult> HealthCheck(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "liveness")] HttpRequest req, ILogger log, [Inject] IVideoApiClient videoApiClient)
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")] HttpRequest req, ILogger log, [Inject] IVideoApiClient videoApiClient)
         {
             var response = new HealthCheckResponse
             {

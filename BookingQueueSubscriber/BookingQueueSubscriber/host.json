@@ -10,7 +10,7 @@
       }
     },
     "http": {
-      "routePrefix": "health",
+      "routePrefix": "",
       "maxOutstandingRequests": 200,
       "maxConcurrentRequests": 100,
       "dynamicThrottlesEnabled": true
