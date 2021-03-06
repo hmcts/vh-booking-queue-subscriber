@@ -5,8 +5,8 @@ java:
   replicas: 2
   ingressHost: vh-booking-queue-subscriber.{{ .Values.global.environment }}.platform.hmcts.net
   releaseNameOverride: vh-booking-queue-subscriber
-  readinessPath: /api/health
-  livenessPath: /api/health
+  readinessPath: /health/liveness
+  livenessPath: /health/liveness
   livenessDelay: 360
   livenessPeriod: 120
   aadIdentityName: vh-aad-identity
