@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace BookingQueueSubscriber
 {
@@ -16,12 +17,14 @@ namespace BookingQueueSubscriber
 
         private const string TokenCacheKey = "VideoApiServiceToken";
 
-        public VideoServiceTokenHandler(AzureAdConfiguration azureAdConfiguration, ServicesConfiguration servicesSonConfiguration,
+        public VideoServiceTokenHandler(
+            IOptions<AzureAdConfiguration> azureAdConfigurationOptions,
+            IOptions<ServicesConfiguration> servicesSonConfigurationOptions,
             IMemoryCache memoryCache,
             IAzureTokenProvider azureTokenProvider)
         {
-            _azureAdConfiguration = azureAdConfiguration;
-            _servicesConfiguration = servicesSonConfiguration;
+            _azureAdConfiguration = azureAdConfigurationOptions.Value;
+            _servicesConfiguration = servicesSonConfigurationOptions.Value;
             _memoryCache = memoryCache;
             _azureTokenProvider = azureTokenProvider;
         }

@@ -5,17 +5,22 @@ using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 namespace BookingQueueSubscriber
 {
-    public static class BookingQueueSubscriberFunction
+    public class BookingQueueSubscriberFunction
     {
+        private readonly IMessageHandlerFactory _messageHandlerFactory;
+
+        public BookingQueueSubscriberFunction(IMessageHandlerFactory messageHandlerFactory)
+        {
+            _messageHandlerFactory = messageHandlerFactory;
+        }
+
         [FunctionName("BookingQueueSubscriberFunction")]
-        public static async Task Run([ServiceBusTrigger("%queueName%", Connection = "ServiceBusConnection")]
+        public async Task Run([ServiceBusTrigger("%queueName%", Connection = "ServiceBusConnection")]
             string bookingQueueItem,
-            ILogger log,
-            [Inject] IMessageHandlerFactory messageHandlerFactory)
+            ILogger log)
         {
             log.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
             // get handler
@@ -30,10 +35,9 @@ namespace BookingQueueSubscriber
                 throw;
             }
 
-            var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
+            var handler = _messageHandlerFactory.Get(eventMessage.IntegrationEvent);
             log.LogInformation("using handler {Handler}", handler.GetType());
 
-            // execute handler
             await handler.HandleAsync(eventMessage.IntegrationEvent);
             log.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
                 eventMessage.IntegrationEvent);

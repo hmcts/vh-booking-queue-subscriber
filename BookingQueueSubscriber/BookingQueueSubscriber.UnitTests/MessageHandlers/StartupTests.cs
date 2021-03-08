@@ -5,14 +5,15 @@ using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class StartupTests
     {
-        [TestCase(typeof(AzureAdConfiguration), typeof(AzureAdConfiguration))]
-        [TestCase(typeof(ServicesConfiguration), typeof(ServicesConfiguration))]
+        [TestCase(typeof(IOptions<AzureAdConfiguration>), typeof(IOptions<AzureAdConfiguration>))]
+        [TestCase(typeof(IOptions<ServicesConfiguration>), typeof(IOptions<ServicesConfiguration>))]
         [TestCase(typeof(IVideoApiService), typeof(VideoApiServiceFake))]
         [TestCase(typeof(IMessageHandlerFactory), typeof(MessageHandlerFactory))]
         [TestCase(typeof(IMessageHandler<HearingCancelledIntegrationEvent>), typeof(HearingCancelledHandler))]

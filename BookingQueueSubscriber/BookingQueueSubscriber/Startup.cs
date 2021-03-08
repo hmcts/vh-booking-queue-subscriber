@@ -1,48 +1,77 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BookingQueueSubscriber;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using VH.Core.Configuration;
 using VideoApi.Client;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
-[assembly: WebJobsStartup(typeof(Startup))]
+[assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
 {
-    public class Startup : IWebJobsStartup
+    public class Startup : FunctionsStartup
     {
-        public void Configure(IWebJobsBuilder builder) =>
-            builder.AddDependencyInjection(ConfigureServices);
+        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
 
-        public static void ConfigureServices(IServiceCollection services)
+            const string vhInfraCore = "/mnt/secrets/vh-infra-core";
+            const string vhBookingQueueSubscriber = "/mnt/secrets/vh-booking-queue-subscriber";
+
+            var context = builder.GetContext();
+            builder.ConfigurationBuilder
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
+                .AddAksKeyVaultSecretProvider(vhInfraCore)
+                .AddAksKeyVaultSecretProvider(vhBookingQueueSubscriber)
+                .AddEnvironmentVariables();
+
+            base.ConfigureAppConfiguration(builder);
+        }
+
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            var context = builder.GetContext();
+            RegisterServices(builder.Services, context.Configuration);
+        }
+
+        public void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddMemoryCache();
-            var configLoader = new ConfigLoader();
-            // need to check if bind works for both tests and host
-            var adConfiguration = configLoader.Configuration.GetSection("AzureAd").Get<AzureAdConfiguration>() ?? BuildAdConfiguration(configLoader);
-            services.AddSingleton(adConfiguration);
+            services.Configure<AzureAdConfiguration>(options =>
+            {
+                configuration.GetSection("AzureAd").Bind(options);
+            });
 
-            var hearingServicesConfiguration =
-                configLoader.Configuration.GetSection("VhServices").Get<ServicesConfiguration>() ??
-                BuildHearingServicesConfiguration(configLoader);
-            services.AddSingleton(hearingServicesConfiguration);
+            var serviceConfiguration = new ServicesConfiguration();
+            configuration.GetSection("VhServices").Bind(serviceConfiguration);
 
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
+            RegisterMessageHandlers(services);
 
             var container = services.BuildServiceProvider();
-            
-            if (hearingServicesConfiguration.EnableVideoApiStub)
+
+            if (serviceConfiguration.EnableVideoApiStub)
             {
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
             }
@@ -54,32 +83,14 @@ namespace BookingQueueSubscriber
                     .AddTypedClient(httpClient =>
                     {
                         var client = VideoApiClient.GetClient(httpClient);
-                        client.BaseUrl = hearingServicesConfiguration.VideoApiUrl;
+                        client.BaseUrl = serviceConfiguration.VideoApiUrl;
                         client.ReadResponseAsString = true;
-                        return (IVideoApiClient) client;
+                        return (IVideoApiClient)client;
                     });
             }
-
-            RegisterMessageHandlers(services);
         }
 
-        private static ServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
-        {
-            var values = configLoader.Configuration.GetSection("Values");
-            var hearingServicesConfiguration = new ServicesConfiguration();
-            values.GetSection("VhServices").Bind(hearingServicesConfiguration);
-            return hearingServicesConfiguration;
-        }
-
-        private static AzureAdConfiguration BuildAdConfiguration(ConfigLoader configLoader)
-        {
-            var values = configLoader.Configuration.GetSection("Values");
-            var azureAdConfiguration = new AzureAdConfiguration();
-            values.GetSection("AzureAd").Bind(azureAdConfiguration);
-            return azureAdConfiguration;
-        }
-
-        private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
+        private void RegisterMessageHandlers(IServiceCollection serviceCollection)
         {
             var messageHandlers = GetAllTypesOf(typeof(IMessageHandler<>)).ToList();
             foreach (var messageHandler in messageHandlers)
@@ -89,12 +100,12 @@ namespace BookingQueueSubscriber
             }
         }
 
-        private static IEnumerable<Type> GetAllTypesOf(Type @interface)
+        private IEnumerable<Type> GetAllTypesOf(Type i)
         {
-            return @interface.Assembly.GetTypes().Where(t =>
+            return i.Assembly.GetTypes().Where(t =>
                 t.GetInterfaces().Any(x =>
                     x.IsGenericType &&
-                    x.GetGenericTypeDefinition() == @interface));
+                    x.GetGenericTypeDefinition() == i));
         }
     }
 }

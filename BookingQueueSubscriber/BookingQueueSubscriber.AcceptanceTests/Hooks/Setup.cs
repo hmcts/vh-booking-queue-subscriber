@@ -27,7 +27,7 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
             var azureOptions = RegisterAzureSecrets();
             var services = RegisterServices();
             RegisterUsernameStem();
-            GenerateBearerTokens(azureOptions.Value, services);
+            GenerateBearerTokens(azureOptions, services);
             return _context;
         }
 
@@ -66,14 +66,14 @@ namespace BookingQueueSubscriber.AcceptanceTests.Hooks
             return NUnit.Framework.TestContext.Parameters["TargetTestEnvironment"] ?? string.Empty;
         }
 
-        private void GenerateBearerTokens(AzureAdConfiguration azureOptions, IOptions<ServicesConfiguration> services)
+        private void GenerateBearerTokens(IOptions<AzureAdConfiguration> azureOptions, IOptions<ServicesConfiguration> services)
         {
             _context.Tokens.BookingsApiBearerToken = new AzureTokenProvider(azureOptions).GetClientAccessToken(
-                azureOptions.ClientId, azureOptions.ClientSecret,
+                azureOptions.Value.ClientId, azureOptions.Value.ClientSecret,
                 services.Value.BookingsApiUrl.TrimEnd('/'));
 
             _context.Tokens.VideoApiBearerToken = new AzureTokenProvider(azureOptions).GetClientAccessToken(
-                azureOptions.ClientId, azureOptions.ClientSecret,
+                azureOptions.Value.ClientId, azureOptions.Value.ClientSecret,
                 services.Value.VideoApiUrl.TrimEnd('/'));
 
             _context.Tokens.BookingsApiBearerToken.Should().NotBeNullOrEmpty("BookingsApiBearerToken is set");
