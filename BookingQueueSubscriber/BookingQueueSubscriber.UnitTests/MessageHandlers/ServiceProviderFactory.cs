@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -9,8 +10,10 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
         static ServiceProviderFactory()
         {
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             ServiceCollection sc = new ServiceCollection();
-            Startup.ConfigureServices(sc);
+            var startup = new Startup();
+            startup.RegisterServices(sc, configuration);
             ServiceProvider = sc.BuildServiceProvider();
         }
     }

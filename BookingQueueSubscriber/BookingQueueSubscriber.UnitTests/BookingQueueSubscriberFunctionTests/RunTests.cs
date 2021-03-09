@@ -7,17 +7,19 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
+namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
     public class RunTests : MessageHandlerTestBase
     {
         private readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private VideoApiServiceFake _videoApiService;
+        private BookingQueueSubscriberFunction _sut;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-          _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
+            _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
+            _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
         }
 
         [TearDown]
@@ -112,8 +114,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
       ]
    }
 }";
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
 
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
@@ -132,8 +133,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
               }
             }";
 
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             
             _videoApiService.DeleteConferenceCount.Should().Be(1);
         }
@@ -159,8 +159,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     }
   }
 }";
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.UpdateConferenceCount.Should().Be(1);
         }
 
@@ -194,8 +193,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     ]
   }
 }";
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
         }
 
@@ -217,8 +215,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
             _videoApiService.ConferenceResponse.Id = Guid.Parse("9e4bb2b7-3187-419c-a7c8-b1e17a3cbb6f");
             _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("ea801426-0ea2-4eab-aaf0-647ae146397a");
             
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.RemoveParticipantFromConferenceCount.Should().Be(1);
         }
 
@@ -253,8 +250,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
             _videoApiService.ConferenceResponse.Id = Guid.Parse("ab013e39-d159-4836-848e-034d2ebbe37a");
             _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("af9afb87-5cf8-4813-b3dc-0ea96f77e752");
             
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
         }
 
@@ -283,8 +279,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
           }";
           var logger = new LoggerFake();
           const string errorMessageMatch = "Unable to deserialize into EventMessage";
-          Func<Task> f = async () => { await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, logger,
-            new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)); };
+          Func<Task> f = async () => { await _sut.Run(message, logger); };
           f.Should().ThrowAsync<Exception>().WithMessage(errorMessageMatch);
           logger.Messages.Should().ContainMatch($"{errorMessageMatch}*");
         }

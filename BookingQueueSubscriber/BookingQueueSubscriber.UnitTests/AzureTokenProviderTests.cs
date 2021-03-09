@@ -1,6 +1,7 @@
 ﻿using System;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests
@@ -10,7 +11,8 @@ namespace BookingQueueSubscriber.UnitTests
         [Test]
         public void should_get_access_token()
         {
-            var azureTokenProvider = new AzureTokenProvider(new AzureAdConfiguration{ TenantId = "teanantid"});
+            var azureAdConfigurationOptions = Options.Create(new AzureAdConfiguration { TenantId = "teanantid" });
+            var azureTokenProvider = new AzureTokenProvider(azureAdConfigurationOptions);
             Assert.Throws<AggregateException>(() => azureTokenProvider.GetClientAccessToken("1234", "1234", "1234"));
         }
     }

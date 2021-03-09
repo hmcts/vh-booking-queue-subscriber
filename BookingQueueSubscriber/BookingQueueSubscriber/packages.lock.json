@@ -151,16 +151,6 @@
         "resolved": "4.5.4",
         "contentHash": "zteT+G8xuGu6mS+mzDzYXbzS7rd3K6Fjb9RiZlYlJPam2/hU7JCBZBVEcywNuR+oZ1ncTvc/cq0faRr3P01OVg=="
       },
-      "Willezone.Azure.WebJobs.Extensions.DependencyInjection": {
-        "type": "Direct",
-        "requested": "[1.0.1, )",
-        "resolved": "1.0.1",
-        "contentHash": "64HyfxdkbDWc0MKsPceVXWqbAXhyHljGOKklUOdMWSKSl88L5pp/jWA8VreKS4Cz9PiCyOhKllCttEUGrNORjw==",
-        "dependencies": {
-          "Microsoft.Azure.WebJobs": "3.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
-        }
-      },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
         "resolved": "2.15.0",
@@ -457,6 +447,15 @@
         "dependencies": {
           "System.Net.WebSockets.Client": "4.0.2",
           "System.Runtime.Serialization.Primitives": "4.1.1"
+        }
+      },
+      "Microsoft.Azure.Functions.Extensions": {
+        "type": "Transitive",
+        "resolved": "1.1.0",
+        "contentHash": "zYKtQQoS1fdzufxFApuMFiFtoi9QAGH6McXxntpylwLKgKjmCMWdgUd1dcekzTKNR9DPSDPRLiulvukqXnpWrQ==",
+        "dependencies": {
+          "Microsoft.Azure.WebJobs": "3.0.18",
+          "Microsoft.Extensions.DependencyInjection": "2.1.0"
         }
       },
       "Microsoft.Azure.ServiceBus": {
@@ -2274,8 +2273,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.23.27",
-        "contentHash": "fjBID/fxWrcbVqQEzVDF+QskK6CDR4c8kO3JotQ6REZRbobHDe11HSf07kSF2yrqwD0xUmQupwZDLb8cV5yxyg==",
+        "resolved": "1.23.33",
+        "contentHash": "Pq2kfIOY/bBruG75OwsmvQao6sSKtf52H0qykNHfUBwmlo/Uc26P9FRTehQ5K64u/YvUk1ymINtAdApBiOgfqw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2293,6 +2292,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
+          "Microsoft.Azure.Functions.Extensions": "1.1.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.12",
           "Microsoft.Extensions.Configuration.Json": "3.1.12",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.8",
@@ -2305,7 +2305,7 @@
         "dependencies": {
           "BookingQueueSubscriber.Common": "1.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.12",
-          "VideoApi.Client": "1.23.27"
+          "VideoApi.Client": "1.23.33"
         }
       }
     }

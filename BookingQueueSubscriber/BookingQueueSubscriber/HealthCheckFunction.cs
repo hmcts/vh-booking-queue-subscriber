@@ -9,15 +9,21 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using VideoApi.Client;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 namespace BookingQueueSubscriber
 {
     public class HealthCheckFunction
     {
+        private readonly IVideoApiClient _videoApiClient;
+
+        public HealthCheckFunction(IVideoApiClient videoApiClient)
+        {
+            _videoApiClient = videoApiClient;
+        }
+
         [FunctionName("HealthCheck")]
         public async Task<IActionResult> HealthCheck(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")] HttpRequest req, ILogger log, [Inject] IVideoApiClient videoApiClient)
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")] HttpRequest req, ILogger log)
         {
             var response = new HealthCheckResponse
             {
@@ -27,7 +33,7 @@ namespace BookingQueueSubscriber
 
             try
             {
-                await videoApiClient.GetExpiredOpenConferencesAsync();
+                await _videoApiClient.GetExpiredOpenConferencesAsync();
             }
             catch (Exception ex)
             {
