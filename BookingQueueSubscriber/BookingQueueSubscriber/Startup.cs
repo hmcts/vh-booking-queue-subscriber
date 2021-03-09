@@ -9,9 +9,11 @@ using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using VH.Core.Configuration;
 using VideoApi.Client;
 
@@ -36,6 +38,7 @@ namespace BookingQueueSubscriber
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
                 .AddAksKeyVaultSecretProvider(vhInfraCore)
                 .AddAksKeyVaultSecretProvider(vhBookingQueueSubscriber)
+                .AddUserSecrets("F6705640-D918-4180-B98A-BAB7ADAA4817")
                 .AddEnvironmentVariables();
 
             base.ConfigureAppConfiguration(builder);
@@ -54,10 +57,15 @@ namespace BookingQueueSubscriber
 
         public void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMemoryCache();
+            var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            services.AddSingleton<IMemoryCache>(memoryCache);
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);
+            });
+            services.Configure<ServicesConfiguration>(options =>
+            {
+                configuration.GetSection("VhServices").Bind(options);
             });
 
             var serviceConfiguration = new ServicesConfiguration();
@@ -66,7 +74,9 @@ namespace BookingQueueSubscriber
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddTransient<VideoServiceTokenHandler>();
-            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
+            services.AddLogging(builder => 
+                builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
+            );
             RegisterMessageHandlers(services);
 
             var container = services.BuildServiceProvider();

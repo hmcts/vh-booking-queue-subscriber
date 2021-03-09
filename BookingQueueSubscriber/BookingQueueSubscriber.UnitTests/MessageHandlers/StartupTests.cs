@@ -5,6 +5,7 @@ using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using FluentAssertions;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
@@ -15,6 +16,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [TestCase(typeof(IOptions<AzureAdConfiguration>), typeof(OptionsManager<AzureAdConfiguration>))]
         [TestCase(typeof(IOptions<ServicesConfiguration>), typeof(OptionsManager<ServicesConfiguration>))]
         [TestCase(typeof(IVideoApiService), typeof(VideoApiServiceFake))]
+        [TestCase(typeof(IMemoryCache), typeof(MemoryCache))]
         [TestCase(typeof(IMessageHandlerFactory), typeof(MessageHandlerFactory))]
         [TestCase(typeof(IMessageHandler<HearingCancelledIntegrationEvent>), typeof(HearingCancelledHandler))]
         [TestCase(typeof(IMessageHandler<HearingDetailsUpdatedIntegrationEvent>), typeof(HearingDetailsUpdatedHandler))]
