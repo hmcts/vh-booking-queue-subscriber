@@ -35,3 +35,4 @@ java:
     VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net
     VHSERVICES__VIDEOAPIRESOURCEID: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
+    QUEUENAME: booking
