@@ -55,6 +55,7 @@ namespace BookingQueueSubscriber
         public void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddMemoryCache();
+            services.AddApplicationInsightsTelemetry(configuration["ApplicationInsights:InstrumentationKey"]);
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);
