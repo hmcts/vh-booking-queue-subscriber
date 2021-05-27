@@ -7,5 +7,7 @@ namespace BookingQueueSubscriber.Common.Configuration
         public string VideoApiResourceId { get; set; }
         public string VideoApiUrl { get; set; }
         public bool EnableVideoApiStub { get; set; }
+        public string VideoWebResourceId { get; set; }
+        public string VideoWebUrl { get; set; }
     }
 }

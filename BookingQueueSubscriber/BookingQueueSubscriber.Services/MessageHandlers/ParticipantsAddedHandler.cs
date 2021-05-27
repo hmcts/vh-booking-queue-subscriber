@@ -25,6 +25,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 Participants = eventMessage.Participants
                     .Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList()
             });
+
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

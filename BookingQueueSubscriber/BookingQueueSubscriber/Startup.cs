@@ -7,6 +7,7 @@ using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Caching.Memory;
@@ -98,6 +99,12 @@ namespace BookingQueueSubscriber
                         return (IVideoApiClient)client;
                     });
             }
+
+            services.AddScoped<IVideoWebService, VideoWebService>();
+            services.AddHttpClient("VideoWeb", client =>
+            {
+                client.BaseAddress = serviceConfiguration.VideoWebUrl;
+            });
         }
 
         private void RegisterMessageHandlers(IServiceCollection serviceCollection)
