@@ -1,6 +1,6 @@
 ---
 java:
-  image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:20210326.10'
+  image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:prod-20210503.1'
   applicationPort: 8080
   replicas: 2
   ingressHost: vh-booking-queue-subscriber.{{ .Values.global.environment }}.platform.hmcts.net
