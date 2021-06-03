@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BookingQueueSubscriber.AcceptanceTests.Configuration.Data;
 using BookingsApi.Contract.Requests;
 using BookingsApi.Contract.Responses;
+using Castle.Core.Internal;
 using FluentAssertions;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Responses;
@@ -48,9 +50,21 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
                 conferenceParticipant.Title.Should().NotBeNullOrWhiteSpace();
                 conferenceParticipant.Username.Should().Be(hearingParticipant.Username);
 
+                if (conferenceParticipant.LinkedParticipants.Any())
+                { 
+                   var linkedParticipant = conferenceParticipant.HearingRoleName != RoleData.INTERPRETER_HEARING_ROLE_NAME ? 
+                                            hearingParticipants.FirstOrDefault(c => c.HearingRole == RoleData.INTERPRETER_HEARING_ROLE_NAME)
+                                            : hearingParticipants.FirstOrDefault(c => c.HearingRole != RoleData.INTERPRETER_HEARING_ROLE_NAME && c.LinkedParticipants.Any());
+                    
+                    hearingParticipant.LinkedParticipants.Any().Should().BeTrue();
+                    conferenceParticipant.LinkedParticipants.Any(c => c.LinkedId == linkedParticipant.RefId).Should().BeTrue();
+                }
+
                 if (!conferenceParticipant.UserRoleName.Equals("Representative") ||
                     conferenceParticipant.CaseRoleName.ToLower() == "none") continue;
                 conferenceParticipant.Organisation.Should().NotBeNullOrWhiteSpace();
+
+
             }
         }
 

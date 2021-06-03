@@ -53,10 +53,14 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 _request.Participants = new HearingParticipantsBuilder(_usernameStem, false)
                     .AddJudge()
                     .AddIndividual()
+                    .AddIndividual(2)
                     .AddRep()
                     .AddObserver()
-                    .AddPanelMember()
+                    .AddPanelMember() 
+                    .AddInterpreter()
                     .Build();
+
+                _request.LinkedParticipants = new LinkedParticipantsRequestBuilder(_request.Participants).Build();
             }
             return this;
         }

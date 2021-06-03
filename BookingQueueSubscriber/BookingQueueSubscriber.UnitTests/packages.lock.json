@@ -438,6 +438,15 @@
           "System.Runtime.Serialization.Primitives": "4.1.1"
         }
       },
+      "Microsoft.Azure.Functions.Extensions": {
+        "type": "Transitive",
+        "resolved": "1.1.0",
+        "contentHash": "zYKtQQoS1fdzufxFApuMFiFtoi9QAGH6McXxntpylwLKgKjmCMWdgUd1dcekzTKNR9DPSDPRLiulvukqXnpWrQ==",
+        "dependencies": {
+          "Microsoft.Azure.WebJobs": "3.0.18",
+          "Microsoft.Extensions.DependencyInjection": "2.1.0"
+        }
+      },
       "Microsoft.Azure.ServiceBus": {
         "type": "Transitive",
         "resolved": "4.2.0",
@@ -2308,20 +2317,11 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.23.16",
-        "contentHash": "3zmgyxFV7bDdySTnf3VMaAROnIhNomCmHs8C6PMkETUqS7xI+e/VCI4pOWH9iUGeQCoof6H5+qCR1MFGwAYTFw==",
+        "resolved": "1.23.33",
+        "contentHash": "Pq2kfIOY/bBruG75OwsmvQao6sSKtf52H0qykNHfUBwmlo/Uc26P9FRTehQ5K64u/YvUk1ymINtAdApBiOgfqw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
-        }
-      },
-      "Willezone.Azure.WebJobs.Extensions.DependencyInjection": {
-        "type": "Transitive",
-        "resolved": "1.0.1",
-        "contentHash": "64HyfxdkbDWc0MKsPceVXWqbAXhyHljGOKklUOdMWSKSl88L5pp/jWA8VreKS4Cz9PiCyOhKllCttEUGrNORjw==",
-        "dependencies": {
-          "Microsoft.Azure.WebJobs": "3.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
         }
       },
       "WindowsAzure.Storage": {
@@ -2347,13 +2347,13 @@
           "Microsoft.Extensions.Http": "3.1.12",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.8",
           "Microsoft.NET.Sdk.Functions": "3.0.11",
-          "System.Threading.Tasks.Extensions": "4.5.4",
-          "Willezone.Azure.WebJobs.Extensions.DependencyInjection": "1.0.1"
+          "System.Threading.Tasks.Extensions": "4.5.4"
         }
       },
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
+          "Microsoft.Azure.Functions.Extensions": "1.1.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.12",
           "Microsoft.Extensions.Configuration.Json": "3.1.12",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.8",
@@ -2366,7 +2366,7 @@
         "dependencies": {
           "BookingQueueSubscriber.Common": "1.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.12",
-          "VideoApi.Client": "1.23.16"
+          "VideoApi.Client": "1.23.33"
         }
       }
     }

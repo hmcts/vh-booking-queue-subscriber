@@ -6,8 +6,14 @@
       "messageHandlerOptions": {
         "autoComplete": true,
         "maxConcurrentCalls": 32,
-        "maxAutoRenewDuration": "00:5:00"
+        "maxAutoRenewDuration": "00:05:00"
       }
+    },
+    "http": {
+      "routePrefix": "",
+      "maxOutstandingRequests": 200,
+      "maxConcurrentRequests": 100,
+      "dynamicThrottlesEnabled": true
     }
   }
 }

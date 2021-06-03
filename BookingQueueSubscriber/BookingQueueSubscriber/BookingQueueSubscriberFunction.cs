@@ -5,19 +5,24 @@ using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 namespace BookingQueueSubscriber
 {
-    public static class BookingQueueSubscriberFunction
+    public class BookingQueueSubscriberFunction
     {
-        [FunctionName("BookingQueueSubscriberFunction")]
-        public static async Task Run([ServiceBusTrigger("%queueName%", Connection = "ServiceBusConnection")]
-            string bookingQueueItem,
-            ILogger log,
-            [Inject]IMessageHandlerFactory messageHandlerFactory)
+        private readonly IMessageHandlerFactory _messageHandlerFactory;
+
+        public BookingQueueSubscriberFunction(IMessageHandlerFactory messageHandlerFactory)
         {
-            log.LogInformation(bookingQueueItem);
+            _messageHandlerFactory = messageHandlerFactory;
+        }
+
+        [FunctionName("BookingQueueSubscriberFunction")]
+        public async Task Run([ServiceBusTrigger("%queueName%", Connection = "ServiceBusConnection")]
+            string bookingQueueItem,
+            ILogger log)
+        {
+            log.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
             // get handler
             EventMessage eventMessage;
             try
@@ -26,16 +31,16 @@ namespace BookingQueueSubscriber
             }
             catch (Exception e)
             {
-                log.LogCritical(e, $"Unable to deserialize into EventMessage \r\n {bookingQueueItem}");
+                log.LogCritical(e, "Unable to deserialize into EventMessage \r\n {BookingQueueItem}", bookingQueueItem);
                 throw;
             }
-            
-            var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
-            log.LogInformation($"using handler {handler.GetType()}");
 
-            // execute handler
+            var handler = _messageHandlerFactory.Get(eventMessage.IntegrationEvent);
+            log.LogInformation("using handler {Handler}", handler.GetType());
+
             await handler.HandleAsync(eventMessage.IntegrationEvent);
-            log.LogInformation($"Process message {eventMessage.Id} - {eventMessage.IntegrationEvent}");
+            log.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
+                eventMessage.IntegrationEvent);
         }
     }
 }

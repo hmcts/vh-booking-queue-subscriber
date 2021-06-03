@@ -47,24 +47,26 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         {
             await CreateAndConfirmHearing();
 
-            var participant = Hearing.Participants.First(x => x.UserRoleName.Equals("Representative"));
+            var participant = Hearing.Participants.First(x => x.HearingRoleName == RoleData.INDV_HEARING_ROLE_NAME && !x.LinkedParticipants.Any());
+            var interpreter = Hearing.Participants.FirstOrDefault(x => x.HearingRoleName == RoleData.INTERPRETER_HEARING_ROLE_NAME);
             
             var request = new UpdateParticipantRequest
             {
                 DisplayName = $"{participant.DisplayName} {HearingData.UPDATED_TEXT}",
                 OrganisationName = $"{participant.Organisation} {HearingData.UPDATED_TEXT}",
-                Representee = $"{participant.Representee} {HearingData.UPDATED_TEXT}",
                 TelephoneNumber = UserData.UPDATED_TELEPHONE_NUMBER,
-                Title = $"{participant.Title} {HearingData.UPDATED_TEXT}"
+                Title = $"{participant.Title} {HearingData.UPDATED_TEXT}",
+                LinkedParticipants = new LinkedParticipantsRequestBuilder(participant.ContactEmail, interpreter.ContactEmail).Build()
             };
 
             await BookingApiClient.UpdateParticipantDetailsAsync(Hearing.Id, participant.Id, request);
 
             var conferenceDetails = await PollForConferenceParticipantUpdated(Hearing.Id, participant.Id,HearingData.UPDATED_TEXT);
             var updatedParticipant = conferenceDetails.Participants.First(x => x.Username.Equals(participant.Username));
+            var updatedInterpreter = conferenceDetails.Participants.FirstOrDefault(x => x.HearingRole == RoleData.INTERPRETER_HEARING_ROLE_NAME);
             updatedParticipant.DisplayName.Should().Be(request.DisplayName);
-            updatedParticipant.Representee.Should().Be(request.Representee);
             updatedParticipant.ContactTelephone.Should().Be(request.TelephoneNumber);
+            updatedParticipant.LinkedParticipants.FirstOrDefault().LinkedId.Should().Be(updatedInterpreter.Id);
         }
         
         private async Task<ConferenceDetailsResponse> PollForConferenceParticipantPresence(Guid hearingRefId, string username, bool expected)

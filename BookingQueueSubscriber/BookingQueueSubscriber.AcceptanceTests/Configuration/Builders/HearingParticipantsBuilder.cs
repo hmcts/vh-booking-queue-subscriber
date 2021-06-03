@@ -23,9 +23,9 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             return this;
         }
 
-        public HearingParticipantsBuilder AddIndividual()
+        public HearingParticipantsBuilder AddIndividual(int number =1)
         {
-            _participants.Add(AddParticipant("Individual"));
+            _participants.Add(AddParticipant("Individual",number));
             return this;
         }
 
@@ -53,6 +53,12 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
             return this;
         }
 
+        public HearingParticipantsBuilder AddInterpreter()
+        {
+            _participants.Add(AddParticipant("Interpreter"));
+            return this;
+        }
+
         public HearingParticipantsBuilder AddUser(string userType, int number)
         {
             _participants.Add(AddParticipant(userType, number));
@@ -61,8 +67,8 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
 
         private ParticipantRequest AddParticipant(string userType, int number = 1)
         {
-            var firstname = $"{UserData.AUTOMATED_FIRST_NAME_PREFIX}_{UserData.BOOKING_QUEUE_SUBSCRIBER_NAME_PREFIX}";
-            var lastname = $"{userType} {number}";
+            var firstname = $"{UserData.AUTOMATED_FIRST_NAME_PREFIX}__{Faker.Name.First()}_{UserData.BOOKING_QUEUE_SUBSCRIBER_NAME_PREFIX}";
+            var lastname = $"{Faker.Name.Last()}_{userType} {number}";
 
             var participant = new ParticipantRequest()
             {
@@ -99,6 +105,12 @@ namespace BookingQueueSubscriber.AcceptanceTests.Configuration.Builders
                 participant.CaseRoleName = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.WINGER_ROLE_NAME;
                 participant.HearingRoleName =
                     _isCacdHearing ? RoleData.CACD_REP_HEARING_ROLE_NAME : RoleData.WINGER_ROLE_NAME;
+            }
+
+            if (userType.Equals("Interpreter"))
+            {
+                participant.CaseRoleName = _isCacdHearing ? RoleData.CACD_CASE_ROLE_NAME : RoleData.CASE_ROLE_NAME;
+                participant.HearingRoleName =  RoleData.INTERPRETER_HEARING_ROLE_NAME;
             }
 
             return participant;

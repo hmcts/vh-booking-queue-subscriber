@@ -24,7 +24,6 @@ namespace BookingQueueSubscriber.AcceptanceTests.Tests
         public async Task Should_create_single_day_conference_from_hearing()
         {
             await CreateAndConfirmHearing();
-            Verify.ConferenceDetailsResponse(Conference, Hearing);
         }
 
         [Test]

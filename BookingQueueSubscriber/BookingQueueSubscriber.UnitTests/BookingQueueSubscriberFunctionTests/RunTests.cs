@@ -7,17 +7,19 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
+namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
     public class RunTests : MessageHandlerTestBase
     {
         private readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private VideoApiServiceFake _videoApiService;
+        private BookingQueueSubscriberFunction _sut;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-          _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
+            _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
+            _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
         }
 
         [TearDown]
@@ -29,118 +31,90 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
         [Test]
         public async Task Should_handle_hearing_ready_for_video_integration_event()
         {
-            const string message = @"
-            {
-              '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
-              'id': '46c99f98-e3b4-440b-a3f3-bd8733ef1b7d',
-              'timestamp': '2019-07-01T14:15:52.0898041Z',
-              'integration_event': {
-                '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.Events.HearingIsReadyForVideoIntegrationEvent, Bookings.Infrastructure.Services',
-                'hearing': {
-                  '$type': 'Bookings.Infrastructure.Services.Dtos.HearingDto, Bookings.Infrastructure.Services',
-                  'hearing_id': '719817d3-5a20-40c5-bfe6-afce48ed48f3',
-                  'scheduled_date_time': '2019-07-01T23:00:00Z',
-                  'scheduled_duration': 1,
-                  'case_type': 'Generic',
-                  'case_number': 'Number1',
-                  'case_name': 'Name1',
-                  'record_audio': true
-                },
-                'participants': [
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
-                    'participant_id': '59bde27c-8684-45ca-8376-9183b85dc584',
-                    'fullname': 'Title1 FirstName1 LastName1',
-                    'first_name': 'FirstName1',
-                    'last_name': 'LastName1',
-                    'contact_email': 'tst@hmcts.net',
-                    'contact_telephone': '01234567890',
-                    'username': 'angie_bartell@hmcts.net',
-                    'display_name': 'DisplayName1',
-                    'hearing_role': 'Litigant in person',
-                    'user_role': 'Individual',
-                    'case_group_type': 'Applicant',
-                    'representee': ''
-                  },
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
-                    'participant_id': 'f260f24d-177f-4192-828f-09756c63be75',
-                    'fullname': 'Title2 FirstName2 LastName2',
-                    'username': 'remington.dibbert@hmcts.net',
-                    'contact_email': 'tst@hmcts.net',
-                    'contact_telephone': '01234567890',
-                    'display_name': 'DisplayName2',
-                    'hearing_role': 'Solicitor',
-                    'user_role': 'Representative',
-                    'case_group_type': 'Applicant',
-                    'representee': 'Representee2'
-                  },
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
-                    'participant_id': 'f69a902f-d5d2-4d4f-968f-3028201396a7',
-                    'fullname': 'Title3 FirstName3 LastName3',
-                    'username': 'samir.mclaughlin@hmcts.net',
-                    'contact_email': 'tst@hmcts.net',
-                    'contact_telephone': '01234567890',
-                    'display_name': 'DisplayName3',
-                    'hearing_role': 'Litigant in person',
-                    'user_role': 'Individual',
-                    'case_group_type': 'Respondent',
-                    'representee': ''
-                  },
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
-                    'participant_id': '9bbcb92b-3d77-4182-b379-792cdf9e9712',
-                    'fullname': 'Title4 FirstName4 LastName4',
-                    'username': 'sister@mhmcts.net',
-                    'contact_email': 'tst@hmcts.net',
-                    'contact_telephone': '01234567890',
-                    'display_name': 'DisplayName4',
-                    'hearing_role': 'Solicitor',
-                    'user_role': 'Representative',
-                    'case_group_type': 'Respondent',
-                    'representee': 'Representee4'
-                  },
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
-                    'participant_id': '98bbaa74-af7c-48c9-a9ad-ac8c61423dfe',
-                    'fullname': 'Title5 FirstName5 LastName5',
-                    'username': 'lloyd_spinka@hmcts.net',
-                    'contact_email': 'tst@hmcts.net',
-                    'contact_telephone': '01234567890',
-                    'display_name': 'DisplayName5',
-                    'hearing_role': 'Judge',
-                    'user_role': 'Judge',
-                    'case_group_type': 'judge',
-                    'representee': ''
-                  }
-                ],
-                'Endpoints': [
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',
-                    'display_name': 'end point one',
-                    'sip': 'sip 12345',
-                    'pin': '1234'
-                  },
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',
-                    'display_name': 'end point two',
-                    'sip': 'sip 67890',
-                    'pin': '1234',
-                    'defence_advocate_username': 'angie_bartell@hmcts.net'
-                  },
-                  {
-                    '$type': 'Bookings.Infrastructure.Services.Dtos.EndpointDto, Bookings.Infrastructure.Services',
-                    'display_name': 'end point three',
-                    'sip': 'sip 6543',
-                    'pin': '1234'
-                  }
-                ],
-                'event_type': 'hearingIsReadyForVideo'
-              }
-            }";
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            const string message = @"{
+   '$type':'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+   'id':'5d94f88d-68a7-46d4-84d0-b026a452d3c4',
+   'timestamp':'2021-02-19T14:50:58.159692Z',
+   'integration_event':{
+      '$type':'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingIsReadyForVideoIntegrationEvent, BookingsApi.Infrastructure.Services',
+      'hearing':{
+         '$type':'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
+         'hearing_id':'a0391117-92e5-41e1-9799-c2cbfc4e9310',
+         'scheduled_date_time':'2021-02-19T10:30:00Z',
+         'scheduled_duration':45,
+         'case_type':'Civil Money Claims',
+         'case_number':'01234567890',
+         'case_name':'Test Add',
+         'hearing_venue_name':'Birmingham Civil and Family Justice Centre',
+         'record_audio':true
+      },
+      'participants':[
+         {
+            '$type':'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+            'participant_id':'1100ddd1-8cef-48f1-a8ce-5283faff8791',
+            'fullname':'Mrs. Automation_Johan Automation_Koch',
+            'username':'Automation_eulah.conroy@pagachirthe.info',
+            'first_name':'Automation_Johan',
+            'last_name':'Automation_Koch',
+            'contact_email':'Automation_dale@senger.info',
+            'contact_telephone':'TelephoneNumber1',
+            'display_name':'Automation_Johan Automation_Koch',
+            'hearing_role':'Judge',
+            'user_role':'Judge',
+            'case_group_type':'judge',
+            'representee':'',
+            'linked_participants':[
+               {
+                  '$type':'BookingsApi.Infrastructure.Services.Dtos.LinkedParticipantDto, BookingsApi.Infrastructure.Services',
+                  'participant_id':'1100ddd1-8cef-48f1-a8ce-5283faff8791',
+                  'linked_id':'a4b2325f-9517-4a7c-a6d0-5dbbe580e371',
+                  'type':'interpreter'
+               }
+            ]
+         },
+         {
+            '$type':'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+            'participant_id':'a4b2325f-9517-4a7c-a6d0-5dbbe580e371',
+            'fullname':'Dr. Automation_Hattie Automation_Armstrong',
+            'username':'Automation_willis@swiftbednar.name',
+            'first_name':'Automation_Hattie',
+            'last_name':'Automation_Armstrong',
+            'contact_email':'Automation_lavon@brakus.biz',
+            'contact_telephone':'TelephoneNumber1',
+            'display_name':'Automation_Hattie Automation_Armstrong',
+            'hearing_role':'Representative',
+            'user_role':'Representative',
+            'case_group_type':'claimant',
+            'representee':'',
+            'linked_participants':[
+               {
+                  '$type':'BookingsApi.Infrastructure.Services.Dtos.LinkedParticipantDto, BookingsApi.Infrastructure.Services',
+                  'participant_id':'a4b2325f-9517-4a7c-a6d0-5dbbe580e371',
+                  'linked_id':'1100ddd1-8cef-48f1-a8ce-5283faff8791',
+                  'type':'interpreter'
+               }
+            ]
+         }
+      ],
+      'endpoints':[
+         {
+            '$type':'BookingsApi.Infrastructure.Services.Dtos.EndpointDto, BookingsApi.Infrastructure.Services',
+            'display_name':'display 1',
+            'sip':'b5d8c1f5-ef19-4726-b722-3ef86bdfda95',
+            'pin':'1234',
+            'defence_advocate_username':null
+         },
+         {
+            '$type':'BookingsApi.Infrastructure.Services.Dtos.EndpointDto, BookingsApi.Infrastructure.Services',
+            'display_name':'display 2',
+            'sip':'72677f04-65d0-41d3-bfe8-845f666c2198',
+            'pin':'5678',
+            'defence_advocate_username':null
+         }
+      ]
+   }
+}";
+            await _sut.Run(message, new LoggerFake());
 
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
@@ -159,8 +133,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
               }
             }";
 
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             
             _videoApiService.DeleteConferenceCount.Should().Be(1);
         }
@@ -186,8 +159,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     }
   }
 }";
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-                new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.UpdateConferenceCount.Should().Be(1);
         }
 
@@ -221,8 +193,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
     ]
   }
 }";
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
         }
 
@@ -244,8 +215,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
             _videoApiService.ConferenceResponse.Id = Guid.Parse("9e4bb2b7-3187-419c-a7c8-b1e17a3cbb6f");
             _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("ea801426-0ea2-4eab-aaf0-647ae146397a");
             
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.RemoveParticipantFromConferenceCount.Should().Be(1);
         }
 
@@ -280,8 +250,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
             _videoApiService.ConferenceResponse.Id = Guid.Parse("ab013e39-d159-4836-848e-034d2ebbe37a");
             _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("af9afb87-5cf8-4813-b3dc-0ea96f77e752");
             
-            await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, new LoggerFake(),
-              new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            await _sut.Run(message, new LoggerFake());
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
         }
 
@@ -310,8 +279,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunction
           }";
           var logger = new LoggerFake();
           const string errorMessageMatch = "Unable to deserialize into EventMessage";
-          Func<Task> f = async () => { await BookingQueueSubscriber.BookingQueueSubscriberFunction.Run(message, logger,
-            new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider)); };
+          Func<Task> f = async () => { await _sut.Run(message, logger); };
           f.Should().ThrowAsync<Exception>().WithMessage(errorMessageMatch);
           logger.Messages.Should().ContainMatch($"{errorMessageMatch}*");
         }

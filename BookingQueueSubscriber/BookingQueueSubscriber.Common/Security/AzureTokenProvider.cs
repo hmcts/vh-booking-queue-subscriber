@@ -1,5 +1,6 @@
 using System;
 using BookingQueueSubscriber.Common.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace BookingQueueSubscriber.Common.Security
@@ -14,9 +15,9 @@ namespace BookingQueueSubscriber.Common.Security
     {
         private readonly AzureAdConfiguration _azureAdConfiguration;
 
-        public AzureTokenProvider(AzureAdConfiguration azureAdConfiguration)
+        public AzureTokenProvider(IOptions<AzureAdConfiguration> azureAdConfigurationOptions)
         {
-            _azureAdConfiguration = azureAdConfiguration;
+            _azureAdConfiguration = azureAdConfigurationOptions.Value;
         }
 
         public string GetClientAccessToken(string clientId, string clientSecret, string clientResource)

@@ -16,7 +16,9 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ContactTelephone = participant.ContactTelephone,
                 DisplayName = participant.DisplayName,
                 Representee = participant.Representee,
-                Username = participant.Username
+                Username = participant.Username,
+                LinkedParticipants = LinkedParticipantToRequestMapper
+                    .MapToLinkedParticipantRequestList(participant.LinkedParticipants)
             };
         }
     }
