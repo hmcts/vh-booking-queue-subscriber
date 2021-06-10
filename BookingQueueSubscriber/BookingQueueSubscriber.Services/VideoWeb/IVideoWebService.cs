@@ -8,6 +8,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 {
     public interface IVideoWebService
     {
-        Task PushAddParticipantsMessage(Guid conferenceId, AddParticipantsToConferenceRequest request);
+        Task PushParticipantsAddedMessage(Guid conferenceId, AddParticipantsToConferenceRequest request);
     }
 }

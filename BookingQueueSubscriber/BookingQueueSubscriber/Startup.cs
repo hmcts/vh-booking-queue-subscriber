@@ -75,6 +75,7 @@ namespace BookingQueueSubscriber
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddTransient<VideoServiceTokenHandler>();
+            services.AddTransient<VideoWebTokenHandler>();
             services.AddLogging(builder => 
                 builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
@@ -100,11 +101,27 @@ namespace BookingQueueSubscriber
                     });
             }
 
-            services.AddScoped<IVideoWebService, VideoWebService>();
-            services.AddHttpClient("VideoWeb", client =>
-            {
-                client.BaseAddress = serviceConfiguration.VideoWebUrl;
-            });
+
+            services.AddTransient<IVideoWebService, VideoWebService>();
+            services.AddHttpClient<IVideoWebService, VideoWebService>(client =>
+                {
+                    client.BaseAddress = new Uri(serviceConfiguration.VideoWebUrl);
+                })
+                .AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
+
+            //services.AddHttpClient<IVideoWebService, VideoWebService>("VideoWeb", client =>
+            //{
+            //    client.BaseAddress = new Uri(serviceConfiguration.VideoWebUrl);
+            //}).AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
+            //services.AddHttpClient()
+            //    .AddHttpMessageHandler(() => container.GetService<VideoServiceTokenHandler>())
+            //    .AddTypedClient(httpClient =>
+            //    {
+            //        var client = VideoApiClient.GetClient(httpClient);
+            //        client.BaseUrl = serviceConfiguration.VideoApiUrl;
+            //        client.ReadResponseAsString = true;
+            //        return (IVideoApiClient)client;
+            //    });
         }
 
         private void RegisterMessageHandlers(IServiceCollection serviceCollection)
