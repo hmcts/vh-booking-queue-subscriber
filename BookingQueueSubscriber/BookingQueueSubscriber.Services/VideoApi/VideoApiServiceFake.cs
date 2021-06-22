@@ -20,6 +20,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         public int AddEndpointToConferenceCount { get; set; }
         public int RemoveEndpointFromConferenceCount { get; set; }
         public int UpdateEndpointInConferenceCount { get; set; }
+        public int UpdateConferenceParticipantsAsyncCount { get; set; }
 
         public Task BookNewConferenceAsync(BookNewConferenceRequest request)
         {
@@ -102,6 +103,12 @@ namespace BookingQueueSubscriber.Services.VideoApi
             BookNewConferenceCount = UpdateConferenceCount = DeleteConferenceCount = GetConferenceByHearingRefIdCount =
                 AddParticipantsToConferenceCount =
                     RemoveParticipantFromConferenceCount = UpdateParticipantDetailsCount = 0;
+        }
+
+        public Task UpdateConferenceParticipantsAsync(Guid conferenceId, UpdateConferenceParticipantsRequest request)
+        {
+            UpdateConferenceParticipantsAsyncCount++;
+            return Task.FromResult(HttpStatusCode.OK);
         }
     }
 }
