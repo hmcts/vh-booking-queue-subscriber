@@ -1,10 +1,14 @@
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 // using VideoWebRequests = BookingQueueSubscriber.Services.VideoWeb;
 using VideoApiRequests = VideoApi.Contract.Requests;
 
@@ -31,12 +35,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             };
 
             await _videoApiService.AddParticipantsToConference(conference.Id, request);
-            await _videoWebService.PushParticipantsAddedMessage(conference.Id, request);
 
-            //var videoWebRequest = new VideoWebRequests.AddParticipantsToConferenceRequest
-            //{
-            //    Participants 
-            //};
+            await _videoWebService.PushParticipantsAddedMessage(conference.Id, request);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

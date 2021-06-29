@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using BookingQueueSubscriber;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using VH.Core.Configuration;
 using VideoApi.Client;
 
@@ -101,27 +103,11 @@ namespace BookingQueueSubscriber
                     });
             }
 
-
             services.AddTransient<IVideoWebService, VideoWebService>();
             services.AddHttpClient<IVideoWebService, VideoWebService>(client =>
                 {
                     client.BaseAddress = new Uri(serviceConfiguration.VideoWebUrl);
-                })
-                .AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
-
-            //services.AddHttpClient<IVideoWebService, VideoWebService>("VideoWeb", client =>
-            //{
-            //    client.BaseAddress = new Uri(serviceConfiguration.VideoWebUrl);
-            //}).AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
-            //services.AddHttpClient()
-            //    .AddHttpMessageHandler(() => container.GetService<VideoServiceTokenHandler>())
-            //    .AddTypedClient(httpClient =>
-            //    {
-            //        var client = VideoApiClient.GetClient(httpClient);
-            //        client.BaseUrl = serviceConfiguration.VideoApiUrl;
-            //        client.ReadResponseAsString = true;
-            //        return (IVideoApiClient)client;
-            //    });
+                }).AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
         }
 
         private void RegisterMessageHandlers(IServiceCollection serviceCollection)

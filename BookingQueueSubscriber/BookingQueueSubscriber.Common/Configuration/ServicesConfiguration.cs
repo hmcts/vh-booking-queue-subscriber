@@ -9,5 +9,6 @@ namespace BookingQueueSubscriber.Common.Configuration
         public bool EnableVideoApiStub { get; set; }
         public string VideoWebResourceId { get; set; }
         public string VideoWebUrl { get; set; }
+        public string InternalEventSecret { get; set; }
     }
 }
