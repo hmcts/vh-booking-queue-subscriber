@@ -55,6 +55,12 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return _apiClient.RemoveParticipantFromConferenceAsync(conferenceId, participantId);
         }
 
+        public Task UpdateConferenceParticipantsAsync(Guid conferenceId, UpdateConferenceParticipantsRequest request)
+        {
+            _logger.LogInformation("Updating participants in conference {ConferenceId} with request: {request}", conferenceId, request);
+            return _apiClient.UpdateConferenceParticipantsAsync(conferenceId, request);
+        }
+
         public Task UpdateParticipantDetails(Guid conferenceId, Guid participantId,
             UpdateParticipantRequest request)
         {
