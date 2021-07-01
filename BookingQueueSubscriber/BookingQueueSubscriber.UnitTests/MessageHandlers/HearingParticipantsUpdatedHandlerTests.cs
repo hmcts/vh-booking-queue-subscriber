@@ -1,23 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using Microsoft.Extensions.Logging;
-using VideoApi.Contract.Requests;
 using Moq;
 using NUnit.Framework;
-using BookingQueueSubscriber.Services.VideoApi;
-using BookingQueueSubscriber.Services.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class HearingParticipantsUpdatedHandlerTests : MessageHandlerTestBase
     {
-        private Mock<ILogger<HearingParticipantsUpdatedHandler>> _loggerMock;
         private HearingParticipantsUpdatedIntegrationEvent _integrationEvent;
 
         private HearingParticipantsUpdatedHandler _handler;
@@ -25,11 +20,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [SetUp]
         public void SetUp()
         {
-            _loggerMock = new Mock<ILogger<HearingParticipantsUpdatedHandler>>();
-
             _integrationEvent = GetIntegrationEvent();
 
-            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object, _loggerMock.Object);
+            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object);
         }
 
 
