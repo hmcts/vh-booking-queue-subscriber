@@ -18,7 +18,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
     {
         private readonly HttpClient httpClient;
         private readonly ILogger<VideoWebService> logger;
-        private const string Secret = "i98gvJLvhRS7pfSyM/fYPS2iyoe3lTP4AblwTLy1VoaN2BDVJXor0be0bezl3+pgMJWTnD/V7iOjdSOLXW56RA==";
         public VideoWebService(HttpClient _httpClient, ILogger<VideoWebService> _logger)
         {
             httpClient = _httpClient;
