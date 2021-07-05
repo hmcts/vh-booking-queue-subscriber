@@ -15,7 +15,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         protected Mock<IVideoWebService> VideoWebServiceMock { get; set; }
         protected Guid ParticipantId { get; set; }
         protected Guid HearingId { get; set; }
-
+        protected ConferenceDetailsResponse ConferenceDetailsResponse { get; set; }
 
         [SetUp]
         public void Setup()
@@ -23,17 +23,16 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             ParticipantId = Guid.NewGuid();
             HearingId = Guid.NewGuid();
             VideoApiServiceMock = new Mock<IVideoApiService>();
-            VideoWebServiceMock = new Mock<IVideoWebService>();
-            var result = Task.FromResult(new ConferenceDetailsResponse
+            ConferenceDetailsResponse = new ConferenceDetailsResponse
             {
                 Id = Guid.NewGuid(),
                 Participants = new List<ParticipantDetailsResponse>
                 {
                     new ParticipantDetailsResponse {Id = Guid.NewGuid(), RefId = ParticipantId}
                 }
-            });
+            };
 
-            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId, It.IsAny<bool>())).Returns(result);
+            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId, It.IsAny<bool>())).ReturnsAsync(ConferenceDetailsResponse);
         }
     }
 }
