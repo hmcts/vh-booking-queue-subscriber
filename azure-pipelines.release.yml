@@ -47,6 +47,20 @@ variables:
       - group: vh-prod
     - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
       - group: vh-preview
+  - group: vh-video-web-nonprod
+    env:
+      - Preview
+      - Dev
+      - AAT
+      - Sandbox
+      - Test1
+      - Test2
+  - group: vh-video-web-preprod
+    env:
+      - Preprod
+  - group: vh-video-web-prod
+    env:
+      - Prod
 
 trigger: none
 pr: none
@@ -123,7 +137,14 @@ stages:
             value: vh-video-api-identifieruris
             secret: true
           - name: VhServices:VideoApiUrl
-            value: $(video_api_url)   
+            value: $(video_api_url)
+          - name: VhServices:VideoWebResourceId   
+            value: vh-video-web-identifieruris
+            secret: true
+          - name: VhServices:VideoWebUrl
+            value: $(video_web_url)
+          - name: VhServices:InternalEventSecret
+            value: $(internal_event_secret)
         acceptanceTestSettings:
           - name: AzureAd:ClientId
             value: vh-booking-queue-subscriber-appid
@@ -144,5 +165,12 @@ stages:
             secret: true
           - name: VhServices:VideoApiUrl
             value: $(video_api_url)
+          - name: VhServices:VideoWebResourceId   
+            value: vh-video-web-identifieruris
+            secret: true
+          - name: VhServices:VideoWebUrl
+            value: $(video_web_url)
+          - name: VhServices:InternalEventSecret
+            value: $(internal_event_secret)
           - name: UsernameStem
             value: $(UsernameStem)

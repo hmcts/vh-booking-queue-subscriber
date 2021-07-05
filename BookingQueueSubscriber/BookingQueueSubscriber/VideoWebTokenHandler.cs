@@ -16,27 +16,26 @@ namespace BookingQueueSubscriber
 {
     public class VideoWebTokenHandler : DelegatingHandler
     {
-        private readonly IMemoryCache _memoryCache;
-        private readonly SecurityTokenHandler _tokenHandler;
+        private readonly IMemoryCache memoryCache;
+        private readonly SecurityTokenHandler tokenHandler;
 
         private readonly string Secret;
         private const string TokenCacheKey = "VideoWebToken";
 
         public VideoWebTokenHandler(
-            // JwtSecurityTokenHandler tokenHandler,
-            IOptions<ServicesConfiguration> servicesConfiguration,
-            IMemoryCache memoryCache
+            IOptions<ServicesConfiguration> _servicesConfiguration,
+            IMemoryCache _memoryCache
            )
         {
-            Secret = servicesConfiguration.Value.InternalEventSecret; 
-            _memoryCache = memoryCache;
-            _tokenHandler = new JwtSecurityTokenHandler();
+            Secret = _servicesConfiguration.Value.InternalEventSecret; 
+            this.memoryCache = _memoryCache;
+            tokenHandler = new JwtSecurityTokenHandler();
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            var token = _memoryCache.Get<string>(TokenCacheKey);
+            var token = memoryCache.Get<string>(TokenCacheKey);
             if (string.IsNullOrEmpty(token))
             {
                 int expireMinutes = 20;
@@ -51,10 +50,10 @@ namespace BookingQueueSubscriber
                         SecurityAlgorithms.HmacSha256Signature)
                 };
 
-                var securityToken = _tokenHandler.CreateToken(tokenDescriptor);
-                token = _tokenHandler.WriteToken(securityToken);
+                var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+                token = tokenHandler.WriteToken(securityToken);
                 var tokenExpireDateTime = securityToken.ValidTo.AddMinutes(-1);
-                _memoryCache.Set(TokenCacheKey, token, tokenExpireDateTime);
+                memoryCache.Set(TokenCacheKey, token, tokenExpireDateTime);
             }
 
             request.Headers.Add("Authorization", $"Bearer {token}");
