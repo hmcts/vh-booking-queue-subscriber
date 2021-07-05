@@ -2,10 +2,13 @@
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using NUnit.Framework;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -13,12 +16,15 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
     {
         private readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private VideoApiServiceFake _videoApiService;
+        private VideoWebServiceFake _videoWebService;
         private BookingQueueSubscriberFunction _sut;
-
+    
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
+            _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
+
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
         }
 
@@ -195,6 +201,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 }";
             await _sut.Run(message, new LoggerFake());
             _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
+            _videoWebService.PushParticipantsAddedMessageCount.Should().Be(1);
         }
 
         [Test]

@@ -33,6 +33,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             };
 
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId, It.IsAny<bool>())).ReturnsAsync(ConferenceDetailsResponse);
+
+            VideoWebServiceMock = new Mock<IVideoWebService>();
         }
     }
 }

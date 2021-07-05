@@ -88,6 +88,7 @@ namespace BookingQueueSubscriber
             if (serviceConfiguration.EnableVideoApiStub)
             {
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
+                services.AddScoped<IVideoWebService, VideoWebServiceFake>();
             }
             else
             {
@@ -101,13 +102,15 @@ namespace BookingQueueSubscriber
                         client.ReadResponseAsString = true;
                         return (IVideoApiClient)client;
                     });
-            }
 
-            services.AddTransient<IVideoWebService, VideoWebService>();
-            services.AddHttpClient<IVideoWebService, VideoWebService>(client =>
+                services.AddTransient<IVideoWebService, VideoWebService>();
+                services.AddHttpClient<IVideoWebService, VideoWebService>(client =>
                 {
                     client.BaseAddress = new Uri(serviceConfiguration.VideoWebUrl);
                 }).AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
+            }
+
+            
         }
 
         private void RegisterMessageHandlers(IServiceCollection serviceCollection)
