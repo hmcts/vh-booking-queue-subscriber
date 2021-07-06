@@ -25,6 +25,8 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         }
         public async Task PushParticipantsAddedMessage(Guid conferenceId, AddParticipantsToConferenceRequest request)
         {
+            var path = $"internalevent/ParticipantsAdded?conferenceId={conferenceId}";
+            
             logger.LogDebug("PushAddParticipantsMessage ConferenceId: {ConferenceId}, ParticipantCount: {ParticipantCount}", conferenceId, request.Participants.Count);
 
             DefaultContractResolver contractResolver = new DefaultContractResolver
@@ -39,7 +41,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             });
 
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var path = $"internalevent/ParticipantsAdded?conferenceId={conferenceId}";
             var result = httpClient.PostAsync(path, httpContent).Result;
 
             logger.LogDebug("PushAddParticipantsMessage result: {Result}", result);
