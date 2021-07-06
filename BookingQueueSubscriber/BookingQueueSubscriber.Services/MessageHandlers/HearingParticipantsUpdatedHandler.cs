@@ -2,6 +2,8 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VideoApi.Contract.Requests;
@@ -11,10 +13,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     public class HearingParticipantsUpdatedHandler : IMessageHandler<HearingParticipantsUpdatedIntegrationEvent>
     {
         private readonly IVideoApiService _videoApiService;
+        private readonly IVideoWebService _videoWebService;
 
-        public HearingParticipantsUpdatedHandler(IVideoApiService videoApiService)
+        public HearingParticipantsUpdatedHandler(IVideoApiService videoApiService, IVideoWebService videoWebService)
         {
             _videoApiService = videoApiService;
+            _videoWebService = videoWebService;
         }
 
         public async Task HandleAsync(HearingParticipantsUpdatedIntegrationEvent eventMessage)
@@ -33,6 +37,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             };
 
             await _videoApiService.UpdateConferenceParticipantsAsync(conferenceResponse.Id, updateConferenceParticipantsRequest);
+
+            if(updateConferenceParticipantsRequest.NewParticipants.Count > 0 && conferenceResponse.ScheduledDateTime.Date == DateTime.Today)
+            {
+                var request = new AddParticipantsToConferenceRequest() { Participants = updateConferenceParticipantsRequest.NewParticipants.ToList() };
+                await _videoWebService.PushParticipantsAddedMessage(conferenceResponse.Id, request);
+            }
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

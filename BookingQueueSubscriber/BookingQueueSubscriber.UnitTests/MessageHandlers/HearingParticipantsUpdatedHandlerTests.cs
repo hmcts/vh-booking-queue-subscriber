@@ -22,7 +22,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             _integrationEvent = GetIntegrationEvent();
 
-            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object);
+            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
         }
 
 

@@ -7,7 +7,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 {
     public class VideoWebServiceFake: IVideoWebService
     {
-        public int PushParticipantsAddedMessageCount { get; private set; }
+        public int PushParticipantsAddedMessageCount { get; set; }
 
         public Task PushParticipantsAddedMessage(Guid conferenceId, AddParticipantsToConferenceRequest request)
         {

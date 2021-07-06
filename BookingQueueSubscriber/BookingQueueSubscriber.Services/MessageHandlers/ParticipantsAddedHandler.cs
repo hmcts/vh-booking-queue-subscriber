@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -36,7 +37,10 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             await _videoApiService.AddParticipantsToConference(conference.Id, request);
 
-            await _videoWebService.PushParticipantsAddedMessage(conference.Id, request);
+            if(conference.ScheduledDateTime.Date == DateTime.Today)
+            {
+                await _videoWebService.PushParticipantsAddedMessage(conference.Id, request);
+            }
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
