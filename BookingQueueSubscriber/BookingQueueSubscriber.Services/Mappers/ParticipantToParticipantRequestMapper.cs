@@ -16,6 +16,7 @@ namespace BookingQueueSubscriber.Services.Mappers
         {
             var request = new ParticipantRequest
             {
+                Id = participant.ParticipantId,
                 Name = participant.Fullname,
                 Username = participant.Username,
                 FirstName = participant.FirstName,

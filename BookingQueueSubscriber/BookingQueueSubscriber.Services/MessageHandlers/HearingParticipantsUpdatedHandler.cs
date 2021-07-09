@@ -37,12 +37,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             };
 
             await _videoApiService.UpdateConferenceParticipantsAsync(conferenceResponse.Id, updateConferenceParticipantsRequest);
-
-            if(updateConferenceParticipantsRequest.NewParticipants.Count > 0 && conferenceResponse.ScheduledDateTime.Date == DateTime.Today)
-            {
-                var request = new AddParticipantsToConferenceRequest() { Participants = updateConferenceParticipantsRequest.NewParticipants.ToList() };
-                await _videoWebService.PushParticipantsAddedMessage(conferenceResponse.Id, request);
-            }
+            await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

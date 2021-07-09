@@ -178,7 +178,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         [TestCase(-1, false)]
         public async Task Should_handle_participants_added_integration_event(int daysOffset, bool shouldCallVideoWeb)
         {
-            _videoWebService.PushParticipantsAddedMessageCount = 0;
+            _videoWebService.PushParticipantsUpdatedMessageCount = 0;
             var scheduledDateTime = DateTime.Today.AddDays(daysOffset).AddHours(12);
             var hearingId = Guid.NewGuid();
 
@@ -218,7 +218,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             
             await _sut.Run(message, new LoggerFake());
             _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
-            _videoWebService.PushParticipantsAddedMessageCount.Should().Be(shouldCallVideoWeb ? 1 : 0);
+            _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(shouldCallVideoWeb ? 1 : 0);
         }
 
         [Test]

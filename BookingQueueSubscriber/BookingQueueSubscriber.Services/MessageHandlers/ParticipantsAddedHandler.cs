@@ -1,17 +1,12 @@
 using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-// using VideoWebRequests = BookingQueueSubscriber.Services.VideoWeb;
-using VideoApiRequests = VideoApi.Contract.Requests;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -29,7 +24,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(ParticipantsAddedIntegrationEvent eventMessage)
         {
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
-            var request = new VideoApiRequests.AddParticipantsToConferenceRequest
+            var request = new AddParticipantsToConferenceRequest
             {
                 Participants = eventMessage.Participants
                     .Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList()
@@ -37,10 +32,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             await _videoApiService.AddParticipantsToConference(conference.Id, request);
 
-            if(conference.ScheduledDateTime.Date == DateTime.Today)
+
+            var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
             {
-                await _videoWebService.PushParticipantsAddedMessage(conference.Id, request);
-            }
+                NewParticipants =
+                    eventMessage.Participants.Select(x => ParticipantToParticipantRequestMapper.MapToParticipantRequest(x)).ToList(),
+            };
+            await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, updateConferenceParticipantsRequest);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

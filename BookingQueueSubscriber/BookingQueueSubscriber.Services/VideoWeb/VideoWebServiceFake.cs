@@ -7,11 +7,11 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 {
     public class VideoWebServiceFake: IVideoWebService
     {
-        public int PushParticipantsAddedMessageCount { get; set; }
+        public int PushParticipantsUpdatedMessageCount { get; set; }
 
-        public Task PushParticipantsAddedMessage(Guid conferenceId, AddParticipantsToConferenceRequest request)
+        public Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {
-            PushParticipantsAddedMessageCount++;
+            PushParticipantsUpdatedMessageCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
     }

@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using VideoApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Net.Http.Headers;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoWeb
 {
@@ -23,11 +18,11 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             httpClient = _httpClient;
             logger = _logger;
         }
-        public async Task PushParticipantsAddedMessage(Guid conferenceId, AddParticipantsToConferenceRequest request)
+        public async Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {
-            var path = $"internalevent/ParticipantsAdded?conferenceId={conferenceId}";
+            var path = $"internalevent/ParticipantsUpdated?conferenceId={conferenceId}";
             
-            logger.LogDebug("PushAddParticipantsMessage ConferenceId: {ConferenceId}, ParticipantCount: {ParticipantCount}", conferenceId, request.Participants.Count);
+            logger.LogDebug("PushParticipantsUpdatedMessage ConferenceId: {ConferenceId}", conferenceId);
 
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
@@ -43,7 +38,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var result = httpClient.PostAsync(path, httpContent).Result;
 
-            logger.LogDebug("PushAddParticipantsMessage result: {Result}", result);
+            logger.LogDebug("PushParticipantsUpdatedMessage result: {Result}", result);
         }
 
 
