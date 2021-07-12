@@ -173,19 +173,10 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
 
         [Test]
-        public async Task Should_handle_participants_added_integration_event(int daysOffset, bool shouldCallVideoWeb)
+        public async Task Should_handle_participants_updated_integration_event()
         {
             _videoWebService.PushParticipantsUpdatedMessageCount = 0;
-            var scheduledDateTime = DateTime.Today.AddDays(daysOffset).AddHours(12);
-            var hearingId = Guid.NewGuid();
 
-            var conferenceDetailsResponse = new ConferenceDetailsResponse()
-            {
-                Id = hearingId,
-                ScheduledDateTime = scheduledDateTime
-            };
-
-            _videoApiService.ConferenceResponse = conferenceDetailsResponse;
             const string message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
   'id': '9250401b-eaec-4b57-81fa-d79026df3e3c',
