@@ -49,12 +49,12 @@ variables:
       - group: vh-preview
   - group: vh-video-web-nonprod
     env:
-      - Preview
-      - Dev
-      - AAT
-      - Sandbox
-      - Test1
-      - Test2
+     - Preview
+     - Dev
+     - AAT
+     - Sandbox
+     - Test1
+     - Test2
   - group: vh-video-web-preprod
     env:
       - Preprod
