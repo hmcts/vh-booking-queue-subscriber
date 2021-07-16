@@ -50,11 +50,8 @@ variables:
   - group: vh-video-web-nonprod
 
   - group: vh-video-web-preprod
-    env:
-      - Preprod
+
   - group: vh-video-web-prod
-    env:
-      - Prod
 
 trigger: none
 pr: none
