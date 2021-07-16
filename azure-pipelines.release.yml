@@ -112,6 +112,7 @@ stages:
              - Test1
              - Test2
           - group: vh-video-web-preprod
+            env:
              - Preprod
           - group: vh-video-web-prod
             env:
