@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using BookingQueueSubscriber;
@@ -7,6 +8,7 @@ using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Caching.Memory;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using VH.Core.Configuration;
 using VideoApi.Client;
 
@@ -74,6 +77,7 @@ namespace BookingQueueSubscriber
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddTransient<VideoServiceTokenHandler>();
+            services.AddTransient<VideoWebTokenHandler>();
             services.AddLogging(builder => 
                 builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
@@ -84,6 +88,7 @@ namespace BookingQueueSubscriber
             if (serviceConfiguration.EnableVideoApiStub)
             {
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
+                services.AddScoped<IVideoWebService, VideoWebServiceFake>();
             }
             else
             {
@@ -97,7 +102,15 @@ namespace BookingQueueSubscriber
                         client.ReadResponseAsString = true;
                         return (IVideoApiClient)client;
                     });
+
+                services.AddTransient<IVideoWebService, VideoWebService>();
+                services.AddHttpClient<IVideoWebService, VideoWebService>(client =>
+                {
+                    client.BaseAddress = new Uri(serviceConfiguration.VideoWebUrl);
+                }).AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
             }
+
+            
         }
 
         private void RegisterMessageHandlers(IServiceCollection serviceCollection)

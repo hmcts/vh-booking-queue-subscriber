@@ -19,17 +19,18 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
         {
-            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object);
+            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushParticipantsUpdatedMessage(It.IsAny<Guid>(), It.IsAny<UpdateConferenceParticipantsRequest>()), Times.Once);
         }
 
         [Test]
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -56,7 +57,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
          [Test]
         public async Task should_call_video_api_when_request_has_linked_participants_and_is_valid()
         {
-            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object);
+            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -66,7 +67,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_has_linked_participants_and_handler_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEventWithLinkedParticipant();
             var dtoList = MapToRequestFromDto(integrationEvent.Participants[0].LinkedParticipants);

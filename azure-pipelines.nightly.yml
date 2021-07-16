@@ -48,6 +48,7 @@ variables:
     - group: vh-prod
   - ${{ if not(containsValue(parameters.prodEnvs, parameters.environment)) }}:
     - group: vh-preview
+  - group: vh-video-web-nonprod
 
 trigger: none
 pr: none
@@ -120,7 +121,14 @@ stages:
           value: vh-video-api-identifieruris
           secret: true
         - name: VhServices:VideoApiUrl
-          value: $(video_api_url)    
+          value: $(video_api_url)
+        - name: VhServices:VideoWebResourceId   
+          value: vh-video-web-identifieruris
+          secret: true
+        - name: VhServices:VideoWebUrl
+          value: $(video_web_url)
+        - name: VhServices:InternalEventSecret
+          value: $(internal_event_secret)
 
         acceptanceTestSettings:
           - name: AzureAd:ClientId
@@ -142,6 +150,13 @@ stages:
             secret: true
           - name: VhServices:VideoApiUrl
             value: $(video_api_url)
+          - name: VhServices:VideoWebResourceId   
+            value: vh-video-web-identifieruris
+            secret: true
+          - name: VhServices:VideoWebUrl
+            value: $(video_web_url)
+          - name: VhServices:InternalEventSecret
+            value: $(internal_event_secret)
           - name: UsernameStem
             value: $(UsernameStem)
         runMultiDeviceTests: false

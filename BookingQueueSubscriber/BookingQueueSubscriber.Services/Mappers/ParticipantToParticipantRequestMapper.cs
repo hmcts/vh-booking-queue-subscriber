@@ -5,15 +5,18 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 using LinkedParticipantType = VideoApi.Contract.Enums.LinkedParticipantType;
+using VideoWebRequests = BookingQueueSubscriber.Services.VideoWeb;
+using VideoApiRequests = VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
     public static class ParticipantToParticipantRequestMapper
     {
-        public static ParticipantRequest MapToParticipantRequest(ParticipantDto participant)
+        public static VideoApiRequests.ParticipantRequest MapToParticipantRequest(ParticipantDto participant)
         {
             var request = new ParticipantRequest
             {
+                Id = participant.ParticipantId,
                 Name = participant.Fullname,
                 Username = participant.Username,
                 FirstName = participant.FirstName,

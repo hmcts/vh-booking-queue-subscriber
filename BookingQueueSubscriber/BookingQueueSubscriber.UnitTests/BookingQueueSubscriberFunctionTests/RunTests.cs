@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using NUnit.Framework;
+using VideoApi.Contract.Requests;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -13,12 +18,15 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
     {
         private readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private VideoApiServiceFake _videoApiService;
+        private VideoWebServiceFake _videoWebService;
         private BookingQueueSubscriberFunction _sut;
-
+    
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
+            _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
+
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
         }
 
@@ -165,8 +173,10 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
 
         [Test]
-        public async Task Should_handle_participants_added_integration_event()
+        public async Task Should_handle_participants_updated_integration_event()
         {
+            _videoWebService.PushParticipantsUpdatedMessageCount = 0;
+
             const string message = @"{
   '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
   'id': '9250401b-eaec-4b57-81fa-d79026df3e3c',
@@ -193,8 +203,10 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
     ]
   }
 }";
+            
             await _sut.Run(message, new LoggerFake());
             _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
+            _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
 
         [Test]
