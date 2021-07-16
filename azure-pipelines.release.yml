@@ -48,13 +48,7 @@ variables:
     - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
       - group: vh-preview
   - group: vh-video-web-nonprod
-    env:
-     - Preview
-     - Dev
-     - AAT
-     - Sandbox
-     - Test1
-     - Test2
+
   - group: vh-video-web-preprod
     env:
       - Preprod
@@ -112,6 +106,20 @@ stages:
             value: $(AppUri_Prod)
             env:
              - Prod
+          - group: vh-video-web-nonprod
+            env:
+             - Preview
+             - Dev
+             - AAT
+             - Sandbox
+             - Test1
+             - Test2
+          - group: vh-video-web-preprod
+             - Preprod
+          - group: vh-video-web-prod
+            env:
+             - Prod  
+
         appSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
