@@ -42,7 +42,10 @@ namespace BookingQueueSubscriber.Services.Mappers
             {
                 return UserRole.JudicialOfficeHolder;
             }
-
+            else if (dtoUserRole == "Staff Member")
+            {
+                return UserRole.StaffMember;
+            }
             else
             {
                 return Enum.Parse<UserRole>(dtoUserRole);
