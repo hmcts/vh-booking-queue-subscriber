@@ -7,6 +7,7 @@ using VideoApi.Contract.Requests;
 using LinkedParticipantType = VideoApi.Contract.Enums.LinkedParticipantType;
 using VideoWebRequests = BookingQueueSubscriber.Services.VideoWeb;
 using VideoApiRequests = VideoApi.Contract.Requests;
+using BookingQueueSubscriber.Services.Consts;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
@@ -38,11 +39,14 @@ namespace BookingQueueSubscriber.Services.Mappers
 
         private static UserRole GetUserRole(string dtoUserRole)
         {
-            if (dtoUserRole == "Judicial Office Holder")
+            if (dtoUserRole == UserRoleName.JudicialOfficeHolder)
             {
                 return UserRole.JudicialOfficeHolder;
             }
-
+            else if (dtoUserRole == UserRoleName.StaffMember)
+            {
+                return UserRole.StaffMember;
+            }
             else
             {
                 return Enum.Parse<UserRole>(dtoUserRole);
