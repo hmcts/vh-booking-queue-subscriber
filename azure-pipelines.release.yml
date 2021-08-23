@@ -44,7 +44,7 @@ variables:
       - group: vh-video-web-prod
     - ${{ if not(containsValue(parameters.prodEnvs, parameters.environment)) }}:
       - group: vh-preview
-      - group: vh-video-web-preprod
+      #- group: vh-video-web-preprod
   - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
     - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}:
       - group: vh-prod
