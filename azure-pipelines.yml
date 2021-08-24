@@ -115,7 +115,6 @@ trigger:
     - master
     - release/*
     - hotfix/*
-    - VIH-7946-pipeline-remediation
 
 pr:
   branches:

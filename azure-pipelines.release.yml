@@ -72,7 +72,6 @@ resources:
       - master
       - hotfix/*
       - release/*
-      - VIH-7946-pipeline-remediation
 
 
 stages:
