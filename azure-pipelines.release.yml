@@ -50,6 +50,7 @@ variables:
       - group: vh-video-web-prod
     - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
       - group: vh-preview
+    - ${{ if containsValue("Preprod", parameters.environment) }}:  
       - group: vh-video-web-preprod
 
 
@@ -71,6 +72,7 @@ resources:
       - master
       - hotfix/*
       - release/*
+
 
 stages:
   - template: templates/vh-release.yml@templates
