@@ -23,6 +23,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(participantDto);
             
             request.Should().NotBeNull();
+            request.ParticipantRefId.Should().Be(participantDto.ParticipantId);
             request.Fullname.Should().Be(participantDto.Fullname);
             request.FirstName.Should().Be(participantDto.FirstName);
             request.LastName.Should().Be(participantDto.LastName);
@@ -61,6 +62,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
         {
             return Builder<ParticipantDto>.CreateNew()
                 .With(x => x.UserRole = UserRole.Individual.ToString())
+                .With(x => x.ParticipantId = Guid.NewGuid())
                 .Build();
         }
 

@@ -57,6 +57,10 @@ parameters:
       value: $(bookings_api_url)
     - name: VhServices:VideoApiUrl
       value: $(video_api_url)
+    - name: VhServices:VideoWebUrl
+      value: $(video_web_url)
+    - name: VhServices:InternalEventSecret
+      value: $(internal_event_secret)
 
   - name: appSettings
     type: object
@@ -89,13 +93,21 @@ parameters:
       value: vh-video-api-identifieruris
       secret: true
     - name: VhServices:VideoApiUrl
-      value: $(video_api_url)      
+      value: $(video_api_url)
+    - name: VhServices:VideoWebResourceId   
+      value: vh-video-web-identifieruris
+      secret: true
+    - name: VhServices:VideoWebUrl
+      value: $(video_web_url)
+    - name: VhServices:InternalEventSecret
+      value: $(internal_event_secret)   
 
 variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
   - group: vh-booking-queue-subscriber
   - group: vh-preview
+  - group: vh-video-web-nonprod
 
 trigger:
   branches:
