@@ -62,17 +62,16 @@ resources:
     - repository: templates
       type: github
       name: hmcts/azure-devops-templates
-      ref: refs/heads/master
+      ref: refs/heads/temp-fix-for-preprod-deploy
       endpoint: hmcts
   pipelines:
   - pipeline: CI
     source: hmcts.vh-booking-queue-subscriber
     trigger: 
       branches:
-        include:
-        - refs/heads/master
-        - refs/heads/hotfix/*
-        - refs/heads/release/*
+      - master
+      - hotfix/*
+      - release/*
 
 
 stages:
