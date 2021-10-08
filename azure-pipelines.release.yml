@@ -68,7 +68,6 @@ resources:
   - pipeline: CI
     source: hmcts.vh-booking-queue-subscriber
     trigger: 
-      enabled: true
       branches:
         includes:
         - master
