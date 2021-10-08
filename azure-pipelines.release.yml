@@ -73,7 +73,6 @@ resources:
       - hotfix/*
       - release/*
 
-
 stages:
   - template: templates/vh-release.yml@templates
     parameters:
