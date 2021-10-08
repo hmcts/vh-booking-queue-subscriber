@@ -2,7 +2,7 @@ parameters:
 - name: deploymentBranch
   displayName: Branch to Deploy
   type: string
-  default: refs/heads/master
+  default: $(Build.SourceBranch)
 
 - name: environment
   displayName: Environment
