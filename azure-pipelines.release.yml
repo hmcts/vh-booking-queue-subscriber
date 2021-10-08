@@ -72,8 +72,7 @@ resources:
         include:
         - master
         - hotfix/*
-        - release/*
-        
+        - refs/heads/release/*        
 
 stages:
   - template: templates/vh-release.yml@templates
