@@ -73,6 +73,7 @@ resources:
         - master
         - hotfix/*
         - release/*
+      tags:
         - refs/tags/release/*
 
 stages:
