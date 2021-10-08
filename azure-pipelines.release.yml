@@ -69,10 +69,9 @@ resources:
     source: hmcts.vh-booking-queue-subscriber
     trigger: 
       branches:
-        include:
-        - refs/heads/master
-        - refs/heads/hotfix/*
-        - refs/heads/release/*
+      - master
+      - hotfix/*
+      - release/*
 
 stages:
   - template: templates/vh-release.yml@templates
