@@ -71,7 +71,7 @@ resources:
       branches:
       - master
       - hotfix/*
-      - release/*
+      - refs/heads/release/*
 
 stages:
   - jobs:
