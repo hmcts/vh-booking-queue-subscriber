@@ -74,110 +74,117 @@ resources:
       - release/*
 
 stages:
-  - template: templates/vh-release.yml@templates
-    parameters:
-      ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
-        environments:
-          - ${{ parameters.environment }}
-        deploymentBranch: ${{ parameters.deploymentBranch }}
-      ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
-        deploymentBranch: resources.pipeline.CI.sourceBranch
-      releaseParameters:
-        runZapTests: ${{ parameters.RunZap }}
-        subscription: $(env_Subscription)
-        secrets_KeyVault: $(env_Secret_KeyVault)
-        secrets_Subscription: $(env_Secret_Subscription)
-        devOpsResource: vh_booking_queue_subscriber
-        deploymentSlot: production
-        appName: vh-booking-queue-subscriber-$(environment)
-        resourceGroup: vh-booking-queue-subscriber-$(environment)
-        testCaseFilter:
-        dependentApps:
-        - name: vh-bookings-api-$(environment)
-          resourceGroup: vh-bookings-api-$(environment)
-          healthEndpoint: $(bookings_api_url)healthcheck/health
-        - name: vh-video-api-$(environment)
-          resourceGroup: vh-video-api-$(environment)
-          healthEndpoint: $(video_api_url)healthcheck/health
-        variables:
-          - name: AppUri
-            value: $(AppUri_Prod)
-            env:
-             - Prod
-          - group: vh-video-web-nonprod
-            env:
-             - Preview
-             - Dev
-             - AAT
-             - Sandbox
-             - Test1
-             - Test2
-          - group: vh-video-web-preprod
-            env:
-             - Preprod
-          - group: vh-video-web-prod
-            env:
-             - Prod  
+  - jobs:
+    - job: Testing
+      displayName: Testing our the CD trigger
+      steps: 
+        - bash: echo "this is our CD triggered in ${{ parameters.environment }}"
 
-        appSettings:
-          - name: ApplicationInsights:InstrumentationKey
-            value: vh-core-infra-AppInsightsKey
-            secret: true
-          - name: AppInsightsKey
-            value: vh-core-infra-AppInsightsKey
-            secret: true
-          - name: AzureAd:ClientId
-            value: vh-booking-queue-subscriber-appid
-            secret: true
-          - name: AzureAd:ClientSecret
-            value: vh-booking-queue-subscriber-key
-            secret: true
-          - name: AzureAd:TenantId
-            value: tenantid
-            secret: true
-          - name: VhServices:BookingsApiResourceId
-            value: vh-bookings-api-identifieruris
-            secret: true
-          - name: VhServices:BookingsApiUrl
-            value: $(bookings_api_url)
-          - name: VhServices:VideoApiResourceId   
-            value: vh-video-api-identifieruris
-            secret: true
-          - name: VhServices:VideoApiUrl
-            value: $(video_api_url)
-          - name: VhServices:VideoWebResourceId   
-            value: vh-video-web-identifieruris
-            secret: true
-          - name: VhServices:VideoWebUrl
-            value: $(video_web_url)
-          - name: VhServices:InternalEventSecret
-            value: $(internal_event_secret)
-        acceptanceTestSettings:
-          - name: AzureAd:ClientId
-            value: vh-booking-queue-subscriber-appid
-            secret: true
-          - name: AzureAd:ClientSecret
-            value: vh-booking-queue-subscriber-key
-            secret: true
-          - name: AzureAd:TenantId
-            value: tenantid
-            secret: true
-          - name: VhServices:BookingsApiResourceId
-            value: vh-bookings-api-identifieruris
-            secret: true
-          - name: VhServices:BookingsApiUrl
-            value: $(bookings_api_url)
-          - name: VhServices:VideoApiResourceId   
-            value: vh-video-api-identifieruris
-            secret: true
-          - name: VhServices:VideoApiUrl
-            value: $(video_api_url)
-          - name: VhServices:VideoWebResourceId   
-            value: vh-video-web-identifieruris
-            secret: true
-          - name: VhServices:VideoWebUrl
-            value: $(video_web_url)
-          - name: VhServices:InternalEventSecret
-            value: $(internal_event_secret)
-          - name: UsernameStem
-            value: $(UsernameStem)
+    
+  #- template: templates/vh-release.yml@templates
+  #  parameters:
+  #    ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
+  #      environments:
+  #        - ${{ parameters.environment }}
+  #      deploymentBranch: ${{ parameters.deploymentBranch }}
+  #    ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+  #      deploymentBranch: resources.pipeline.CI.sourceBranch
+  #    releaseParameters:
+  #      runZapTests: ${{ parameters.RunZap }}
+  #      subscription: $(env_Subscription)
+  #      secrets_KeyVault: $(env_Secret_KeyVault)
+  #      secrets_Subscription: $(env_Secret_Subscription)
+  #      devOpsResource: vh_booking_queue_subscriber
+  #      deploymentSlot: production
+  #      appName: vh-booking-queue-subscriber-$(environment)
+  #      resourceGroup: vh-booking-queue-subscriber-$(environment)
+  #      testCaseFilter:
+  #      dependentApps:
+  #      - name: vh-bookings-api-$(environment)
+  #        resourceGroup: vh-bookings-api-$(environment)
+  #        healthEndpoint: $(bookings_api_url)healthcheck/health
+  #      - name: vh-video-api-$(environment)
+  #        resourceGroup: vh-video-api-$(environment)
+  #        healthEndpoint: $(video_api_url)healthcheck/health
+  #      variables:
+  #        - name: AppUri
+  #          value: $(AppUri_Prod)
+  #          env:
+  #           - Prod
+  #        - group: vh-video-web-nonprod
+  #          env:
+  #           - Preview
+  #           - Dev
+  #           - AAT
+  #           - Sandbox
+  #           - Test1
+  #           - Test2
+  #        - group: vh-video-web-preprod
+  #          env:
+  #           - Preprod
+  #        - group: vh-video-web-prod
+  #          env:
+  #           - Prod  
+#
+  #      appSettings:
+  #        - name: ApplicationInsights:InstrumentationKey
+  #          value: vh-core-infra-AppInsightsKey
+  #          secret: true
+  #        - name: AppInsightsKey
+  #          value: vh-core-infra-AppInsightsKey
+  #          secret: true
+  #        - name: AzureAd:ClientId
+  #          value: vh-booking-queue-subscriber-appid
+  #          secret: true
+  #        - name: AzureAd:ClientSecret
+  #          value: vh-booking-queue-subscriber-key
+  #          secret: true
+  #        - name: AzureAd:TenantId
+  #          value: tenantid
+  #          secret: true
+  #        - name: VhServices:BookingsApiResourceId
+  #          value: vh-bookings-api-identifieruris
+  #          secret: true
+  #        - name: VhServices:BookingsApiUrl
+  #          value: $(bookings_api_url)
+  #        - name: VhServices:VideoApiResourceId   
+  #          value: vh-video-api-identifieruris
+  #          secret: true
+  #        - name: VhServices:VideoApiUrl
+  #          value: $(video_api_url)
+  #        - name: VhServices:VideoWebResourceId   
+  #          value: vh-video-web-identifieruris
+  #          secret: true
+  #        - name: VhServices:VideoWebUrl
+  #          value: $(video_web_url)
+  #        - name: VhServices:InternalEventSecret
+  #          value: $(internal_event_secret)
+  #      acceptanceTestSettings:
+  #        - name: AzureAd:ClientId
+  #          value: vh-booking-queue-subscriber-appid
+  #          secret: true
+  #        - name: AzureAd:ClientSecret
+  #          value: vh-booking-queue-subscriber-key
+  #          secret: true
+  #        - name: AzureAd:TenantId
+  #          value: tenantid
+  #          secret: true
+  #        - name: VhServices:BookingsApiResourceId
+  #          value: vh-bookings-api-identifieruris
+  #          secret: true
+  #        - name: VhServices:BookingsApiUrl
+  #          value: $(bookings_api_url)
+  #        - name: VhServices:VideoApiResourceId   
+  #          value: vh-video-api-identifieruris
+  #          secret: true
+  #        - name: VhServices:VideoApiUrl
+  #          value: $(video_api_url)
+  #        - name: VhServices:VideoWebResourceId   
+  #          value: vh-video-web-identifieruris
+  #          secret: true
+  #        - name: VhServices:VideoWebUrl
+  #          value: $(video_web_url)
+  #        - name: VhServices:InternalEventSecret
+  #          value: $(internal_event_secret)
+  #        - name: UsernameStem
+  #          value: $(UsernameStem)
