@@ -84,6 +84,7 @@ stages:
       ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
         deploymentBranch: resources.pipeline.CI.sourceBranch
       releaseParameters:
+        runACTests: false
         runZapTests: ${{ parameters.RunZap }}
         subscription: $(env_Subscription)
         secrets_KeyVault: $(env_Secret_KeyVault)
