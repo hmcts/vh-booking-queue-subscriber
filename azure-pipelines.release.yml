@@ -65,13 +65,13 @@ resources:
       ref: refs/heads/master
       endpoint: hmcts
   pipelines:
-  - pipeline: CI
-    source: hmcts.vh-booking-queue-subscriber
-    trigger: 
-      branches:
-      - master
-      - hotfix/*
-      - refs/heads/release/*
+    - pipeline: CI
+      source: hmcts.vh-booking-queue-subscriber
+      trigger: 
+        branches:
+        - master
+        - hotfix/*
+        - refs/heads/release/*
 
 stages:
   - jobs:
