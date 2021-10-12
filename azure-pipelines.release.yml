@@ -62,7 +62,7 @@ resources:
     - repository: templates
       type: github
       name: hmcts/azure-devops-templates
-      ref: refs/heads/master
+      ref: refs/heads/temp-fix-for-prod-deploy
       endpoint: hmcts
   pipelines:
     - pipeline: CI
@@ -74,13 +74,7 @@ resources:
         - refs/heads/release/*
 
 stages:
-  - jobs:
-    - job: Testing
-      displayName: Testing our the CD trigger
-      steps: 
-        - bash: echo "this is our CD triggered in ${{ parameters.environment }}"
-
-    
+   
   - template: templates/vh-release.yml@templates
     parameters:
       ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
