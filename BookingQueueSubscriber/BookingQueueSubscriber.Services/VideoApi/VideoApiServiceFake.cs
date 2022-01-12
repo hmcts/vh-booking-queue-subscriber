@@ -115,9 +115,5 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        //Task<ConferenceDetailsResponse> IVideoApiService.BookNewConferenceAsync(BookNewConferenceRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }
