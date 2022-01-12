@@ -22,10 +22,14 @@ namespace BookingQueueSubscriber.Services.VideoApi
         public int UpdateEndpointInConferenceCount { get; set; }
         public int UpdateConferenceParticipantsAsyncCount { get; set; }
 
-        public Task BookNewConferenceAsync(BookNewConferenceRequest request)
+        public Task<ConferenceDetailsResponse> BookNewConferenceAsync(BookNewConferenceRequest request)
         {
             BookNewConferenceCount++;
-            return Task.FromResult(HttpStatusCode.OK);
+            if (ConferenceResponse == null)
+            {
+                InitConferenceResponse();
+            }
+            return Task.FromResult(ConferenceResponse);
         }
 
         public Task UpdateConferenceAsync(UpdateConferenceRequest request)
@@ -110,5 +114,10 @@ namespace BookingQueueSubscriber.Services.VideoApi
             UpdateConferenceParticipantsAsyncCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
+
+        //Task<ConferenceDetailsResponse> IVideoApiService.BookNewConferenceAsync(BookNewConferenceRequest request)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

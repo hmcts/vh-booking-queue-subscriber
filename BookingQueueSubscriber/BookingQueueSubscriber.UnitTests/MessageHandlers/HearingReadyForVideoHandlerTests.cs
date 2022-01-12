@@ -10,6 +10,7 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using VideoApi.Contract.Enums;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -18,7 +19,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
         {
-            var messageHandler = new HearingReadyForVideoHandler(VideoApiServiceMock.Object);
+            var messageHandler = new HearingReadyForVideoHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
          
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -28,11 +30,25 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new HearingReadyForVideoHandler(VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler)new HearingReadyForVideoHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
 
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
+        }
+
+        [Test]
+        public async Task Pushes_New_Conference_Added_Event_To_Video_Web()
+        {
+            var expectedConferenceId = Guid.NewGuid();
+            var messageHandler = (IMessageHandler)new HearingReadyForVideoHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse { Id = expectedConferenceId});
+
+            var integrationEvent = CreateEvent();
+            await messageHandler.HandleAsync(integrationEvent);
+
+            VideoWebServiceMock.Verify(x => x.PushNewConferenceAdded(expectedConferenceId));
         }
 
 

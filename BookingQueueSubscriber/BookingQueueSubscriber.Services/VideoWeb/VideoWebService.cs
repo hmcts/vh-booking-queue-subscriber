@@ -18,6 +18,16 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             httpClient = _httpClient;
             logger = _logger;
         }
+
+        public async Task PushNewConferenceAdded(Guid conferenceId)
+        {
+            var path = $"internalevent/ConferenceAdded?conferenceId={conferenceId}";
+
+            logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
+
+            await httpClient.PostAsync(path, null);
+        }
+
         public async Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {
             var path = $"internalevent/ParticipantsUpdated?conferenceId={conferenceId}";
@@ -40,8 +50,5 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 
             logger.LogDebug("PushParticipantsUpdatedMessage result: {Result}", result);
         }
-
-
-
     }
 }

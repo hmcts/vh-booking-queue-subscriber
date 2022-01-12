@@ -8,6 +8,13 @@ namespace BookingQueueSubscriber.Services.VideoWeb
     public class VideoWebServiceFake: IVideoWebService
     {
         public int PushParticipantsUpdatedMessageCount { get; set; }
+        public int PushNewConferenceAddedMessageCount { get; set; }
+
+        public Task PushNewConferenceAdded(Guid conferenceId)
+        {
+            PushNewConferenceAddedMessageCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
 
         public Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {

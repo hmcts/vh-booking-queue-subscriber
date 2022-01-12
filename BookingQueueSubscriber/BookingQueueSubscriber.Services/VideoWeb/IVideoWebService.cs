@@ -7,5 +7,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
     public interface IVideoWebService
     {
         Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request);
+        Task PushNewConferenceAdded(Guid conferenceId);
     }
 }
