@@ -7,7 +7,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
 {
     public interface IVideoApiService
     {
-        Task BookNewConferenceAsync(BookNewConferenceRequest request);
+        Task<ConferenceDetailsResponse> BookNewConferenceAsync(BookNewConferenceRequest request);
         Task UpdateConferenceAsync(UpdateConferenceRequest request);
         Task DeleteConferenceAsync(Guid conferenceId);
         Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId, bool includeClosed = false);

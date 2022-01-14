@@ -18,7 +18,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
             _logger = logger;
         }
 
-        public Task BookNewConferenceAsync(BookNewConferenceRequest request)
+        public Task<ConferenceDetailsResponse> BookNewConferenceAsync(BookNewConferenceRequest request)
         {
             _logger.LogInformation("Booking new conference for hearing {Hearing}", request.HearingRefId);
             return _apiClient.BookNewConferenceAsync(request);
