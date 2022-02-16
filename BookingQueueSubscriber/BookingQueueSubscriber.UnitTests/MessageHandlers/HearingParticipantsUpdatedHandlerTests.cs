@@ -1,7 +1,7 @@
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using Microsoft.Extensions.Logging;
+using BookingsApi.Contract.Enums;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -120,7 +120,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         LinkedId = Guid.NewGuid(),
                         ParticipantId = Guid.NewGuid(),
-                        Type = LinkedParticipantType.Interpreter
+                        Type = Services.MessageHandlers.Dtos.LinkedParticipantType.Interpreter
                     }
                 },
             };

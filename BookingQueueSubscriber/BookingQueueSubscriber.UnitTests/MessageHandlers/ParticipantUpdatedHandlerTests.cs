@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Requests;
 using Moq;
 using NUnit.Framework;
+using BookingsApi.Contract.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -126,7 +127,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 {
                     ParticipantId = ParticipantId,
                     LinkedId = Guid.NewGuid(),
-                    Type = LinkedParticipantType.Interpreter
+                    Type = Services.MessageHandlers.Dtos.LinkedParticipantType.Interpreter
                 }
             };
             return integrationEvent;
