@@ -11,6 +11,7 @@ using Moq;
 using NUnit.Framework;
 using VideoApi.Contract.Enums;
 using LinkedParticipantType = BookingQueueSubscriber.Services.MessageHandlers.Dtos.LinkedParticipantType;
+using BookingsApi.Contract.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
