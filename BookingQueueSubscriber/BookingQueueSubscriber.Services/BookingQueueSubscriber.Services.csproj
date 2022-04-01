@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BookingsApi.Client" Version="1.31.14" />
+      <PackageReference Include="BookingsApi.Client" Version="1.32.6" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.12" />
       <PackageReference Include="VideoApi.Client" Version="1.27.4" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
