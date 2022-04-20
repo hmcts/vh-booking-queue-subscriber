@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.25" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.2.1" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.12" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.12" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.12" />

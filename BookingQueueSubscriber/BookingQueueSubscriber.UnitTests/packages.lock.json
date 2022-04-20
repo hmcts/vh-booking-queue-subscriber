@@ -86,8 +86,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.33.7",
-        "contentHash": "Q6mIQ6Osebt2uUhcSnOc7I3uR1RwU+B2rvF8yXrEYgrdgfEW+kIaxiN6rl5zYT0ByrwjowuA+2Zovi6EVHALoQ==",
+        "resolved": "1.31.14",
+        "contentHash": "Yc7+SOek7F+lc/txqNlM5OJWzxEZjfyIgA5eRSllLw5Hgjk0hyXp4Uwapp1SgLab7aBHXNHNxXmfT4fwn51E4w==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -440,8 +440,8 @@
       },
       "Microsoft.Azure.Amqp": {
         "type": "Transitive",
-        "resolved": "2.4.9",
-        "contentHash": "BUY0Wj2E7PujIxzjg5UuIlTK9BPjRnre4hAl5fVbkHIzeR+cQysnyIm4poRzQTR1uJcLQhdiO8YtCMTRzZHB+A==",
+        "resolved": "2.4.2",
+        "contentHash": "lpLAG37LJ6UCU6mF4kGFt9mxtp6BQPAEB07pxSKDjzqRhqLrd0yHArGTg8vkIIDw5JR6iVZIhpS2vxMF4KtR0A==",
         "dependencies": {
           "System.Net.WebSockets.Client": "4.0.2",
           "System.Runtime.Serialization.Primitives": "4.1.1"
@@ -458,10 +458,10 @@
       },
       "Microsoft.Azure.ServiceBus": {
         "type": "Transitive",
-        "resolved": "4.2.1",
-        "contentHash": "P7k23loxqcUv7D5kOE8PhBoT0kfs2ztxrmZbcw6gLLXRGzPDy+Ug37nys2PFqDT+VTAVzc7Vz+6XAWsvSjhJ2A==",
+        "resolved": "4.2.0",
+        "contentHash": "CzxYGABXkM3SRaPG6AfKyvwtSHLaugUd0PQ8lAWixCORbC89DulJuIgvuJIT9GyTCfgSne5oBl4/oTlyWbCv5g==",
         "dependencies": {
-          "Microsoft.Azure.Amqp": "2.4.9",
+          "Microsoft.Azure.Amqp": "[2.4.2, 3.0.0)",
           "Microsoft.Azure.Services.AppAuthentication": "[1.0.3, 2.0.0)",
           "Newtonsoft.Json": "10.0.3",
           "System.Diagnostics.DiagnosticSource": "4.5.1",
@@ -530,10 +530,10 @@
       },
       "Microsoft.Azure.WebJobs.Extensions.ServiceBus": {
         "type": "Transitive",
-        "resolved": "4.2.1",
-        "contentHash": "hPBoCw2t54FnPVXW9afgkouCFN5qVCMWy7mVUfCIcQHA+Aw42kiBd6C2pyRRx15WRHXimqECB7ZkjzyFyUGN3Q==",
+        "resolved": "4.2.0",
+        "contentHash": "1IS+u59qspEGhAVRHoAKQhWkBeZ8S+hfX9XQBua57OEDIl9byKbZXqM2UlbpcPi1hmauP5RxfrLfKfp1u/CCsA==",
         "dependencies": {
-          "Microsoft.Azure.ServiceBus": "4.2.1",
+          "Microsoft.Azure.ServiceBus": "4.2.0",
           "Microsoft.Azure.WebJobs": "3.0.19",
           "Microsoft.Azure.WebJobs.Sources": "3.0.19"
         }
@@ -2281,7 +2281,7 @@
           "Microsoft.ApplicationInsights.AspNetCore": "2.15.0",
           "Microsoft.AspNetCore.Hosting": "2.2.7",
           "Microsoft.Azure.WebJobs": "3.0.25",
-          "Microsoft.Azure.WebJobs.Extensions.ServiceBus": "4.2.1",
+          "Microsoft.Azure.WebJobs.Extensions.ServiceBus": "4.2.0",
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.12",
           "Microsoft.Extensions.Configuration.UserSecrets": "3.1.12",
           "Microsoft.Extensions.DependencyInjection": "3.1.12",
@@ -2307,7 +2307,7 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "1.0.0",
-          "BookingsApi.Client": "1.33.7",
+          "BookingsApi.Client": "1.31.14",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.12",
           "System.IdentityModel.Tokens.Jwt": "6.11.1",
           "VideoApi.Client": "1.27.4"
