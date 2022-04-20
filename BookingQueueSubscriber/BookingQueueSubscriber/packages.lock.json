@@ -2247,6 +2247,7 @@
         "dependencies": {
           "BookingQueueSubscriber.Common": "1.0.0",
           "BookingsApi.Client": "1.33.7",
+
           "Microsoft.Extensions.Logging.Abstractions": "3.1.12",
           "System.IdentityModel.Tokens.Jwt": "6.11.1",
           "VideoApi.Client": "1.27.4"
