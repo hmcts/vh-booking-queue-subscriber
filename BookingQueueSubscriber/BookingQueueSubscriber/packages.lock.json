@@ -64,11 +64,11 @@
       },
       "Microsoft.Azure.WebJobs.Extensions.ServiceBus": {
         "type": "Direct",
-        "requested": "[4.2.0, )",
-        "resolved": "4.2.0",
-        "contentHash": "1IS+u59qspEGhAVRHoAKQhWkBeZ8S+hfX9XQBua57OEDIl9byKbZXqM2UlbpcPi1hmauP5RxfrLfKfp1u/CCsA==",
+        "requested": "[4.2.1, )",
+        "resolved": "4.2.1",
+        "contentHash": "hPBoCw2t54FnPVXW9afgkouCFN5qVCMWy7mVUfCIcQHA+Aw42kiBd6C2pyRRx15WRHXimqECB7ZkjzyFyUGN3Q==",
         "dependencies": {
-          "Microsoft.Azure.ServiceBus": "4.2.0",
+          "Microsoft.Azure.ServiceBus": "4.2.1",
           "Microsoft.Azure.WebJobs": "3.0.19",
           "Microsoft.Azure.WebJobs.Sources": "3.0.19"
         }
@@ -461,8 +461,8 @@
       },
       "Microsoft.Azure.Amqp": {
         "type": "Transitive",
-        "resolved": "2.4.2",
-        "contentHash": "lpLAG37LJ6UCU6mF4kGFt9mxtp6BQPAEB07pxSKDjzqRhqLrd0yHArGTg8vkIIDw5JR6iVZIhpS2vxMF4KtR0A==",
+        "resolved": "2.4.9",
+        "contentHash": "BUY0Wj2E7PujIxzjg5UuIlTK9BPjRnre4hAl5fVbkHIzeR+cQysnyIm4poRzQTR1uJcLQhdiO8YtCMTRzZHB+A==",
         "dependencies": {
           "System.Net.WebSockets.Client": "4.0.2",
           "System.Runtime.Serialization.Primitives": "4.1.1"
@@ -479,10 +479,10 @@
       },
       "Microsoft.Azure.ServiceBus": {
         "type": "Transitive",
-        "resolved": "4.2.0",
-        "contentHash": "CzxYGABXkM3SRaPG6AfKyvwtSHLaugUd0PQ8lAWixCORbC89DulJuIgvuJIT9GyTCfgSne5oBl4/oTlyWbCv5g==",
+        "resolved": "4.2.1",
+        "contentHash": "P7k23loxqcUv7D5kOE8PhBoT0kfs2ztxrmZbcw6gLLXRGzPDy+Ug37nys2PFqDT+VTAVzc7Vz+6XAWsvSjhJ2A==",
         "dependencies": {
-          "Microsoft.Azure.Amqp": "[2.4.2, 3.0.0)",
+          "Microsoft.Azure.Amqp": "2.4.9",
           "Microsoft.Azure.Services.AppAuthentication": "[1.0.3, 2.0.0)",
           "Newtonsoft.Json": "10.0.3",
           "System.Diagnostics.DiagnosticSource": "4.5.1",
