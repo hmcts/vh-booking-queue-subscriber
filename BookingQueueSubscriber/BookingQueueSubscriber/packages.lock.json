@@ -936,6 +936,15 @@
           "Newtonsoft.Json": "10.0.1"
         }
       },
+      "NotificationApi.Client": {
+        "type": "Transitive",
+        "resolved": "1.34.4",
+        "contentHash": "L7qr5un2IB6j+wGlImONPWeRHLHak7/5nkGvCAOsuSRlMkjzG1QCdleHDjNlmy9APpt/ZftEYJwQgTSIqHU3dA==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Newtonsoft.Json": "12.0.3"
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
         "type": "Transitive",
         "resolved": "4.3.2",
@@ -2201,6 +2210,20 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
+      "TimeZoneConverter": {
+        "type": "Transitive",
+        "resolved": "3.3.0",
+        "contentHash": "OeXMqNZ1Xt/9ehELN2khz8vT8wckg8VVa6Rx+XeYTdEIMaKETlSXkCzj4TuCGQ0L2SgXdpjGSh1XwZVusZE2Yw=="
+      },
+      "UserApi.Client": {
+        "type": "Transitive",
+        "resolved": "1.30.1",
+        "contentHash": "uoBLn6V2m29+X/GiOWXDby4O4/MVj4/q5egFRTZYiTOfuSo1zRMZlYBcnaMKa0LysVJ2ItMuW4NvvjNA+UG40Q==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Newtonsoft.Json": "12.0.3"
+        }
+      },
       "VH.Core.Configuration": {
         "type": "Transitive",
         "resolved": "0.1.12",
@@ -2215,8 +2238,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.27.4",
-        "contentHash": "v1N+K2TUNp0cxHPzOyDjNFyCAV3kmJ7iQrr2psRI7VQzElg74HAeQtMJph3os9WcK4iJFRQcO0zor+k50ahImQ==",
+        "resolved": "1.35.3",
+        "contentHash": "CenFFPsHySmV0WosJnLrc5H7mfFfm5BssC/KsIlor4qie8JNdG8cjL1EDmSvppiX5feHcjQE2sK+gYH3yhXSRA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2248,8 +2271,11 @@
           "BookingQueueSubscriber.Common": "1.0.0",
           "BookingsApi.Client": "1.33.7",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.12",
+          "NotificationApi.Client": "1.34.4",
           "System.IdentityModel.Tokens.Jwt": "6.11.1",
-          "VideoApi.Client": "1.27.4"
+          "TimeZoneConverter": "3.3.0",
+          "UserApi.Client": "1.30.1",
+          "VideoApi.Client": "1.35.3"
         }
       }
     }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Services.NotificationApi;
+using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using Moq;
@@ -13,6 +15,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
     {
         protected Mock<IVideoApiService> VideoApiServiceMock { get; set; }
         protected Mock<IVideoWebService> VideoWebServiceMock { get; set; }
+        protected Mock<IUserService> UserServiceMock { get; set; }
+        protected Mock<INotificationService> NotificationServiceMock { get; set; }
         protected Guid ParticipantId { get; set; }
         protected Guid HearingId { get; set; }
         protected ConferenceDetailsResponse ConferenceDetailsResponse { get; set; }
@@ -35,6 +39,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId, It.IsAny<bool>())).ReturnsAsync(ConferenceDetailsResponse);
 
             VideoWebServiceMock = new Mock<IVideoWebService>();
+            UserServiceMock = new Mock<IUserService>();
+            NotificationServiceMock = new Mock<INotificationService>();
         }
     }
 }

@@ -10,5 +10,9 @@ namespace BookingQueueSubscriber.Common.Configuration
         public string VideoWebResourceId { get; set; }
         public string VideoWebUrl { get; set; }
         public string InternalEventSecret { get; set; }
+        public string UserApiResourceId { get; set; }
+        public string UserApiUrl { get; set; } = "https://localhost:5200/";
+        public string NotificationApiResourceId { get; set; }
+        public string NotificationApiUrl { get; set; } = "https://localhost:59390/";
     }
 }
