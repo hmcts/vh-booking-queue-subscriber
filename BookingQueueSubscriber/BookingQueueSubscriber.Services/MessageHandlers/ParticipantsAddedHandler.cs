@@ -57,23 +57,25 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private async Task CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
         {
             User user = null;
-            if (string.IsNullOrWhiteSpace(participant.Username) && !string.Equals(participant.UserRole, RoleNames.Judge))
+            // TODO: Is this logic correct? do we create user accoutns for panel members and wingers - so does it work here?
+            if (!string.Equals(participant.HearingRole, RoleNames.Judge))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);
                 participant.Username = user.UserName;
-                // Update participant with the user name though bookings api.
+                // TODO: Update participant with the user name though bookings api.
             }
 
             if (user != null)
             {
-                await _notificationService.SendNewUserEmailParticipantAsync(hearingId, participant, user.Password);
+                await _notificationService.SendNewUserAccountNotificationAsync(hearingId, participant, user.Password);
             }
         }
-
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
             await HandleAsync((ParticipantsAddedIntegrationEvent)integrationEvent);
         }
     }
+
+
 }

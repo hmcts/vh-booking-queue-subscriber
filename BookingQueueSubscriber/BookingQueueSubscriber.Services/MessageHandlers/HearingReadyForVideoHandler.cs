@@ -33,6 +33,11 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
             }
 
+            if (eventMessage.Hearing.GroupId == null) // Not a multi day hearing
+            {
+                await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
+            }
+
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);
 
@@ -54,7 +59,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             if (user != null)
             {
-                await _notificationService.SendNewUserEmailParticipantAsync(hearingId, participant, user.Password);
+                await _notificationService.SendNewUserAccountNotificationAsync(hearingId, participant, user.Password);
             }
         }
 

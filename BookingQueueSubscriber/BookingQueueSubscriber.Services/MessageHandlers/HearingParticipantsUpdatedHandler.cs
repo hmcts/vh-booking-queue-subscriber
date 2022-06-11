@@ -65,7 +65,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }
             if (user != null)
             {
-                await _notificationService.SendNewUserEmailParticipantAsync(hearingId, participant, user.Password);
+                await _notificationService.SendNewUserAccountNotificationAsync(hearingId, participant, user.Password);
             }
         }
 
