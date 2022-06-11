@@ -32,12 +32,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(ParticipantsAddedIntegrationEvent eventMessage)
         {
-            foreach (var participant in eventMessage.Participants)
-            {
-                await CreateUserAndSendNotificationAsync(eventMessage.HearingId, participant);
-            }
+            await HandleUserCreationAndNotifications(eventMessage);
 
-            var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
+            var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId);
             var request = new AddParticipantsToConferenceRequest
             {
                 Participants = eventMessage.Participants
@@ -54,10 +51,20 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, updateConferenceParticipantsRequest);
         }
 
+        private async Task HandleUserCreationAndNotifications(ParticipantsAddedIntegrationEvent eventMessage)
+        {
+            foreach (var participant in eventMessage.Participants)
+            {
+                await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
+            }
+
+            await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
+        }
+
         private async Task CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
         {
             User user = null;
-            // TODO: Is this logic correct? do we create user accoutns for panel members and wingers - so does it work here?
+            // TODO: Is this logic correct? do we create user accounts for panel members and wingers - so does it work here?
             if (!string.Equals(participant.HearingRole, RoleNames.Judge))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
@@ -71,6 +78,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 await _notificationService.SendNewUserAccountNotificationAsync(hearingId, participant, user.Password);
             }
         }
+
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
             await HandleAsync((ParticipantsAddedIntegrationEvent)integrationEvent);

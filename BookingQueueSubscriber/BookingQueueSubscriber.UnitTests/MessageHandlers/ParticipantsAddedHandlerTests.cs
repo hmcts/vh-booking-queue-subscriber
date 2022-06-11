@@ -103,9 +103,10 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
         private ParticipantsAddedIntegrationEvent GetIntegrationEvent()
         {
+
             return new ParticipantsAddedIntegrationEvent
             {
-                HearingId = HearingId,
+                Hearing = GetHearingDto(),
                 Participants = new List<ParticipantDto>
                 {
                     new ParticipantDto
@@ -135,7 +136,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             return new ParticipantsAddedIntegrationEvent
             {
-                HearingId = HearingId,
+                Hearing = GetHearingDto(),
                 Participants = new List<ParticipantDto>
                 {
                     new ParticipantDto
@@ -163,7 +164,22 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 }
             };
         }
-        
+
+        private static HearingDto GetHearingDto()
+        {
+            return new HearingDto
+            {
+                HearingId = Guid.NewGuid(),
+                CaseNumber = "Test1234",
+                CaseType = "Generic",
+                CaseName = "Automated Case vs Humans",
+                ScheduledDuration = 60,
+                ScheduledDateTime = DateTime.UtcNow,
+                HearingVenueName = "MyVenue",
+                RecordAudio = true
+            };
+        }
+
         private IList<LinkedParticipantRequest> MapToRequestFromDto(IList<LinkedParticipantDto> linked)
         {
             return linked.Select(l => new LinkedParticipantRequest()

@@ -18,7 +18,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly IUserService _userService;
         private readonly INotificationService _notificationService;
 
-        public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService, IUserService userService, INotificationService notificationService)
+        public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService, 
+            IUserService userService, 
+            INotificationService notificationService)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
@@ -33,7 +35,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
             }
 
-            if (eventMessage.Hearing.GroupId == null) // Not a multi day hearing
+            if (!eventMessage.Hearing.GroupId.HasValue) // Not a multi day hearing
             {
                 await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
             }

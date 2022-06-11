@@ -85,7 +85,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
 
-            //if BookAndConfirm toggle switched off include where userRole != Judge LINQ clause to requests
             var requests = participants
                 .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days))
                 .ToList();
@@ -119,7 +118,5 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             notificationRequests = notificationRequests.Where(req => !string.IsNullOrWhiteSpace(req.ContactEmail)).ToList();
             await Task.WhenAll(notificationRequests.Select(_notificationApiClient.CreateNewNotificationAsync));
         }
-
-
     }
 }
