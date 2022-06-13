@@ -151,6 +151,16 @@ stages:
             secret: true
           - name: VhServices:VideoWebUrl
             value: $(video_web_url)
+          - name: VhServices:NotificationApiResourceId
+            value: vh-notification-api-identifieruris
+            secret: true
+          - name: VhServices:NotificationApiUrl
+            value: $(notification_api_url)
+          - name: VhServices:UserApiResourceId   
+            value: vh-user-api-identifieruris
+            secret: true
+          - name: VhServices:UserApiUrl
+            value: $(user_api_url)            
           - name: VhServices:InternalEventSecret
             value: $(internal_event_secret)
         acceptanceTestSettings:

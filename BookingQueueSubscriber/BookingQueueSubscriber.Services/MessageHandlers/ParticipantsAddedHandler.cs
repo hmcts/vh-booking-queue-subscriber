@@ -46,7 +46,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
             {
                 NewParticipants =
-                    eventMessage.Participants.Select(x => ParticipantToParticipantRequestMapper.MapToParticipantRequest(x)).ToList(),
+                    eventMessage.Participants.Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList(),
             };
             await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, updateConferenceParticipantsRequest);
         }

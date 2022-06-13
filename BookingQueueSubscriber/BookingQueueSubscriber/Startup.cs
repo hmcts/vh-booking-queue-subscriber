@@ -81,6 +81,8 @@ namespace BookingQueueSubscriber
             services.AddTransient<VideoWebTokenHandler>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<NotificationServiceTokenHandler>();
+            services.AddTransient<UserServiceTokenHandler>();
             services.AddLogging(builder => 
                 builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
@@ -123,7 +125,6 @@ namespace BookingQueueSubscriber
                         return (IUserApiClient)client;
                     });
 
-                services.AddTransient<NotificationServiceTokenHandler>();
                 services.AddHttpClient<INotificationApiClient, NotificationApiClient>()
                     .AddHttpMessageHandler<NotificationServiceTokenHandler>()
                     .AddTypedClient(httpClient =>
