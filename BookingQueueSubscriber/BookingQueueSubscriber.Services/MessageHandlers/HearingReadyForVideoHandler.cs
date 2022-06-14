@@ -48,7 +48,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }
 
             if (!eventMessage.Hearing.GroupId.HasValue ||
-                eventMessage.Hearing.GroupId.GetValueOrDefault() != Guid.Empty) // Not a multi day hearing
+                eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty) // Not a multi day hearing
             {
                 await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
             }
