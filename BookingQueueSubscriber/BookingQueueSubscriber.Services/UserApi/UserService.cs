@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingsApi.Contract.Requests;
+using Microsoft.Extensions.Logging;
 using UserApi.Client;
 using UserApi.Contract.Requests;
 using UserApi.Contract.Responses;
@@ -19,6 +20,7 @@ namespace BookingQueueSubscriber.Services.UserApi
     public class UserService : IUserService
     {
         private readonly IUserApiClient _userApiClient;
+        private readonly ILogger<UserService> _logger;
 
         public const string Representative = "Representative";
         public const string Joh = "Judicial Office Holder";
@@ -27,9 +29,10 @@ namespace BookingQueueSubscriber.Services.UserApi
         public const string VirtualRoomProfessionalUser = "VirtualRoomProfessionalUser";
         public const string JudicialOfficeHolder = "JudicialOfficeHolder";
         public const string StaffMember = "Staff Member";
-        public UserService(IUserApiClient userApiClient)
+        public UserService(IUserApiClient userApiClient, ILogger<UserService> logger)
         {
             _userApiClient = userApiClient;
+            _logger = logger;
         }
 
         public async Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser)
@@ -37,7 +40,7 @@ namespace BookingQueueSubscriber.Services.UserApi
             var userProfile = await GetUserByContactEmail(contactEmail);
             if (userProfile == null)
             {
-                //_logger.LogDebug("User with contact email {contactEmail} does not exist. Creating an account.", participant.ContactEmail);
+                _logger.LogInformation("User with contact email {contactEmail} does not exist. Creating an account.", contactEmail);
                 // create the user in AD.
                 var newUser = await CreateNewUserInAD(firstname, lastname, contactEmail, isTestUser);
                 return new User
@@ -55,9 +58,6 @@ namespace BookingQueueSubscriber.Services.UserApi
             };
 
         }
-
-
-
         public async Task AssignParticipantToGroup(string username, string userRole)
         {
             switch (userRole)
@@ -82,7 +82,7 @@ namespace BookingQueueSubscriber.Services.UserApi
         private async Task<NewUserResponse> CreateNewUserInAD(string firstname, string lastname, string contactEmail, bool isTestUser)
         {
             const string BLANK = " ";
-            //_logger.LogDebug("Attempting to create an AD user with contact email {contactEmail}.", participant.ContactEmail);
+            _logger.LogInformation("Attempting to create an AD user with contact email {contactEmail}.", contactEmail);
             var createUserRequest = new CreateUserRequest
             {
                 FirstName = firstname?.Replace(BLANK, string.Empty),
@@ -92,30 +92,29 @@ namespace BookingQueueSubscriber.Services.UserApi
             };
 
             var newUserResponse = await _userApiClient.CreateUserAsync(createUserRequest);
-            //_logger.LogDebug("Successfully created an AD user with contact email {contactEmail}.", participant.ContactEmail);
+            _logger.LogDebug("Successfully created an AD user with contact email {contactEmail}.", contactEmail);
             //participant.Username = newUserResponse.Username;
             return newUserResponse;
         }
 
-
         private async Task<UserProfile> GetUserByContactEmail(string emailAddress)
         {
-            //_logger.LogDebug("Attempt to get username by contact email {contactEmail}.", emailAddress);
+            _logger.LogInformation("Attempt to get username by contact email {contactEmail}.", emailAddress);
             try
             {
                 var user = await _userApiClient.GetUserByEmailAsync(emailAddress);
-                //_logger.LogDebug("User with contact email {contactEmail} found.", emailAddress);
+                _logger.LogInformation("User with contact email {contactEmail} found.", emailAddress);
                 return user;
             }
             catch (UserApiException e)
             {
                 if (e.StatusCode == (int)HttpStatusCode.NotFound)
                 {
-                    //_logger.LogWarning("User with contact email {contactEmail} not found.", emailAddress);
+                    _logger.LogWarning("User with contact email {contactEmail} not found.", emailAddress);
                     return null;
                 }
 
-                //_logger.LogError(e, "Unhandled error getting a user with contact email {contactEmail}.", emailAddress);
+                _logger.LogError(e, "Unhandled error getting a user with contact email {contactEmail}.", emailAddress);
                 throw;
             }
         }
@@ -129,13 +128,13 @@ namespace BookingQueueSubscriber.Services.UserApi
                     GroupName = groupName
                 };
                 await _userApiClient.AddUserToGroupAsync(addUserToGroupRequest);
-                //_logger.LogDebug("{username} to group {group}.", username, addUserToGroupRequest.GroupName);
+                _logger.LogDebug("{username} to group {group}.", username, addUserToGroupRequest.GroupName);
             }
             catch (UserApiException e)
             {
-                //_logger.LogError(e,
-                //    $"Failed to add user {username} to {groupName} in User API. " +
-                //    $"Status Code {e.StatusCode} - Message {e.Message}");
+                _logger.LogError(e,
+                    $"Failed to add user {username} to {groupName} in User API. " +
+                    $"Status Code {e.StatusCode} - Message {e.Message}");
                 throw;
             }
         }
