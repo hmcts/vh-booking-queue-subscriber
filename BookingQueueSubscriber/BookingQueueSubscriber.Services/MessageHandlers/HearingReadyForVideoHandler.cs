@@ -35,7 +35,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
             }
 
-            if (!eventMessage.Hearing.GroupId.HasValue) // Not a multi day hearing
+            if (!eventMessage.Hearing.GroupId.HasValue || eventMessage.Hearing.GroupId.GetValueOrDefault() != Guid.Empty) // Not a multi day hearing
             {
                 await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
             }
