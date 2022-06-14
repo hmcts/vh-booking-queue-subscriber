@@ -11,7 +11,7 @@ namespace BookingQueueSubscriber.Services
     {
         public static bool IsGenericHearing(this HearingDto hearing)
         {
-            return hearing.CaseType.Equals("Generic", StringComparison.CurrentCultureIgnoreCase);
+            return hearing.CaseType.Equals("Generic", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool HasScheduleAmended(this HearingDto hearing, HearingDto anotherHearing)

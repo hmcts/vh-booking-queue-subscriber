@@ -63,8 +63,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
 
-            var caseName = hearing.CaseName;
-            var caseNumber = hearing.CaseNumber;
+            //var caseName = hearing.CaseName;
+            //var caseNumber = hearing.CaseNumber;
             //if (!hearing.DoesJudgeEmailExist() || originalDateTime == null ||
             //    originalHearing.GroupId != originalHearing.Id)
             //{
