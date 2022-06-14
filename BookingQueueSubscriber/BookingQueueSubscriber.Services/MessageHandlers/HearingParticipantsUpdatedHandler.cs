@@ -32,11 +32,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingParticipantsUpdatedIntegrationEvent eventMessage)
         {
-            var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId, true);
-            foreach (var participant in eventMessage.NewParticipants)
-            {
-                await CreateUserAndSendNotificationAsync(eventMessage.HearingId, participant);
-            }
+            var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId, true);
+            await HandleUserCreationAndNotifications(eventMessage);
 
             var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
             {
@@ -53,10 +50,19 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
         }
 
+        private async Task HandleUserCreationAndNotifications(HearingParticipantsUpdatedIntegrationEvent eventMessage)
+        {
+            foreach (var participant in eventMessage.NewParticipants)
+            {
+                await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
+            }
+
+            await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.NewParticipants);
+        }
         private async Task CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
         {
             User user = null;
-            if (string.IsNullOrWhiteSpace(participant.Username) && !string.Equals(participant.UserRole, RoleNames.Judge))
+            if (!string.Equals(participant.UserRole, RoleNames.Judge))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);

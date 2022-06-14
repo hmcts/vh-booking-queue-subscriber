@@ -65,7 +65,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             User user = null;
             // TODO: Is this logic correct? do we create user accounts for panel members and wingers - so does it work here?
-            if (!string.Equals(participant.HearingRole, RoleNames.Judge))
+            if (!string.Equals(participant.UserRole, RoleNames.Judge))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);

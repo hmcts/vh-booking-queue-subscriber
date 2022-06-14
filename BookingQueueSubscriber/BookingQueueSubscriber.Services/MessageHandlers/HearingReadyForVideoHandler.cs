@@ -30,15 +30,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            foreach (var participant in eventMessage.Participants)
-            {
-                await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
-            }
-
-            if (!eventMessage.Hearing.GroupId.HasValue || eventMessage.Hearing.GroupId.GetValueOrDefault() != Guid.Empty) // Not a multi day hearing
-            {
-                await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
-            }
+            await HandleUserCreationAndNotifications(eventMessage);
 
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);
@@ -46,6 +38,20 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
             
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
+        }
+
+        private async Task HandleUserCreationAndNotifications(HearingIsReadyForVideoIntegrationEvent eventMessage)
+        {
+            foreach (var participant in eventMessage.Participants)
+            {
+                await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
+            }
+
+            if (!eventMessage.Hearing.GroupId.HasValue ||
+                eventMessage.Hearing.GroupId.GetValueOrDefault() != Guid.Empty) // Not a multi day hearing
+            {
+                await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
+            }
         }
 
         private async Task CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)

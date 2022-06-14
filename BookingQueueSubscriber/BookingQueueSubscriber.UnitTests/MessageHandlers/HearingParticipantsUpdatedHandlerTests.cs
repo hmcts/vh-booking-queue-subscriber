@@ -75,9 +75,20 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
         private HearingParticipantsUpdatedIntegrationEvent GetIntegrationEvent()
         {
+            var hearingDto = new HearingDto
+            {
+                HearingId = Guid.NewGuid(),
+                CaseNumber = "Test1234",
+                CaseType = "Generic",
+                CaseName = "Automated Case vs Humans",
+                ScheduledDuration = 60,
+                ScheduledDateTime = DateTime.UtcNow,
+                HearingVenueName = "MyVenue",
+                RecordAudio = true
+            };
             return new HearingParticipantsUpdatedIntegrationEvent
             {
-                HearingId = HearingId,
+                Hearing = hearingDto,
                 ExistingParticipants = new List<ParticipantDto>
                 {
                     new ParticipantDto
