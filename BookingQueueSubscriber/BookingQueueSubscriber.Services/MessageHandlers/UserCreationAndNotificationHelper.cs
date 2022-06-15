@@ -35,7 +35,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private async Task CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
         {
             User user = null;
-            if (!string.Equals(participant.HearingRole, RoleNames.Judge) ||
+            if (!string.Equals(participant.HearingRole, RoleNames.Judge) &&
                 !IsPanelMemberOrWingerWithUsername(participant))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,

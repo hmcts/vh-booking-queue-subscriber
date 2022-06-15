@@ -230,7 +230,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         private static Dictionary<string, string> InitHearingNotificationParams(HearingDto hearing)
-        {
+        {   
             return new Dictionary<string, string>
             {
                 {NotifyParams.CaseName, hearing.CaseName},
@@ -242,7 +242,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         private static string GetContactEmail(ParticipantDto participant)
         {
             var contactEmail = participant.ContactEmail;
-            if (!participant.IsJudgeEmailEJud() && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser))
+            if (participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.IsUsernameEjud() 
+                && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser))
             {
                 contactEmail = participant.ContactEmailForNonEJudJudgeUser;
             }

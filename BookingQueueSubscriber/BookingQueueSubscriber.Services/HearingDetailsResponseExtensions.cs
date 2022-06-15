@@ -99,13 +99,13 @@ namespace BookingQueueSubscriber.Services
         public static bool IsJudgeEmailEJud(this ParticipantDto participant)
         {
             return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) &&
-                   IsEmailEjud(participant);
+                   IsUsernameEjud(participant);
         }
 
         public static bool IsParticipantAEJudJudicialOfficeHolder(this ParticipantDto participant)
         {
             return participant.UserRole.Equals(RoleNames.JudicialOfficeHolder, StringComparison.CurrentCultureIgnoreCase) &&
-                   IsEmailEjud(participant);
+                   IsUsernameEjud(participant);
         }
 
         public static bool IsParticipantAJudicialOfficeHolderOrJudge(this ParticipantDto participant)
@@ -115,7 +115,7 @@ namespace BookingQueueSubscriber.Services
             return joh || judge;
         }
 
-        private static bool IsEmailEjud(this ParticipantDto participant)
+        public static bool IsUsernameEjud(this ParticipantDto participant)
         {
             return !string.IsNullOrEmpty(participant.Username) && participant.Username.Contains("judiciary", StringComparison.CurrentCultureIgnoreCase);
         }
