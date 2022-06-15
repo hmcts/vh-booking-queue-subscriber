@@ -1,9 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
@@ -30,7 +28,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            await HandleUserCreationAndNotifications(eventMessage);
+            await new UserCreationAndNotificationHelper(_notificationService, _userService)
+                .HandleUserCreationAndNotificationsAsync(eventMessage.Hearing, eventMessage.Participants);
 
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);
@@ -38,37 +37,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
             
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
-        }
-
-        private async Task HandleUserCreationAndNotifications(HearingIsReadyForVideoIntegrationEvent eventMessage)
-        {
-            foreach (var participant in eventMessage.Participants)
-            {
-                await CreateUserAndSendNotificationAsync(eventMessage.Hearing.HearingId, participant);
-            }
-
-            if (!eventMessage.Hearing.GroupId.HasValue ||
-                eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty) // Not a multi day hearing
-            {
-                await _notificationService.SendNewHearingNotification(eventMessage.Hearing, eventMessage.Participants);
-            }
-        }
-
-        private async Task CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
-        {
-            User user = null;
-            if (!string.Equals(participant.UserRole, RoleNames.Judge))
-            {
-                user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
-                    participant.LastName, participant.ContactEmail, false);
-                participant.Username = user.UserName;
-                // Update participant with the user name though bookings api.
-            }
-
-            if (user != null)
-            {
-                await _notificationService.SendNewUserAccountNotificationAsync(hearingId, participant, user.Password);
-            }
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

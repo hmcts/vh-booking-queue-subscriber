@@ -39,6 +39,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         public static AddNotificationRequest MapToNewHearingNotification(HearingDto hearing, ParticipantDto participant)
         {
             var parameters = InitHearingNotificationParams(hearing);
+            var contactEmail = GetContactEmail(participant);
 
             NotificationType notificationType;
             if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase))
@@ -70,16 +71,19 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 HearingId = hearing.HearingId,
                 MessageType = MessageType.Email,
-                ContactEmail = participant.ContactEmail,
+                ContactEmail = contactEmail,
                 NotificationType = notificationType,
                 ParticipantId = participant.ParticipantId,
                 PhoneNumber = participant.ContactTelephone,
                 Parameters = parameters
             };
         }
+
         public static AddNotificationRequest MapToHearingAmendmentNotification(HearingDto hearing, ParticipantDto participant, DateTime originalDateTime,
             DateTime newDateTime)
         {
+            var contactEmail = GetContactEmail(participant);
+
             var parameters = new Dictionary<string, string>
             {
                 {NotifyParams.CaseName, hearing.CaseName},
@@ -118,7 +122,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 HearingId = hearing.HearingId,
                 MessageType = MessageType.Email,
-                ContactEmail = participant.ContactEmail,
+                ContactEmail = contactEmail,
                 NotificationType = notificationType,
                 ParticipantId = participant.ParticipantId,
                 PhoneNumber = participant.ContactTelephone,
@@ -129,6 +133,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         public static AddNotificationRequest MapToMultiDayHearingConfirmationNotification(
             HearingDto hearing, ParticipantDto participant, int days)
         {
+            var contactEmail = GetContactEmail(participant);
+
             var cleanedCaseName = hearing.CaseName.Replace($"Day 1 of {days}", string.Empty).Trim();
             var parameters = new Dictionary<string, string>
             {
@@ -166,7 +172,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 HearingId = hearing.HearingId,
                 MessageType = MessageType.Email,
-                ContactEmail = participant.ContactEmail,
+                ContactEmail = contactEmail,
                 NotificationType = notificationType,
                 ParticipantId = participant.ParticipantId,
                 PhoneNumber = participant.ContactTelephone,
@@ -176,6 +182,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         public static AddNotificationRequest MapToDemoOrTestNotification(HearingDto hearing, ParticipantDto participant, string testType)
         {
+            var contactEmail = GetContactEmail(participant);
+
             var parameters = new Dictionary<string, string>()
             {
                 {NotifyParams.CaseNumber, hearing.CaseNumber},
@@ -213,7 +221,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 HearingId = hearing.HearingId,
                 MessageType = MessageType.Email,
-                ContactEmail = participant.ContactEmail,
+                ContactEmail = contactEmail,
                 NotificationType = notificationType,
                 ParticipantId = participant.ParticipantId,
                 PhoneNumber = participant.ContactTelephone,
@@ -230,6 +238,16 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.Time, hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
                 {NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale()}
             };
+        }
+        private static string GetContactEmail(ParticipantDto participant)
+        {
+            var contactEmail = participant.ContactEmail;
+            if (!participant.IsJudgeEmailEJud() && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser))
+            {
+                contactEmail = participant.ContactEmailForNonEJudJudgeUser;
+            }
+
+            return contactEmail;
         }
     }
 }

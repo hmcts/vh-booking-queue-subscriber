@@ -20,5 +20,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         public string Representee { get; set; }
 
         public IList<LinkedParticipantDto> LinkedParticipants { get; set; }
+        public string ContactEmailForNonEJudJudgeUser { get; set; }
+
     }
 }
