@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingsApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using UserApi.Client;
 using UserApi.Contract.Requests;
 using UserApi.Contract.Responses;
-using UserNotificationQueueSubscriber.Services;
 
 namespace BookingQueueSubscriber.Services.UserApi
 {
     public interface IUserService
     {
-        //Task<User> CreateNewUserForParticipant(ParticipantRequest participant);
         Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser);
+        Task AssignUserToGroup(string username, string userRole);
     }
 
     public class UserService : IUserService
@@ -58,24 +55,25 @@ namespace BookingQueueSubscriber.Services.UserApi
             };
 
         }
-        public async Task AssignParticipantToGroup(string username, string userRole)
+
+        public async Task AssignUserToGroup(string userId, string userRole)
         {
             switch (userRole)
             {
                 case "Representative":
-                    await AddGroup(username, External);
-                    await AddGroup(username, VirtualRoomProfessionalUser);
+                    await AddGroup(userId, External);
+                    await AddGroup(userId, VirtualRoomProfessionalUser);
                     break;
                 case "Joh":
-                    await AddGroup(username, External);
-                    await AddGroup(username, JudicialOfficeHolder);
+                    await AddGroup(userId, External);
+                    await AddGroup(userId, JudicialOfficeHolder);
                     break;
                 case "StaffMember":
-                    await AddGroup(username, Internal);
-                    await AddGroup(username, StaffMember);
+                    await AddGroup(userId, Internal);
+                    await AddGroup(userId, StaffMember);
                     break;
                 default:
-                    await AddGroup(username, External);
+                    await AddGroup(userId, External);
                     break;
             }
         }
@@ -118,22 +116,22 @@ namespace BookingQueueSubscriber.Services.UserApi
                 throw;
             }
         }
-        private async Task AddGroup(string username, string groupName)
+        private async Task AddGroup(string userId, string groupName)
         {
             try
             {
                 var addUserToGroupRequest = new AddUserToGroupRequest
                 {
-                    UserId = username,
+                    UserId = userId,
                     GroupName = groupName
                 };
                 await _userApiClient.AddUserToGroupAsync(addUserToGroupRequest);
-                _logger.LogDebug("{username} to group {group}.", username, addUserToGroupRequest.GroupName);
+                _logger.LogDebug("{username} to group {group}.", userId, addUserToGroupRequest.GroupName);
             }
             catch (UserApiException e)
             {
                 _logger.LogError(e,
-                    $"Failed to add user {username} to {groupName} in User API. " +
+                    $"Failed to add user {userId} to {groupName} in User API. " +
                     $"Status Code {e.StatusCode} - Message {e.Message}");
                 throw;
             }

@@ -4,25 +4,40 @@ using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
+using Microsoft.Extensions.Logging;
 
-namespace BookingQueueSubscriber.Services.MessageHandlers
+namespace BookingQueueSubscriber.Services
 {
-    internal class UserCreationAndNotificationHelper
+    public interface IUserCreationAndNotification
+    {
+        Task<IList<UserDto>> HandleUserCreationAndNotificationsAsync(HearingDto hearing, IList<ParticipantDto> participants);
+        Task HandleAssignUserToGroup(IList<UserDto> users);
+    }
+
+    public class UserCreationAndNotification : IUserCreationAndNotification
     {
         private readonly INotificationService _notificationService;
         private readonly IUserService _userService;
+        private readonly ILogger<UserCreationAndNotification> _logger;
 
-        public UserCreationAndNotificationHelper(INotificationService notificationService, IUserService userService)
+        public UserCreationAndNotification(INotificationService notificationService, IUserService userService,
+             ILogger<UserCreationAndNotification> logger)
         {
             _notificationService = notificationService;
             _userService = userService;
+            _logger = logger;
         }
 
-        public async Task HandleUserCreationAndNotificationsAsync(HearingDto hearing, IList<ParticipantDto> participants)
+        public async Task<IList<UserDto>> HandleUserCreationAndNotificationsAsync(HearingDto hearing, IList<ParticipantDto> participants)
         {
+            var newUsers = new List<UserDto>();
             foreach (var participant in participants)
             {
-                await CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
+                var user = await CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
+                if (!string.IsNullOrEmpty(user?.UserName))
+                {
+                    newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole});
+                }
             }
 
             if (!hearing.GroupId.HasValue ||
@@ -30,9 +45,19 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 await _notificationService.SendNewHearingNotification(hearing, participants);
             }
+
+            return newUsers;
         }
 
-        private async Task CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
+        public async Task HandleAssignUserToGroup(IList<UserDto> users)
+        {
+            foreach (var user in users)
+            {
+                await _userService.AssignUserToGroup(user.UserId, user.UserRole);
+            }
+        }
+
+        private async Task<User> CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
         {
             User user = null;
             if (!string.Equals(participant.HearingRole, RoleNames.Judge) &&
@@ -48,6 +73,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 await _notificationService.SendNewUserAccountNotificationAsync(hearingId, participant, user.Password);
             }
+
+            return user;
         }
 
         private static bool IsPanelMemberOrWingerWithUsername(ParticipantDto participant)

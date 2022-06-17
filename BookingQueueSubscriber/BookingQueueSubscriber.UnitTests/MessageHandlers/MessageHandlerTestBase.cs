@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
@@ -17,6 +17,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         protected Mock<IVideoWebService> VideoWebServiceMock { get; set; }
         protected Mock<IUserService> UserServiceMock { get; set; }
         protected Mock<INotificationService> NotificationServiceMock { get; set; }
+        protected Mock<IUserCreationAndNotification> UserCreationAndNotificationMock { get; set; }
+
         protected Guid ParticipantId { get; set; }
         protected Guid HearingId { get; set; }
         protected ConferenceDetailsResponse ConferenceDetailsResponse { get; set; }
