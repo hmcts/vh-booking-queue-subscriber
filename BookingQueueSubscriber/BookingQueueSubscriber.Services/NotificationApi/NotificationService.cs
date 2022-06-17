@@ -104,13 +104,9 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
 
-            var filteredParticipants = participants
-                .Where(x => !x.UserRole.Contains(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase))
-                .ToList();
-
-            var notificationRequests = filteredParticipants
-                .Select(participant =>
-                    AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, hearing.HearingType))
+            var notificationRequests = participants
+                .Select(participant => AddNotificationRequestMapper.MapToDemoOrTestNotification(
+                    hearing, participant, hearing.HearingType))
                 .Where(x => x != null)
                 .ToList();
 

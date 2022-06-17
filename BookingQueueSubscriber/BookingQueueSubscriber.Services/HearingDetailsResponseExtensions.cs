@@ -19,105 +19,14 @@ namespace BookingQueueSubscriber.Services
             return hearing.ScheduledDateTime.Ticks != anotherHearing.ScheduledDateTime.Ticks;
         }
 
-        //public static bool JudgeHasNotChangedForGenericHearing(this HearingDto newHearingJudge,
-        //    HearingDto originalHearingJudge)
-        //{
-        //    var judgeFromUpdatedHearing = newHearingJudge.GetJudgeById();
-        //    var judgeFromOriginalHearing = originalHearingJudge.GetJudgeById();
 
-        //    if((judgeFromUpdatedHearing != judgeFromOriginalHearing) && newHearingJudge.IsGenericHearing()) return false;
-        //    return true;
-        //}
-
-        //private static Guid? GetJudgeById(this HearingDto hearing)
-        //{
-        //    var judgeId = hearing?.Participants.SingleOrDefault(x =>
-        //        x.UserRoleName.Contains(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase))?.Id;
-        //    return judgeId;
-        //}
-
-        //public static bool HasJudgeEmailChanged(this HearingDto hearing,
-        //    HearingDto originalHearing)
-        //{
-        //    var isNewJudgeEJud = IsJudgeEmailEJud(hearing);
-        //    var isOriginalJudgeEJud = IsJudgeEmailEJud(originalHearing);
-        //    var isNewJudgeVhJudge = hearing.GetJudgeEmail() != null;
-        //    var isOriginalJudgeVhJudge = originalHearing.GetJudgeEmail() != null;
-
-
-        //    if (isNewJudgeEJud && isOriginalJudgeEJud)
-        //    {
-        //        var judgeA = hearing.Participants.FirstOrDefault(x =>
-        //            x.UserRoleName.Contains(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase));
-
-
-        //        var judgeB = originalHearing.Participants.FirstOrDefault(x =>
-        //            x.UserRoleName.Contains(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase));
-
-        //        return judgeA?.ContactEmail != judgeB?.ContactEmail;
-        //    }
-
-        //    if (isNewJudgeVhJudge && isOriginalJudgeVhJudge)
-        //    {
-        //        return hearing.GetJudgeEmail() != originalHearing.GetJudgeEmail();
-        //    }
-
-        //    return isNewJudgeEJud || isOriginalJudgeEJud || isNewJudgeVhJudge || isOriginalJudgeVhJudge;
-        //}
-
-        //public static bool DoesJudgeEmailExist(this HearingDto hearing, ParticipantDto participant)
-        //{
-        //    if (participant.IsJudgeEmailEJud())
-        //    {
-        //        return true;
-        //    }
-
-        //    if (hearing.OtherInformation == null) return false;
-        //    var otherInformationDetails = GetOtherInformationObject(hearing.OtherInformation);
-        //    return !string.IsNullOrEmpty(otherInformationDetails.JudgeEmail);
-        //}
-
-        //public static bool DoesJudgePhoneExist(this HearingDto hearing)
-        //{
-        //    if (hearing.OtherInformation == null) return false;
-        //    var otherInformationDetails = GetOtherInformationObject(hearing.OtherInformation);
-        //    return !string.IsNullOrWhiteSpace(otherInformationDetails.JudgePhone);
-        //}
-
-        //public static string GetJudgeEmail(this HearingDto hearing)
-        //{
-
-        //    var email = GetOtherInformationObject(hearing.OtherInformation)?.JudgeEmail;
-        //    if (string.IsNullOrEmpty(email))
-        //    {
-        //        return null;
-        //    }
-
-        //    return email;
-        //}
-
-        public static bool IsJudgeEmailEJud(this ParticipantDto participant)
-        {
-            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) &&
-                   IsUsernameEjud(participant);
-        }
-
-        public static bool IsParticipantAEJudJudicialOfficeHolder(this ParticipantDto participant)
-        {
-            return participant.UserRole.Equals(RoleNames.JudicialOfficeHolder, StringComparison.CurrentCultureIgnoreCase) &&
-                   IsUsernameEjud(participant);
-        }
-
-        public static bool IsParticipantAJudicialOfficeHolderOrJudge(this ParticipantDto participant)
-        {
-            var joh = participant.UserRole.Equals(RoleNames.JudicialOfficeHolder, StringComparison.CurrentCultureIgnoreCase);
-            var judge = participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase);
-            return joh || judge;
-        }
-
-        public static bool IsUsernameEjud(this ParticipantDto participant)
+        public static bool HasEjdUsername(this ParticipantDto participant)
         {
             return !string.IsNullOrEmpty(participant.Username) && participant.Username.Contains("judiciary", StringComparison.CurrentCultureIgnoreCase);
+        }
+        public static bool IsUsernameVHAAD(this ParticipantDto participant)
+        {
+            return !string.IsNullOrEmpty(participant.Username) && participant.Username.Contains("hearings.reform.hmcts.net", StringComparison.CurrentCultureIgnoreCase);
         }
 
         //public static string GetJudgePhone(this HearingDto hearing)

@@ -79,8 +79,9 @@ namespace BookingQueueSubscriber.Services
 
         private static bool IsPanelMemberOrWingerWithUsername(ParticipantDto participant)
         {
-            return !string.IsNullOrEmpty(participant.Username) && (string.Equals(participant.HearingRole, RoleNames.PanelMember) ||
-                    string.Equals(participant.HearingRole, RoleNames.Winger));
+            return !string.IsNullOrEmpty(participant.Username) && 
+                (string.Equals(participant.HearingRole, RoleNames.JudicialOfficeHolder)) && 
+                participant.HasEjdUsername();
         }
     }
 }
