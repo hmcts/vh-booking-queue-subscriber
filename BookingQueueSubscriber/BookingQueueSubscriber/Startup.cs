@@ -21,6 +21,7 @@ using NotificationApi.Client;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
+using BookingsApi.Client;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
@@ -80,6 +81,7 @@ namespace BookingQueueSubscriber
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<VideoWebTokenHandler>();
+            services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
@@ -136,7 +138,15 @@ namespace BookingQueueSubscriber
                         client.ReadResponseAsString = true;
                         return (INotificationApiClient)client;
                     });
-
+                 services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
+                .AddHttpMessageHandler<BookingsServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = BookingsApiClient.GetClient(httpClient);
+                    client.BaseUrl = serviceConfiguration.BookingsApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IBookingsApiClient)client;
+                });
             }
 
 

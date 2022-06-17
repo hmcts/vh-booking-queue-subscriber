@@ -5,6 +5,7 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using Microsoft.Extensions.Logging;
+using BookingsApi.Client;
 
 namespace BookingQueueSubscriber.Services
 {
@@ -18,13 +19,15 @@ namespace BookingQueueSubscriber.Services
     {
         private readonly INotificationService _notificationService;
         private readonly IUserService _userService;
+        private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<UserCreationAndNotification> _logger;
 
-        public UserCreationAndNotification(INotificationService notificationService, IUserService userService,
+        public UserCreationAndNotification(INotificationService notificationService, IUserService userService, IBookingsApiClient bookingsApiClient,
              ILogger<UserCreationAndNotification> logger)
         {
             _notificationService = notificationService;
             _userService = userService;
+            _bookingsApiClient = bookingsApiClient;
             _logger = logger;
         }
 
@@ -67,6 +70,7 @@ namespace BookingQueueSubscriber.Services
                     participant.LastName, participant.ContactEmail, false);
                 participant.Username = user.UserName;
                 // Update participant with the user name through bookings api.
+                await _bookingsApiClient.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username);
             }
 
             if (user != null)
