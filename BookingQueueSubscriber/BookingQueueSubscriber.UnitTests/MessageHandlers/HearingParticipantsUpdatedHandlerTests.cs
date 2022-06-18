@@ -32,7 +32,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             await _handler.HandleAsync(_integrationEvent);
 
-            VideoApiServiceMock.Verify(x => x.GetConferenceByHearingRefId(HearingId, true), Times.Once);
+            VideoApiServiceMock.Verify(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()), Times.Once);
         }
 
         [Test]

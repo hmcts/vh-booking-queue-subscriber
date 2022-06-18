@@ -178,30 +178,43 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _videoWebService.PushParticipantsUpdatedMessageCount = 0;
 
             const string message = @"{
-  '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.EventMessage, Bookings.Infrastructure.Services',
-  'id': '9250401b-eaec-4b57-81fa-d79026df3e3c',
-  'timestamp': '2019-07-02T21:44:11.2088463Z',
-  'integration_event': {
-    '$type': 'Bookings.Infrastructure.Services.IntegrationEvents.Events.ParticipantsAddedIntegrationEvent, Bookings.Infrastructure.Services',
-    'hearing_id': '38bf53e4-32c6-46f1-a7ec-be3016005ec7',
-    'participants': [
-      {
-        '$type': 'Bookings.Infrastructure.Services.Dtos.ParticipantDto, Bookings.Infrastructure.Services',
-        'participant_id': 'a12597ab-b6a1-49a3-a0dd-f15bf05974ab',
-        'fullname': 'Mr. Elliott Davis',
-        'first_name': 'FirstName1',
-        'last_name': 'LastName1',
-        'contact_email': 'tst@hmcts.net',
-        'contact_telephone': '01234567890',
-        'username': 'harley@kshlerin.biz',
-        'display_name': 'DisplayName1',
-        'hearing_role': 'Litigant in person',
-        'user_role': 'Individual',
-        'case_group_type': 'Respondent',
-        'representee': ''
-      }
-    ]
-  }
+'$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+'id': 'd0089d35-7a49-4fa3-8414-fb3c77186bfc',
+'timestamp': '2022-06-16T09:45:35.5875542Z',
+'integration_event': {
+'$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.ParticipantsAddedIntegrationEvent, BookingsApi.Infrastructure.Services',
+'hearing': {
+'$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
+'hearing_id': 'fe5bcb33-f950-4b64-978b-1d130280b154',
+'group_id': null,
+'scheduled_date_time': '2022-07-12T09:49:56.924Z',
+'scheduled_duration': 45,
+'case_type': 'Civil Money Claims',
+'case_number': '123333',
+'case_name': 'Rambo5 vs terminator5',
+'hearing_venue_name': 'Aberdeen Tribunal Hearing Centre',
+'record_audio': false
+},
+'participants': [
+{
+'$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+'participant_id': '96c04fca-b3d0-4526-9120-7916b55a4657',
+'fullname': 'Mr Partcipant Eleven',
+'username': 'Partcipant.Eleven@hearings.reform.hmcts.net',
+'first_name': 'Partcipant',
+'last_name': 'Eleven',
+'contact_email': 'Part.eleven@gmail.com',
+'contact_telephone': '1213131321',
+'display_name': 'One',
+'hearing_role': 'Litigant in person',
+'user_role': 'Individual',
+'case_group_type': 'claimant',
+'representee': '',
+'linked_participants': [],
+'contact_email_for_non_e_jud_judge_user': ''
+}
+]
+}
 }";
             
             await _sut.Run(message, new LoggerFake());

@@ -64,7 +64,7 @@ namespace BookingQueueSubscriber.Services.UserApi
                     await AddGroup(userId, External);
                     await AddGroup(userId, VirtualRoomProfessionalUser);
                     break;
-                case "Joh":
+                case "JudicialOfficeHolder":
                     await AddGroup(userId, External);
                     await AddGroup(userId, JudicialOfficeHolder);
                     break;

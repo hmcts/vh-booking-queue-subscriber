@@ -56,6 +56,7 @@ namespace BookingQueueSubscriber.Services
         {
             foreach (var user in users)
             {
+                _logger.LogInformation("Asign user {Username} with role {UserRole} to group", user.Username, user.UserRole);
                 await _userService.AssignUserToGroup(user.UserId, user.UserRole);
             }
         }
@@ -84,8 +85,7 @@ namespace BookingQueueSubscriber.Services
         private static bool IsPanelMemberOrWingerWithUsername(ParticipantDto participant)
         {
             return !string.IsNullOrEmpty(participant.Username) && 
-                (string.Equals(participant.HearingRole, RoleNames.JudicialOfficeHolder)) && 
-                participant.HasEjdUsername();
+                (string.Equals(participant.HearingRole, RoleNames.JudicialOfficeHolder));
         }
     }
 }

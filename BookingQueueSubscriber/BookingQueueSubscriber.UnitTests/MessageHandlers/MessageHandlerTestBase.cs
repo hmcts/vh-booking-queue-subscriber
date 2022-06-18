@@ -38,11 +38,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 }
             };
 
-            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(HearingId, It.IsAny<bool>())).ReturnsAsync(ConferenceDetailsResponse);
+            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>())).ReturnsAsync(ConferenceDetailsResponse);
 
             VideoWebServiceMock = new Mock<IVideoWebService>();
             UserServiceMock = new Mock<IUserService>();
             NotificationServiceMock = new Mock<INotificationService>();
+            UserCreationAndNotificationMock = new Mock<IUserCreationAndNotification>();
         }
     }
 }
