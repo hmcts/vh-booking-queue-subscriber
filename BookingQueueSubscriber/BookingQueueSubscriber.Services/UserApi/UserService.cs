@@ -58,13 +58,14 @@ namespace BookingQueueSubscriber.Services.UserApi
 
         public async Task AssignUserToGroup(string userId, string userRole)
         {
+            _logger.LogInformation("Assigning the user to the group based on the userrole {userRole}", userRole);
             switch (userRole)
             {
                 case "Representative":
                     await AddGroup(userId, External);
                     await AddGroup(userId, VirtualRoomProfessionalUser);
                     break;
-                case "JudicialOfficeHolder":
+                case "Judicial Office Holder":
                     await AddGroup(userId, External);
                     await AddGroup(userId, JudicialOfficeHolder);
                     break;
@@ -91,7 +92,6 @@ namespace BookingQueueSubscriber.Services.UserApi
 
             var newUserResponse = await _userApiClient.CreateUserAsync(createUserRequest);
             _logger.LogDebug("Successfully created an AD user with contact email {contactEmail}.", contactEmail);
-            //participant.Username = newUserResponse.Username;
             return newUserResponse;
         }
 

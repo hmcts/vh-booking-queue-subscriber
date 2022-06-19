@@ -34,10 +34,9 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             if (!string.IsNullOrEmpty(password))
             {
-                _logger.LogInformation("Creating Notification for new user");
+                _logger.LogInformation("Creating Notification for new user {username}", participant.Username);
                 var request = AddNotificationRequestMapper.MapToNewUserNotification(hearingId, participant, password);
                 await _notificationApiClient.CreateNewNotificationAsync(request);
-                _logger.LogInformation("Creating Notification for new user");
             }
         }
         public async Task SendNewHearingNotification(HearingDto hearing, IList<ParticipantDto> participants)
@@ -52,7 +51,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 .Select(participant => AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant))
                 .ToList();
             await CreateNotifications(requests);
-            _logger.LogInformation("Created hearing notification for the users in the hearing");
+            _logger.LogInformation("Created hearing notification for the users in the hearing {hearingid}", hearing.HearingId);
         }
 
         public async Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime, IList<ParticipantDto> participants)
