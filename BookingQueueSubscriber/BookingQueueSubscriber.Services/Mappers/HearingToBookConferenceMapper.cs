@@ -26,10 +26,26 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Participants = participants,
                 HearingVenueName = hearingDto.HearingVenueName,
                 AudioRecordingRequired = hearingDto.RecordAudio,
-                Endpoints = endpointDtos.Select(EndpointToRequestMapper.MapToRequest).ToList()
+                Endpoints = PopulateAddEndpointRequests(endpointDtos, participantDtos).ToList()
             };
             
             return request;
+        }
+
+        private static List<AddEndpointRequest> PopulateAddEndpointRequests(IEnumerable<EndpointDto> endpointDtos, IEnumerable<ParticipantDto> participantDtos)
+        {
+            var addEndpointRequests = new List<AddEndpointRequest>();
+            foreach (var endpointDto in endpointDtos)
+            {
+                addEndpointRequests.Add(new AddEndpointRequest
+                {
+                    DefenceAdvocate = participantDtos.SingleOrDefault(x => x.ContactEmail == endpointDto.DefenceAdvocateContactEmail)?.Username,
+                    DisplayName = endpointDto.DisplayName,
+                    Pin = endpointDto.Pin,
+                    SipAddress = endpointDto.Sip
+                });
+            }
+            return addEndpointRequests;
         }
     }
 }

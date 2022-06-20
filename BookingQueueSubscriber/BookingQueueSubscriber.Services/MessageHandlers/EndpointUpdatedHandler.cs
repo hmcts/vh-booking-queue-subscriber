@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using VideoApi.Contract.Requests;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -18,11 +20,16 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(EndpointUpdatedIntegrationEvent eventMessage)
         {
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
-            
+            ParticipantDetailsResponse defenceAdvocate = null;
+            if (!string.IsNullOrEmpty(eventMessage.DefenceAdvocate))
+            {
+                defenceAdvocate = conference.Participants.Single(x => x.ContactEmail ==
+                    eventMessage.DefenceAdvocate);
+            }
             await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip, new UpdateEndpointRequest
             {
                 DisplayName = eventMessage.DisplayName,
-                DefenceAdvocate = eventMessage.DefenceAdvocate
+                DefenceAdvocate = defenceAdvocate?.Username
             });
         }
 
