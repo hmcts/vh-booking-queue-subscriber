@@ -308,5 +308,52 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
           f.Should().ThrowAsync<Exception>().WithMessage(errorMessageMatch);
           logger.Messages.Should().ContainMatch($"{errorMessageMatch}*");
         }
+        [Test]
+        public async Task Should_handle_hearing_create_and_notify_user_integration_event()
+        {
+            const string message = @"{
+'$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+'id': '0473e722-a7e1-4af2-b76e-42332d988a4d',
+'timestamp': '2022-06-24T16:04:11.3750446Z',
+'integration_event': {
+'$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.CreateAndNotifyUserIntegrationEvent, BookingsApi.Infrastructure.Services',
+'hearing': {
+'$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
+'hearing_id': '80b79a4e-a104-46ac-b31c-c20edc2c5c8a',
+'group_id': null,
+'scheduled_date_time': '2022-07-19T09:49:56.924Z',
+'scheduled_duration': 45,
+'case_type': 'Civil Money Claims',
+'case_number': '54453434',
+'case_name': 'Rambo4 vs terminator4',
+'hearing_venue_name': 'Aberdeen Tribunal Hearing Centre',
+'record_audio': false
+},
+'participants': [
+{
+'$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+'participant_id': '6706c2f5-0698-4e8d-9034-9e148e9b8bf2',
+'fullname': 'Mr Brew milkyOne',
+'username': 'brewmilkyOne@gmail.com',
+'first_name': 'Brew',
+'last_name': 'milkyOne',
+'contact_email': 'brewmilkyOne@gmail.com',
+'contact_telephone': '1234444444',
+'display_name': 'milk',
+'hearing_role': 'Litigant in person',
+'user_role': 'Individual',
+'case_group_type': 'claimant',
+'representee': '',
+'linked_participants': [],
+'contact_email_for_non_e_jud_judge_user': null,
+'contact_phone_for_non_e_jud_judge_user': null
+}
+]
+}
+}";
+            await _sut.Run(message, new LoggerFake());
+
+            _videoApiService.BookNewConferenceCount.Should().Be(1);
+        }
     }
 }

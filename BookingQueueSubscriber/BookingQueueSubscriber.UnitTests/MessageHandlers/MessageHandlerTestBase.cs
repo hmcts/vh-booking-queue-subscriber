@@ -34,7 +34,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 Id = Guid.NewGuid(),
                 Participants = new List<ParticipantDetailsResponse>
                 {
-                    new ParticipantDetailsResponse {Id = Guid.NewGuid(), RefId = ParticipantId}
+                    new ParticipantDetailsResponse {Id = Guid.NewGuid(), RefId = ParticipantId, 
+                        ContactEmail = "test@hmcts.net", Username = "test@hmcts.net"}
                 }
             };
 

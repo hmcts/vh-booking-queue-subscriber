@@ -25,8 +25,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(ParticipantsAddedIntegrationEvent eventMessage)
         {
-            var newParticipantUsers = await _userCreationAndNotification.HandleUserCreationAndNotificationsAsync(
+            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
                 eventMessage.Hearing, eventMessage.Participants);
+            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.Participants);
 
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId);
             var request = new AddParticipantsToConferenceRequest

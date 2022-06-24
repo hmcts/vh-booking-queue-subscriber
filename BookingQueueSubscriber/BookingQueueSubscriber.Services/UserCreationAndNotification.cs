@@ -11,8 +11,9 @@ namespace BookingQueueSubscriber.Services
 {
     public interface IUserCreationAndNotification
     {
-        Task<IList<UserDto>> HandleUserCreationAndNotificationsAsync(HearingDto hearing, IList<ParticipantDto> participants);
+        Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants);
         Task HandleAssignUserToGroup(IList<UserDto> users);
+        Task SendHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants);
     }
 
     public class UserCreationAndNotification : IUserCreationAndNotification
@@ -31,7 +32,7 @@ namespace BookingQueueSubscriber.Services
             _logger = logger;
         }
 
-        public async Task<IList<UserDto>> HandleUserCreationAndNotificationsAsync(HearingDto hearing, IList<ParticipantDto> participants)
+        public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)
         {
             var newUsers = new List<UserDto>();
             foreach (var participant in participants)
@@ -39,17 +40,20 @@ namespace BookingQueueSubscriber.Services
                 var user = await CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
                 if (!string.IsNullOrEmpty(user?.UserName))
                 {
-                    newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole});
+                    newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole });
                 }
             }
 
+            return newUsers;
+        }
+
+        public async Task SendHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants)
+        {
             if (!hearing.GroupId.HasValue ||
                 hearing.GroupId.GetValueOrDefault() == Guid.Empty) // Not a multi day hearing
             {
                 await _notificationService.SendNewHearingNotification(hearing, participants);
             }
-
-            return newUsers;
         }
 
         public async Task HandleAssignUserToGroup(IList<UserDto> users)
