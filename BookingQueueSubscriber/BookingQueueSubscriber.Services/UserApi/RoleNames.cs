@@ -5,7 +5,7 @@
         public const string PanelMember = "PanelMember";
         public const string Winger = "Winger";
         public const string Judge = "Judge";
-        public const string JudicialOfficeHolder = "JudicialOfficeHolder";
+        public const string JudicialOfficeHolder = "Judicial Office Holder";
         public const string Representative = "Representative";
         public const string Individual = "Individual";
     }

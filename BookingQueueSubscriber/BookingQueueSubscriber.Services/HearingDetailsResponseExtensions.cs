@@ -24,7 +24,7 @@ namespace BookingQueueSubscriber.Services
         {
             return !string.IsNullOrEmpty(participant.Username) && participant.Username.Contains("judiciary", StringComparison.CurrentCultureIgnoreCase);
         }
-        public static bool IsUsernameVHAAD(this ParticipantDto participant)
+        public static bool HasVHAADUsername(this ParticipantDto participant)
         {
             return !string.IsNullOrEmpty(participant.Username) && participant.Username.Contains("hearings.reform.hmcts.net", StringComparison.CurrentCultureIgnoreCase);
         }

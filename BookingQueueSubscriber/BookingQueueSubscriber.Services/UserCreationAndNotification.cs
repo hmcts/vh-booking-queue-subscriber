@@ -68,7 +68,7 @@ namespace BookingQueueSubscriber.Services
         private async Task<User> CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
         {
             User user = null;
-            if (!string.Equals(participant.HearingRole, RoleNames.Judge) &&
+            if (!string.Equals(participant.UserRole, RoleNames.Judge) &&
                 !IsPanelMemberOrWingerWithUsername(participant))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
@@ -88,8 +88,9 @@ namespace BookingQueueSubscriber.Services
 
         private static bool IsPanelMemberOrWingerWithUsername(ParticipantDto participant)
         {
-            return !string.IsNullOrEmpty(participant.Username) && 
-                (string.Equals(participant.HearingRole, RoleNames.JudicialOfficeHolder));
+            return !string.IsNullOrEmpty(participant.Username) &&
+                string.Equals(participant.UserRole, RoleNames.JudicialOfficeHolder) && 
+                participant.HasEjdUsername();
         }
     }
 }
