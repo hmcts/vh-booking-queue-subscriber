@@ -273,27 +273,21 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale()}
             };
         }
+
         private static string GetContactEmailForNonEJudJudgeUser(ParticipantDto participant)
         {
-            var contactEmail = participant.ContactEmail;
-            if (participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername() 
-                && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser))
-            {
-                contactEmail = participant.ContactEmailForNonEJudJudgeUser;
-            }
-
-            return contactEmail;
+            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
+                && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser)
+                ? participant.ContactEmailForNonEJudJudgeUser
+                : string.Empty;
         }
+  
         private static string GetContactPhoneForNonEJudJudgeUser(ParticipantDto participant)
         {
-            var contactPhone = participant.ContactTelephone;
-            if (participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
-                && !string.IsNullOrEmpty(participant.ContactPhoneForNonEJudJudgeUser))
-            {
-                contactPhone = participant.ContactPhoneForNonEJudJudgeUser;
-            }
-
-            return contactPhone;
+            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
+                && !string.IsNullOrEmpty(participant.ContactPhoneForNonEJudJudgeUser)
+                ? participant.ContactPhoneForNonEJudJudgeUser
+                : string.Empty;
         }
     }
 }
