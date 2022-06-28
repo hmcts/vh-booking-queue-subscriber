@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
 
             // send hearing notification
-            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.Participants);
+            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.Participants, false);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

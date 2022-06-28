@@ -29,7 +29,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             
             var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
                 eventMessage.Hearing, eventMessage.NewParticipants);
-            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
+            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.NewParticipants, false);
 
             var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
             {

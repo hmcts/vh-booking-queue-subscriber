@@ -13,7 +13,7 @@ namespace BookingQueueSubscriber.Services
     {
         Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants);
         Task HandleAssignUserToGroup(IList<UserDto> users);
-        Task SendHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants);
+        Task SendHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, bool ignoreGroupIdCheck);
     }
 
     public class UserCreationAndNotification : IUserCreationAndNotification
@@ -47,10 +47,9 @@ namespace BookingQueueSubscriber.Services
             return newUsers;
         }
 
-        public async Task SendHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants)
+        public async Task SendHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, bool ignoreGroupIdCheck)
         {
-            if (!hearing.GroupId.HasValue ||
-                hearing.GroupId.GetValueOrDefault() == Guid.Empty) // Not a multi day hearing
+            if (ignoreGroupIdCheck || !hearing.GroupId.HasValue || hearing.GroupId.GetValueOrDefault() == Guid.Empty) // Not a multi day hearing
             {
                 await _notificationService.SendNewHearingNotification(hearing, participants);
             }
