@@ -163,8 +163,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.33.7",
-        "contentHash": "Q6mIQ6Osebt2uUhcSnOc7I3uR1RwU+B2rvF8yXrEYgrdgfEW+kIaxiN6rl5zYT0ByrwjowuA+2Zovi6EVHALoQ==",
+        "resolved": "1.36.9",
+        "contentHash": "4RsY8ULj9wnfQCtwPy0k/GR5oVcaemx1bnJ3B2U/AsjNuDaDN/1kHaLpFwSYU2sbuLzr87CAmK9yhW8u+OdWRA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2215,8 +2215,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.27.4",
-        "contentHash": "v1N+K2TUNp0cxHPzOyDjNFyCAV3kmJ7iQrr2psRI7VQzElg74HAeQtMJph3os9WcK4iJFRQcO0zor+k50ahImQ==",
+        "resolved": "1.35.3",
+        "contentHash": "CenFFPsHySmV0WosJnLrc5H7mfFfm5BssC/KsIlor4qie8JNdG8cjL1EDmSvppiX5feHcjQE2sK+gYH3yhXSRA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2246,10 +2246,10 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "1.0.0",
-          "BookingsApi.Client": "1.33.7",
+          "BookingsApi.Client": "1.36.9",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.12",
           "System.IdentityModel.Tokens.Jwt": "6.11.1",
-          "VideoApi.Client": "1.27.4"
+          "VideoApi.Client": "1.35.3"
         }
       }
     }
