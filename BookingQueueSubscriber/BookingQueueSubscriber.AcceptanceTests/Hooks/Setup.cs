@@ -6,6 +6,7 @@ using BookingQueueSubscriber.Common.Security;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using ConfigurationManager = AcceptanceTests.Common.Configuration.ConfigurationManager;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Hooks
 {
