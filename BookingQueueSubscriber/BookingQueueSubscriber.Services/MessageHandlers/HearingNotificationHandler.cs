@@ -15,7 +15,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingNotificationIntegrationEvent eventMessage)
         {
-            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.Participants, true);
+            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.Participants);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

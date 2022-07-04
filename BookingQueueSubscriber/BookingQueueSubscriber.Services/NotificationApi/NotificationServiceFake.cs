@@ -14,7 +14,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
-        public Task SendNewHearingNotification(HearingDto hearing, IList<ParticipantDto> participants)
+        public Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
@@ -26,6 +28,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
                 eventMessage.Hearing, eventMessage.Participants);
+
+            if (!eventMessage.Hearing.GroupId.HasValue || eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty)
+            {
+                // Not a multiday hearing
+                await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
+                eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
+            }
 
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);

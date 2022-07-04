@@ -12,7 +12,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     public interface INotificationService
     {
         Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password);
-        Task SendNewHearingNotification(HearingDto hearing, IList<ParticipantDto> participants);
+        Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants);
         Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime,
              IList<ParticipantDto> participants);
 
@@ -39,7 +39,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 await _notificationApiClient.CreateNewNotificationAsync(request);
             }
         }
-        public async Task SendNewHearingNotification(HearingDto hearing, IList<ParticipantDto> participants)
+        public async Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
             if (hearing.IsGenericHearing())
             {
@@ -95,7 +95,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
               await CreateNotifications(requests);
         }
 
-        private async Task ProcessGenericEmail(HearingDto hearing, IList<ParticipantDto> participants)
+        private async Task ProcessGenericEmail(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
             if (string.Equals(hearing.HearingType, "Automated Test", StringComparison.CurrentCultureIgnoreCase))
             {
