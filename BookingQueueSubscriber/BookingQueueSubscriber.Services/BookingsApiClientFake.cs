@@ -100,6 +100,16 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task BulkJudiciaryPersonsStagingAsync(IEnumerable<JudiciaryPersonStagingRequest> request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task BulkJudiciaryPersonsStagingAsync(IEnumerable<JudiciaryPersonStagingRequest> request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<BookingsApiHealthResponse> CheckServiceHealth2Async()
         {
             throw new NotImplementedException();
@@ -356,6 +366,16 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<PersonResponse>> PostPersonBySearchTermAsync(SearchTermRequest term, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveAllJudiciaryPersonsStagingAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveAllJudiciaryPersonsStagingAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
