@@ -30,6 +30,9 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                     .Excluding(o => o.CaseGroupType)
                     .Excluding(o => o.Representee)
                     .Excluding(o => o.LinkedParticipants)
+                    .Excluding(o => o.ContactEmailForNonEJudJudgeUser)
+                    .Excluding(o => o.ContactPhoneForNonEJudJudgeUser)
+                    .Excluding(o => o.SendHearingNotificationIfNew)
             );
             request.ParticipantRefId.Should().Be(participantDto.ParticipantId);
             request.Name.Should().Be(participantDto.Fullname);
@@ -60,6 +63,9 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                     .Excluding(o => o.CaseGroupType)
                     .Excluding(o => o.Representee)
                     .Excluding(o => o.LinkedParticipants)
+                    .Excluding(o => o.ContactEmailForNonEJudJudgeUser)
+                    .Excluding(o => o.ContactPhoneForNonEJudJudgeUser)
+                    .Excluding(o => o.SendHearingNotificationIfNew)
             );
             request.ParticipantRefId.Should().Be(participantDto.ParticipantId);
             request.Name.Should().Be(participantDto.Fullname);

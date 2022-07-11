@@ -18,6 +18,7 @@ using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Tests
 {
+    [Ignore("These tests shouldnt be part of this service")]
     public class HearingsSubscriberTests : TestsBase
     {
         [Test]

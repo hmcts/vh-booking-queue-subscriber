@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
@@ -11,21 +13,36 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     {
         private readonly IVideoApiService _videoApiService;
         private readonly IVideoWebService _videoWebService;
+        private readonly IUserCreationAndNotification _userCreationAndNotification;
 
-        public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService)
+
+        public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService,
+             IUserCreationAndNotification userCreationAndNotification)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
+            _userCreationAndNotification = userCreationAndNotification;
         }
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
+            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
+                eventMessage.Hearing, eventMessage.Participants);
+
+            if (!eventMessage.Hearing.GroupId.HasValue || eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty)
+            {
+                // Not a multiday hearing
+                await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
+                eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
+            }
+
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);
 
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
             
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
+            await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

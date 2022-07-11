@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
@@ -14,16 +13,23 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     {
         private readonly IVideoApiService _videoApiService;
         private readonly IVideoWebService _videoWebService;
+        private readonly IUserCreationAndNotification _userCreationAndNotification;
 
-        public ParticipantsAddedHandler(IVideoApiService videoApiService, IVideoWebService videoWebService)
+        public ParticipantsAddedHandler(IVideoApiService videoApiService, IVideoWebService videoWebService, 
+            IUserCreationAndNotification userCreationAndNotification)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
+            _userCreationAndNotification = userCreationAndNotification;
         }
 
         public async Task HandleAsync(ParticipantsAddedIntegrationEvent eventMessage)
         {
-            var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
+            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
+                eventMessage.Hearing, eventMessage.Participants);
+            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.Participants);
+
+            var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId);
             var request = new AddParticipantsToConferenceRequest
             {
                 Participants = eventMessage.Participants
@@ -32,13 +38,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             await _videoApiService.AddParticipantsToConference(conference.Id, request);
 
-
             var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
             {
                 NewParticipants =
-                    eventMessage.Participants.Select(x => ParticipantToParticipantRequestMapper.MapToParticipantRequest(x)).ToList(),
+                    eventMessage.Participants.Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList(),
             };
             await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, updateConferenceParticipantsRequest);
+            await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
@@ -46,4 +52,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await HandleAsync((ParticipantsAddedIntegrationEvent)integrationEvent);
         }
     }
+
+
 }

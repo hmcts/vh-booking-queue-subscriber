@@ -6,7 +6,7 @@ namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
     public class ParticipantsAddedIntegrationEvent: IIntegrationEvent
     {
-        public Guid HearingId { get; set; }
+        public HearingDto Hearing { get; set; }
         public IList<ParticipantDto> Participants { get; set; }
     }
 }

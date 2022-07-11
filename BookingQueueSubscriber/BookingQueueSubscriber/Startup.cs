@@ -1,24 +1,27 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using BookingQueueSubscriber;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services;
+using BookingQueueSubscriber.Services.NotificationApi;
+using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+using NotificationApi.Client;
+using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
+using BookingsApi.Client;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
@@ -78,6 +81,12 @@ namespace BookingQueueSubscriber
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<VideoWebTokenHandler>();
+            services.AddTransient<BookingsServiceTokenHandler>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
+            services.AddTransient<NotificationServiceTokenHandler>();
+            services.AddTransient<UserServiceTokenHandler>();
             services.AddLogging(builder => 
                 builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
@@ -89,6 +98,9 @@ namespace BookingQueueSubscriber
             {
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
                 services.AddScoped<IVideoWebService, VideoWebServiceFake>();
+                services.AddScoped<INotificationService, NotificationServiceFake>();
+                services.AddScoped<IUserService, UserServiceFake>();
+                services.AddScoped<IBookingsApiClient, BookingsApiClientFake>();
             }
             else
             {
@@ -108,9 +120,39 @@ namespace BookingQueueSubscriber
                 {
                     client.BaseAddress = new Uri(serviceConfiguration.VideoWebUrl);
                 }).AddHttpMessageHandler(() => container.GetService<VideoWebTokenHandler>());
+
+                services.AddTransient<IUserApiClient, UserApiClient>();
+                services.AddHttpClient<IUserApiClient, UserApiClient>()
+                    .AddHttpMessageHandler<UserServiceTokenHandler>()
+                    .AddTypedClient(httpClient =>
+                    {
+                        var client = UserApiClient.GetClient(httpClient);
+                        client.BaseUrl = serviceConfiguration.UserApiUrl;
+                        client.ReadResponseAsString = true;
+                        return (IUserApiClient)client;
+                    });
+
+                services.AddHttpClient<INotificationApiClient, NotificationApiClient>()
+                    .AddHttpMessageHandler<NotificationServiceTokenHandler>()
+                    .AddTypedClient(httpClient =>
+                    {
+                        var client = NotificationApiClient.GetClient(httpClient);
+                        client.BaseUrl = serviceConfiguration.NotificationApiUrl;
+                        client.ReadResponseAsString = true;
+                        return (INotificationApiClient)client;
+                    });
+                 services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
+                .AddHttpMessageHandler<BookingsServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = BookingsApiClient.GetClient(httpClient);
+                    client.BaseUrl = serviceConfiguration.BookingsApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IBookingsApiClient)client;
+                });
             }
 
-            
+
         }
 
         private void RegisterMessageHandlers(IServiceCollection serviceCollection)

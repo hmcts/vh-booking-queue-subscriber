@@ -22,7 +22,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             _integrationEvent = GetIntegrationEvent();
 
-            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object,
+                UserCreationAndNotificationMock.Object);
         }
 
 
@@ -31,7 +32,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             await _handler.HandleAsync(_integrationEvent);
 
-            VideoApiServiceMock.Verify(x => x.GetConferenceByHearingRefId(HearingId, true), Times.Once);
+            VideoApiServiceMock.Verify(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()), Times.Once);
         }
 
         [Test]
@@ -74,9 +75,20 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
         private HearingParticipantsUpdatedIntegrationEvent GetIntegrationEvent()
         {
+            var hearingDto = new HearingDto
+            {
+                HearingId = Guid.NewGuid(),
+                CaseNumber = "Test1234",
+                CaseType = "Generic",
+                CaseName = "Automated Case vs Humans",
+                ScheduledDuration = 60,
+                ScheduledDateTime = DateTime.UtcNow,
+                HearingVenueName = "MyVenue",
+                RecordAudio = true
+            };
             return new HearingParticipantsUpdatedIntegrationEvent
             {
-                HearingId = HearingId,
+                Hearing = hearingDto,
                 ExistingParticipants = new List<ParticipantDto>
                 {
                     new ParticipantDto

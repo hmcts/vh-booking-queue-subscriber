@@ -20,7 +20,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
         {
-            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object,
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -31,7 +32,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            var messageHandler = (IMessageHandler) new ParticipantsAddedHandler(VideoApiServiceMock.Object,
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -58,7 +60,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
          [Test]
         public async Task should_call_video_api_when_request_has_linked_participants_and_is_valid()
         {
-            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object,
+                UserCreationAndNotificationMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -68,7 +71,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_has_linked_participants_and_handler_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
+            var messageHandler = (IMessageHandler) new ParticipantsAddedHandler(VideoApiServiceMock.Object,
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object);
 
             var integrationEvent = GetIntegrationEventWithLinkedParticipant();
             var dtoList = MapToRequestFromDto(integrationEvent.Participants[0].LinkedParticipants);
@@ -99,9 +103,10 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
         private ParticipantsAddedIntegrationEvent GetIntegrationEvent()
         {
+
             return new ParticipantsAddedIntegrationEvent
             {
-                HearingId = HearingId,
+                Hearing = GetHearingDto(),
                 Participants = new List<ParticipantDto>
                 {
                     new ParticipantDto
@@ -131,7 +136,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             return new ParticipantsAddedIntegrationEvent
             {
-                HearingId = HearingId,
+                Hearing = GetHearingDto(),
                 Participants = new List<ParticipantDto>
                 {
                     new ParticipantDto
@@ -159,7 +164,22 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 }
             };
         }
-        
+
+        private static HearingDto GetHearingDto()
+        {
+            return new HearingDto
+            {
+                HearingId = Guid.NewGuid(),
+                CaseNumber = "Test1234",
+                CaseType = "Generic",
+                CaseName = "Automated Case vs Humans",
+                ScheduledDuration = 60,
+                ScheduledDateTime = DateTime.UtcNow,
+                HearingVenueName = "MyVenue",
+                RecordAudio = true
+            };
+        }
+
         private IList<LinkedParticipantRequest> MapToRequestFromDto(IList<LinkedParticipantDto> linked)
         {
             return linked.Select(l => new LinkedParticipantRequest()

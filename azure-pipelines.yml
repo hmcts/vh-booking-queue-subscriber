@@ -59,6 +59,13 @@ parameters:
       value: $(video_api_url)
     - name: VhServices:VideoWebUrl
       value: $(video_web_url)
+    - name: VhServices:NotificationApiUrl
+      value: $(notification_api_url)
+    - name: VhServices:UserApiUrl
+      value: $(user_api_url)
+    - name: VhServices:UserApiResourceId
+      value: vh-user-api-identifieruris
+      secret: true
     - name: VhServices:InternalEventSecret
       value: $(internal_event_secret)
 
@@ -101,7 +108,16 @@ parameters:
       value: $(video_web_url)
     - name: VhServices:InternalEventSecret
       value: $(internal_event_secret)   
-
+    - name: VhServices:NotificationApiUrl
+      value: $(notification_api_url)      
+    - name: VhServices:NotificationApiResourceId
+      value: vh-notification-api-identifieruris
+      secret: true
+    - name: VhServices:UserApiUrl
+      value: $(user_api_url)
+    - name: VhServices:UserApiResourceId
+      value: vh-user-api-identifieruris
+      secret: true      
 variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
