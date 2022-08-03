@@ -1,14 +1,8 @@
 ---
-java:
-  image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:20210603.9'
-  applicationPort: 8080
-  replicas: 2
-  ingressHost: vh-booking-queue-subscriber.{{ .Values.global.environment }}.platform.hmcts.net
+function:
+  image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest'
+  replicas: 1
   releaseNameOverride: vh-booking-queue-subscriber
-  readinessPath: /health/liveness
-  livenessPath: /health/liveness
-  livenessDelay: 360
-  livenessPeriod: 120
   aadIdentityName: vh-aad-identity
   keyVaults:
     vh-infra-core:
@@ -16,24 +10,30 @@ java:
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
       usePodIdentity: true
       secrets:
+        - azuread--tenantid
         - applicationinsights--instrumentationkey
-        - ServiceBusConnection
+        - name: servicebusqueue--connectionstring
+          alias: servicebusconnection
     vh-booking-queue:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
       usePodIdentity: true
       secrets:
-        - azuread--clientsecret
         - azuread--clientid
+        - azuread--clientsecret
+        - vhservices--internaleventsecret
   environment:
-    ASPNETCORE_URLS: http://+:8080
-    AZUREAD__TENANTID: "fb6e0e22-0da3-4c35-972a-9d61eb256508"
-    DISABLEHTTPSREDIRECTION: true
+    AZUREAD__AUTHORITY: https://login.microsoftonline.com/
+    AZUREAD__VIDEOAPIRESOURCEID: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
     Logging__LogLevel__Default: debug
     Logging__LogLevel__System: debug
     Logging__LogLevel__Microsoft: debug
-    USERNAMESTEM: "hearings.reform.hmcts.net"
-    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net
-    VHSERVICES__VIDEOAPIRESOURCEID: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
-    VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
     QUEUENAME: booking
+    VHSERVICES__BOOKINGSAPIRESOURCEID: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    VHSERVICES__ENABLEVIDEOAPISTUB: false
+    VHSERVICES__VIDEOAPIRESOURCEID: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net
+    VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    VHSERVICES__VIDEOWEBRESOURCEID: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net
+    VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
+
