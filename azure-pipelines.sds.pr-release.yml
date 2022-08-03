@@ -13,6 +13,9 @@ trigger: none
 pr:
   - master
 
+pool:
+ vmImage: ubuntu-latest
+
 variables:
   - group: vh-github-app-credentials
   - group: vh-video-web
