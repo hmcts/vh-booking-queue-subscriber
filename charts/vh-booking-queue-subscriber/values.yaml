@@ -1,7 +1,6 @@
 ---
 function:
   image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest'
-  replicas: 1
   releaseNameOverride: vh-booking-queue-subscriber
   aadIdentityName: vh-aad-identity
   keyVaults:
@@ -36,4 +35,13 @@ function:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBRESOURCEID: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
+  triggers:
+  - type: azure-servicebus 
+    queueName: booking
+    messageCount: 5
+    serviceBusName: vh-infra-core-{{ .Values.global.environment }}
+  triggerAuth:
+    create: true
+    enabled: true
+  triggerPodIdentityProvider: azure
 
