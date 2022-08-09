@@ -43,4 +43,3 @@ function:
     create: true
     enabled: true
   triggerPodIdentityProvider: azure
-
