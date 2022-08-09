@@ -1,7 +1,7 @@
 ---
 function:
   image: '${IMAGE_NAME}'
-triggers:
+  triggers:
   - type: azure-servicebus 
     queueName: booking
     messageCount: 5
