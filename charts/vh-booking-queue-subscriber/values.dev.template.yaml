@@ -1,3 +1,8 @@
 ---
 function:
   image: '${IMAGE_NAME}'
+triggers:
+  - type: azure-servicebus 
+    queueName: booking
+    messageCount: 5
+    serviceBusName: "vh-infra-core-dev"
