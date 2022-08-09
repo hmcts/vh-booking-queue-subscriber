@@ -35,11 +35,17 @@ function:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBRESOURCEID: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
-  triggers:
-  - type: azure-servicebus 
-    queueName: booking
-    messageCount: 5
+  triggers: []
+  triggerPodIdentityProvider: azure
   triggerAuth:
     create: true
     enabled: true
-  triggerPodIdentityProvider: azure
+  job:
+    parallelism: 1 # [max number of desired pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
+    completions: 1 # [desired number of successfully finished pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
+    activeDeadlineSeconds: 600 # Specifies the duration in seconds relative to the startTime that the job may be active before the system tries to terminate it; value must be positive integer
+    backoffLimit: 6
+  pollingInterval: 30  
+  maxReplicaCount: 100
+  successfulJobsHistoryLimit: 100
+  failedJobsHistoryLimit: 100
