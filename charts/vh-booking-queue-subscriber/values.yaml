@@ -39,7 +39,6 @@ function:
   - type: azure-servicebus 
     queueName: booking
     messageCount: 5
-    serviceBusName: "vh-infra-core-{{ .Values.global.environment }}"
   triggerAuth:
     create: true
     enabled: true
