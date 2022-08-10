@@ -70,7 +70,7 @@ stages:
               repositoryName: ${{ variables.repositoryName }}
               imageName: "${{ variables.imageName }}"
               imageTags:
-                - ${{ if eq(variables['Build.SourceBranchName'], 'VIH-9021') }}:
+                - ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
                     - "${{ variables.stagingTagName }}"
                 - ? ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/release') }}
                   : - "latest"
