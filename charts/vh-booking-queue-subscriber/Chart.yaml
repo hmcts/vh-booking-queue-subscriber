@@ -9,5 +9,5 @@ maintainers:
 
 dependencies:
   - name: function
-    version: 2.1.0-beta
+    version: 2.1.0
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
