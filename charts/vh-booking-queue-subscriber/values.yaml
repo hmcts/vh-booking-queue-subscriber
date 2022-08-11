@@ -1,7 +1,6 @@
 ---
 function:
   image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest'
-  releaseNameOverride: vh-booking-queue-subscriber
   aadIdentityName: vh-aad-identity
   keyVaults:
     vh-infra-core:
