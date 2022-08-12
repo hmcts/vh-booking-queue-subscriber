@@ -80,6 +80,6 @@ function:
     activeDeadlineSeconds: 600 # Specifies the duration in seconds relative to the startTime that the job may be active before the system tries to terminate it; value must be positive integer
     backoffLimit: 6
   pollingInterval: 30  
-  maxReplicaCount: 10
+  maxReplicaCount: 2
   successfulJobsHistoryLimit: 100
   failedJobsHistoryLimit: 100
