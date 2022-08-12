@@ -22,10 +22,8 @@ using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
 using BookingsApi.Client;
-using System.Collections.Generic;
 
 [assembly: FunctionsStartup(typeof(Startup))]
-
 namespace BookingQueueSubscriber
 {
     public class Startup : FunctionsStartup
@@ -37,31 +35,17 @@ namespace BookingQueueSubscriber
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            var keyVaults = new List<string>()
-            {
-                "vh-infra-core",
-                "vh-admin-web",
-                "vh-bookings-api",
-                "vh-video-api",
-                "vh-notification-api",
-                "vh-user-api",
-                "vh-booking-queue",
-                "vh-video-web"
-            };
+            const string vhInfraCore = "/mnt/secrets/vh-infra-core";
+            const string vhBookingQueueSubscriber = "/mnt/secrets/vh-booking-queue-subscriber";
 
             var context = builder.GetContext();
-            var configurationBuilder = builder.ConfigurationBuilder;
-            foreach (var keyVault in keyVaults)
-            {
-                configurationBuilder.AddAksKeyVaultSecretProvider($"/mnt/secrets/{keyVault}");
-            }
-
-            configurationBuilder.AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
-                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"),
-                    true)
+            builder.ConfigurationBuilder
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
+                .AddAksKeyVaultSecretProvider(vhInfraCore)
+                .AddAksKeyVaultSecretProvider(vhBookingQueueSubscriber)
                 .AddUserSecrets("F6705640-D918-4180-B98A-BAB7ADAA4817")
                 .AddEnvironmentVariables();
-
 
             base.ConfigureAppConfiguration(builder);
         }
@@ -81,7 +65,10 @@ namespace BookingQueueSubscriber
         {
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
-            services.Configure<AzureAdConfiguration>(options => { configuration.GetSection("AzureAd").Bind(options); });
+            services.Configure<AzureAdConfiguration>(options =>
+            {
+                configuration.GetSection("AzureAd").Bind(options);
+            });
             services.Configure<ServicesConfiguration>(options =>
             {
                 configuration.GetSection("VhServices").Bind(options);
@@ -100,7 +87,7 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            services.AddLogging(builder =>
+            services.AddLogging(builder => 
                 builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
             RegisterMessageHandlers(services);
@@ -125,7 +112,7 @@ namespace BookingQueueSubscriber
                         var client = VideoApiClient.GetClient(httpClient);
                         client.BaseUrl = serviceConfiguration.VideoApiUrl;
                         client.ReadResponseAsString = true;
-                        return (IVideoApiClient) client;
+                        return (IVideoApiClient)client;
                     });
 
                 services.AddTransient<IVideoWebService, VideoWebService>();
@@ -142,7 +129,7 @@ namespace BookingQueueSubscriber
                         var client = UserApiClient.GetClient(httpClient);
                         client.BaseUrl = serviceConfiguration.UserApiUrl;
                         client.ReadResponseAsString = true;
-                        return (IUserApiClient) client;
+                        return (IUserApiClient)client;
                     });
 
                 services.AddHttpClient<INotificationApiClient, NotificationApiClient>()
@@ -152,18 +139,20 @@ namespace BookingQueueSubscriber
                         var client = NotificationApiClient.GetClient(httpClient);
                         client.BaseUrl = serviceConfiguration.NotificationApiUrl;
                         client.ReadResponseAsString = true;
-                        return (INotificationApiClient) client;
+                        return (INotificationApiClient)client;
                     });
-                services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
-                    .AddHttpMessageHandler<BookingsServiceTokenHandler>()
-                    .AddTypedClient(httpClient =>
-                    {
-                        var client = BookingsApiClient.GetClient(httpClient);
-                        client.BaseUrl = serviceConfiguration.BookingsApiUrl;
-                        client.ReadResponseAsString = true;
-                        return (IBookingsApiClient) client;
-                    });
+                 services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
+                .AddHttpMessageHandler<BookingsServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = BookingsApiClient.GetClient(httpClient);
+                    client.BaseUrl = serviceConfiguration.BookingsApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IBookingsApiClient)client;
+                });
             }
+
+
         }
 
         private void RegisterMessageHandlers(IServiceCollection serviceCollection)
