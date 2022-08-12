@@ -53,7 +53,7 @@ namespace BookingQueueSubscriber
             var configurationBuilder = builder.ConfigurationBuilder;
             foreach (var keyVault in keyVaults)
             {
-                configurationBuilder.AddAksKeyVaultSecretProvider(keyVault);
+                configurationBuilder.AddAksKeyVaultSecretProvider($"/mnt/secrets/{keyVault}");
             }
 
             configurationBuilder.AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
