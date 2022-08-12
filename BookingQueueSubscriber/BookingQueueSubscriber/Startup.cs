@@ -37,6 +37,12 @@ namespace BookingQueueSubscriber
 
             const string vhInfraCore = "/mnt/secrets/vh-infra-core";
             const string vhBookingQueueSubscriber = "/mnt/secrets/vh-booking-queue-subscriber";
+            const string vhAdminWeb = "/mnt/secrets/vh-admin-web";
+            const string vhBookingsApi = "/mnt/secrets/vh-bookings-api";
+            const string vhVideoApi= "/mnt/secrets/vh-video-api";
+            const string vhNotificationApi = "/mnt/secrets/vh-notification-api";
+            const string vhUserApi= "/mnt/secrets/vh-user-api";
+            const string vhVideoWeb = "/mnt/secrets/vh-video-web";
 
             var context = builder.GetContext();
             builder.ConfigurationBuilder
@@ -44,6 +50,12 @@ namespace BookingQueueSubscriber
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
                 .AddAksKeyVaultSecretProvider(vhInfraCore)
                 .AddAksKeyVaultSecretProvider(vhBookingQueueSubscriber)
+                .AddAksKeyVaultSecretProvider(vhAdminWeb)
+                .AddAksKeyVaultSecretProvider(vhBookingsApi)
+                .AddAksKeyVaultSecretProvider(vhVideoApi)
+                .AddAksKeyVaultSecretProvider(vhNotificationApi)
+                .AddAksKeyVaultSecretProvider(vhUserApi)
+                .AddAksKeyVaultSecretProvider(vhVideoWeb)
                 .AddUserSecrets("F6705640-D918-4180-B98A-BAB7ADAA4817")
                 .AddEnvironmentVariables();
 
