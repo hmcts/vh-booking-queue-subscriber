@@ -85,6 +85,7 @@ stages:
               arguments: "-c Release"
 
           - template: templates/sonarCloud/runAnalysis.yml@azTemplates
+          
 
   #####################################################
   # Pre Steps. ########################################
