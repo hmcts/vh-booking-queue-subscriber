@@ -42,7 +42,9 @@ namespace BookingQueueSubscriber
             "vh-bookings-api",
             "vh-video-api",
             "vh-notification-api",
-            "vh-user-api"
+            "vh-user-api",
+            "vh-booking-queue",
+            "vh-video-web"
             };
 
             var context = builder.GetContext();
