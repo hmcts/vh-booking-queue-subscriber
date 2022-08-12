@@ -22,6 +22,7 @@ using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
 using BookingsApi.Client;
+using System.Collections.Generic;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
@@ -35,17 +36,26 @@ namespace BookingQueueSubscriber
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            const string vhInfraCore = "/mnt/secrets/vh-infra-core";
-            const string vhBookingQueueSubscriber = "/mnt/secrets/vh-booking-queue-subscriber";
+            var keyVaults=new List<string> (){
+            "vh-infra-core",
+            "vh-admin-web",
+            "vh-bookings-api",
+            "vh-video-api",
+            "vh-notification-api",
+            "vh-user-api"
+            };
 
             var context = builder.GetContext();
             builder.ConfigurationBuilder
+                foreach (var keyVault in keyVaults)
+                {
+                    configBuilder.AddAksKeyVaultSecretProvider($"/mnt/secrets/{keyVault}");
+                }
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
-                .AddAksKeyVaultSecretProvider(vhInfraCore)
-                .AddAksKeyVaultSecretProvider(vhBookingQueueSubscriber)
                 .AddUserSecrets("F6705640-D918-4180-B98A-BAB7ADAA4817")
                 .AddEnvironmentVariables();
+
 
             base.ConfigureAppConfiguration(builder);
         }
