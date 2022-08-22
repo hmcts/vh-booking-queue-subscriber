@@ -6,6 +6,7 @@ using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using Microsoft.Extensions.Logging;
 using BookingsApi.Client;
+using BookingsApi.Contract.Configuration;
 
 namespace BookingQueueSubscriber.Services
 {
@@ -64,8 +65,9 @@ namespace BookingQueueSubscriber.Services
         private async Task<User> CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
         {
             User user = null;
+            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             if (!string.Equals(participant.UserRole, RoleNames.Judge) &&
-                !IsPanelMemberOrWingerWithUsername(participant))
+                !IsPanelMemberOrWingerWithUsername(participant, ejudFeatureFlag))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);
@@ -82,10 +84,11 @@ namespace BookingQueueSubscriber.Services
             return user;
         }
 
-        private static bool IsPanelMemberOrWingerWithUsername(ParticipantDto participant)
+        private static bool IsPanelMemberOrWingerWithUsername(ParticipantDto participant, bool ejudFeatureFlag)
         {
             return !string.IsNullOrEmpty(participant.Username) &&
                 string.Equals(participant.UserRole, RoleNames.JudicialOfficeHolder) && 
+                ejudFeatureFlag &&
                 participant.HasEjdUsername();
         }
     }

@@ -20,7 +20,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             Dictionary<string, string> expectedParameters = GetExpectedParameters(hearing, participant);
 
             //Act
-            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType);
+            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType, true);
 
             //Assert
             result.Should().NotBeNull();
@@ -43,7 +43,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             participant.Username = "testusername@hmcts.net";
             participant.ContactEmail = "contact@hearings.reform.hmcts.net";
             //Act
-            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType);
+            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType, false);
 
             //Assert
             result.Should().BeNull();
@@ -66,7 +66,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Add("courtroom account username", participant.Username);
 
             //Act
-            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType);
+            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType, false);
 
             //Assert
             result.Should().NotBeNull();
@@ -94,7 +94,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Add("username", $"{participant.Username.ToLower()}");
 
             //Act
-            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType);
+            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType, true);
 
             //Assert
             result.Should().NotBeNull();
@@ -122,7 +122,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Add("username", $"{participant.Username.ToLower()}");
 
             //Act
-            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType);
+            var result = AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, testType, false);
 
             //Assert
             result.Should().NotBeNull();

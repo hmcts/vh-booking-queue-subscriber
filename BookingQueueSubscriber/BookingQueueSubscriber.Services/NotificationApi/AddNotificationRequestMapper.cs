@@ -36,20 +36,20 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return addNotificationRequest;
         }
 
-        public static AddNotificationRequest MapToNewHearingNotification(HearingDto hearing, ParticipantDto participant)
+        public static AddNotificationRequest MapToNewHearingNotification(HearingDto hearing, ParticipantDto participant, bool eJudFeatureEnabled)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
             var parameters = InitHearingNotificationParams(hearing);
 
             NotificationType notificationType;
-            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) && participant.HasEjdUsername())
+            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
             else if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) &&
-                     !participant.HasEjdUsername())
+                     !eJudFeatureEnabled)
             {
                 notificationType = NotificationType.HearingConfirmationJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -59,7 +59,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
             {
-                notificationType = participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJoh : NotificationType.HearingConfirmationJoh;
+                notificationType = eJudFeatureEnabled && participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJoh : NotificationType.HearingConfirmationJoh;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
             else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
@@ -87,7 +87,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         public static AddNotificationRequest MapToHearingAmendmentNotification(HearingDto hearing, ParticipantDto participant, DateTime originalDateTime,
-            DateTime newDateTime)
+            DateTime newDateTime, bool eJudFeatureEnabled)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
@@ -102,13 +102,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
 
             NotificationType notificationType;
-            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) && participant.HasEjdUsername())
+            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingAmendmentEJudJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
             else if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) &&
-                     !participant.HasEjdUsername())
+                     !eJudFeatureEnabled)
             {
                 notificationType = NotificationType.HearingAmendmentJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -118,7 +118,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
             {
-                notificationType = participant.HasEjdUsername() ? NotificationType.HearingAmendmentEJudJoh : NotificationType.HearingAmendmentJoh;
+                notificationType = eJudFeatureEnabled && participant.HasEjdUsername() ? NotificationType.HearingAmendmentEJudJoh : NotificationType.HearingAmendmentJoh;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
 
             }
@@ -147,7 +147,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         public static AddNotificationRequest MapToMultiDayHearingConfirmationNotification(
-            HearingDto hearing, ParticipantDto participant, int days)
+            HearingDto hearing, ParticipantDto participant, int days, bool eJudFeatureEnabled)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
@@ -162,13 +162,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
             NotificationType notificationType;
             if (participant.UserRole.Contains(NotifyParams.Judge, StringComparison.InvariantCultureIgnoreCase) &&
-                participant.HasEjdUsername())
+                eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
             else if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) &&
-                     !participant.HasEjdUsername())
+                     !eJudFeatureEnabled)
             {
                 notificationType = NotificationType.HearingConfirmationJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -178,7 +178,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
             {
-                notificationType = participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJohMultiDay : NotificationType.HearingConfirmationJohMultiDay;
+                notificationType = eJudFeatureEnabled && participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJohMultiDay : NotificationType.HearingConfirmationJohMultiDay;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
             else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
@@ -205,7 +205,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
         }
 
-        public static AddNotificationRequest MapToDemoOrTestNotification(HearingDto hearing, ParticipantDto participant, string testType)
+        public static AddNotificationRequest MapToDemoOrTestNotification(HearingDto hearing, ParticipantDto participant, string testType, bool eJudFeatureEnabled)
         {
             var contactEmail = participant.ContactEmail;
             var parameters = new Dictionary<string, string>()
@@ -218,7 +218,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
 
             NotificationType notificationType;
-            if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase) && participant.HasEjdUsername())
+            if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase) && eJudFeatureEnabled 
+                && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.EJudJohDemoOrTest;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
