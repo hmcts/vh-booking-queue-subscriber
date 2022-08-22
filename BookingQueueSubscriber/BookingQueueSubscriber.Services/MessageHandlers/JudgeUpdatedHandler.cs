@@ -9,7 +9,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     {
         private readonly IUserCreationAndNotification _userCreationAndNotification;
 
-        public JudgeUpdatedHandler(  IUserCreationAndNotification userCreationAndNotification, ILogger<JudgeUpdatedHandler> logger)
+        public JudgeUpdatedHandler(  IUserCreationAndNotification userCreationAndNotification)
         {
             _userCreationAndNotification = userCreationAndNotification;
         }
