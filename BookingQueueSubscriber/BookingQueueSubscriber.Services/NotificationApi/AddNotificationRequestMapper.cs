@@ -280,7 +280,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
                 && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser)
                 ? participant.ContactEmailForNonEJudJudgeUser
-                : string.Empty;
+                : null;
         }
   
         private static string GetContactPhoneForNonEJudJudgeUser(ParticipantDto participant)
@@ -288,7 +288,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
                 && !string.IsNullOrEmpty(participant.ContactPhoneForNonEJudJudgeUser)
                 ? participant.ContactPhoneForNonEJudJudgeUser
-                : string.Empty;
+                : null;
         }
     }
 }
