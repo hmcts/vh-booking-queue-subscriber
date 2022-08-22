@@ -65,15 +65,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
 
-            //var caseName = hearing.CaseName;
-            //var caseNumber = hearing.CaseNumber;
-            //if (!hearing.DoesJudgeEmailExist() || originalDateTime == null ||
-            //    originalHearing.GroupId != originalHearing.Id)
-            //{
-            //    participantsToEmail = participantsToEmail
-            //        .Where(x => !x.UserRole.Contains("Judge", StringComparison.CurrentCultureIgnoreCase))
-            //        .ToList();
-            //}
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var requests = participants
                 .Select(participant =>

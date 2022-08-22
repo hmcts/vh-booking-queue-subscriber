@@ -239,7 +239,10 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 else
                 {
                     notificationType = NotificationType.JudgeDemoOrTest;
-                    contactEmail = contactEmailForNonEJudJudgeUser ?? participant.ContactEmail;
+                    if (!string.IsNullOrEmpty(contactEmailForNonEJudJudgeUser))
+                    {
+                        contactEmail = participant.ContactEmail;
+                    }
                     parameters.Add(NotifyParams.CourtroomAccountUserName, participant.Username);
                 }
 
