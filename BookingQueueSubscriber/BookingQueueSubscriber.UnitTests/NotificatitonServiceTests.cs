@@ -23,7 +23,9 @@ namespace BookingQueueSubscriber.UnitTests
         private Mock<IUserService> _userServiceMock;
         private Mock<IBookingsApiClient> _bookingsAPIMock;
         private Mock<ILogger<NotificationService>> _logger;
-        public NotificatitonServiceTests()
+
+        [SetUp]
+        public void TestSetup()
         {
             _notificationApiMock = new Mock<INotificationApiClient>();
             _userServiceMock = new Mock<IUserService>();
@@ -37,8 +39,6 @@ namespace BookingQueueSubscriber.UnitTests
             var participant = GetJoh();
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic" };
 
-            SetupDependencyCalls(false);
-
             var notificationService = new NotificationService(_notificationApiMock.Object, 
                 _bookingsAPIMock.Object, _logger.Object);
 
@@ -47,14 +47,14 @@ namespace BookingQueueSubscriber.UnitTests
                    participant
                 });
 
+            _bookingsAPIMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
         }
+
         [Test]
         public async Task SendHearingAmendmentNotification_should_have_map_to_hearingamendment_notification_with_feature_flag()
         {
             var participant = GetJoh();
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic", ScheduledDateTime = DateTime.UtcNow.AddDays(1) };
-
-            SetupDependencyCalls(false);
 
             var notificationService = new NotificationService(_notificationApiMock.Object,
                 _bookingsAPIMock.Object, _logger.Object);
@@ -64,6 +64,7 @@ namespace BookingQueueSubscriber.UnitTests
                    participant
                 });
 
+            _bookingsAPIMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
         }
 
         [Test]
@@ -71,8 +72,6 @@ namespace BookingQueueSubscriber.UnitTests
         {
             var participant = GetJoh();
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic", CaseName = "multi day test" };
-
-            SetupDependencyCalls(false);
 
             var notificationService = new NotificationService(_notificationApiMock.Object,
                 _bookingsAPIMock.Object, _logger.Object);
@@ -82,12 +81,7 @@ namespace BookingQueueSubscriber.UnitTests
                    participant
                 }, 10);
 
-        }
-
-        private void SetupDependencyCalls(bool eJudFeatureFlag)
-        {
-            _bookingsAPIMock.Setup(x => x.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature))).ReturnsAsync(eJudFeatureFlag);
-
+            _bookingsAPIMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
         }
 
         private ParticipantDto GetJoh()
