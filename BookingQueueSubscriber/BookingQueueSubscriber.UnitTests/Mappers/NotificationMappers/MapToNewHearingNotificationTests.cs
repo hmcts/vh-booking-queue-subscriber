@@ -83,31 +83,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
         }
 
         [Test]
-        public void Should_map_to_judge_confirmation_notification_has_other_contact_email()
-        {
-            var expectedNotificationType = NotificationType.HearingConfirmationJudge;
-            const string expectedPhone = "123456789";
-            var participant = GetParticipantDto("Judge");
-            participant.Username = "judge@hearings.net";
-            participant.ContactPhoneForNonEJudJudgeUser = expectedPhone;
-            var hearing = GetHearingDto();
-
-            var expectedParameters = GetExpectedParameters(hearing, participant);
-            expectedParameters.Add("courtroom account username", participant.Username);
-
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
-
-            result.Should().NotBeNull();
-            result.HearingId.Should().Be(hearing.HearingId);
-            result.ParticipantId.Should().Be(participant.ParticipantId);
-            result.ContactEmail.Should().Be(participant.ContactEmail);
-            result.NotificationType.Should().Be(expectedNotificationType);
-            result.MessageType.Should().Be(MessageType.Email);
-            result.PhoneNumber.Should().Be(expectedPhone);
-            result.Parameters.Should().BeEquivalentTo(expectedParameters);
-        }
-
-        [Test]
         public void Should_map_to_lip_confirmation_notification()
         {
             var expectedNotificationType = NotificationType.HearingConfirmationLip;
