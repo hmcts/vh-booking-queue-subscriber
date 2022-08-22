@@ -36,7 +36,7 @@ namespace BookingQueueSubscriber
             }
 
             const string vhInfraCore = "/mnt/secrets/vh-infra-core";
-            const string vhBookingQueueSubscriber = "/mnt/secrets/vh-booking-queue-subscriber";
+            const string vhBookingQueue = "/mnt/secrets/vh-booking-queue";
             const string vhAdminWeb = "/mnt/secrets/vh-admin-web";
             const string vhBookingsApi = "/mnt/secrets/vh-bookings-api";
             const string vhVideoApi= "/mnt/secrets/vh-video-api";
@@ -49,7 +49,7 @@ namespace BookingQueueSubscriber
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
                 .AddAksKeyVaultSecretProvider(vhInfraCore)
-                .AddAksKeyVaultSecretProvider(vhBookingQueueSubscriber)
+                .AddAksKeyVaultSecretProvider(vhBookingQueue)
                 .AddAksKeyVaultSecretProvider(vhAdminWeb)
                 .AddAksKeyVaultSecretProvider(vhBookingsApi)
                 .AddAksKeyVaultSecretProvider(vhVideoApi)
