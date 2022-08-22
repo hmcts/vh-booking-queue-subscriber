@@ -28,7 +28,6 @@ namespace BookingQueueSubscriber.Common.Security
 
         public AuthenticationResult GetAuthorisationResult(string clientId, string clientSecret, string clientResource)
         {
-            Console.WriteLine($"Client id: ${clientId}");
             AuthenticationResult result;
             var credential = new ClientCredential(clientId, clientSecret);
             var authContext =
