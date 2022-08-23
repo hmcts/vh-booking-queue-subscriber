@@ -60,6 +60,8 @@ stages:
 
       - job: SonarCloud
         displayName: SonarCloud Test Analysis
+        pool:
+          vmImage: windows-latest
         steps:
           - template: templates/sonarCloud/prepare.yml@azTemplates
             parameters:
