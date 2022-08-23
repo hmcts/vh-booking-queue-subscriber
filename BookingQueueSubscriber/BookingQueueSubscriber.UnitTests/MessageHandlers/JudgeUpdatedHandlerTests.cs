@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
@@ -7,12 +8,26 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using VideoApi.Contract.Requests;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class JudgeUpdatedHandlerTests : MessageHandlerTestBase
     {
         private readonly Mock<ILogger<JudgeUpdatedHandler>> logger = new Mock<ILogger<JudgeUpdatedHandler>>();
+        private ConferenceDetailsResponse mockConferenceDetailsResponse;
+
+        [SetUp]
+        public void setup()
+        {
+            mockConferenceDetailsResponse = new ConferenceDetailsResponse{Participants = new List<ParticipantDetailsResponse>
+            {
+                new ParticipantDetailsResponse()
+            }};
+            VideoApiServiceMock.Setup(e => e.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
+                .ReturnsAsync(mockConferenceDetailsResponse);
+        }
+        
         [Test]
         public async Task should_send_notification_and_update_participant_details()
         {

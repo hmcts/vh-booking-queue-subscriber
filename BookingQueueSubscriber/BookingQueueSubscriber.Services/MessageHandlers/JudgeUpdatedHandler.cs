@@ -23,16 +23,18 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(JudgeUpdatedIntegrationEvent eventMessage)
         {
+            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, new[] {eventMessage.Judge});
+            
             var conferenceResponse = await _apiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId, true);
             var judgeResponse = conferenceResponse.Participants.SingleOrDefault(x => x.RefId == eventMessage.Judge.ParticipantId);
             
             if (judgeResponse != null)
             {
-                _logger.LogError("Unable to find judge participant by ref id {ParticipantRefId} in {ConferenceId}", eventMessage.Judge.ParticipantId, conferenceResponse.Id);
                 var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(eventMessage.Judge);
                 await _apiService.UpdateParticipantDetails(conferenceResponse.Id, judgeResponse.Id, request);
             }
-            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, new[] {eventMessage.Judge});
+            else
+                _logger.LogError("Unable to find judge participant by ref id {ParticipantRefId} in {ConferenceId}", eventMessage.Judge.ParticipantId, conferenceResponse.Id);
         } 
         
 
