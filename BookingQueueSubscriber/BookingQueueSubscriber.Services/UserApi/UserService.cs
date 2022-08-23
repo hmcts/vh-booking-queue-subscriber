@@ -11,7 +11,7 @@ namespace BookingQueueSubscriber.Services.UserApi
     public interface IUserService
     {
         Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser);
-        Task AssignUserToGroup(string username, string userRole);
+        Task AssignUserToGroup(string userId, string userRole);
     }
 
     public class UserService : IUserService

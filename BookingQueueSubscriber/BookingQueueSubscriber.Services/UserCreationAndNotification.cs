@@ -68,7 +68,7 @@ namespace BookingQueueSubscriber.Services
             User user = null;
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             if (!string.Equals(participant.UserRole, RoleNames.Judge) &&
-                !IsPanelMemberOrWingerWithUsername(participant, ejudFeatureFlag))
+                !IsPanelMemberOrWingerWithEJudUsername(participant, ejudFeatureFlag))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);
@@ -85,12 +85,14 @@ namespace BookingQueueSubscriber.Services
             return user;
         }
 
-        private static bool IsPanelMemberOrWingerWithUsername(ParticipantDto participant, bool ejudFeatureFlag)
+        private static bool IsPanelMemberOrWingerWithEJudUsername(ParticipantDto participant, bool ejudFeatureFlag)
         {
-            return !string.IsNullOrEmpty(participant.Username) &&
-                string.Equals(participant.UserRole, RoleNames.JudicialOfficeHolder) && 
-                ejudFeatureFlag &&
-                participant.HasEjdUsername();
+            if (string.Equals(participant.UserRole, RoleNames.JudicialOfficeHolder) && ejudFeatureFlag)
+            {
+                return participant.HasEjdUsername();
+            }
+
+            return false;
         }
     }
 }
