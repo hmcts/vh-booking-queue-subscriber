@@ -182,12 +182,12 @@ namespace BookingQueueSubscriber.Services
 
         public Task<bool> GetFeatureFlagAsync(string featureName)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(false);
         }
 
         public Task<bool> GetFeatureFlagAsync(string featureName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(false);
         }
 
         public Task<HearingDetailsResponse> GetHearingDetailsByIdAsync(Guid hearingId)
@@ -509,5 +509,6 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
+        
     }
 }

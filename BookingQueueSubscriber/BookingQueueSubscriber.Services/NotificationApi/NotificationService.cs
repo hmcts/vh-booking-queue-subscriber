@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+using BookingsApi.Client;
+using BookingsApi.Contract.Configuration;
 using Microsoft.Extensions.Logging;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
@@ -22,11 +24,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     public class NotificationService : INotificationService
     {
         private readonly INotificationApiClient _notificationApiClient;
+        private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService(INotificationApiClient notificationApiClient, ILogger<NotificationService> logger)
+        public NotificationService(INotificationApiClient notificationApiClient, IBookingsApiClient bookingsApiClient, ILogger<NotificationService> logger)
         {
             _notificationApiClient = notificationApiClient;
+            _bookingsApiClient = bookingsApiClient;
             _logger = logger;
         }
 
@@ -46,9 +50,9 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 await ProcessGenericEmail(hearing, participants);
                 return;
             }
-
+            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var requests = participants
-                .Select(participant => AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant))
+                .Select(participant => AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, ejudFeatureFlag))
                 .ToList();
             await CreateNotifications(requests);
             _logger.LogInformation("Created hearing notification for the users in the hearing {hearingid}", hearing.HearingId);
@@ -61,20 +65,11 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
 
-            //var caseName = hearing.CaseName;
-            //var caseNumber = hearing.CaseNumber;
-            //if (!hearing.DoesJudgeEmailExist() || originalDateTime == null ||
-            //    originalHearing.GroupId != originalHearing.Id)
-            //{
-            //    participantsToEmail = participantsToEmail
-            //        .Where(x => !x.UserRole.Contains("Judge", StringComparison.CurrentCultureIgnoreCase))
-            //        .ToList();
-            //}
-
+            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var requests = participants
                 .Select(participant =>
                     AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant,
-                        originalDateTime, hearing.ScheduledDateTime))
+                        originalDateTime, hearing.ScheduledDateTime, ejudFeatureFlag))
                 .ToList();
 
             await CreateNotifications(requests);
@@ -87,9 +82,9 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 await ProcessGenericEmail(hearing, participants); 
                 return;
             }
-
+            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var requests = participants
-                .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days))
+                .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag))
                 .ToList();
 
               await CreateNotifications(requests);
@@ -101,10 +96,10 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 return;
             }
-
+            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var notificationRequests = participants
                 .Select(participant => AddNotificationRequestMapper.MapToDemoOrTestNotification(
-                    hearing, participant, hearing.HearingType))
+                    hearing, participant, hearing.HearingType, ejudFeatureFlag))
                 .Where(x => x != null)
                 .ToList();
 
