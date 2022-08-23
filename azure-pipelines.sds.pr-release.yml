@@ -44,27 +44,8 @@ stages:
 
       - job: UnitTests
         displayName: "Unit Tests"
-        pool:
-          vmImage: windows-latest
         steps:
           - checkout: self
-
-          - template: templates/sonarCloud/prepare.yml@azTemplates
-            parameters:
-              ExtraProperties: |
-                sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
-                sonar.coverage.exclusions=${{ variables.sonar_exclusion }}
-                sonar.cpd.exclusions="**/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber/Swagger/**"
-
-          - task: DotNetCoreCLI@2
-            displayName: Restore .NET Project(s)
-            inputs:
-              command: restore
-              restoreArguments: --force-evaluate
-              projects: "${{ variables.app_path }}/${{ variables.app_path }}.UnitTests/*.UnitTests.csproj"
-              feedsToUse: config
-              nugetConfigPath: "${{ variables.app_path }}/nuget.config" # Temp - Change To SDS Feed When Possible.
-              # vstsFeed: 'Video Hearings/vh-packages'
 
           - template: stages\dotnet-tests\unit-tests.yml@azTemplates
             parameters:
@@ -77,7 +58,34 @@ stages:
                 - "[*]${{ variables.app_path }}.Common.*"
                 - "[Testing.Common]*"
 
-          - template: templates/sonarCloud/runAnalysis.yml@azTemplates          
+      - job: SonarCloud
+        displayName: SonarCloud Test Analysis
+        steps:
+          - template: templates/sonarCloud/prepare.yml@azTemplates
+            parameters:
+              ExtraProperties: |
+                sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
+                sonar.coverage.exclusions=${{ variables.sonar_exclusion }}
+
+          - task: DotNetCoreCLI@2
+            displayName: Restore .NET Project(s)
+            inputs:
+              command: restore
+              restoreArguments: --force-evaluate
+              projects: "${{ variables.app_path }}/${{ variables.app_path }}.UnitTests/*.UnitTests.csproj"
+              feedsToUse: config
+              nugetConfigPath: "${{ variables.app_path }}/nuget.config" # Temp - Change To SDS Feed When Possible.
+              # vstsFeed: 'Video Hearings/vh-packages'
+
+          - task: DotNetCoreCLI@2
+            displayName: Build .NET Project(s)
+            inputs:
+              command: build
+              projects: "${{ variables.app_path }}/${{ variables.app_path }}.UnitTests/*.UnitTests.csproj"
+              arguments: "-c Release"
+
+          - template: templates/sonarCloud/runAnalysis.yml@azTemplates
+          
 
   #####################################################
   # Pre Steps. ########################################
