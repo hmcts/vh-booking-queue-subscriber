@@ -5,7 +5,7 @@ resources:
     - repository: azTemplates
       type: github
       name: hmcts/azure-devops-templates
-      ref: master
+      ref: VIH-9236-code-coverage
       endpoint: hmcts
 
 trigger: none
@@ -44,8 +44,8 @@ stages:
 
       - job: UnitTests
         displayName: "Unit Tests"
-        pool:
-          vmImage: windows-latest
+        #pool:
+        #  vmImage: windows-latest
         steps:
           - checkout: self
 
