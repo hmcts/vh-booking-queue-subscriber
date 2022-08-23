@@ -46,6 +46,7 @@ namespace BookingQueueSubscriber.Services
             }
 
             return newUsers;
+
         }
 
         public async Task SendHearingNotificationAsync(HearingDto hearing, IEnumerable<ParticipantDto> participants)
