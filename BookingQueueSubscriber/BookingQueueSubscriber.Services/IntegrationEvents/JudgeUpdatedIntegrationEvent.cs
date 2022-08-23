@@ -1,5 +1,4 @@
-﻿using System;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+﻿using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 
 namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
