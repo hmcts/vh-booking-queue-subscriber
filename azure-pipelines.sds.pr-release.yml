@@ -5,7 +5,7 @@ resources:
     - repository: azTemplates
       type: github
       name: hmcts/azure-devops-templates
-      ref: VIH-9236-code-coverage
+      ref: master
       endpoint: hmcts
 
 trigger: none
