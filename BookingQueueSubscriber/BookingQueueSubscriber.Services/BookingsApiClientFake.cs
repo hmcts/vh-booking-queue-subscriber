@@ -10,7 +10,7 @@ namespace BookingQueueSubscriber.Services
 {
     public class BookingsApiClientFake : IBookingsApiClient
     {
-        public bool EJudFeatureEnabled = false;
+        public bool EJudFeatureEnabled { get; set; }
         public Task<BookingsApi.Contract.Responses.EndpointResponse> AddEndPointToHearingAsync(Guid hearingId, BookingsApi.Contract.Requests.AddEndpointRequest addEndpointRequest)
         {
             throw new NotImplementedException();

@@ -11,7 +11,7 @@ namespace BookingQueueSubscriber.Services.UserApi
 {
     public class UserServiceFake : IUserService
     {
-        public List<User> Users = new List<User>();
+        public List<User> Users { get; set; } = new List<User>();
         public  Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser)
         {
             var user = new User

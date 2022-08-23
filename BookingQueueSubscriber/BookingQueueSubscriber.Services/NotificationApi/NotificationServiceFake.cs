@@ -10,8 +10,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
  
     public class NotificationServiceFake : INotificationService
     {
-        public List<AddNotificationRequest> NotificationRequests;
-        public bool EJudFetaureEnabled = false;
+        public List<AddNotificationRequest> NotificationRequests { get; set; }
+        public bool EJudFetaureEnabled { get; set; }
         public Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
         {
             return Task.FromResult(HttpStatusCode.OK);
