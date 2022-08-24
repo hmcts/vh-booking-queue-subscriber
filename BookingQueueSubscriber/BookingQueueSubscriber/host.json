@@ -5,15 +5,9 @@
       "prefetchCount": 16,
       "messageHandlerOptions": {
         "autoComplete": true,
-        "maxConcurrentCalls": 32,
+        "maxConcurrentCalls": 1,
         "maxAutoRenewDuration": "00:05:00"
-      },
-      "sessionHandlerOptions": {
-        "autoComplete": true,
-        "messageWaitTimeout": "00:00:30",
-        "maxAutoRenewDuration": "00:55:00",
-        "maxConcurrentSessions": 16
-    },
+      }
     },
     "http": {
       "routePrefix": "",
