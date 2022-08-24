@@ -69,6 +69,7 @@ function:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    WEBJOBS_IDLE_TIMEOUT: 30
   triggers: []
   triggerPodIdentityProvider: azure
   triggerAuth:
