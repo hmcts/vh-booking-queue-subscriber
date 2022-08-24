@@ -18,7 +18,7 @@ namespace BookingQueueSubscriber
         }
 
         [FunctionName("BookingQueueSubscriberFunction")]
-        public async Task Run([ServiceBusTrigger("%queueName%", Connection = "ServiceBusConnection")]
+        public async Task Run([ServiceBusTrigger("%queueName%", Connection = "ServiceBusConnection", IsSessionsEnabled = true)]
             string bookingQueueItem,
             ILogger log)
         {

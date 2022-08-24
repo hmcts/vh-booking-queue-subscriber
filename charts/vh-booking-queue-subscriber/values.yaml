@@ -81,5 +81,5 @@ function:
     backoffLimit: 3
   pollingInterval: 30
   maxReplicaCount: 2
-  successfulJobsHistoryLimit: 20
-  failedJobsHistoryLimit: 20
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 3
