@@ -78,8 +78,8 @@ function:
     parallelism: 1 # [max number of desired pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
     completions: 1 # [desired number of successfully finished pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
     activeDeadlineSeconds: 60 # Specifies the duration in seconds relative to the startTime that the job may be active before the system tries to terminate it; value must be positive integer
-    backoffLimit: 3
+    backoffLimit: 1
   pollingInterval: 30
-  maxReplicaCount: 2
+  maxReplicaCount: 1
   successfulJobsHistoryLimit: 10
-  failedJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
