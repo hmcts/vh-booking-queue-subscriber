@@ -19,8 +19,6 @@ namespace BookingQueueSubscriber.Common.Security
         {
             _azureAdConfiguration = azureAdConfigurationOptions.Value;
         }
-        
-        Console.WriteLine($"Client id: ${clientId}");
 
         public string GetClientAccessToken(string clientId, string clientSecret, string clientResource)
         {
