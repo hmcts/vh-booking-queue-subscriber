@@ -42,7 +42,7 @@ namespace BookingQueueSubscriber
             log.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
                 eventMessage.IntegrationEvent);
 
-            return;
+            Environment.Exit(0);
         }
     }
 }
