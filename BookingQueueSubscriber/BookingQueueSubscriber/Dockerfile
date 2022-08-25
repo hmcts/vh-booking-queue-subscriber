@@ -13,4 +13,5 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
 
 COPY --from=publish ["/home/site/wwwroot", "/home/site/wwwroot"]
 
+USER root
 RUN apt-get update && apt-get install -y curl
