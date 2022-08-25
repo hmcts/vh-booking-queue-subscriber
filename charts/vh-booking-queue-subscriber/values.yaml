@@ -75,7 +75,7 @@ function:
   object: 
     apiVersion: apps/v1
     kind: Deployment
-    name: "{{ .Values.global.releaseName }}"
+    name: "{{ .Release.Name }}"
     pollingInterval: 30
     cooldownPeriod: 90
     idleReplicaCount: 0
