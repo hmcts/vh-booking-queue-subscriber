@@ -4,7 +4,7 @@ java:
   aadIdentityName: vh-aad-identity
   readinessPath: /health/liveness
   livenessPath: /health/liveness
-  applicationPort: 80
+  applicationPort: 8080
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
@@ -61,6 +61,7 @@ java:
         - name: azuread--identifieruri
           alias: vhservices--userapiresourceid
   environment:
+    ASPNETCORE_URLS: http://+:8080
     AZUREAD__AUTHORITY: https://login.microsoftonline.com/
     Logging__LogLevel__Default: debug
     Logging__LogLevel__Microsoft: debug
@@ -72,6 +73,7 @@ java:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    
 
 function:
   scaleType: Object
