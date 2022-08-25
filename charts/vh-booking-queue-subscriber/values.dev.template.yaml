@@ -18,3 +18,4 @@ function:
     cooldownPeriod: 90
     idleReplicaCount: 0
     maxReplicaCount: 1
+    minReplicaCount: 0

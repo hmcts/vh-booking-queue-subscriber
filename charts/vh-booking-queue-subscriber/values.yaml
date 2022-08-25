@@ -74,7 +74,6 @@ java:
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
     
-
 function:
   scaleType: Object
   object: 
@@ -85,11 +84,10 @@ function:
     cooldownPeriod: 90
     idleReplicaCount: 0
     maxReplicaCount: 1
-
+    minReplicaCount: 0
   triggerAuth:
     create: true
     enabled: true
     triggerPodIdentityProvider: azure
-  
   triggers: []
   
