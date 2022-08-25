@@ -12,3 +12,5 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 
 COPY --from=publish ["/home/site/wwwroot", "/home/site/wwwroot"]
+
+RUN apt-get update && apt-get install -y curl
