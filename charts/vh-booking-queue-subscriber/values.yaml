@@ -4,6 +4,7 @@ java:
   aadIdentityName: vh-aad-identity
   readinessPath: /health/liveness
   livenessPath: /health/liveness
+  applicationPort: 80
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
