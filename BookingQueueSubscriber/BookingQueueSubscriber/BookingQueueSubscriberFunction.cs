@@ -41,8 +41,6 @@ namespace BookingQueueSubscriber
             await handler.HandleAsync(eventMessage.IntegrationEvent);
             log.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
                 eventMessage.IntegrationEvent);
-
-            applicationLifetime.StopApplication();
         }
     }
 }
