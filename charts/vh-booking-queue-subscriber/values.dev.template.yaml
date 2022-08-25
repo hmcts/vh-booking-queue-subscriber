@@ -1,6 +1,7 @@
 ---
 function:
   image: '${IMAGE_NAME}'
+  releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
@@ -15,5 +16,3 @@ function:
     cooldownPeriod: 90
     idleReplicaCount: 0
     maxReplicaCount: 1
-    failureThreshold: 3
-    replicas: 2
