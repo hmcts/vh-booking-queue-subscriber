@@ -6,8 +6,7 @@ function:
     serviceBusName: "vh-infra-core-demo"
     queueName: booking
     messageCount: 1
-    failureThreshold: 3
-    replicas: 2
+
   object:
     apiVersion: apps/v1
     kind: Deployment
@@ -16,3 +15,5 @@ function:
     cooldownPeriod: 90
     idleReplicaCount: 0
     maxReplicaCount: 1
+    failureThreshold: 3
+    replicas: 2

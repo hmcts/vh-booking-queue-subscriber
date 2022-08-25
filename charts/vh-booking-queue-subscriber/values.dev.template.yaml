@@ -15,3 +15,5 @@ function:
     cooldownPeriod: 90
     idleReplicaCount: 0
     maxReplicaCount: 1
+    failureThreshold: 3
+    replicas: 2

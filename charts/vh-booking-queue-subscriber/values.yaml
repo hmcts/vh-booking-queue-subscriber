@@ -75,7 +75,7 @@ function:
   object: 
     apiVersion: apps/v1
     kind: Deployment
-    name: "{{ .Release.Name }}"
+    name: "vh-booking-queue-subscriber"
     pollingInterval: 30
     cooldownPeriod: 90
     idleReplicaCount: 0
