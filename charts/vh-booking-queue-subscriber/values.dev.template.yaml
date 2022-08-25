@@ -6,3 +6,12 @@ function:
     serviceBusName: "vh-infra-core-dev"
     queueName: booking
     messageCount: 1
+    
+  object:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: '${RELEASE_NAME}'
+    pollingInterval: 30
+    cooldownPeriod: 90
+    idleReplicaCount: 0
+    maxReplicaCount: 1
