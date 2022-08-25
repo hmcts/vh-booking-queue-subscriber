@@ -2,7 +2,6 @@
 java:
   image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest'
   aadIdentityName: vh-aad-identity
-  releaseNameOverride: vh-booking-queue-subscriber
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
