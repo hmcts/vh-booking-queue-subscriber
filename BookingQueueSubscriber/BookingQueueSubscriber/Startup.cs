@@ -116,7 +116,7 @@ namespace BookingQueueSubscriber
             }
             else
             {
-                services.AddScoped<IVideoApiService, VideoApiService>();
+                services.AddTransient<IVideoApiService, VideoApiService>();
                 services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                     .AddHttpMessageHandler(() => container.GetService<VideoServiceTokenHandler>())
                     .AddTypedClient(httpClient =>

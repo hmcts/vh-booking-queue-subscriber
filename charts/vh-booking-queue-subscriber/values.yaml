@@ -1,6 +1,7 @@
 ---
 java:
   image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest'
+  releaseNameOverride: vh-booking-queue-subscriber
   aadIdentityName: vh-aad-identity
   readinessPath: /health/liveness
   livenessPath: /health/liveness
@@ -75,6 +76,7 @@ java:
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
     
 function:
+  releaseNameOverride: vh-booking-queue-subscriber
   scaleType: Object
   object: 
     apiVersion: apps/v1
@@ -84,7 +86,6 @@ function:
     cooldownPeriod: 90
     idleReplicaCount: 0
     maxReplicaCount: 1
-    minReplicaCount: 0
   triggerAuth:
     create: true
     enabled: true
