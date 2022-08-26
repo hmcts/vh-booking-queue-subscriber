@@ -1,7 +1,11 @@
 ---
-function:
+java:
   image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest'
+  releaseNameOverride: vh-booking-queue-subscriber
   aadIdentityName: vh-aad-identity
+  readinessPath: /health/liveness
+  livenessPath: /health/liveness
+  applicationPort: 8080
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
@@ -58,6 +62,7 @@ function:
         - name: azuread--identifieruri
           alias: vhservices--userapiresourceid
   environment:
+    ASPNETCORE_URLS: http://+:8080
     AZUREAD__AUTHORITY: https://login.microsoftonline.com/
     Logging__LogLevel__Default: debug
     Logging__LogLevel__Microsoft: debug
@@ -69,17 +74,21 @@ function:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
-  triggers: []
-  triggerPodIdentityProvider: azure
+function:
+  releaseNameOverride: vh-booking-queue-subscriber
+  scaleType: Object
+  object: 
+    apiVersion: apps/v1
+    kind: Deployment
+    name: vh-booking-queue-subscriber
+    pollingInterval: 30
+    cooldownPeriod: 90
+    idleReplicaCount: 0
+    maxReplicaCount: 1
+    minReplicaCount: 0
   triggerAuth:
     create: true
     enabled: true
-  job:
-    parallelism: 1 # [max number of desired pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
-    completions: 1 # [desired number of successfully finished pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
-    activeDeadlineSeconds: 600 # Specifies the duration in seconds relative to the startTime that the job may be active before the system tries to terminate it; value must be positive integer
-    backoffLimit: 6
-  pollingInterval: 30  
-  maxReplicaCount: 2
-  successfulJobsHistoryLimit: 100
-  failedJobsHistoryLimit: 100
+    triggerPodIdentityProvider: azure
+  triggers: []
+  
