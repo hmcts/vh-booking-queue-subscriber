@@ -4,7 +4,9 @@ java:
   releaseNameOverride: vh-booking-queue-subscriber
   aadIdentityName: vh-aad-identity
   readinessPath: /health/liveness
+  readinessDelay: 30
   livenessPath: /health/liveness
+  livenessDelay: 30
   applicationPort: 8080
   keyVaults:
     vh-infra-core:

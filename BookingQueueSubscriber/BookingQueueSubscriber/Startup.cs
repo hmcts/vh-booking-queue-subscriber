@@ -85,7 +85,8 @@ namespace BookingQueueSubscriber
             {
                 configuration.GetSection("VhServices").Bind(options);
             });
-
+            
+            Console.WriteLine($"client id: {configuration["AzureAd:ClientId"]}");
             var serviceConfiguration = new ServicesConfiguration();
             configuration.GetSection("VhServices").Bind(serviceConfiguration);
 
