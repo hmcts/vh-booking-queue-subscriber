@@ -15,14 +15,5 @@
       "maxConcurrentRequests": 100,
       "dynamicThrottlesEnabled": true
     }
-  },
-  "logging": {
-    "fileLoggingMode": "always",
-    "logLevel": {
-      "default": "Trace",
-      "Host.Results": "Trace",
-      "Function": "Trace",
-      "Host.Aggregator": "Trace"
-    }
   }
 }
