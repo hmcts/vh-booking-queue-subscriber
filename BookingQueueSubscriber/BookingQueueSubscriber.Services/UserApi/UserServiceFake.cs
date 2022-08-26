@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -10,14 +11,16 @@ namespace BookingQueueSubscriber.Services.UserApi
 {
     public class UserServiceFake : IUserService
     {
+        public List<User> Users { get; set; } = new List<User>();
         public  Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser)
         {
-    
-            return Task.FromResult(new User
+            var user = new User
             {
-                UserId = "UserId",
-                UserName = "UserName"
-            });
+                UserId = $"{firstname}.{lastname}",
+                UserName = $"{firstname}.{lastname}"
+            };
+            Users.Add(user);
+            return Task.FromResult(user);
 
         }
 
