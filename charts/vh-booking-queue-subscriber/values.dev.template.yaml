@@ -1,8 +1,8 @@
 ---
 java:
+  image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
 function:
-  image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
