@@ -64,7 +64,7 @@ java:
         - name: azuread--identifieruri
           alias: vhservices--userapiresourceid
   environment:
-    ASPNETCORE_URLS: http://+:8080
+    #ASPNETCORE_URLS: http://+:8080
     AZUREAD__AUTHORITY: https://login.microsoftonline.com/
     Logging__LogLevel__Default: debug
     Logging__LogLevel__Microsoft: debug
