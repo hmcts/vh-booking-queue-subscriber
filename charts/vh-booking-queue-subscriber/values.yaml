@@ -82,6 +82,7 @@ function:
     cooldownPeriod: 90
     idleReplicaCount: 0
     maxReplicaCount: 1
+    minReplicaCount: 0
   triggerAuth:
     create: true
     enabled: true
