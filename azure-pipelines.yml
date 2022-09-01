@@ -117,6 +117,10 @@ parameters:
       value: $(user_api_url)
     - name: VhServices:UserApiResourceId
       value: vh-user-api-identifieruris
+      secret: true
+
+    - name: FeatureToggle:SdkKey
+      value: vh-admin-web-Feature-Toggle
       secret: true      
 variables:
   - group: vh-domains-and-urls

@@ -61,6 +61,13 @@ java:
       secrets:
         - name: azuread--identifieruri
           alias: vhservices--userapiresourceid
+    vh-admin-web:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: FeatureToggles--SDK-Key
+          alias: FeatureToggle--SdkKey
   environment:
     ASPNETCORE_URLS: http://+:8080
     AZUREAD__AUTHORITY: https://login.microsoftonline.com/
