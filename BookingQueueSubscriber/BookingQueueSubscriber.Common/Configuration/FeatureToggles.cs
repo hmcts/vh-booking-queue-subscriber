@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LaunchDarkly.Sdk;
 using LaunchDarkly.Sdk.Server;
 using LaunchDarkly.Sdk.Server.Interfaces;
@@ -9,6 +10,7 @@ namespace BookingQueueSubscriber.Common.Configuration
         public bool SsprToggle();
     }
 
+    [ExcludeFromCodeCoverage]
     public class FeatureToggles : IFeatureToggles
     {
         private readonly ILdClient _ldClient;
