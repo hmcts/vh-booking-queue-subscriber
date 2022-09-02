@@ -89,6 +89,8 @@ namespace BookingQueueSubscriber
             var serviceConfiguration = new ServicesConfiguration();
             configuration.GetSection("VhServices").Bind(serviceConfiguration);
 
+
+
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
             services.AddScoped<IMessageHandlerFactory, MessageHandlerFactory>();
             services.AddTransient<VideoServiceTokenHandler>();
