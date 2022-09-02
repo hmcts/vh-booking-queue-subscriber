@@ -26,6 +26,7 @@ namespace BookingQueueSubscriber.Services.UserApi
         public const string VirtualRoomProfessionalUser = "VirtualRoomProfessionalUser";
         public const string JudicialOfficeHolder = "JudicialOfficeHolder";
         public const string StaffMember = "Staff Member";
+        public const string SsprEnabled = "SSPR Enabled";
         public UserService(IUserApiClient userApiClient, ILogger<UserService> logger)
         {
             _userApiClient = userApiClient;
@@ -77,6 +78,7 @@ namespace BookingQueueSubscriber.Services.UserApi
                     await AddGroup(userId, External);
                     break;
             }
+            await AddGroup(userId, SsprEnabled);
         }
         private async Task<NewUserResponse> CreateNewUserInAD(string firstname, string lastname, string contactEmail, bool isTestUser)
         {

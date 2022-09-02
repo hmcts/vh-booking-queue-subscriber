@@ -164,6 +164,9 @@ stages:
             value: $(user_api_url)            
           - name: VhServices:InternalEventSecret
             value: $(internal_event_secret)
+          - name: FeatureToggle:SdkKey
+            value: vh-admin-web-Feature-Toggle
+            secret: true
         acceptanceTestSettings:
           - name: AzureAd:ClientId
             value: vh-booking-queue-subscriber-appid
