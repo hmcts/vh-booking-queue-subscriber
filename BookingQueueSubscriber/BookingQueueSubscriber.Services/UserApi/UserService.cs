@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Common.Configuration;
 using Microsoft.Extensions.Logging;
 using UserApi.Client;
 using UserApi.Contract.Requests;
@@ -18,6 +19,7 @@ namespace BookingQueueSubscriber.Services.UserApi
     {
         private readonly IUserApiClient _userApiClient;
         private readonly ILogger<UserService> _logger;
+        private readonly IFeatureToggles _featureToggles;
 
         public const string Representative = "Representative";
         public const string Joh = "Judicial Office Holder";
@@ -26,10 +28,13 @@ namespace BookingQueueSubscriber.Services.UserApi
         public const string VirtualRoomProfessionalUser = "VirtualRoomProfessionalUser";
         public const string JudicialOfficeHolder = "JudicialOfficeHolder";
         public const string StaffMember = "Staff Member";
-        public UserService(IUserApiClient userApiClient, ILogger<UserService> logger)
+        public const string SsprEnabled = "SSPR Enabled";
+        
+        public UserService(IUserApiClient userApiClient, ILogger<UserService> logger, IFeatureToggles featureToggles)
         {
             _userApiClient = userApiClient;
             _logger = logger;
+            _featureToggles = featureToggles;
         }
 
         public async Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser)
@@ -76,6 +81,10 @@ namespace BookingQueueSubscriber.Services.UserApi
                 default:
                     await AddGroup(userId, External);
                     break;
+            }
+            if (_featureToggles.SsprToggle())
+            {
+                await AddGroup(userId, SsprEnabled);
             }
         }
         private async Task<NewUserResponse> CreateNewUserInAD(string firstname, string lastname, string contactEmail, bool isTestUser)
