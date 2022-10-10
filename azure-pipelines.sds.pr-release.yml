@@ -20,7 +20,7 @@ variables:
   - group: vh-github-app-credentials
   - group: vh-video-web
   - name: run_acceptance_tests
-    value: false
+    value: true
 
 stages:
   #####################################################
