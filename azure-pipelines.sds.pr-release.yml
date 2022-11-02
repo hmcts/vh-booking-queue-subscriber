@@ -121,6 +121,7 @@ stages:
 
       # - ${{ if eq(variables.run_acceptance_tests, true) }}:
       #     - job: PublishAcceptanceTests
+      #       pool: VH Self Hosted
       #       displayName: Publish Acceptance Tests
       #       variables:
       #         projectPath: "$(app_path)/$(app_path)"
