@@ -150,10 +150,10 @@ resources:
       endpoint: hmcts
   containers:
   - container: dotnetsdk
-    image: sspublicsbox.azurecr.io/vh/dotnet:3.1.102
+    image: sspublicsbox.azurecr.io/vh/dotnet:latest
     endpoint: sspublicsbox
   - container: dotnetsdk-cipipeline
-    image: sspublicsbox.azurecr.io/vh/dotnet-cipipeline:3.1.102
+    image: sspublicsbox.azurecr.io/vh/dotnet-cipipeline:latest
     endpoint: sspublicsbox
 
 extends:
