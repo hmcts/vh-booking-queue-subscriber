@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 RUN mkdir -p /home/site/wwwroot
 COPY BookingQueueSubscriber .
 RUN dotnet restore --configfile nuget.config BookingQueueSubscriber
