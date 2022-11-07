@@ -7,7 +7,7 @@ RUN dotnet build BookingQueueSubscriber -c Release
 FROM build AS publish
 RUN dotnet publish BookingQueueSubscriber -c Release -o /home/site/wwwroot
 
-FROM mcr.microsoft.com/azure-functions/dotnet:3.0
+FROM mcr.microsoft.com/azure-functions/dotnet:4.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 
