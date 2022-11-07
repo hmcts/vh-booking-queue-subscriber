@@ -3,7 +3,6 @@
     <PropertyGroup>
       <TargetFramework>net6.0</TargetFramework>
       <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-      <RestoreLockedMode>true</RestoreLockedMode>
       <NoWarn>NU1603</NoWarn>
       <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
       <ProjectGuid>0E3CC11A-C8AF-4AB2-A1D8-6375ACDC51B9</ProjectGuid>
