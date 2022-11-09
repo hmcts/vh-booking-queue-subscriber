@@ -3,11 +3,13 @@ using BookingsApi.Contract.Requests;
 using BookingsApi.Contract.Responses;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace BookingQueueSubscriber.Services
 {
+    [ExcludeFromCodeCoverage]
     public class BookingsApiClientFake : IBookingsApiClient
     {
         public bool EJudFeatureEnabled { get; set; }
