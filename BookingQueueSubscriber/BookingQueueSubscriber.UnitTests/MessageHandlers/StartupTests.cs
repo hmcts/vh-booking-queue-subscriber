@@ -13,8 +13,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class StartupTests
     {
-        [TestCase(typeof(IOptions<AzureAdConfiguration>), typeof(OptionsManager<AzureAdConfiguration>))]
-        [TestCase(typeof(IOptions<ServicesConfiguration>), typeof(OptionsManager<ServicesConfiguration>))]
+        [TestCase(typeof(IOptionsSnapshot<AzureAdConfiguration>), typeof(OptionsManager<AzureAdConfiguration>))]
+        [TestCase(typeof(IOptionsSnapshot<ServicesConfiguration>), typeof(OptionsManager<ServicesConfiguration>))]
         [TestCase(typeof(IVideoApiService), typeof(VideoApiServiceFake))]
         [TestCase(typeof(IMemoryCache), typeof(MemoryCache))]
         [TestCase(typeof(IMessageHandlerFactory), typeof(MessageHandlerFactory))]
