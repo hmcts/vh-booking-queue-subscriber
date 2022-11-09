@@ -3,11 +3,13 @@ using BookingsApi.Contract.Requests;
 using BookingsApi.Contract.Responses;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace BookingQueueSubscriber.Services
 {
+    [ExcludeFromCodeCoverage]
     public class BookingsApiClientFake : IBookingsApiClient
     {
         public bool EJudFeatureEnabled { get; set; }
@@ -91,6 +93,11 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<JobHistoryResponse>> GetJobHistoryAsync(string jobName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<BulkJudiciaryPersonResponse> BulkJudiciaryPersonsAsync(IEnumerable<JudiciaryPersonRequest> request)
         {
             throw new NotImplementedException();
@@ -107,6 +114,16 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task BulkJudiciaryPersonsStagingAsync(IEnumerable<JudiciaryPersonStagingRequest> request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> GetJusticeUserByUsernameAsync(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> GetJusticeUserByUsernameAsync(string username, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -271,6 +288,21 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task UpdateJobHistoryAsync(string jobName, bool isSuccessful)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateJobHistoryAsync(string jobName, bool isSuccessful, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<JobHistoryResponse>> GetJobHistoryAsync(string jobName)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ParticipantResponse> GetParticipantInHearingAsync(Guid hearingId, Guid participantId)
         {
             throw new NotImplementedException();
@@ -347,6 +379,67 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<SuitabilityAnswersResponse> GetSuitabilityAnswersAsync(string cursor, int? limit, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<string>> SaveWorkHoursAsync(IEnumerable<UploadWorkHoursRequest> uploadWorkHoursRequests)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<string>> SaveWorkHoursAsync(IEnumerable<UploadWorkHoursRequest> uploadWorkHoursRequests, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<string>> SaveNonWorkingHoursAsync(IEnumerable<UploadNonWorkingHoursRequest> uploadNonWorkingHoursRequests)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<string>> SaveNonWorkingHoursAsync(IEnumerable<UploadNonWorkingHoursRequest> uploadNonWorkingHoursRequests, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<VhoWorkHoursResponse>> GetVhoWorkAvailabilityHoursAsync(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<VhoWorkHoursResponse>> GetVhoWorkAvailabilityHoursAsync(string username, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<VhoNonAvailabilityWorkHoursResponse>> GetVhoNonAvailabilityHoursAsync(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<VhoNonAvailabilityWorkHoursResponse>> GetVhoNonAvailabilityHoursAsync(string username, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateVhoNonAvailabilityHoursAsync(string username, UpdateNonWorkingHoursRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateVhoNonAvailabilityHoursAsync(string username, UpdateNonWorkingHoursRequest request,
+                                                       CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteVhoNonAvailabilityHoursAsync(long? id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteVhoNonAvailabilityHoursAsync(long? id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
