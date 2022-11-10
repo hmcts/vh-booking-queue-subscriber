@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.Configuration;
 using Microsoft.Extensions.Logging;
@@ -37,20 +38,50 @@ namespace BookingQueueSubscriber.Services.UserApi
             _featureToggles = featureToggles;
         }
 
-        public async Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser)
+        public async Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail,
+            bool isTestUser)
         {
             var userProfile = await GetUserByContactEmail(contactEmail);
             if (userProfile == null)
             {
-                _logger.LogInformation("User with contact email {contactEmail} does not exist. Creating an account.", contactEmail);
-                // create the user in AD.
-                var newUser = await CreateNewUserInAD(firstname, lastname, contactEmail, isTestUser);
-                return new User
+                _logger.LogInformation("User with contact email {contactEmail} does not exist. Creating an account.",
+                    contactEmail);
+
+                try
                 {
-                    UserId = newUser.UserId,
-                    UserName = newUser.Username,
-                    Password = newUser.OneTimePassword
-                };
+                    // create the user in AD.
+                    var newUser = await CreateNewUserInAD(firstname, lastname, contactEmail, isTestUser);
+                    
+                    
+
+                    return new User
+                    {
+                        UserId = newUser.UserId,
+                        UserName = newUser.Username,
+                        Password = newUser.OneTimePassword
+                    };
+                }
+                catch (UserApiException e)
+                {
+                    if (e.StatusCode == (int) HttpStatusCode.Conflict)
+                    {
+                        Thread.Sleep(1000);
+                        userProfile = await GetUserByContactEmail(contactEmail);
+                        if (userProfile == null)
+                        {
+                            _logger.LogInformation(
+                                "User with contact email {contactEmail} does not exist. Creating an account. Second try.",
+                                contactEmail);
+                            throw new UserApiException("Second attempt to create user failed",
+                                (int) HttpStatusCode.Conflict,
+                                "", new Dictionary<string, IEnumerable<string>>(), e);
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
 
             return new User
@@ -63,7 +94,7 @@ namespace BookingQueueSubscriber.Services.UserApi
 
         public async Task AssignUserToGroup(string userId, string userRole)
         {
-            _logger.LogInformation("Assigning the user to the group based on the userrole {userRole}", userRole);
+            _logger.LogInformation("Assigning the user to the group based on the user role {userRole}", userRole);
             switch (userRole)
             {
                 case "Representative":
