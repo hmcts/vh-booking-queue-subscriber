@@ -81,7 +81,7 @@ namespace BookingQueueSubscriber.UnitTests
         [Test]
         public async Task should_return_created_user_CreateNewUserForParticipantAsync_for_create_user_exists_first_time()
         {
-            var participant = getParticipant();
+            var participant = GetParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
             SetupDependencyCalls(participant, hearing, true);
@@ -125,7 +125,7 @@ namespace BookingQueueSubscriber.UnitTests
         [Test]
         public async Task should_return_null_user_CreateNewUserForParticipantAsync_for_get_user_fail_twice()
         {
-            var participant = getParticipant();
+            var participant = GetParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
             SetupDependencyCalls(participant, hearing, true);
@@ -163,7 +163,7 @@ namespace BookingQueueSubscriber.UnitTests
         [Test]
         public async Task should_return_exception_CreateNewUserForParticipantAsync_for_create_user_Throw_exception_different_from_Conflict()
         {
-            var participant = getParticipant();
+            var participant = GetParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
             SetupDependencyCalls(participant, hearing, true);
@@ -214,7 +214,7 @@ namespace BookingQueueSubscriber.UnitTests
                 false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = "xyz", UserName = "part1@hearigns.reform.hmcts.net" });
         }
 
-        private ParticipantDto GetJoh()
+        private static ParticipantDto GetJoh()
         {
             return new ParticipantDto
             {
@@ -226,7 +226,7 @@ namespace BookingQueueSubscriber.UnitTests
             };
         }
         
-        private ParticipantDto getParticipant()
+        private static ParticipantDto GetParticipant()
         {
             return new ParticipantDto
             {
