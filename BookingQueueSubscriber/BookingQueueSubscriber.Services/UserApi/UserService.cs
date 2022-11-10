@@ -72,14 +72,12 @@ namespace BookingQueueSubscriber.Services.UserApi
                             _logger.LogInformation(
                                 "User with contact email {contactEmail} does not exist. Creating an account. Second try.",
                                 contactEmail);
-                            throw new UserApiException("Second attempt to create user failed",
-                                (int) HttpStatusCode.Conflict,
-                                "", new Dictionary<string, IEnumerable<string>>(), e);
+                            return null;
                         }
                     }
                     else
                     {
-                        throw;
+                        return null;
                     }
                 }
             }

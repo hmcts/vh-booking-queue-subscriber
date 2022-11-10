@@ -11,8 +11,10 @@ using NUnit.Framework;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using BookingsApi.Contract.Configuration;
+using UserApi.Client;
 
 namespace BookingQueueSubscriber.UnitTests
 {
@@ -62,9 +64,65 @@ namespace BookingQueueSubscriber.UnitTests
                 _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object);
 
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
-                {
-                   participant
-                });
+            {
+                participant
+            });
+
+            _userServiceMock.Verify(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, true), Times.Never);
+            _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Never);
+        }
+        
+        [Test]
+        public async Task should_return_exception_Conflict_CreateNewUserForParticipantAsync_for_create_user_exists()
+        {
+            var participant = GetJoh();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid() };
+
+            SetupDependencyCalls(participant, hearing, true);
+
+            _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName,
+                    participant.ContactEmail,
+                    false))
+                .ThrowsAsync(new UserApiException("Second attempt to create user failed",
+                    (int) HttpStatusCode.Conflict,
+                    "", new Dictionary<string, IEnumerable<string>>(), null));
+            
+            
+            var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
+                _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object);
+
+            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            {
+                participant
+            });
+
+            _userServiceMock.Verify(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, true), Times.Never);
+            _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Never);
+        }
+        
+        [Test]
+        public async Task should_return_exception_CreateNewUserForParticipantAsync_for_create_user_Throw_exception_different_from_Conflict()
+        {
+            var participant = GetJoh();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid() };
+
+            SetupDependencyCalls(participant, hearing, true);
+
+            _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName,
+                    participant.ContactEmail,
+                    false))
+                .ThrowsAsync(new UserApiException("Second attempt to create user failed",
+                    (int) HttpStatusCode.NotFound,
+                    "", new Dictionary<string, IEnumerable<string>>(), null));
+            
+            
+            var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
+                _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object);
+
+            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            {
+                participant
+            });
 
             _userServiceMock.Verify(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, true), Times.Never);
             _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Never);
