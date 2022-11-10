@@ -1,11 +1,8 @@
 ﻿using System;
-using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using BookingQueueSubscriber.Services;
@@ -13,8 +10,11 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Common.Configuration;
 using BookingsApi.Contract.Configuration;
 using UserApi.Client;
+using UserApi.Contract.Requests;
+using UserApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests
 {
@@ -24,12 +24,18 @@ namespace BookingQueueSubscriber.UnitTests
         private Mock<IUserService> _userServiceMock;
         private Mock<IBookingsApiClient> _bookingsAPIMock;
         private Mock<ILogger<UserCreationAndNotification>> _logger;
+        private Mock<ILogger<UserService>> _logger2;
+        private Mock<IUserApiClient> _userApi;
+        private Mock<IFeatureToggles> _featureTogglesMock;
         public UserCreationAndNotificationTests()
         {
             _notificationServiceMock = new Mock<INotificationService>();
             _userServiceMock = new Mock<IUserService>();
             _bookingsAPIMock = new Mock<IBookingsApiClient>();
             _logger = new Mock<ILogger<UserCreationAndNotification>>();
+            _logger2 = new Mock<ILogger<UserService>>();
+            _userApi = new Mock<IUserApiClient>();
+            _featureTogglesMock = new Mock<IFeatureToggles>();
         }
 
         [Test]
@@ -73,23 +79,37 @@ namespace BookingQueueSubscriber.UnitTests
         }
         
         [Test]
-        public async Task should_return_exception_Conflict_CreateNewUserForParticipantAsync_for_create_user_exists()
+        public async Task should_return_created_user_CreateNewUserForParticipantAsync_for_create_user_exists_first_time()
         {
-            var participant = GetJoh();
+            var participant = getParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
             SetupDependencyCalls(participant, hearing, true);
 
-            _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName,
-                    participant.ContactEmail,
-                    false))
-                .ThrowsAsync(new UserApiException("Second attempt to create user failed",
+            var user = new UserProfile()
+            {
+                UserId = "1",
+                UserName = participant.Username
+            };
+            
+            _userApi.SetupSequence(x => x.GetUserByEmailAsync(participant.ContactEmail))
+                .ThrowsAsync(new UserApiException("Not Found",
+                    (int) HttpStatusCode.NotFound,
+                    "", new Dictionary<string, IEnumerable<string>>(), null))
+                .ReturnsAsync(user);
+                            
+            _featureTogglesMock.Setup(x => x.SsprToggle()).Returns(false);
+            
+            
+            _userApi.Setup(x=>x.CreateUserAsync(It.IsAny<CreateUserRequest>()))
+                .ThrowsAsync(new UserApiException("User already exists",
                     (int) HttpStatusCode.Conflict,
                     "", new Dictionary<string, IEnumerable<string>>(), null));
             
+            var userService = new UserService(_userApi.Object, _logger2.Object, _featureTogglesMock.Object);
             
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object);
+                userService, _bookingsAPIMock.Object, _logger.Object);
 
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
             {
@@ -97,27 +117,42 @@ namespace BookingQueueSubscriber.UnitTests
             });
 
             _userServiceMock.Verify(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, true), Times.Never);
-            _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Never);
+            _userApi.Verify(x=>x.GetUserByEmailAsync(participant.ContactEmail), Times.Exactly(2));
+            _bookingsAPIMock.Verify(x=>x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username), Times.Once);
+            _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Once);
         }
         
         [Test]
         public async Task should_return_exception_CreateNewUserForParticipantAsync_for_create_user_Throw_exception_different_from_Conflict()
         {
-            var participant = GetJoh();
+            var participant = getParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
             SetupDependencyCalls(participant, hearing, true);
 
-            _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName,
-                    participant.ContactEmail,
-                    false))
-                .ThrowsAsync(new UserApiException("Second attempt to create user failed",
+            var user = new UserProfile()
+            {
+                UserId = "1",
+                UserName = participant.Username
+            };
+            
+            _userApi.Setup(x => x.GetUserByEmailAsync(participant.ContactEmail))
+                .ThrowsAsync(new UserApiException("Not Found",
+                    (int) HttpStatusCode.NotFound,
+                    "", new Dictionary<string, IEnumerable<string>>(), null));
+                            
+            _featureTogglesMock.Setup(x => x.SsprToggle()).Returns(false);
+            
+            
+            _userApi.Setup(x=>x.CreateUserAsync(It.IsAny<CreateUserRequest>()))
+                .ThrowsAsync(new UserApiException("User already exists",
                     (int) HttpStatusCode.NotFound,
                     "", new Dictionary<string, IEnumerable<string>>(), null));
             
+            var userService = new UserService(_userApi.Object, _logger2.Object, _featureTogglesMock.Object);
             
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object);
+                userService, _bookingsAPIMock.Object, _logger.Object);
 
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
             {
@@ -125,6 +160,8 @@ namespace BookingQueueSubscriber.UnitTests
             });
 
             _userServiceMock.Verify(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, true), Times.Never);
+            _userApi.Verify(x=>x.GetUserByEmailAsync(participant.ContactEmail), Times.Once);
+            _bookingsAPIMock.Verify(x=>x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username), Times.Never);
             _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Never);
         }
 
@@ -143,6 +180,18 @@ namespace BookingQueueSubscriber.UnitTests
             {
                 ContactEmail = "part1@ejudiciary.net",
                 Username = "part1@ejudiciary.net",
+                UserRole = "Judicial Office Holder",
+                FirstName = "part1",
+                LastName = "joh"
+            };
+        }
+        
+        private ParticipantDto getParticipant()
+        {
+            return new ParticipantDto
+            {
+                ContactEmail = "part1@hmcts.net",
+                Username = "part1@hmcts.net",
                 UserRole = "Judicial Office Holder",
                 FirstName = "part1",
                 LastName = "joh"
