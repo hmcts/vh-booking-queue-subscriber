@@ -123,6 +123,44 @@ namespace BookingQueueSubscriber.UnitTests
         }
         
         [Test]
+        public async Task should_return_null_user_CreateNewUserForParticipantAsync_for_get_user_fail_twice()
+        {
+            var participant = getParticipant();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid() };
+
+            SetupDependencyCalls(participant, hearing, true);
+            
+            
+            _userApi.Setup(x => x.GetUserByEmailAsync(participant.ContactEmail))
+                .ThrowsAsync(new UserApiException("Not Found",
+                    (int) HttpStatusCode.NotFound,
+                    "", new Dictionary<string, IEnumerable<string>>(), null));
+                            
+            _featureTogglesMock.Setup(x => x.SsprToggle()).Returns(false);
+            
+            
+            _userApi.Setup(x=>x.CreateUserAsync(It.IsAny<CreateUserRequest>()))
+                .ThrowsAsync(new UserApiException("User already exists",
+                    (int) HttpStatusCode.Conflict,
+                    "", new Dictionary<string, IEnumerable<string>>(), null));
+            
+            var userService = new UserService(_userApi.Object, _logger2.Object, _featureTogglesMock.Object);
+            
+            var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
+                userService, _bookingsAPIMock.Object, _logger.Object);
+
+            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            {
+                participant
+            });
+
+            _userServiceMock.Verify(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, true), Times.Never);
+            _userApi.Verify(x=>x.GetUserByEmailAsync(participant.ContactEmail), Times.Exactly(2));
+            _bookingsAPIMock.Verify(x=>x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username), Times.Never);
+            _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Never);
+        }
+
+        [Test]
         public async Task should_return_exception_CreateNewUserForParticipantAsync_for_create_user_Throw_exception_different_from_Conflict()
         {
             var participant = getParticipant();
