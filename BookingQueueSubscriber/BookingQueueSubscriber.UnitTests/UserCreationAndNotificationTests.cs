@@ -130,6 +130,8 @@ namespace BookingQueueSubscriber.UnitTests
 
             SetupDependencyCalls(participant, hearing, true);
 
+            _userApi.Reset();
+            _bookingsAPIMock.Reset();
             var user = new UserProfile()
             {
                 UserId = "1",
