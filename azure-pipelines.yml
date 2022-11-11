@@ -122,6 +122,11 @@ parameters:
     - name: FeatureToggle:SdkKey
       value: vh-admin-web-Feature-Toggle
       secret: true      
+      
+      #AzureFunction Version
+    - name: FUNCTIONS_EXTENSION_VERSION
+      value: ~4
+
 variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
