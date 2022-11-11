@@ -52,8 +52,6 @@ namespace BookingQueueSubscriber.Services.UserApi
                     // create the user in AD.
                     var newUser = await CreateNewUserInAD(firstname, lastname, contactEmail, isTestUser);
                     
-                    
-
                     return new User
                     {
                         UserId = newUser.UserId,
@@ -69,7 +67,7 @@ namespace BookingQueueSubscriber.Services.UserApi
                         userProfile = await GetUserByContactEmail(contactEmail);
                         if (userProfile == null)
                         {
-                            _logger.LogInformation(
+                            _logger.LogError(e,
                                 "User with contact email {contactEmail} does not exist. Creating an account. Second try.",
                                 contactEmail);
                             return null;
@@ -77,6 +75,9 @@ namespace BookingQueueSubscriber.Services.UserApi
                     }
                     else
                     {
+                        _logger.LogError(e,
+                            "User with contact email {contactEmail} does not exist. Creating an account. Second try.",
+                            contactEmail);
                         return null;
                     }
                 }

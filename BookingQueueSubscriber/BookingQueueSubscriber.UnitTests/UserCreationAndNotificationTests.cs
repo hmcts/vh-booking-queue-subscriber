@@ -131,7 +131,7 @@ namespace BookingQueueSubscriber.UnitTests
             SetupDependencyCalls(participant, hearing, true);
             
             _userApi.Reset();
-            _bookingsAPIMock.Reset();
+            _bookingsAPIMock.Reset();   
             
             _userApi.Setup(x => x.GetUserByEmailAsync(participant.ContactEmail))
                 .ThrowsAsync(new UserApiException("Not Found",
