@@ -1,11 +1,11 @@
-﻿using AcceptanceTests.Common.Configuration;
-using AcceptanceTests.Common.Exceptions;
+﻿using AcceptanceTests.Common.Exceptions;
 using BookingQueueSubscriber.AcceptanceTests.Configuration;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using ConfigurationManager = AcceptanceTests.Common.Configuration.ConfigurationManager;
 
 namespace BookingQueueSubscriber.AcceptanceTests.Hooks
 {
