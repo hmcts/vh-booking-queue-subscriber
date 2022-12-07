@@ -10,5 +10,6 @@ RUN dotnet publish BookingQueueSubscriber -c Release -o /home/site/wwwroot
 FROM mcr.microsoft.com/azure-functions/dotnet:4.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true
-
+    
+RUN apt-get update && apt-get install -y curl
 COPY --from=publish ["/home/site/wwwroot", "/home/site/wwwroot"]
