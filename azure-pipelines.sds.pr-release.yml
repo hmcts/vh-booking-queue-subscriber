@@ -69,7 +69,7 @@ stages:
 #####################################################
 # Build Docker Image ################################
 - stage: Dock
-  displayName: Build Bookings Queue Subscriber
+  displayName: Docker Build & Push Image
   variables:
   - template: variables/dev.yaml
   - template: variables/shared.yaml
