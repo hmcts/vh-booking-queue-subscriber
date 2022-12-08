@@ -90,9 +90,9 @@ function:
     name: vh-booking-queue-subscriber
     pollingInterval: 30
     cooldownPeriod: 90
-    idleReplicaCount: 0
-    maxReplicaCount: 1
-    minReplicaCount: 0
+    idleReplicaCount: 1
+    maxReplicaCount: 2
+    minReplicaCount: 1
   triggerAuth:
     create: true
     enabled: true
