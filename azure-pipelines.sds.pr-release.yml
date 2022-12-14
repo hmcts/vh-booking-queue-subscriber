@@ -13,8 +13,8 @@ trigger: none
 pr:
   - master
 
-pool:
- vmImage: ubuntu-latest
+pool: 
+  vmImage: ubuntu-22.04
 
 variables:
   - group: vh-github-app-credentials
