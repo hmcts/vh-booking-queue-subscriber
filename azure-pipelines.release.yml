@@ -168,6 +168,8 @@ stages:
           - name: FeatureToggle:SdkKey
             value: vh-admin-web-Feature-Toggle
             secret: true
+          - name: FUNCTIONS_EXTENSION_VERSION
+            value: ~4    
         acceptanceTestSettings:
           - name: AzureAd:ClientId
             value: vh-booking-queue-subscriber-appid
