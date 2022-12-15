@@ -15,11 +15,10 @@
 
     <ItemGroup>
       <PackageReference Include="BookingsApi.Client" Version="1.39.36" />
-      <PackageReference Include="LaunchDarkly.ServerSdk" Version="6.3.3" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
-      <PackageReference Include="NotificationApi.Client" Version="1.38.11" />
-      <PackageReference Include="TimeZoneConverter" Version="3.3.0" />
-      <PackageReference Include="UserApi.Client" Version="1.40.1" />
+      <PackageReference Include="LaunchDarkly.ServerSdk" Version="7.0.0" />
+      <PackageReference Include="NotificationApi.Client" Version="1.41.2" />
+      <PackageReference Include="TimeZoneConverter" Version="6.0.1" />
+      <PackageReference Include="UserApi.Client" Version="1.41.3" />
       <PackageReference Include="VideoApi.Client" Version="1.41.5" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
     </ItemGroup>
