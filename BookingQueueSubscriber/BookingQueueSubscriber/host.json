@@ -15,5 +15,9 @@
       "maxConcurrentRequests": 100,
       "dynamicThrottlesEnabled": true
     }
+  },
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "4.*"
   }
 }

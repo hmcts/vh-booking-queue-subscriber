@@ -2340,6 +2340,7 @@
           "BookingsApi.Client": "[1.39.36, )",
           "Microsoft.ApplicationInsights.AspNetCore": "[2.21.0, )",
           "Microsoft.AspNetCore.Hosting": "[2.2.7, )",
+          "Microsoft.Azure.WebJobs": "[3.0.33, )",
           "Microsoft.Azure.WebJobs.Extensions.ServiceBus": "[5.8.1, )",
           "Microsoft.Extensions.Configuration.UserSecrets": "[7.0.0, )",
           "Microsoft.Extensions.Http": "[7.0.0, )",
