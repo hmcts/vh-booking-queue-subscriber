@@ -25,6 +25,8 @@ namespace BookingQueueSubscriber
         public async Task<IActionResult> HealthCheck(
            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")] HttpRequest req, ILogger log)
         {
+            log.LogInformation("Started HealthCheck function");
+            
             var response = new HealthCheckResponse
             {
                 VideoApiHealth = { Successful = true },
@@ -41,6 +43,8 @@ namespace BookingQueueSubscriber
                 response.VideoApiHealth = HandleVideoApiCallException(ex);
             }
 
+            log.LogInformation("Stopped HealthCheck function");
+            
             return new OkObjectResult(response);
         }
 
