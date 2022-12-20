@@ -71,7 +71,6 @@ java:
   environment:
     ASPNETCORE_URLS: http://+:8080
     AZUREAD__AUTHORITY: https://login.microsoftonline.com/
-    FUNCTIONS_EXTENSION_VERSION: ~4
     Logging__LogLevel__Default: debug
     Logging__LogLevel__Microsoft: debug
     Logging__LogLevel__System: debug
