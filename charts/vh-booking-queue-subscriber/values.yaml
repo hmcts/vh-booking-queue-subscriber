@@ -92,7 +92,7 @@ function:
     pollingInterval: 30
     cooldownPeriod: 90
     idleReplicaCount: 0
-    maxReplicaCount: 1
+    maxReplicaCount: 2
     minReplicaCount: 0
   triggerAuth:
     create: true
