@@ -77,7 +77,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
 
         [Test]
-        public async Task should_assign_users_to_correct_group_when_request_is_valid_and_sspr_feature_is_enabled()
+        public async Task should_assign_users_to_correct_group_when_request_is_valid()
         {
             var notificationService = new Mock<INotificationService>();
             var userApiClient = new Mock<IUserApiClient>();
@@ -123,10 +123,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 });
             }
 
-            var featureToggles = new Mock<IFeatureToggles>();
-            featureToggles.Setup(x => x.SsprToggle()).Returns(true);
-            
-            var userService = new UserService(userApiClient.Object, new Mock<ILogger<UserService>>().Object, featureToggles.Object);
+            var userService = new UserService(userApiClient.Object, new Mock<ILogger<UserService>>().Object);
             var bookingsApiClient = new Mock<IBookingsApiClient>();
             var logger = new Mock<ILogger<UserCreationAndNotification>>();
 
@@ -166,116 +163,10 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             foreach (var participant in integrationEvent.Participants)
             {
                 userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                    r.UserId == participant.LastName && 
-                    r.GroupName == UserService.SsprEnabled)));
+                    r.UserId == participant.LastName)));
             }
         }
    
-        [TestCase(false)]
-        [TestCase(true)]
-        public async Task should_assign_users_to_correct_group_when_request_is_valid_and_sspr_feature_is_toggled(bool ssprFeatureEnabled)
-        {
-            var notificationService = new Mock<INotificationService>();
-            var userApiClient = new Mock<IUserApiClient>();
-            var integrationEvent = new CreateAndNotifyUserIntegrationEvent
-            {
-                Hearing = GetHearingDto(),
-                Participants = new List<ParticipantDto>
-                {
-                    new ParticipantDto
-                    {
-                        FirstName = "Test",
-                        LastName = UserRole.Representative.ToString(),
-                        UserRole = "Representative"
-                    },
-                    new ParticipantDto
-                    {
-                        FirstName = "Test",
-                        LastName = UserRole.JudicialOfficeHolder.ToString(),
-                        UserRole = "Judicial Office Holder"
-                    },
-                    new ParticipantDto
-                    {
-                        FirstName = "Test",
-                        LastName = UserRole.StaffMember.ToString(),
-                        UserRole = "StaffMember"
-                    },
-                    new ParticipantDto
-                    {
-                        FirstName = "Test",
-                        LastName = UserRole.Individual.ToString(),
-                        UserRole = "Individual"
-                    }
-                }
-            };
-
-            foreach (var participant in integrationEvent.Participants)
-            {
-                userApiClient.Setup(x => x.CreateUserAsync(It.Is<CreateUserRequest>(r => r.LastName == participant.LastName))).ReturnsAsync(new NewUserResponse
-                {
-                    Username = "test@hmcts.net",
-                    UserId = participant.LastName,
-                    OneTimePassword = "Password"
-                });
-            }
-
-            var featureToggles = new Mock<IFeatureToggles>();
-            featureToggles.Setup(x => x.SsprToggle()).Returns(ssprFeatureEnabled);
-            
-            var userService = new UserService(userApiClient.Object, new Mock<ILogger<UserService>>().Object, featureToggles.Object);
-            var bookingsApiClient = new Mock<IBookingsApiClient>();
-            var logger = new Mock<ILogger<UserCreationAndNotification>>();
-
-            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(new UserCreationAndNotification(
-                notificationService.Object,
-                userService,
-                bookingsApiClient.Object,
-                logger.Object));
-
-            await messageHandler.HandleAsync(integrationEvent);
-            
-            userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                r.UserId == UserRole.Representative.ToString() && 
-                r.GroupName == UserService.External)));
-            userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                r.UserId == UserRole.Representative.ToString() && 
-                r.GroupName == UserService.VirtualRoomProfessionalUser)));
-            
-            userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                r.UserId == UserRole.JudicialOfficeHolder.ToString() && 
-                r.GroupName == UserService.External)));
-            userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                r.UserId == UserRole.JudicialOfficeHolder.ToString() && 
-                r.GroupName == UserService.JudicialOfficeHolder)));
-            
-            userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                r.UserId == UserRole.StaffMember.ToString() && 
-                r.GroupName == UserService.Internal)));
-            userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                r.UserId == UserRole.StaffMember.ToString() && 
-                r.GroupName == UserService.StaffMember)));
-            
-            userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                r.UserId == UserRole.Individual.ToString() && 
-                r.GroupName == UserService.External)));
-
-            foreach (var participant in integrationEvent.Participants)
-            {
-                if (ssprFeatureEnabled)
-                {
-                    userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                        r.UserId == participant.LastName && 
-                        r.GroupName == UserService.SsprEnabled)), Times.Once);
-                }
-                else
-                {
-                    userApiClient.Verify(x => x.AddUserToGroupAsync(It.Is<AddUserToGroupRequest>(r => 
-                        r.UserId == participant.LastName && 
-                        r.GroupName == UserService.SsprEnabled)), Times.Never);
-                }
-            }
-        }
-        
         private CreateAndNotifyUserIntegrationEvent GetIntegrationEvent()
         {
 

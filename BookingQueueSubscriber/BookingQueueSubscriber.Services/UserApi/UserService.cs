@@ -20,7 +20,6 @@ namespace BookingQueueSubscriber.Services.UserApi
     {
         private readonly IUserApiClient _userApiClient;
         private readonly ILogger<UserService> _logger;
-        private readonly IFeatureToggles _featureToggles;
 
         public const string Representative = "Representative";
         public const string Joh = "Judicial Office Holder";
@@ -31,11 +30,10 @@ namespace BookingQueueSubscriber.Services.UserApi
         public const string StaffMember = "Staff Member";
         public const string SsprEnabled = "SSPR Enabled";
         
-        public UserService(IUserApiClient userApiClient, ILogger<UserService> logger, IFeatureToggles featureToggles)
+        public UserService(IUserApiClient userApiClient, ILogger<UserService> logger)
         {
             _userApiClient = userApiClient;
             _logger = logger;
-            _featureToggles = featureToggles;
         }
 
         public async Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail,
@@ -111,10 +109,6 @@ namespace BookingQueueSubscriber.Services.UserApi
                 default:
                     await AddGroup(userId, External);
                     break;
-            }
-            if (_featureToggles.SsprToggle())
-            {
-                await AddGroup(userId, SsprEnabled);
             }
         }
         private async Task<NewUserResponse> CreateNewUserInAD(string firstname, string lastname, string contactEmail, bool isTestUser)

@@ -6,6 +6,9 @@ using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
+using BookingsApi.Client;
+using BookingsApi.Contract.Requests;
+using BookingsApi.Contract.Requests.Enums;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -14,14 +17,15 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly IVideoApiService _videoApiService;
         private readonly IVideoWebService _videoWebService;
         private readonly IUserCreationAndNotification _userCreationAndNotification;
-
+        private readonly IBookingsApiClient _bookingsApiClient;
 
         public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService,
-             IUserCreationAndNotification userCreationAndNotification)
+             IUserCreationAndNotification userCreationAndNotification, IBookingsApiClient bookingsApiClient)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
             _userCreationAndNotification = userCreationAndNotification;
+            _bookingsApiClient = bookingsApiClient;
         }
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
@@ -40,9 +44,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 eventMessage.Participants, eventMessage.Endpoints);
 
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
-            
-            await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
+
             await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
+            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
+                { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
+
+            await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

@@ -1,4 +1,5 @@
 using BookingsApi.Client;
+using BookingsApi.Contract.Enums;
 using BookingsApi.Contract.Requests;
 using BookingsApi.Contract.Responses;
 using System;
@@ -526,7 +527,7 @@ namespace BookingQueueSubscriber.Services
 
         public Task UpdateBookingStatusAsync(Guid hearingId, UpdateBookingStatusRequest request)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task UpdateBookingStatusAsync(Guid hearingId, UpdateBookingStatusRequest request, CancellationToken cancellationToken)
@@ -603,6 +604,55 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
+        public Task<JusticeUserResponse> AllocateHearingAutomaticallyAsync(Guid hearingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> AllocateHearingAutomaticallyAsync(Guid hearingId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponse>> GetUnallocatedHearingsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponse>> GetUnallocatedHearingsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HearingDetailsResponse> GetBookingStatusByIdAsync(Guid hearingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HearingDetailsResponse> GetBookingStatusByIdAsync(Guid hearingId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<BookingStatus> IBookingsApiClient.GetBookingStatusByIdAsync(Guid hearingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<BookingStatus> IBookingsApiClient.GetBookingStatusByIdAsync(Guid hearingId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
