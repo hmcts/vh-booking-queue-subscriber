@@ -26,7 +26,6 @@ namespace BookingQueueSubscriber.UnitTests
         private Mock<ILogger<UserCreationAndNotification>> _logger;
         private Mock<ILogger<UserService>> _logger2;
         private Mock<IUserApiClient> _userApi;
-        private Mock<IFeatureToggles> _featureTogglesMock;
         public UserCreationAndNotificationTests()
         {
             _notificationServiceMock = new Mock<INotificationService>();
@@ -35,7 +34,6 @@ namespace BookingQueueSubscriber.UnitTests
             _logger = new Mock<ILogger<UserCreationAndNotification>>();
             _logger2 = new Mock<ILogger<UserService>>();
             _userApi = new Mock<IUserApiClient>();
-            _featureTogglesMock = new Mock<IFeatureToggles>();
         }
 
         [Test]
@@ -98,15 +96,12 @@ namespace BookingQueueSubscriber.UnitTests
                     "", new Dictionary<string, IEnumerable<string>>(), null))
                 .ReturnsAsync(user);
                             
-            _featureTogglesMock.Setup(x => x.SsprToggle()).Returns(false);
-            
-            
             _userApi.Setup(x=>x.CreateUserAsync(It.IsAny<CreateUserRequest>()))
                 .ThrowsAsync(new UserApiException("User already exists",
                     (int) HttpStatusCode.Conflict,
                     "", new Dictionary<string, IEnumerable<string>>(), null));
             
-            var userService = new UserService(_userApi.Object, _logger2.Object, _featureTogglesMock.Object);
+            var userService = new UserService(_userApi.Object, _logger2.Object);
             
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsAPIMock.Object, _logger.Object);
@@ -138,15 +133,12 @@ namespace BookingQueueSubscriber.UnitTests
                     (int) HttpStatusCode.NotFound,
                     "", new Dictionary<string, IEnumerable<string>>(), null));
                             
-            _featureTogglesMock.Setup(x => x.SsprToggle()).Returns(false);
-            
-            
             _userApi.Setup(x=>x.CreateUserAsync(It.IsAny<CreateUserRequest>()))
                 .ThrowsAsync(new UserApiException("User already exists",
                     (int) HttpStatusCode.Conflict,
                     "", new Dictionary<string, IEnumerable<string>>(), null));
             
-            var userService = new UserService(_userApi.Object, _logger2.Object, _featureTogglesMock.Object);
+            var userService = new UserService(_userApi.Object, _logger2.Object);
             
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsAPIMock.Object, _logger.Object);
@@ -183,15 +175,12 @@ namespace BookingQueueSubscriber.UnitTests
                     (int) HttpStatusCode.NotFound,
                     "", new Dictionary<string, IEnumerable<string>>(), null));
                             
-            _featureTogglesMock.Setup(x => x.SsprToggle()).Returns(false);
-            
-            
             _userApi.Setup(x=>x.CreateUserAsync(It.IsAny<CreateUserRequest>()))
                 .ThrowsAsync(new UserApiException("User already exists",
                     (int) HttpStatusCode.NotFound,
                     "", new Dictionary<string, IEnumerable<string>>(), null));
             
-            var userService = new UserService(_userApi.Object, _logger2.Object, _featureTogglesMock.Object);
+            var userService = new UserService(_userApi.Object, _logger2.Object);
             
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsAPIMock.Object, _logger.Object);
