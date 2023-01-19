@@ -44,11 +44,10 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 eventMessage.Participants, eventMessage.Endpoints);
 
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
+            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
+            { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
 
             await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
-            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
-                { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
-
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
         }
 

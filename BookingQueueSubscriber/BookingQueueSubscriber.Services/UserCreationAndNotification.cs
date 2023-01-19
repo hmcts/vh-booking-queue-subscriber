@@ -72,7 +72,7 @@ namespace BookingQueueSubscriber.Services
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);
-                if (user != null)
+                if (user != null && !string.IsNullOrEmpty(user.Password))
                 {
                     participant.Username = user.UserName;
                     // Update participant with the user name through bookings api.
