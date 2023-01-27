@@ -20,7 +20,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="VH.AcceptanceTests.Common" Version="1.21.69" />
-    <PackageReference Include="VideoApi.Client" Version="1.41.5" />
+    <PackageReference Include="VideoApi.Client" Version="1.41.9" />
   </ItemGroup>
 
   <ItemGroup>
