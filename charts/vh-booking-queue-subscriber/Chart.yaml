@@ -13,5 +13,5 @@ dependencies:
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
 
   - name: java
-    version: 3.7.2
+    version: 4.0.11
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
