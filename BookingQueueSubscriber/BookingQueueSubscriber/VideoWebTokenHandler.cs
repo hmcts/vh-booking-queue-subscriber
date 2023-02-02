@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Common.Security;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

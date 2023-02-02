@@ -625,6 +625,28 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<HearingDetailsResponse>> SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
+            IEnumerable<string> caseType, string caseNumber, bool? isUnallocated)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponse>> SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
+            IEnumerable<string> caseType, string caseNumber, bool? isUnallocated, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponse>> AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponse>> AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<HearingDetailsResponse> GetBookingStatusByIdAsync(Guid hearingId)
         {
             throw new NotImplementedException();
