@@ -59,11 +59,14 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 }
             }
 
-            await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip, new UpdateEndpointRequest
+            if (conference != null)
             {
-                DisplayName = eventMessage.DisplayName,
-                DefenceAdvocate = defenceAdvocate?.Username
-            });
+                await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip, new UpdateEndpointRequest
+                {
+                    DisplayName = eventMessage.DisplayName,
+                    DefenceAdvocate = defenceAdvocate?.Username
+                });
+            }
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
