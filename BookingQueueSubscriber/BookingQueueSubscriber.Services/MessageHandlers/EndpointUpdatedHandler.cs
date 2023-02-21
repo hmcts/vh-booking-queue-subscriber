@@ -34,36 +34,36 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 {
                     conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
 
-                    defenceAdvocate = conference.Participants.SingleOrDefault(x => x.ContactEmail ==
+                    if (conference == null)
+                    {
+                        _logger.LogError("Unable to find conference by hearing id {HearingId}", eventMessage.HearingId);
+                    }
+                    else
+                    {
+                        defenceAdvocate = conference.Participants.SingleOrDefault(x => x.ContactEmail ==
                                 eventMessage.DefenceAdvocate);
 
-                    if (defenceAdvocate != null)
-                    {
-                        break;
-                    }
+                        if (defenceAdvocate != null)
+                        {
+                            break;
+                        }
 
-                    if (retry == RetryLimit)
-                    {
-                        _logger.LogError("Unable to find defence advocate email by hearing id {HearingId}", eventMessage.HearingId);
-                        break;
+                        if (retry == RetryLimit)
+                        {
+                            _logger.LogError("Unable to find defence advocate email by hearing id {HearingId}", eventMessage.HearingId);
+                            break;
+                        }
                     }
 
                     Thread.Sleep(RetrySleep);
                 }
             }
 
-            if (conference != null)
+            await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip, new UpdateEndpointRequest
             {
-                await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip, new UpdateEndpointRequest
-                {
-                    DisplayName = eventMessage.DisplayName,
-                    DefenceAdvocate = defenceAdvocate?.Username
-                });
-            }
-            else
-            {
-                _logger.LogError("Unable to find conference by hearing id {HearingId}", eventMessage.HearingId);
-            }
+                DisplayName = eventMessage.DisplayName,
+                DefenceAdvocate = defenceAdvocate?.Username
+            });
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
