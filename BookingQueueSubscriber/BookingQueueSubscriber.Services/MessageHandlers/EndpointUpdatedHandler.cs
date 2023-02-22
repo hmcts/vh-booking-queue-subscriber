@@ -25,7 +25,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(EndpointUpdatedIntegrationEvent eventMessage)
         {
-            ConferenceDetailsResponse conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
+            var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
             ParticipantDetailsResponse defenceAdvocate = null;
             
             if (!string.IsNullOrEmpty(eventMessage.DefenceAdvocate))
