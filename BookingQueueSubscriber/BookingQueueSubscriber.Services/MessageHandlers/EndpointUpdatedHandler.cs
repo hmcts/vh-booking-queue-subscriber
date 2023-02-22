@@ -25,38 +25,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(EndpointUpdatedIntegrationEvent eventMessage)
         {
+            ConferenceDetailsResponse conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
             ParticipantDetailsResponse defenceAdvocate = null;
-            ConferenceDetailsResponse conference = null;
-
+            
             if (!string.IsNullOrEmpty(eventMessage.DefenceAdvocate))
             {
-                for (var retry = 0; retry <= RetryLimit; retry++)
-                {
-                    conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
-
-                    if (conference == null)
-                    {
-                        _logger.LogError("Unable to find conference by hearing id {HearingId}", eventMessage.HearingId);
-                    }
-                    else
-                    {
-                        defenceAdvocate = conference.Participants.SingleOrDefault(x => x.ContactEmail ==
-                                eventMessage.DefenceAdvocate);
-
-                        if (defenceAdvocate != null)
-                        {
-                            break;
-                        }
-
-                        if (retry == RetryLimit)
-                        {
-                            _logger.LogError("Unable to find defence advocate email by hearing id {HearingId}", eventMessage.HearingId);
-                            break;
-                        }
-                    }
-
-                    Thread.Sleep(RetrySleep);
-                }
+                defenceAdvocate = await this.GetDefenceAdvocate(conference, eventMessage);
             }
 
             if (conference != null)
@@ -67,6 +41,41 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                     DefenceAdvocate = defenceAdvocate?.Username
                 });
             }
+        }
+
+        private async Task<ParticipantDetailsResponse> GetDefenceAdvocate(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent eventMessage)
+        {
+            ParticipantDetailsResponse defenceAdvocate = null;
+
+            for (var retry = 0; retry <= RetryLimit; retry++)
+            {
+                if (conference == null)
+                {
+                    _logger.LogError("Unable to find conference by hearing id {HearingId}", eventMessage.HearingId);
+                    break;
+                }
+                else
+                {
+                    defenceAdvocate = conference.Participants.SingleOrDefault(x => x.ContactEmail ==
+                            eventMessage.DefenceAdvocate);
+
+                    if (defenceAdvocate != null)
+                    {
+                        break;
+                    }
+
+                    if (retry == RetryLimit)
+                    {
+                        _logger.LogError("Unable to find defence advocate email by hearing id {HearingId}", eventMessage.HearingId);
+                        break;
+                    }
+                }
+
+                Thread.Sleep(RetrySleep);
+                conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
+            }
+
+            return defenceAdvocate;
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
