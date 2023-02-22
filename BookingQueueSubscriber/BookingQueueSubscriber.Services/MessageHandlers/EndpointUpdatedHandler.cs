@@ -30,7 +30,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             
             if (!string.IsNullOrEmpty(eventMessage.DefenceAdvocate))
             {
-                defenceAdvocate = await this.GetDefenceAdvocate(conference, eventMessage);
+                defenceAdvocate = await GetDefenceAdvocate(conference, eventMessage);
             }
 
             if (conference != null)
