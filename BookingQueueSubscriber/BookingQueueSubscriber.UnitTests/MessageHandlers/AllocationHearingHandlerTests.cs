@@ -32,11 +32,27 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             return new AllocationHearingsIntegrationEvent
             {
-                Hearings = new List<HearingDto>(),
-                AllocatedCso = new UserDto()
+                Hearings = buildHearings(),
+                AllocatedCso = new UserDto() {Username = "user.name@mail.com"}
             };
         }
 
+        private IList<HearingDto> buildHearings()
+        {
+            IList<HearingDto> list = new List<HearingDto>();
 
+            for (int i = 0; i < 3; i++)
+            {
+                HearingDto hearing = new HearingDto()
+                {
+                    HearingId = new Guid(),
+                    CaseName = $"Case name {i}",
+                    JudgeDisplayName = $"Judge {i}",
+                    ScheduledDateTime = DateTime.Now
+                };
+                list.Add(hearing);
+            }
+            return list;
+        }
     }
 }
