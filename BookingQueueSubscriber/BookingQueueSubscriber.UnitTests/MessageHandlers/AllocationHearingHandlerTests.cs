@@ -28,13 +28,29 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             await messageHandler.HandleAsync(integrationEvent);
             VideoWebServiceMock.Verify(x=>x.PushAllocationToCsoUpdatedMessage(It.IsAny<AllocationHearingsToCsoRequest>()), Times.Once);
         }
+        
+        [Test]
+        public async Task should_call_videoweb_service_when_handle_is_called_with_explicit_interface()
+        {
+            var messageHandler = (IMessageHandler)new AllocationHearingHandler(VideoWebServiceMock.Object, _logger.Object, BookingsApiClientMock.Object);
+
+            var integrationEvent = new AllocationHearingsIntegrationEvent {Hearings = buildHearings(), AllocatedCso = buildCsoUser()};
+            await messageHandler.HandleAsync(integrationEvent);
+            VideoWebServiceMock.Verify(x=>x.PushAllocationToCsoUpdatedMessage(It.IsAny<AllocationHearingsToCsoRequest>()), Times.Once);
+        }
+        
         private AllocationHearingsIntegrationEvent GetIntegrationEvent()
         {
             return new AllocationHearingsIntegrationEvent
             {
                 Hearings = buildHearings(),
-                AllocatedCso = new UserDto() {Username = "user.name@mail.com"}
+                AllocatedCso = buildCsoUser()
             };
+        }
+
+        private UserDto buildCsoUser()
+        {
+            return new UserDto() {Username = "user.name@mail.com"};
         }
 
         private IList<HearingDto> buildHearings()
