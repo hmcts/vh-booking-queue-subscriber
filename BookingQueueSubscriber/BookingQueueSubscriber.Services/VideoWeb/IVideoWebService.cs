@@ -8,5 +8,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
     {
         Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request);
         Task PushNewConferenceAdded(Guid conferenceId);
+
+        Task PushAllocationToCsoUpdatedMessage(AllocationHearingsToCsoRequest request);
     }
 }

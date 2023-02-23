@@ -1,0 +1,42 @@
+{
+  "$type": "BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services",
+  "id": "f5b7769d-7a3e-4296-8031-64e54fe12776",
+  "timestamp": "2023-02-16T10:12:24.879853Z",
+  "integration_event": {
+    "$type": "BookingsApi.Infrastructure.Services.IntegrationEvents.Events.AllocationHearingsIntegrationEvent, BookingsApi.Infrastructure.Services",
+    "hearings": [
+      {
+        "$type": "BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services",
+        "hearing_id": "a1179d4d-9720-4843-8742-874460c9127c",
+        "group_id": "a1179d4d-9720-4843-8742-874460c9127c",
+        "scheduled_date_time": "2023-01-06T10:00:00Z",
+        "scheduled_duration": 480,
+        "case_type": "Tribunal",
+        "case_number": "Weekend-booking-test-demo-2-multi-day-individual-dates",
+        "case_name": "Weekend-booking-test-demo-2-multi-day-individual-dates Day 1 of 4",
+        "hearing_venue_name": "Birmingham Civil and Family Justice Centre",
+        "record_audio": false,
+        "hearing_type": "Hearing"
+      },
+      {
+        "$type": "BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services",
+        "hearing_id": "c6b763f4-b38c-4a6e-b164-439aeafb8870",
+        "group_id": "c6b763f4-b38c-4a6e-b164-439aeafb8870",
+        "scheduled_date_time": "2023-01-06T12:00:00Z",
+        "scheduled_duration": 480,
+        "case_type": "Tribunal",
+        "case_number": "Weekend-booking-test-0857",
+        "case_name": "Weekend-booking-test-0857 Day 1 of 3",
+        "hearing_venue_name": "Birmingham Civil and Family Justice Centre",
+        "record_audio": false,
+        "hearing_type": "Hearing"
+      }
+    ],
+    "allocated_cso": {
+      "$type": "BookingsApi.Infrastructure.Services.Dtos.UserDto, BookingsApi.Infrastructure.Services",
+      "user_id": "387ce9cd-2372-4af2-a657-f31c3101fbff",
+      "username": "william.craig@hearings.reform.hmcts.net",
+      "user_role": "Video hearings team lead"
+    }
+  }
+}
