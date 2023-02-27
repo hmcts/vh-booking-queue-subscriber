@@ -17,15 +17,10 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     public class AllocationHearingHandler : IMessageHandler<AllocationHearingsIntegrationEvent>
     {
         private readonly IVideoWebService _videoWebService;
-        private readonly ILogger<AllocationHearingHandler> _logger;
-        private readonly IBookingsApiClient _bookingApi;
 
-        public AllocationHearingHandler(IVideoWebService videoWebService, ILogger<AllocationHearingHandler> logger,
-            IBookingsApiClient bookingApi)
+        public AllocationHearingHandler(IVideoWebService videoWebService)
         {
             _videoWebService = videoWebService;
-            _logger = logger;
-            _bookingApi = bookingApi;
         }
 
         public async Task HandleAsync(AllocationHearingsIntegrationEvent eventMessage)
@@ -48,7 +43,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 }).ToList()
             };
 
-            await _videoWebService.PushAllocationToCsoUpdatedMessage(updateAlocatioHearingsRequest);
+            _videoWebService.PushAllocationToCsoUpdatedMessage(updateAlocatioHearingsRequest);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

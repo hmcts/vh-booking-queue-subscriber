@@ -16,13 +16,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class AllocationHearingHandlerTests : MessageHandlerTestBase
     {
-        private readonly Mock<ILogger<AllocationHearingHandler>> _logger =
-            new Mock<ILogger<AllocationHearingHandler>>();
 
         [Test]
         public async Task should_call_videoweb_service_when_request_is_valid()
         {
-            var messageHandler = new AllocationHearingHandler(VideoWebServiceMock.Object, _logger.Object, BookingsApiClientMock.Object);
+            var messageHandler = new AllocationHearingHandler(VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -32,7 +30,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_videoweb_service_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new AllocationHearingHandler(VideoWebServiceMock.Object, _logger.Object, BookingsApiClientMock.Object);
+            var messageHandler = (IMessageHandler)new AllocationHearingHandler(VideoWebServiceMock.Object);
 
             var integrationEvent = new AllocationHearingsIntegrationEvent {Hearings = buildHearings(), AllocatedCso = buildCsoUser()};
             await messageHandler.HandleAsync(integrationEvent);
@@ -48,12 +46,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             };
         }
 
-        private UserDto buildCsoUser()
+        private static UserDto buildCsoUser()
         {
             return new UserDto() {Username = "user.name@mail.com"};
         }
 
-        private IList<HearingDto> buildHearings()
+        private static IList<HearingDto> buildHearings()
         {
             IList<HearingDto> list = new List<HearingDto>();
 
@@ -61,7 +59,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             {
                 HearingDto hearing = new HearingDto()
                 {
-                    HearingId = new Guid(),
+                    HearingId = Guid.NewGuid(),
                     CaseName = $"Case name {i}",
                     JudgeDisplayName = $"Judge {i}",
                     ScheduledDateTime = DateTime.Now

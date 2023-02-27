@@ -27,14 +27,14 @@ namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
             var logger = new Mock<ILogger<VideoWebService>>();
             var videoWebService = new VideoWebService(client, logger.Object);
 
-            await videoWebService.PushAllocationToCsoUpdatedMessage(new AllocationHearingsToCsoRequest(){AllocatedCsoUserName = "username@mail.com", Hearings = buildHearingsRequest()});
+            videoWebService.PushAllocationToCsoUpdatedMessage(new AllocationHearingsToCsoRequest(){AllocatedCsoUserName = "username@mail.com", Hearings = buildHearingsRequest()});
 
             handler.Protected().Verify("SendAsync", Times.Exactly(1),
                  ItExpr.Is<HttpRequestMessage>(
                 request => request.Method == HttpMethod.Post), ItExpr.IsAny<CancellationToken>());
         }
 
-        private IList<HearingDetailRequest> buildHearingsRequest()
+        private static IList<HearingDetailRequest> buildHearingsRequest()
         {
             IList<HearingDetailRequest> list = new List<HearingDetailRequest>();
             HearingDetailRequest hearing = new HearingDetailRequest() {Judge = "Judge", CaseName = "CaseName", Time = "12:00"};

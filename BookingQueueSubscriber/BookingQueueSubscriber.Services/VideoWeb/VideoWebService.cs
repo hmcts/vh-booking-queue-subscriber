@@ -47,7 +47,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             });
 
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = _httpClient.PostAsync(path, httpContent).Result;
+            var result = await _httpClient.PostAsync(path, httpContent);
 
             _logger.LogDebug("PushParticipantsUpdatedMessage result: {Result}", result);
         }
@@ -70,7 +70,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             });
 
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = _httpClient.PostAsync(path, httpContent).Result;
+            var result = await _httpClient.PostAsync(path, httpContent);
 
             _logger.LogDebug("PushAllocationToCsoUpdatedMessage result: {Result}", result);
         }
