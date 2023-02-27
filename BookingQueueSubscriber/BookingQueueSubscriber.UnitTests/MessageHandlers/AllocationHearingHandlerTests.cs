@@ -51,13 +51,13 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             return new UserDto() {Username = "user.name@mail.com"};
         }
 
-        private static IList<HearingDto> buildHearings()
+        private static IList<HearingAllocationDto> buildHearings()
         {
-            IList<HearingDto> list = new List<HearingDto>();
+            IList<HearingAllocationDto> list = new List<HearingAllocationDto>();
 
             for (int i = 0; i < 3; i++)
             {
-                HearingDto hearing = new HearingDto()
+                HearingAllocationDto hearing = new HearingAllocationDto()
                 {
                     HearingId = Guid.NewGuid(),
                     CaseName = $"Case name {i}",

@@ -14,6 +14,5 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         public bool RecordAudio { get; set; }
         public Guid? GroupId { get; set; }
         public string HearingType { get; set; }
-        public string JudgeDisplayName { get; set;}
     }
 }
