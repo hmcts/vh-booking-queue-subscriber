@@ -27,7 +27,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
             var logger = new Mock<ILogger<VideoWebService>>();
             var videoWebService = new VideoWebService(client, logger.Object);
 
-            videoWebService.PushAllocationToCsoUpdatedMessage(new AllocationHearingsToCsoRequest(){AllocatedCsoUserName = "username@mail.com", Hearings = buildHearingsRequest()});
+            await videoWebService.PushAllocationToCsoUpdatedMessage(new AllocationHearingsToCsoRequest(){AllocatedCsoUserName = "username@mail.com", Hearings = buildHearingsRequest()});
 
             handler.Protected().Verify("SendAsync", Times.Exactly(1),
                  ItExpr.Is<HttpRequestMessage>(

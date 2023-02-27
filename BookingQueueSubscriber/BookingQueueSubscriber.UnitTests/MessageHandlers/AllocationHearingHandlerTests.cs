@@ -37,7 +37,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoWebServiceMock.Verify(x=>x.PushAllocationToCsoUpdatedMessage(It.IsAny<AllocationHearingsToCsoRequest>()), Times.Once);
         }
         
-        private AllocationHearingsIntegrationEvent GetIntegrationEvent()
+        private static AllocationHearingsIntegrationEvent GetIntegrationEvent()
         {
             return new AllocationHearingsIntegrationEvent
             {

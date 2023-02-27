@@ -43,7 +43,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 }).ToList()
             };
 
-            _videoWebService.PushAllocationToCsoUpdatedMessage(updateAlocatioHearingsRequest);
+            await _videoWebService.PushAllocationToCsoUpdatedMessage(updateAlocatioHearingsRequest);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
