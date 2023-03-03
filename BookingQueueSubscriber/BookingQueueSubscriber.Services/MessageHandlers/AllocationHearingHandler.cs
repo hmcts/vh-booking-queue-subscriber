@@ -29,7 +29,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             var todayHearings = eventMessage.Hearings.Where(h => h.ScheduledDateTime.Date == todayDate.Date);
 
-            var updateAlocatioHearingsRequest = new AllocationHearingsToCsoRequest
+            var updateAllocationHearingsRequest = new AllocationHearingsToCsoRequest
             {
                 AllocatedCsoUserName = eventMessage.AllocatedCso.Username,
                 Hearings = todayHearings.Select(h =>
@@ -43,7 +43,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 }).ToList()
             };
 
-            await _videoWebService.PushAllocationToCsoUpdatedMessage(updateAlocatioHearingsRequest);
+            await _videoWebService.PushAllocationToCsoUpdatedMessage(updateAllocationHearingsRequest);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
