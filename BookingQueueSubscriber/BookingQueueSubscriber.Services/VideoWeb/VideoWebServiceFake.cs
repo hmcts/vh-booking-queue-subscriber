@@ -9,6 +9,8 @@ namespace BookingQueueSubscriber.Services.VideoWeb
     {
         public int PushParticipantsUpdatedMessageCount { get; set; }
         public int PushNewConferenceAddedMessageCount { get; set; }
+        
+        public int PushAllocationToCsoUpdatedMessageCount { get; set; }
 
         public Task PushNewConferenceAdded(Guid conferenceId)
         {
@@ -19,6 +21,12 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         public Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {
             PushParticipantsUpdatedMessageCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+        
+        public Task PushAllocationToCsoUpdatedMessage(AllocationHearingsToCsoRequest request)
+        {
+            PushAllocationToCsoUpdatedMessageCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
     }
