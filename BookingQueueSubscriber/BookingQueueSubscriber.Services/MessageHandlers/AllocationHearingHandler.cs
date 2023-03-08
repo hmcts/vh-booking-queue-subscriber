@@ -14,6 +14,7 @@ using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
+    [Obsolete("This handler is no longer used and will be removed in a future release. Please refer to HearingsAllocationHandler instead.")]
     public class AllocationHearingHandler : IMessageHandler<AllocationHearingsIntegrationEvent>
     {
         private readonly IVideoWebService _videoWebService;

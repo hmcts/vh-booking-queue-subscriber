@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
+using BookingQueueSubscriber.Services.VideoWeb.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using VideoApi.Contract.Requests;
@@ -73,6 +74,19 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             var result = await _httpClient.PostAsync(path, httpContent);
 
             _logger.LogDebug("PushAllocationToCsoUpdatedMessage result: {Result}", result);
+        }
+
+        public async Task PushAllocationUpdatedMessage(AllocationUpdatedRequest request)
+        {
+            var path = $"internalevent/updatedAllocation";
+            
+            _logger.LogDebug("PushAllocationUpdatedMessage");
+            var payload = MessageSerializer.Serialise(request);
+            var httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+            var result = await _httpClient.PostAsync(path, httpContent);
+            result.EnsureSuccessStatusCode();
+            
+            _logger.LogDebug("PushAllocationUpdatedMessage result: {Result}", result);
         }
     }
 }

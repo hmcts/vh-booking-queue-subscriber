@@ -47,6 +47,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             yield return new TestData(new HearingIsReadyForVideoIntegrationEvent(), typeof(HearingReadyForVideoHandler));
             yield return new TestData(new ParticipantsAddedIntegrationEvent(), typeof(ParticipantsAddedHandler));
             yield return new TestData(new ParticipantRemovedIntegrationEvent(), typeof(ParticipantRemovedHandler));
+            yield return new TestData(new HearingsAllocationIntegrationEvent(), typeof(HearingsAllocationHandler));
         }
     }
 }

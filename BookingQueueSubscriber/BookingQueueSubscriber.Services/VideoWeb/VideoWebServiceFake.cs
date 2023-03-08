@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Services.VideoWeb.Models;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoWeb
@@ -28,6 +29,12 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         {
             PushAllocationToCsoUpdatedMessageCount++;
             return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task PushAllocationUpdatedMessage(AllocationUpdatedRequest request)
+        {
+            PushAllocationToCsoUpdatedMessageCount++;
+            return Task.FromResult(HttpStatusCode.Accepted);
         }
     }
 }
