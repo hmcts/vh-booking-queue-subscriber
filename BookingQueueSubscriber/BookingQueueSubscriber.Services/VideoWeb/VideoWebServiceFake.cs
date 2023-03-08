@@ -24,12 +24,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             PushParticipantsUpdatedMessageCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
-        
-        public Task PushAllocationToCsoUpdatedMessage(AllocationHearingsToCsoRequest request)
-        {
-            PushAllocationToCsoUpdatedMessageCount++;
-            return Task.FromResult(HttpStatusCode.OK);
-        }
 
         public Task PushAllocationUpdatedMessage(AllocationUpdatedRequest request)
         {

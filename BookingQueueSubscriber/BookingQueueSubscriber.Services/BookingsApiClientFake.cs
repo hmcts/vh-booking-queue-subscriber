@@ -119,12 +119,52 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<JusticeUserResponse> AddJusticeUserAsync(AddJusticeUserRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> AddJusticeUserAsync(AddJusticeUserRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> EditJusticeUserAsync(EditJusticeUserRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> EditJusticeUserAsync(EditJusticeUserRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<JusticeUserResponse> GetJusticeUserByUsernameAsync(string username)
         {
             throw new NotImplementedException();
         }
 
         public Task<JusticeUserResponse> GetJusticeUserByUsernameAsync(string username, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync(string term)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync(string term, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> DeleteJusticeUserAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> DeleteJusticeUserAsync(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -289,6 +329,16 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<string>> GetHearingVenuesByAllocatedCsoAsync(IEnumerable<Guid> csoIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<string>> GetHearingVenuesByAllocatedCsoAsync(IEnumerable<Guid> csoIds, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task UpdateJobHistoryAsync(string jobName, bool isSuccessful)
         {
             throw new NotImplementedException();
@@ -380,6 +430,11 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<SuitabilityAnswersResponse> GetSuitabilityAnswersAsync(string cursor, int? limit, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ICollection<HearingAllocationsResponse>> IBookingsApiClient.AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -621,6 +676,33 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<HearingDetailsResponse>> GetUnallocatedHearingsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<AllocatedCsoResponse>> GetAllocationsForHearingsAsync(IEnumerable<Guid> hearingIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<AllocatedCsoResponse>> GetAllocationsForHearingsAsync(IEnumerable<Guid> hearingIds, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ICollection<HearingAllocationsResponse>> IBookingsApiClient.SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
+            IEnumerable<string> caseType, string caseNumber, bool? isUnallocated)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ICollection<HearingAllocationsResponse>> IBookingsApiClient.SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
+            IEnumerable<string> caseType, string caseNumber, bool? isUnallocated, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ICollection<HearingAllocationsResponse>> IBookingsApiClient.AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest)
         {
             throw new NotImplementedException();
         }

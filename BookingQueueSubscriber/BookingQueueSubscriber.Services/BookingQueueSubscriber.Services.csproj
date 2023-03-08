@@ -14,13 +14,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BookingsApi.Client" Version="1.41.21" />
+      <PackageReference Include="BookingsApi.Client" Version="1.43.15" />
       <PackageReference Include="LaunchDarkly.ServerSdk" Version="6.3.3" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
-      <PackageReference Include="NotificationApi.Client" Version="1.41.9" />
+      <PackageReference Include="NotificationApi.Client" Version="1.43.3" />
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.54.0.64047">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="TimeZoneConverter" Version="3.3.0" />
-      <PackageReference Include="UserApi.Client" Version="1.41.8" />
-      <PackageReference Include="VideoApi.Client" Version="1.41.20" />
+      <PackageReference Include="UserApi.Client" Version="1.43.4" />
+      <PackageReference Include="VideoApi.Client" Version="1.43.5" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
     </ItemGroup>
 

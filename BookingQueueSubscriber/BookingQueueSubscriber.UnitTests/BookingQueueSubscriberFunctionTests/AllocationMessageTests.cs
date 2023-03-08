@@ -1,13 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.NotificationApi;
-using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
-using BookingsApi.Client;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -30,20 +26,6 @@ public class AllocationMessageTests : MessageHandlerTestBase
         _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
         _sut = new BookingQueueSubscriberFunction(
             new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
-    }
-    
-    [SetUp]
-    public void Setup()
-    {
-        ParticipantId = Guid.NewGuid();
-        HearingId = Guid.NewGuid();
-        VideoApiServiceMock = new Mock<IVideoApiService>();
-
-        VideoWebServiceMock = new Mock<IVideoWebService>();
-        UserServiceMock = new Mock<IUserService>();
-        NotificationServiceMock = new Mock<INotificationService>();
-        UserCreationAndNotificationMock = new Mock<IUserCreationAndNotification>();
-        BookingsApiClientMock = new Mock<IBookingsApiClient>();
     }
 
     [TearDown]
