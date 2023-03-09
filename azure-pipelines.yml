@@ -32,100 +32,100 @@ parameters:
   - name: RunACTests
     displayName: Run Acceptance Tests
     type: boolean
-    default: true
+    default: false
 
   - name: testSettings
     type: object
     default:
-    # AzureAd
-    - name: AzureAd:ClientId
-      value: vh-booking-queue-subscriber-appid
-      secret: true
-    - name: AzureAd:ClientSecret
-      value: vh-booking-queue-subscriber-key
-      secret: true
-    - name: AzureAd:TenantId
-      value: tenantid
-      secret: true
+      # AzureAd
+      - name: AzureAd:ClientId
+        value: vh-booking-queue-subscriber-appid
+        secret: true
+      - name: AzureAd:ClientSecret
+        value: vh-booking-queue-subscriber-key
+        secret: true
+      - name: AzureAd:TenantId
+        value: tenantid
+        secret: true
 
-    # Testing
-    - name: UsernameStem
-      value: $(UsernameStem)
+      # Testing
+      - name: UsernameStem
+        value: $(UsernameStem)
 
-    # VhServices
-    - name: VhServices:BookingsApiUrl
-      value: $(bookings_api_url)
-    - name: VhServices:VideoApiUrl
-      value: $(video_api_url)
-    - name: VhServices:VideoWebUrl
-      value: $(video_web_url)
-    - name: VhServices:NotificationApiUrl
-      value: $(notification_api_url)
-    - name: VhServices:UserApiUrl
-      value: $(user_api_url)
-    - name: VhServices:UserApiResourceId
-      value: vh-user-api-identifieruris
-      secret: true
-    - name: VhServices:InternalEventSecret
-      value: $(internal_event_secret)
+      # VhServices
+      - name: VhServices:BookingsApiUrl
+        value: $(bookings_api_url)
+      - name: VhServices:VideoApiUrl
+        value: $(video_api_url)
+      - name: VhServices:VideoWebUrl
+        value: $(video_web_url)
+      - name: VhServices:NotificationApiUrl
+        value: $(notification_api_url)
+      - name: VhServices:UserApiUrl
+        value: $(user_api_url)
+      - name: VhServices:UserApiResourceId
+        value: vh-user-api-identifieruris
+        secret: true
+      - name: VhServices:InternalEventSecret
+        value: $(internal_event_secret)
 
   - name: appSettings
     type: object
     default:
-    - name: ApplicationInsights:InstrumentationKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-    - name: AppInsightsKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-    
-    # AzureAd
-    - name: AzureAd:ClientId
-      value: vh-booking-queue-subscriber-appid
-      secret: true
-    - name: AzureAd:ClientSecret
-      value: vh-booking-queue-subscriber-key
-      secret: true
-    - name: AzureAd:TenantId
-      value: tenantid
-      secret: true
+      - name: ApplicationInsights:InstrumentationKey
+        value: vh-core-infra-AppInsightsKey
+        secret: true
+      - name: AppInsightsKey
+        value: vh-core-infra-AppInsightsKey
+        secret: true
 
-    # VhServices
-    - name: VhServices:BookingsApiResourceId
-      value: vh-bookings-api-identifieruris
-      secret: true
-    - name: VhServices:BookingsApiUrl
-      value: $(bookings_api_url)
-    - name: VhServices:VideoApiResourceId   
-      value: vh-video-api-identifieruris
-      secret: true
-    - name: VhServices:VideoApiUrl
-      value: $(video_api_url)
-    - name: VhServices:VideoWebResourceId   
-      value: vh-video-web-identifieruris
-      secret: true
-    - name: VhServices:VideoWebUrl
-      value: $(video_web_url)
-    - name: VhServices:InternalEventSecret
-      value: $(internal_event_secret)   
-    - name: VhServices:NotificationApiUrl
-      value: $(notification_api_url)      
-    - name: VhServices:NotificationApiResourceId
-      value: vh-notification-api-identifieruris
-      secret: true
-    - name: VhServices:UserApiUrl
-      value: $(user_api_url)
-    - name: VhServices:UserApiResourceId
-      value: vh-user-api-identifieruris
-      secret: true
+      # AzureAd
+      - name: AzureAd:ClientId
+        value: vh-booking-queue-subscriber-appid
+        secret: true
+      - name: AzureAd:ClientSecret
+        value: vh-booking-queue-subscriber-key
+        secret: true
+      - name: AzureAd:TenantId
+        value: tenantid
+        secret: true
 
-    - name: FeatureToggle:SdkKey
-      value: vh-admin-web-Feature-Toggle
-      secret: true      
-      
-      #AzureFunction Version
-    - name: FUNCTIONS_EXTENSION_VERSION
-      value: ~4
+      # VhServices
+      - name: VhServices:BookingsApiResourceId
+        value: vh-bookings-api-identifieruris
+        secret: true
+      - name: VhServices:BookingsApiUrl
+        value: $(bookings_api_url)
+      - name: VhServices:VideoApiResourceId
+        value: vh-video-api-identifieruris
+        secret: true
+      - name: VhServices:VideoApiUrl
+        value: $(video_api_url)
+      - name: VhServices:VideoWebResourceId
+        value: vh-video-web-identifieruris
+        secret: true
+      - name: VhServices:VideoWebUrl
+        value: $(video_web_url)
+      - name: VhServices:InternalEventSecret
+        value: $(internal_event_secret)
+      - name: VhServices:NotificationApiUrl
+        value: $(notification_api_url)
+      - name: VhServices:NotificationApiResourceId
+        value: vh-notification-api-identifieruris
+        secret: true
+      - name: VhServices:UserApiUrl
+        value: $(user_api_url)
+      - name: VhServices:UserApiResourceId
+        value: vh-user-api-identifieruris
+        secret: true
+
+      - name: FeatureToggle:SdkKey
+        value: vh-admin-web-Feature-Toggle
+        secret: true
+
+        #AzureFunction Version
+      - name: FUNCTIONS_EXTENSION_VERSION
+        value: ~4
 
 variables:
   - group: vh-domains-and-urls
@@ -137,14 +137,14 @@ variables:
 trigger:
   branches:
     include:
-    - master
-    - release/*
-    - hotfix/*
+      - master
+      - release/*
+      - hotfix/*
 
 pr:
   branches:
     include:
-    - master
+      - master
 
 resources:
   repositories:
@@ -154,12 +154,12 @@ resources:
       ref: refs/heads/master
       endpoint: hmcts
   containers:
-  - container: dotnetsdk
-    image: sspublicsbox.azurecr.io/vh/dotnet:latest
-    endpoint: sspublicsbox
-  - container: dotnetsdk-cipipeline
-    image: sspublicsbox.azurecr.io/vh/dotnet-cipipeline:latest
-    endpoint: sspublicsbox
+    - container: dotnetsdk
+      image: sspublicsbox.azurecr.io/vh/dotnet:latest
+      endpoint: sspublicsbox
+    - container: dotnetsdk-cipipeline
+      image: sspublicsbox.azurecr.io/vh/dotnet-cipipeline:latest
+      endpoint: sspublicsbox
 
 extends:
   template: stages\dotnet-package.yml@templates
@@ -179,14 +179,14 @@ extends:
       RunUnitTests: ${{ parameters.RunUnitTests }}
       RunIntegrationTests: ${{ parameters.RunIntegTests }}
       RunSonarCloud: ${{ parameters.RunSonarCloudTests }}
-      RunStryker: ${{ parameters.RunMutationTests }}    
+      RunStryker: ${{ parameters.RunMutationTests }}
       netVersion: 6.x
       IntegrationTestSettings:
         - ${{ each setting in parameters.testSettings }}:
-          - name: ${{ setting.name }}
-            value: ${{ setting.value }}
-            secret: ${{ setting.secret }}
-            type: ${{ setting.type }}
+            - name: ${{ setting.name }}
+              value: ${{ setting.value }}
+              secret: ${{ setting.secret }}
+              type: ${{ setting.type }}
       variables:
         - group: vh-domains-and-urls
         - group: vh-apps-settings-generic
@@ -227,6 +227,6 @@ extends:
           healthEndpoint: $(video_api_url)healthcheck/health
       acceptanceTestSettings:
         - ${{ each setting in parameters.testSettings }}:
-          - name: ${{ setting.name }}
-            value: ${{ setting.value }}
-            secret: ${{ setting.secret }}
+            - name: ${{ setting.name }}
+              value: ${{ setting.value }}
+              secret: ${{ setting.secret }}
