@@ -7,7 +7,7 @@ parameters:
   - name: PackageACTests
     displayName: Package Acceptance Tests
     type: boolean
-    default: true
+    default: false
 
   - name: RunUnitTests
     displayName: Run Unit Tests
