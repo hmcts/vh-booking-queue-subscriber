@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingQueueSubscriber.Comm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingQueueSubscriber.Services", "BookingQueueSubscriber.Services\BookingQueueSubscriber.Services.csproj", "{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingQueueSubscriber.AcceptanceTests", "BookingQueueSubscriber.AcceptanceTests\BookingQueueSubscriber.AcceptanceTests.csproj", "{7F260397-68B2-40C4-8442-E6F0886BCF31}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,17 +35,12 @@ Global
 		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DC349FE-8D8F-436D-8C95-DE92B8BA35EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F260397-68B2-40C4-8442-E6F0886BCF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F260397-68B2-40C4-8442-E6F0886BCF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F260397-68B2-40C4-8442-E6F0886BCF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F260397-68B2-40C4-8442-E6F0886BCF31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F356930E-88E9-4B0E-AA46-179E12BCFCD6} = {4774AAF7-2F45-4AFB-BA0B-07BA77A44C5B}
-		{7F260397-68B2-40C4-8442-E6F0886BCF31} = {4774AAF7-2F45-4AFB-BA0B-07BA77A44C5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {84556641-2AEE-4531-BCAF-A1217A7925B5}
