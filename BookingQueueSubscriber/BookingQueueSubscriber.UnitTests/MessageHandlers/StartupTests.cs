@@ -24,6 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [TestCase(typeof(IMessageHandler<ParticipantRemovedIntegrationEvent>), typeof(ParticipantRemovedHandler))]
         [TestCase(typeof(IMessageHandler<ParticipantsAddedIntegrationEvent>), typeof(ParticipantsAddedHandler))]
         [TestCase(typeof(IMessageHandler<ParticipantUpdatedIntegrationEvent>), typeof(ParticipantUpdatedHandler))]
+        [TestCase(typeof(IMessageHandler<HearingsAllocationIntegrationEvent>), typeof(HearingsAllocationHandler))]
         public void should_return_services(Type serviceType, Type serviceInstance)
         {
             var service = ServiceProviderFactory.ServiceProvider.GetService(serviceType);

@@ -18,4 +18,6 @@ Finally, run the following command into a terminal in the same directory as the 
 ```bash
 cd BookingQueueSubscriber/BookingQueueSubscriber
 func azure functionapp fetch-app-settings vh-booking-queue-subscriber-dev
+# view secrets in plain text
+func settings decrypt
 ```

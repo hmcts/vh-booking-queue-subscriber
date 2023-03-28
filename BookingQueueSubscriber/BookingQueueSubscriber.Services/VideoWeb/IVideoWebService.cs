@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Services.VideoWeb.Models;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoWeb
@@ -8,7 +9,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
     {
         Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request);
         Task PushNewConferenceAdded(Guid conferenceId);
-
-        Task PushAllocationToCsoUpdatedMessage(AllocationHearingsToCsoRequest request);
+        Task PushAllocationUpdatedMessage(AllocationUpdatedRequest request);
     }
 }
