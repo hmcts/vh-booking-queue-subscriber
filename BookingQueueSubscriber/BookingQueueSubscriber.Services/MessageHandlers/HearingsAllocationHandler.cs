@@ -33,16 +33,16 @@ public class HearingsAllocationHandler : IMessageHandler<HearingsAllocationInteg
         await _videoWebService.PushAllocationUpdatedMessage(request);
     }
 
+    public async Task HandleAsync(object integrationEvent)
+    {
+        await HandleAsync((HearingsAllocationIntegrationEvent)integrationEvent);
+    }
+
     // for each hearing get the conference details
     private async Task<List<ConferenceDetailsResponse>> GetConferenceForHearings(List<HearingDto> hearings)
     {
         var getTasks = hearings.Select(x => _videoApiService.GetConferenceByHearingRefId(x.HearingId)).ToList();
         var results = await Task.WhenAll(getTasks);
         return results.ToList();
-    }
-
-    public async Task HandleAsync(object integrationEvent)
-    {
-        await HandleAsync((HearingsAllocationIntegrationEvent)integrationEvent);
     }
 }
