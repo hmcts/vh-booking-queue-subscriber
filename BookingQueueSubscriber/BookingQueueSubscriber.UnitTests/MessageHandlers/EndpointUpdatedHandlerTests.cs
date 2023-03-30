@@ -18,7 +18,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_request_is_valid()
         {
             logger = new Mock<ILogger<EndpointUpdatedHandler>>();
-            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, logger.Object);
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -29,7 +29,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
             logger = new Mock<ILogger<EndpointUpdatedHandler>>();
-            var messageHandler = (IMessageHandler) new EndpointUpdatedHandler(VideoApiServiceMock.Object, logger.Object);
+            var messageHandler = (IMessageHandler) new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);

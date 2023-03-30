@@ -22,7 +22,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>())).ReturnsAsync(conference);
 
             logger = new Mock<ILogger<EndpointUpdatedHandler>>();
-            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, logger.Object);
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
 
             var integrationEvent = GetIntegrationEventValid();
             await messageHandler.HandleAsync(integrationEvent);
@@ -41,7 +41,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_log_error_when_retry_limit_is_reached()
         {
             logger = new Mock<ILogger<EndpointUpdatedHandler>>();
-            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, logger.Object);
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
 
             var integrationEvent = GetIntegrationEventInvalid();
             await messageHandler.HandleAsync(integrationEvent);
@@ -60,7 +60,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_not_log_error_when_defence_advocate_is_found()
         {
             logger = new Mock<ILogger<EndpointUpdatedHandler>>();
-            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, logger.Object);
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
 
             var integrationEvent = GetIntegrationEventValid();
             await messageHandler.HandleAsync(integrationEvent);
