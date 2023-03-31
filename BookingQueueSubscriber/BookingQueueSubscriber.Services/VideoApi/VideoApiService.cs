@@ -45,7 +45,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
 
         public Task<ICollection<EndpointResponse>> GetEndpointsForConference(Guid conferenceId)
         {
-            _logger.LogInformation($"Getting endpoints by conference id {conferenceId}");
+            _logger.LogInformation("Getting endpoints by conference id {ConferenceId}", conferenceId);
             return _apiClient.GetEndpointsForConferenceAsync(conferenceId);
         }
 
@@ -64,7 +64,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
 
         public Task UpdateConferenceParticipantsAsync(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {
-            _logger.LogInformation("Updating participants in conference {ConferenceId} with request: {request}", conferenceId, request);
+            _logger.LogInformation("Updating participants in conference {ConferenceId} with request: {Request}", conferenceId, request);
             return _apiClient.UpdateConferenceParticipantsAsync(conferenceId, request);
         }
 
