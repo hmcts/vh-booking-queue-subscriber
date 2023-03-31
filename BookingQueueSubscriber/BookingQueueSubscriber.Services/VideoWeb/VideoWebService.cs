@@ -94,7 +94,9 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             });
 
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var result = _httpClient.PostAsync(path, httpContent).Result;
+            var result = await _httpClient.PostAsync(path, httpContent);
+
+            result.EnsureSuccessStatusCode();
 
             _logger.LogDebug("PushEndpointsUpdatedMessage result: {Result}", result);
         }
