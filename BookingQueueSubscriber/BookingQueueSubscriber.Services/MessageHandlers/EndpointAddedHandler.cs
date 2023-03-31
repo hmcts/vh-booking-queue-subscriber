@@ -18,6 +18,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public EndpointAddedHandler(IVideoApiService videoApiService, IVideoWebService videoWebService)
         {
             _videoApiService = videoApiService;
+            _videoWebService = videoWebService;
         }
 
         public async Task HandleAsync(EndpointAddedIntegrationEvent eventMessage)
