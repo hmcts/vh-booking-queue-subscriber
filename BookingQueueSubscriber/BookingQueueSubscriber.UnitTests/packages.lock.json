@@ -73,6 +73,12 @@
         "resolved": "4.4.2",
         "contentHash": "vA/iHYcR+LYw+pRWQugckC/zW2fXHaqMr2uA82NOBt8v4YK4wMJrQ7QC8XLc7PjetEZ96cPbBTWsDDtmQiRZTA=="
       },
+      "RichardSzalay.MockHttp": {
+        "type": "Direct",
+        "requested": "[6.0.0, )",
+        "resolved": "6.0.0",
+        "contentHash": "bStGNqIX/MGYtML7K3EzdsE/k5HGVAcg7XgN23TQXGXqxNC9fvYFR94fA0sGM5hAT36R+BBGet6ZDQxXL/IPxg=="
+      },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
         "requested": "[8.55.0.65544, )",

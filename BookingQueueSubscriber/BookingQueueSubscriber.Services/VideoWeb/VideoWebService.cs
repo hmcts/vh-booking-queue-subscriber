@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -82,12 +81,12 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 
             _logger.LogDebug("PushEndpointsUpdatedMessage ConferenceId: {ConferenceId}", conferenceId);
 
-            DefaultContractResolver contractResolver = new DefaultContractResolver
+            var contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new SnakeCaseNamingStrategy()
             };
 
-            string json = JsonConvert.SerializeObject(request, new JsonSerializerSettings
+            var json = JsonConvert.SerializeObject(request, new JsonSerializerSettings
             {
                 ContractResolver = contractResolver,
                 Formatting = Formatting.Indented
