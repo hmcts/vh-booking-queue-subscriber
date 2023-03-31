@@ -23,7 +23,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             _mockEndpointDetailsResponse = new List<EndpointResponse>
             {
-                new EndpointResponse
+                new()
                 {
                     Id = Guid.NewGuid(),
                     SipAddress = integrationEvent.Endpoint.Sip,

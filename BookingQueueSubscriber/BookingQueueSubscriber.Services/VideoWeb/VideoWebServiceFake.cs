@@ -1,13 +1,13 @@
 ﻿using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using VideoApi.Contract.Requests;
-using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.VideoWeb
 {
+    [ExcludeFromCodeCoverage]
     public class VideoWebServiceFake: IVideoWebService
     {
         public int PushParticipantsUpdatedMessageCount { get; set; }

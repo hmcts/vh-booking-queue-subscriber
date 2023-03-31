@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using VideoApi.Contract.Requests;
 using Moq;
 using NUnit.Framework;
@@ -15,7 +14,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class EndpointDefenceAdvocateHandlerTests : MessageHandlerTestBase
     {
-        protected Mock<ILogger<EndpointUpdatedHandler>> logger;
+        private Mock<ILogger<EndpointUpdatedHandler>> logger;
         private ICollection<EndpointResponse> _mockEndpointDetailsResponse;
 
         [SetUp]
@@ -43,8 +42,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_log_error_when_conference_is_null()
         {
-            ConferenceDetailsResponse conference = null; 
-            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>())).ReturnsAsync(conference);
+            VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>())).ReturnsAsync((ConferenceDetailsResponse) null);
 
             logger = new Mock<ILogger<EndpointUpdatedHandler>>();
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
@@ -56,7 +54,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 It.Is<LogLevel>(log => log == LogLevel.Error),
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((@object, @type) => @object.ToString().Contains("Unable to find conference by hearing id")),
-                It.Is<Exception>(x => x == null),
+                It.Is<Exception>(exception => exception == null),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
 
             VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<UpdateEndpointRequest>()), Times.Never);

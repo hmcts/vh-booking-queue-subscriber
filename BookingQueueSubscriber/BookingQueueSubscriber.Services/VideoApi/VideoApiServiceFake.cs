@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using VideoApi.Contract.Requests;
@@ -7,6 +8,7 @@ using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.VideoApi
 {
+    [ExcludeFromCodeCoverage]
     public class VideoApiServiceFake : IVideoApiService
     {
         public ConferenceDetailsResponse ConferenceResponse { get; set; }
