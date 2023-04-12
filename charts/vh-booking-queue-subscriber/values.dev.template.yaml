@@ -1,6 +1,8 @@
 ---
 java:
   image: '${IMAGE_NAME}'
+  environment:
+    VHSERVICES__VIDEOWEBURL: https://vh-video-web-pr-1985.dev.platform.hmcts.net/ # TODO: remove before merging
   releaseNameOverride: ${RELEASE_NAME}
 function:
   releaseNameOverride: ${RELEASE_NAME}
