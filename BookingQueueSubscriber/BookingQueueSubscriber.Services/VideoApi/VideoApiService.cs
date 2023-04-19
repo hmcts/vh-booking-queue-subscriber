@@ -4,6 +4,7 @@ using VideoApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
+using System.Collections.Generic;
 
 namespace BookingQueueSubscriber.Services.VideoApi
 {
@@ -42,6 +43,12 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return _apiClient.GetConferenceByHearingRefIdAsync(hearingRefId, includeClosed);
         }
 
+        public Task<ICollection<EndpointResponse>> GetEndpointsForConference(Guid conferenceId)
+        {
+            _logger.LogInformation("Getting endpoints by conference id {ConferenceId}", conferenceId);
+            return _apiClient.GetEndpointsForConferenceAsync(conferenceId);
+        }
+
         public Task AddParticipantsToConference(Guid conferenceId, AddParticipantsToConferenceRequest request)
         {
             _logger.LogInformation("Adding participants to conference {ConferenceId}", conferenceId);
@@ -57,7 +64,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
 
         public Task UpdateConferenceParticipantsAsync(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {
-            _logger.LogInformation("Updating participants in conference {ConferenceId} with request: {request}", conferenceId, request);
+            _logger.LogInformation("Updating participants in conference {ConferenceId} with request: {Request}", conferenceId, request);
             return _apiClient.UpdateConferenceParticipantsAsync(conferenceId, request);
         }
 

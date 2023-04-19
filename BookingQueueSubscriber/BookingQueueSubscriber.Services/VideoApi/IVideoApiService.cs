@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
@@ -15,6 +16,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         Task RemoveParticipantFromConference(Guid conferenceId, Guid participantId);
         Task UpdateConferenceParticipantsAsync(Guid conferenceId, UpdateConferenceParticipantsRequest request);
         Task UpdateParticipantDetails(Guid conferenceId, Guid participantId, UpdateParticipantRequest request);
+        Task<ICollection<EndpointResponse>> GetEndpointsForConference(Guid conferenceId);
         Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request);
         Task RemoveEndpointFromConference(Guid conferenceId, string sip);
         Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request);

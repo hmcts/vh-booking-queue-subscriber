@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
 using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
@@ -13,13 +15,15 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     public class EndpointUpdatedHandler : IMessageHandler<EndpointUpdatedIntegrationEvent>
     {
         private readonly IVideoApiService _videoApiService;
+        private readonly IVideoWebService _videoWebService;
         private readonly ILogger<EndpointUpdatedHandler> _logger;
         private const int RetryLimit = 3;
         private const int RetrySleep = 3000;
 
-        public EndpointUpdatedHandler(IVideoApiService videoApiService, ILogger<EndpointUpdatedHandler> logger)
+        public EndpointUpdatedHandler(IVideoApiService videoApiService, IVideoWebService videoWebService, ILogger<EndpointUpdatedHandler> logger)
         {
             _videoApiService = videoApiService;
+            _videoWebService = videoWebService;
             _logger = logger;
         }
 
@@ -40,6 +44,15 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                     DisplayName = eventMessage.DisplayName,
                     DefenceAdvocate = defenceAdvocate?.Username
                 });
+
+                var endpoints = await _videoApiService.GetEndpointsForConference(conference.Id);
+
+                var updateEndpointRequest = new UpdateConferenceEndpointsRequest
+                {
+                    ExistingEndpoints = endpoints.Where(x => x.SipAddress == eventMessage.Sip).ToList()
+                };
+
+                await _videoWebService.PushEndpointsUpdatedMessage(conference.Id, updateEndpointRequest);
             }
         }
 

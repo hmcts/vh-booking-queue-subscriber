@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
@@ -7,7 +8,7 @@ using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.NotificationApi
 {
- 
+    [ExcludeFromCodeCoverage]
     public class NotificationServiceFake : INotificationService
     {
         public List<AddNotificationRequest> NotificationRequests { get; set; }
