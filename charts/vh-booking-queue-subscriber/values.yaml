@@ -74,7 +74,7 @@ java:
     Logging__LogLevel__Default: debug
     Logging__LogLevel__Microsoft: debug
     Logging__LogLevel__System: debug
-    QUEUENAME: booking
+    QUEUENAME: marco-dev-booking
     VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__ENABLEVIDEOAPISTUB: false
     VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api.{{ .Values.global.environment }}.platform.hmcts.net/
