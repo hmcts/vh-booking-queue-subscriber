@@ -11,3 +11,6 @@ function:
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
+environment: # TODO for testing only, do not merge
+  VHSERVICES__VIDEOWEBURL : https://vh-video-web-pr-1999.dev.platform.hmcts.net/
+  QUEUENAME : marco-dev-booking
