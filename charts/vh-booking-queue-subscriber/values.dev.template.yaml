@@ -4,6 +4,7 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   environment: # TODO for testing only, do not merge
     VHSERVICES__VIDEOWEBURL: https://vh-video-web-pr-1999.dev.platform.hmcts.net/
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-634.dev.platform.hmcts.net/
     QUEUENAME: marco-dev-booking
 function:
   releaseNameOverride: ${RELEASE_NAME}
