@@ -4,12 +4,13 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   environment:
     VHSERVICES__USERAPIURL: https://vh-user-api-pr-223.dev.platform.hmcts.net/
+    QUEUENAME : oliver-booking
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: booking
+    queueName: oliver-booking
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
