@@ -2249,8 +2249,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.41.20",
-        "contentHash": "VYrfk9WH/lSBFW2rTdnJPS4IL3vqtWBfxLvGFT3zQJD6SezbZTwdSJVKIAM/XPIahkx5QjzmOnO6a+QyDSJv2Q==",
+        "resolved": "1.43.12-pullrequest0571-0003",
+        "contentHash": "BV/cyxrKIW+fWbY0NwUVyheLX8BzWQl3vMm9njW/marLwqJyY5LdVEAZp676+YEauJHT1dkeBzl7yXmS7qpKqA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2267,13 +2267,13 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "LaunchDarkly.ServerSdk": "[6.3.3, )",
-          "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
-          "Microsoft.Extensions.Configuration.Json": "[6.0.0, )",
-          "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
-          "Newtonsoft.Json": "[13.0.1, )",
-          "VH.Core.Configuration": "[0.1.12, )"
+          "LaunchDarkly.ServerSdk": "6.3.3",
+          "Microsoft.Azure.Functions.Extensions": "1.1.0",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
+          "Microsoft.Extensions.Configuration.Json": "6.0.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
+          "Newtonsoft.Json": "13.0.1",
+          "VH.Core.Configuration": "0.1.12"
         }
       },
       "bookingqueuesubscriber.services": {
@@ -2287,7 +2287,7 @@
           "System.IdentityModel.Tokens.Jwt": "6.25.0",
           "TimeZoneConverter": "3.3.0",
           "UserApi.Client": "1.41.8",
-          "VideoApi.Client": "1.43.11-pullrequest0571-0002"
+          "VideoApi.Client": "1.43.12-pullrequest0571-0003"
         }
       }
     }
