@@ -2249,8 +2249,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.41.20",
-        "contentHash": "VYrfk9WH/lSBFW2rTdnJPS4IL3vqtWBfxLvGFT3zQJD6SezbZTwdSJVKIAM/XPIahkx5QjzmOnO6a+QyDSJv2Q==",
+        "resolved": "1.43.12",
+        "contentHash": "HlnnMw3ay+FMEHPa1Rich7THcKYbQujFvNXDVIpEgngTeumWkdapYqVoVY4aaSky+6FNqhexaM6bi5x20aGJhw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2267,27 +2267,27 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "LaunchDarkly.ServerSdk": "[6.3.3, )",
-          "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
-          "Microsoft.Extensions.Configuration.Json": "[6.0.0, )",
-          "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
-          "Newtonsoft.Json": "[13.0.1, )",
-          "VH.Core.Configuration": "[0.1.12, )"
+          "LaunchDarkly.ServerSdk": "6.3.3",
+          "Microsoft.Azure.Functions.Extensions": "1.1.0",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
+          "Microsoft.Extensions.Configuration.Json": "6.0.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
+          "Newtonsoft.Json": "13.0.1",
+          "VH.Core.Configuration": "0.1.12"
         }
       },
       "bookingqueuesubscriber.services": {
         "type": "Project",
         "dependencies": {
-          "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[1.41.21, )",
-          "LaunchDarkly.ServerSdk": "[6.3.3, )",
-          "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[1.41.9, )",
-          "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
-          "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[1.41.8, )",
-          "VideoApi.Client": "[1.41.20, )"
+          "BookingQueueSubscriber.Common": "1.0.0",
+          "BookingsApi.Client": "1.41.21",
+          "LaunchDarkly.ServerSdk": "6.3.3",
+          "Microsoft.Extensions.Logging.Abstractions": "6.0.2",
+          "NotificationApi.Client": "1.41.9",
+          "System.IdentityModel.Tokens.Jwt": "6.25.0",
+          "TimeZoneConverter": "3.3.0",
+          "UserApi.Client": "1.41.8",
+          "VideoApi.Client": "1.43.12"
         }
       }
     }

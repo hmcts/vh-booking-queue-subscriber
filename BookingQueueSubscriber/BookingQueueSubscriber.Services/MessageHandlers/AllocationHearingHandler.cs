@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                     {
                         Judge = h.JudgeDisplayName, 
                         CaseName = h.CaseName, 
-                        Time = h.ScheduledDateTime.ToString("HH:mm tt")
+                        Time = h.ScheduledDateTime
                     };
                 }).ToList()
             };
