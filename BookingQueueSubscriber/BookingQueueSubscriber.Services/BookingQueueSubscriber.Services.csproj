@@ -24,7 +24,7 @@
       </PackageReference>
       <PackageReference Include="TimeZoneConverter" Version="3.3.0" />
       <PackageReference Include="UserApi.Client" Version="1.41.8" />
-      <PackageReference Include="VideoApi.Client" Version="1.43.12-pullrequest0571-0003" />
+      <PackageReference Include="VideoApi.Client" Version="1.43.12" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
     </ItemGroup>
 
