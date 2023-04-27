@@ -156,6 +156,7 @@ extends:
   parameters:
     coreProjectPath: BookingQueueSubscriber/BookingQueueSubscriber
     PackageApp: ${{ parameters.PackageApp }}
+    PackageAcceptanceTests: false
     netVersion: 6.x
     Test: ${{ or(parameters.RunUnitTests, parameters.RunIntegTests, parameters.RunMutationTests) }}
     testParameters:
