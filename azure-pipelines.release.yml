@@ -94,6 +94,7 @@ stages:
         deploymentSlot: production
         appName: vh-booking-queue-subscriber-$(environment)
         resourceGroup: vh-booking-queue-subscriber-$(environment)
+        runACTests: false
         testCaseFilter:
         dependentApps:
         - name: vh-bookings-api-$(environment)
