@@ -4,11 +4,6 @@ parameters:
     type: boolean
     default: true
 
-  - name: PackageACTests
-    displayName: Package Acceptance Tests
-    type: boolean
-    default: false
-
   - name: RunUnitTests
     displayName: Run Unit Tests
     type: boolean
@@ -26,11 +21,6 @@ parameters:
 
   - name: RunMutationTests
     displayName: Run Mutation Tests
-    type: boolean
-    default: false
-
-  - name: RunACTests
-    displayName: Run Acceptance Tests
     type: boolean
     default: false
 
@@ -166,7 +156,6 @@ extends:
   parameters:
     coreProjectPath: BookingQueueSubscriber/BookingQueueSubscriber
     PackageApp: ${{ parameters.PackageApp }}
-    PackageAcceptanceTests: ${{ parameters.PackageACTests }}
     netVersion: 6.x
     Test: ${{ or(parameters.RunUnitTests, parameters.RunIntegTests, parameters.RunMutationTests) }}
     testParameters:
@@ -202,7 +191,6 @@ extends:
         sonar.coverage.exclusions="**/BookingQueueSubscriber/Swagger/**, **/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.IntegrationTests/**, **/BookingQueueSubscriber.UnitTests/**, **/BookingQueueSubscriber/Helper/**, **/BookingQueueSubscriber/ConfigureServicesExtensions.cs, **/BookingQueueSubscriber/Extensions/**"
         sonar.cpd.exclusions="**/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber/Swagger/**"
       StrykerBreak: 75
-    ACTest: ${{ parameters.RunACTests }}
     releaseParameters:
       environment: Preview
       netVersion: 6.x
@@ -225,8 +213,3 @@ extends:
         - name: vh-video-api-$(environment)
           resourceGroup: vh-video-api-$(environment)
           healthEndpoint: $(video_api_url)healthcheck/health
-      acceptanceTestSettings:
-        - ${{ each setting in parameters.testSettings }}:
-            - name: ${{ setting.name }}
-              value: ${{ setting.value }}
-              secret: ${{ setting.secret }}
