@@ -43,10 +43,14 @@ namespace BookingQueueSubscriber.Services
                 tasks.Add(task);
             }
 
+            Console.WriteLine($"Creating users");
             var users = await Task.WhenAll(tasks);
             var newUsers = new List<UserDto>();
+
             foreach (var user in users)
             {
+                if (user == null) continue;
+            
                 var participant = participants.FirstOrDefault(p => p.ContactEmail == user.ContactEmail);
                 
                 if (!string.IsNullOrEmpty(user?.UserName))
@@ -55,6 +59,8 @@ namespace BookingQueueSubscriber.Services
                 }
             }
 
+            Console.WriteLine($"Users to create: {newUsers.Count}");
+            
             return newUsers;
 
         }
