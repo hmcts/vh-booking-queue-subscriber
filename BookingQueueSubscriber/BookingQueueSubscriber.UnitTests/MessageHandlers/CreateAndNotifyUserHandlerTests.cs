@@ -77,7 +77,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
 
         [Test]
-        [Ignore("TODO fix")]
         public async Task should_assign_users_to_correct_group_when_request_is_valid()
         {
             var notificationService = new Mock<INotificationService>();
@@ -91,25 +90,29 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         FirstName = "Test",
                         LastName = UserRole.Representative.ToString(),
-                        UserRole = "Representative"
+                        UserRole = "Representative",
+                        ContactEmail = "rep@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.JudicialOfficeHolder.ToString(),
-                        UserRole = "Judicial Office Holder"
+                        UserRole = "Judicial Office Holder",
+                        ContactEmail = "joh@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.StaffMember.ToString(),
-                        UserRole = "StaffMember"
+                        UserRole = "StaffMember",
+                        ContactEmail = "staffmember@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.Individual.ToString(),
-                        UserRole = "Individual"
+                        UserRole = "Individual",
+                        ContactEmail = "individual@email.com"
                     }
                 }
             };
@@ -169,7 +172,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
 
         [Test]
-        [Ignore("TODO fix")]
         public async Task should_assign_users_to_correct_group_when_request_is_valid_and_sspr_feature_is_toggled()
         {
             var notificationService = new Mock<INotificationService>();
@@ -183,25 +185,29 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         FirstName = "Test",
                         LastName = UserRole.Representative.ToString(),
-                        UserRole = "Representative"
+                        UserRole = "Representative",
+                        ContactEmail = "rep@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.JudicialOfficeHolder.ToString(),
-                        UserRole = "Judicial Office Holder"
+                        UserRole = "Judicial Office Holder",
+                        ContactEmail = "joh@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.StaffMember.ToString(),
-                        UserRole = "StaffMember"
+                        UserRole = "StaffMember",
+                        ContactEmail = "staffmember@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.Individual.ToString(),
-                        UserRole = "Individual"
+                        UserRole = "Individual",
+                        ContactEmail = "individual@email.com"
                     }
                 }
             };

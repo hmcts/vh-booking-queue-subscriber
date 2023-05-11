@@ -37,7 +37,6 @@ namespace BookingQueueSubscriber.UnitTests
         }
 
         [Test]
-        [Ignore("TODO fix")]
         public async Task should_have_called_CreateNewUserForParticipantAsync_for_joh_when_eJudfeature_disabled()
         {
             var participant = GetJoh();
@@ -58,7 +57,6 @@ namespace BookingQueueSubscriber.UnitTests
         }
 
         [Test]
-        [Ignore("TODO fix")]
         public async Task should_not_have_called_CreateNewUserForParticipantAsync_for_joh_when_eJudfeature_enabled()
         {
             var participant = GetJoh();
@@ -120,7 +118,6 @@ namespace BookingQueueSubscriber.UnitTests
         }
         
         [Test]
-        [Ignore("TODO fix")]
         public async Task should_return_null_user_CreateNewUserForParticipantAsync_for_get_user_fail_twice()
         {
             var participant = GetParticipant();
@@ -158,7 +155,6 @@ namespace BookingQueueSubscriber.UnitTests
         }
 
         [Test]
-        [Ignore("TODO fix")]
         public async Task should_return_exception_CreateNewUserForParticipantAsync_for_create_user_Throw_exception_different_from_Conflict()
         {
             var participant = GetParticipant();
@@ -206,7 +202,7 @@ namespace BookingQueueSubscriber.UnitTests
             _bookingsAPIMock.Setup(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username));
             _notificationServiceMock.Setup(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, "xyz"));
             _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail,
-                false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = "xyz", UserName = "part1@hearigns.reform.hmcts.net" });
+                false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = "xyz", UserName = "part1@hearigns.reform.hmcts.net", ContactEmail = participant.ContactEmail});
         }
 
         private static ParticipantDto GetJoh()
