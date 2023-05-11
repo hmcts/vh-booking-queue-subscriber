@@ -42,8 +42,7 @@ namespace BookingQueueSubscriber.Services
                 var task = CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
                 createUserTasks.Add(task);
             }
-
-            Console.WriteLine($"Creating users");
+            
             var users = await Task.WhenAll(createUserTasks);
             var newUsers = new List<UserDto>();
 
@@ -59,8 +58,6 @@ namespace BookingQueueSubscriber.Services
                 }
             }
 
-            Console.WriteLine($"Users to create: {newUsers.Count}");
-            
             return newUsers;
 
         }
