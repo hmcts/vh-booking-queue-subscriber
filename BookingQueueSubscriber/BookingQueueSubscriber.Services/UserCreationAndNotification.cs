@@ -36,15 +36,15 @@ namespace BookingQueueSubscriber.Services
 
         public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)
         {
-            var tasks = new List<Task<User>>();
+            var createUserTasks = new List<Task<User>>();
             foreach (var participant in participants)
             {
                 var task = CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
-                tasks.Add(task);
+                createUserTasks.Add(task);
             }
 
             Console.WriteLine($"Creating users");
-            var users = await Task.WhenAll(tasks);
+            var users = await Task.WhenAll(createUserTasks);
             var newUsers = new List<UserDto>();
 
             foreach (var user in users)
@@ -52,8 +52,8 @@ namespace BookingQueueSubscriber.Services
                 if (user == null) continue;
             
                 var participant = participants.FirstOrDefault(p => p.ContactEmail == user.ContactEmail);
-                
-                if (!string.IsNullOrEmpty(user.UserName))
+
+                if (!string.IsNullOrEmpty(user.UserName) && participant != null)
                 {
                     newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole });
                 }
