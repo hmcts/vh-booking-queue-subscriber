@@ -119,12 +119,62 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<JusticeUserResponse> AddJusticeUserAsync(AddJusticeUserRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> AddJusticeUserAsync(AddJusticeUserRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> EditJusticeUserAsync(EditJusticeUserRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JusticeUserResponse> EditJusticeUserAsync(EditJusticeUserRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<JusticeUserResponse> GetJusticeUserByUsernameAsync(string username)
         {
             throw new NotImplementedException();
         }
 
         public Task<JusticeUserResponse> GetJusticeUserByUsernameAsync(string username, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync(string term, bool? includeDeleted)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync(string term, bool? includeDeleted, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteJusticeUserAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteJusticeUserAsync(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RestoreJusticeUserAsync(RestoreJusticeUserRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RestoreJusticeUserAsync(RestoreJusticeUserRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -285,6 +335,16 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<HearingVenueResponse>> GetHearingVenuesAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<string>> GetHearingVenuesByAllocatedCsoAsync(IEnumerable<Guid> csoIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<string>> GetHearingVenuesByAllocatedCsoAsync(IEnumerable<Guid> csoIds, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -625,24 +685,34 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponse>> SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
+        public Task<ICollection<AllocatedCsoResponse>> GetAllocationsForHearingsAsync(IEnumerable<Guid> hearingIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<AllocatedCsoResponse>> GetAllocationsForHearingsAsync(IEnumerable<Guid> hearingIds, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingAllocationsResponse>> SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
             IEnumerable<string> caseType, string caseNumber, bool? isUnallocated)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponse>> SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
+        public Task<ICollection<HearingAllocationsResponse>> SearchForAllocationHearingsAsync(DateTimeOffset? fromDate, DateTimeOffset? toDate, IEnumerable<Guid> cso,
             IEnumerable<string> caseType, string caseNumber, bool? isUnallocated, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponse>> AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest)
+        public Task<ICollection<HearingAllocationsResponse>> AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponse>> AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest, CancellationToken cancellationToken)
+        public Task<ICollection<HearingAllocationsResponse>> AllocateHearingsToCsoAsync(UpdateHearingAllocationToCsoRequest postRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -2233,6 +2233,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
+          "BookingsApi.Client": "[1.44.1, )",
           "LaunchDarkly.ServerSdk": "[6.3.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",

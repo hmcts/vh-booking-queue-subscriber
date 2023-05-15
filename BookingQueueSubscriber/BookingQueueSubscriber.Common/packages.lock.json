@@ -2,6 +2,15 @@
   "version": 1,
   "dependencies": {
     "net6.0": {
+      "BookingsApi.Client": {
+        "type": "Direct",
+        "requested": "[1.44.1, )",
+        "resolved": "1.44.1",
+        "contentHash": "F84Y6EnY0yUwmRholTBrenZZRvx3x52x9NB24OQqM3D+cJZOzMIlY92+rGn5TjRP9OejiKcfUovXBaajLqyVRg==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
+        }
+      },
       "LaunchDarkly.ServerSdk": {
         "type": "Direct",
         "requested": "[6.3.3, )",
