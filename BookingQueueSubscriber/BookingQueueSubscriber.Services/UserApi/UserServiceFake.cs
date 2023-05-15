@@ -19,7 +19,8 @@ namespace BookingQueueSubscriber.Services.UserApi
             var user = new User
             {
                 UserId = $"{firstname}.{lastname}",
-                UserName = $"{firstname}.{lastname}"
+                UserName = $"{firstname}.{lastname}",
+                ContactEmail = contactEmail
             };
             Users.Add(user);
             return Task.FromResult(user);
