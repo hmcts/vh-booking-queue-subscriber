@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
@@ -35,11 +36,23 @@ namespace BookingQueueSubscriber.Services
 
         public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)
         {
-            var newUsers = new List<UserDto>();
+            var createUserTasks = new List<Task<User>>();
             foreach (var participant in participants)
             {
-                var user = await CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
-                if (!string.IsNullOrEmpty(user?.UserName))
+                var task = CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
+                createUserTasks.Add(task);
+            }
+            
+            var users = await Task.WhenAll(createUserTasks);
+            var newUsers = new List<UserDto>();
+
+            foreach (var user in users)
+            {
+                if (user == null) continue;
+            
+                var participant = participants.FirstOrDefault(p => p.ContactEmail == user.ContactEmail);
+
+                if (!string.IsNullOrEmpty(user.UserName) && participant != null)
                 {
                     newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole });
                 }

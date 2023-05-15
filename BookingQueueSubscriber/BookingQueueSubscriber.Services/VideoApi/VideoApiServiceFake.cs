@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using VideoApi.Contract.Requests;
@@ -7,13 +8,16 @@ using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.VideoApi
 {
+    [ExcludeFromCodeCoverage]
     public class VideoApiServiceFake : IVideoApiService
     {
         public ConferenceDetailsResponse ConferenceResponse { get; set; }
+        public ICollection<EndpointResponse> EndpointResponses { get; set; }
         public int BookNewConferenceCount { get; private set; }
         public int UpdateConferenceCount { get; private set; }
         public int DeleteConferenceCount { get; private set; }
         public int GetConferenceByHearingRefIdCount { get; private set; }
+        public int GetEndpointsForConferenceCount { get; private set; }
         public int AddParticipantsToConferenceCount { get; private set; }
         public int RemoveParticipantFromConferenceCount { get; private set; }
         public int UpdateParticipantDetailsCount { get; private set; }
@@ -54,6 +58,16 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(ConferenceResponse);
         }
 
+        public Task<ICollection<EndpointResponse>> GetEndpointsForConference(Guid conferenceId)
+        {
+            GetEndpointsForConferenceCount++;
+            if (EndpointResponses == null)
+            {
+                InitEndpointResponse();
+            }
+            return Task.FromResult(EndpointResponses);
+        }
+
         public void InitConferenceResponse()
         {
             ConferenceResponse = new ConferenceDetailsResponse
@@ -63,6 +77,14 @@ namespace BookingQueueSubscriber.Services.VideoApi
                 {
                     new ParticipantDetailsResponse {Id = Guid.NewGuid()}
                 }
+            };
+        }
+
+        public void InitEndpointResponse()
+        {
+            EndpointResponses = new List<EndpointResponse>
+            {
+               new EndpointResponse { Id = Guid.NewGuid() }
             };
         }
 

@@ -54,7 +54,8 @@ namespace BookingQueueSubscriber.Services.UserApi
                     {
                         UserId = newUser.UserId,
                         UserName = newUser.Username,
-                        Password = newUser.OneTimePassword
+                        Password = newUser.OneTimePassword,
+                        ContactEmail = contactEmail
                     };
                 }
                 catch (UserApiException e)
@@ -84,7 +85,8 @@ namespace BookingQueueSubscriber.Services.UserApi
             return new User
             {
                 UserId = userProfile.UserId,
-                UserName = userProfile.UserName
+                UserName = userProfile.UserName,
+                ContactEmail = contactEmail
             };
 
         }

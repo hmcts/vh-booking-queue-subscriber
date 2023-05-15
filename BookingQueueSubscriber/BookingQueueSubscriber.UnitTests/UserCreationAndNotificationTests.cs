@@ -196,13 +196,34 @@ namespace BookingQueueSubscriber.UnitTests
             _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>() ),Times.Never);
         }
 
+        [Test]
+        public async Task should_skip_user_when_matching_participant_not_found()
+        {
+            var participant = GetParticipant();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid() };
+
+            SetupDependencyCalls(participant, hearing, false);
+            _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail,
+                false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = "xyz", UserName = "part1@hearigns.reform.hmcts.net", ContactEmail = ""});
+            
+            var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
+                _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object);
+
+            var users = await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            {
+                participant
+            });
+
+            Assert.IsEmpty(users);
+        }
+
         private void SetupDependencyCalls(ParticipantDto participant, HearingDto hearing, bool eJudFeatureFlag)
         {
             _bookingsAPIMock.Setup(x => x.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature))).ReturnsAsync(eJudFeatureFlag);
             _bookingsAPIMock.Setup(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username));
             _notificationServiceMock.Setup(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, "xyz"));
             _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail,
-                false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = "xyz", UserName = "part1@hearigns.reform.hmcts.net" });
+                false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = "xyz", UserName = "part1@hearigns.reform.hmcts.net", ContactEmail = participant.ContactEmail});
         }
 
         private static ParticipantDto GetJoh()

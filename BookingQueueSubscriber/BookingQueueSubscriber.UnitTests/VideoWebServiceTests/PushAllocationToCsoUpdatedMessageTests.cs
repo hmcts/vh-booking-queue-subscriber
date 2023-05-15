@@ -37,7 +37,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
         private static IList<HearingDetailRequest> buildHearingsRequest()
         {
             IList<HearingDetailRequest> list = new List<HearingDetailRequest>();
-            HearingDetailRequest hearing = new HearingDetailRequest() {Judge = "Judge", CaseName = "CaseName", Time = "12:00"};
+            HearingDetailRequest hearing = new HearingDetailRequest() {Judge = "Judge", CaseName = "CaseName", Time = new DateTimeOffset(2023,04,01,12,0,0,new TimeSpan())};
             list.Add(hearing);
 
             return list;

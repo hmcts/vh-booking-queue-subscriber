@@ -42,6 +42,12 @@
           "Newtonsoft.Json": "13.0.1"
         }
       },
+      "SonarAnalyzer.CSharp": {
+        "type": "Direct",
+        "requested": "[8.55.0.65544, )",
+        "resolved": "8.55.0.65544",
+        "contentHash": "YyvIQwnu4lKiYsXPA6/px4rbMqJtql6tiDZRTd9IBG04M0UN1P7QrjxFQhVsnQSabHwgUX/zemUAGn2hamNa8A=="
+      },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Direct",
         "requested": "[6.25.0, )",
@@ -69,9 +75,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[1.41.20, )",
-        "resolved": "1.41.20",
-        "contentHash": "VYrfk9WH/lSBFW2rTdnJPS4IL3vqtWBfxLvGFT3zQJD6SezbZTwdSJVKIAM/XPIahkx5QjzmOnO6a+QyDSJv2Q==",
+        "requested": "[1.43.12, )",
+        "resolved": "1.43.12",
+        "contentHash": "HlnnMw3ay+FMEHPa1Rich7THcKYbQujFvNXDVIpEgngTeumWkdapYqVoVY4aaSky+6FNqhexaM6bi5x20aGJhw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -119,6 +125,14 @@
         "contentHash": "rWgD2CIB3rvhdgN4WkwIT9JQTK1SayubtmR4efhJis/fmlhi5J4roXtkvBs07C1mU/06farZWCXdF+KnCjdfjg==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "3.1.9"
+        }
+      },
+      "Microsoft.ApplicationInsights": {
+        "type": "Transitive",
+        "resolved": "2.21.0",
+        "contentHash": "btZEDWAFNo9CoYliMCriSMTX3ruRGZTtYw4mo2XyyfLlowFicYVM2Xszi5evDG95QRYV7MbbH3D2RqVwfZlJHw==",
+        "dependencies": {
+          "System.Diagnostics.DiagnosticSource": "5.0.0"
         }
       },
       "Microsoft.AspNetCore.Authentication.Abstractions": {
@@ -919,8 +933,8 @@
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
-        "resolved": "4.5.0",
-        "contentHash": "eIHRELiYDQvsMToML81QFkXEEYXUSUT2F28t1SGrevWqP+epFdw80SyAXIKTXOHrIEXReFOEnEr7XlGiC2GgOg=="
+        "resolved": "5.0.0",
+        "contentHash": "tCQTzPsGZh/A9LhhA6zrqCRV4hOHsK90/G7q3Khxmn6tnB1PuNU0cRaKANP2AWcF9bn0zsuOoZOSrHuJk6oNBA=="
       },
       "System.Diagnostics.Tools": {
         "type": "Transitive",
@@ -1755,13 +1769,14 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "LaunchDarkly.ServerSdk": "6.3.3",
-          "Microsoft.Azure.Functions.Extensions": "1.1.0",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
-          "Microsoft.Extensions.Configuration.Json": "6.0.0",
-          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
-          "Newtonsoft.Json": "13.0.1",
-          "VH.Core.Configuration": "0.1.12"
+          "LaunchDarkly.ServerSdk": "[6.3.3, )",
+          "Microsoft.ApplicationInsights": "[2.21.0, )",
+          "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
+          "Microsoft.Extensions.Configuration.Json": "[6.0.0, )",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
+          "Newtonsoft.Json": "[13.0.1, )",
+          "VH.Core.Configuration": "[0.1.12, )"
         }
       }
     }

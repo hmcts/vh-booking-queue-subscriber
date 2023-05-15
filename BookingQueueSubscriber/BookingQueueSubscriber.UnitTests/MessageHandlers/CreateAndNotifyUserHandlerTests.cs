@@ -90,25 +90,29 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         FirstName = "Test",
                         LastName = UserRole.Representative.ToString(),
-                        UserRole = "Representative"
+                        UserRole = "Representative",
+                        ContactEmail = "rep@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.JudicialOfficeHolder.ToString(),
-                        UserRole = "Judicial Office Holder"
+                        UserRole = "Judicial Office Holder",
+                        ContactEmail = "joh@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.StaffMember.ToString(),
-                        UserRole = "StaffMember"
+                        UserRole = "StaffMember",
+                        ContactEmail = "staffmember@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.Individual.ToString(),
-                        UserRole = "Individual"
+                        UserRole = "Individual",
+                        ContactEmail = "individual@email.com"
                     }
                 }
             };
@@ -181,25 +185,29 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         FirstName = "Test",
                         LastName = UserRole.Representative.ToString(),
-                        UserRole = "Representative"
+                        UserRole = "Representative",
+                        ContactEmail = "rep@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.JudicialOfficeHolder.ToString(),
-                        UserRole = "Judicial Office Holder"
+                        UserRole = "Judicial Office Holder",
+                        ContactEmail = "joh@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.StaffMember.ToString(),
-                        UserRole = "StaffMember"
+                        UserRole = "StaffMember",
+                        ContactEmail = "staffmember@email.com"
                     },
                     new ParticipantDto
                     {
                         FirstName = "Test",
                         LastName = UserRole.Individual.ToString(),
-                        UserRole = "Individual"
+                        UserRole = "Individual",
+                        ContactEmail = "individual@email.com"
                     }
                 }
             };

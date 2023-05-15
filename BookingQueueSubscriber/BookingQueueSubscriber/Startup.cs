@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using BookingQueueSubscriber;
 using BookingQueueSubscriber.Common.Configuration;
+using BookingQueueSubscriber.Common.Logging;
 using BookingQueueSubscriber.Common.Security;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services;
@@ -22,6 +23,7 @@ using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
 using BookingsApi.Client;
+using Microsoft.ApplicationInsights.Extensibility;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
@@ -77,6 +79,7 @@ namespace BookingQueueSubscriber
         {
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
+            services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);

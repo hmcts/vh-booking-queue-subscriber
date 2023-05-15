@@ -11,12 +11,13 @@
 
     <ItemGroup>
         <PackageReference Include="LaunchDarkly.ServerSdk" Version="6.3.3" />
+        <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

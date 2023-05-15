@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using UserApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.UserApi
 {
+    [ExcludeFromCodeCoverage]
     public class UserServiceFake : IUserService
     {
         public List<User> Users { get; set; } = new List<User>();
@@ -17,7 +19,8 @@ namespace BookingQueueSubscriber.Services.UserApi
             var user = new User
             {
                 UserId = $"{firstname}.{lastname}",
-                UserName = $"{firstname}.{lastname}"
+                UserName = $"{firstname}.{lastname}",
+                ContactEmail = contactEmail
             };
             Users.Add(user);
             return Task.FromResult(user);

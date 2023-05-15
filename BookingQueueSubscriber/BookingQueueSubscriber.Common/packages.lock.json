@@ -17,6 +17,15 @@
           "System.Collections.Immutable": "1.7.1"
         }
       },
+      "Microsoft.ApplicationInsights": {
+        "type": "Direct",
+        "requested": "[2.21.0, )",
+        "resolved": "2.21.0",
+        "contentHash": "btZEDWAFNo9CoYliMCriSMTX3ruRGZTtYw4mo2XyyfLlowFicYVM2Xszi5evDG95QRYV7MbbH3D2RqVwfZlJHw==",
+        "dependencies": {
+          "System.Diagnostics.DiagnosticSource": "5.0.0"
+        }
+      },
       "Microsoft.Azure.Functions.Extensions": {
         "type": "Direct",
         "requested": "[1.1.0, )",
@@ -79,9 +88,9 @@
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
-        "requested": "[8.47.0.55603, )",
-        "resolved": "8.47.0.55603",
-        "contentHash": "5a5Kvu+StydHjVetBKcQWcsmvE9cece4NLc1d5qrKJR/ZEddA4VMwlX8dUUo3MyhCbnOCEv9+tB13ugP2Dl3NA=="
+        "requested": "[8.55.0.65544, )",
+        "resolved": "8.55.0.65544",
+        "contentHash": "YyvIQwnu4lKiYsXPA6/px4rbMqJtql6tiDZRTd9IBG04M0UN1P7QrjxFQhVsnQSabHwgUX/zemUAGn2hamNa8A=="
       },
       "VH.Core.Configuration": {
         "type": "Direct",
@@ -874,8 +883,8 @@
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
-        "resolved": "4.5.0",
-        "contentHash": "eIHRELiYDQvsMToML81QFkXEEYXUSUT2F28t1SGrevWqP+epFdw80SyAXIKTXOHrIEXReFOEnEr7XlGiC2GgOg=="
+        "resolved": "5.0.0",
+        "contentHash": "tCQTzPsGZh/A9LhhA6zrqCRV4hOHsK90/G7q3Khxmn6tnB1PuNU0cRaKANP2AWcF9bn0zsuOoZOSrHuJk6oNBA=="
       },
       "System.Diagnostics.Tools": {
         "type": "Transitive",
