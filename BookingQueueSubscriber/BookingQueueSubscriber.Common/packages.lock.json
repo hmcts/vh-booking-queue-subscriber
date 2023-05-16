@@ -2,6 +2,15 @@
   "version": 1,
   "dependencies": {
     "net6.0": {
+      "BookingsApi.Client": {
+        "type": "Direct",
+        "requested": "[1.44.1, )",
+        "resolved": "1.44.1",
+        "contentHash": "F84Y6EnY0yUwmRholTBrenZZRvx3x52x9NB24OQqM3D+cJZOzMIlY92+rGn5TjRP9OejiKcfUovXBaajLqyVRg==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
+        }
+      },
       "LaunchDarkly.ServerSdk": {
         "type": "Direct",
         "requested": "[6.3.3, )",
@@ -94,9 +103,9 @@
       },
       "VH.Core.Configuration": {
         "type": "Direct",
-        "requested": "[0.1.12, )",
-        "resolved": "0.1.12",
-        "contentHash": "uoDl/7HSRkueoe8e2uwPD1qCz1wuY0Tdzqf4HdQALuiK2qWXmFq/JYvnIl0g0IZmY4B1zsn7KKTOLvI4PMttuQ==",
+        "requested": "[0.1.13, )",
+        "resolved": "0.1.13",
+        "contentHash": "fEtq8dy7GbJ8eUDc5kmwg3Ze+6C7JEPSHlmvz22W8UPX/x7ujBTr5MqUdpKNQganaHalt/6DHfHi+gxlPSUjiw==",
         "dependencies": {
           "Microsoft.AspNetCore.Http.Connections.Common": "3.1.10",
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
