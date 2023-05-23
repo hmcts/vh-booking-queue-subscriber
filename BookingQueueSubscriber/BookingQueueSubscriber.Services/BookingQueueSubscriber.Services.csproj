@@ -14,10 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BookingsApi.Client" Version="1.44.1" />
+      <PackageReference Include="BookingsApi.Client" Version="1.44.3" />
       <PackageReference Include="LaunchDarkly.ServerSdk" Version="6.3.3" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
-      <PackageReference Include="NotificationApi.Client" Version="1.44.1" />
+      <PackageReference Include="NotificationApi.Client" Version="1.44.2" />
       <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

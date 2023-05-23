@@ -4,9 +4,9 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.44.1, )",
-        "resolved": "1.44.1",
-        "contentHash": "F84Y6EnY0yUwmRholTBrenZZRvx3x52x9NB24OQqM3D+cJZOzMIlY92+rGn5TjRP9OejiKcfUovXBaajLqyVRg==",
+        "requested": "[1.44.3, )",
+        "resolved": "1.44.3",
+        "contentHash": "Jx3exAldQTp2Cy0h68zx7tmbwmw8NgXvoy6RmIZ5hgmAiMbsKtx0Np0xdTn0um0e4tA8ouo+0XGqbFZppS0a+g==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -1040,8 +1040,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "1.44.1",
-        "contentHash": "CtpIE9H2OI0dfH2jMOOLYaY/5GyCg6byPaHy6EK8HxrHOGALIHZaxBgbq46Rdfr6KJhKlibq+fg3TEQLiqI16g==",
+        "resolved": "1.44.2",
+        "contentHash": "zZ/reiiXi7niCDE+SObUbeGnq5ON394jHg4YCZX2ZNOM1tz0wnIendQOPOSl4IMuHsLYr/xv6rOB0VqnFdjH/A==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
@@ -2267,7 +2267,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.44.1, )",
+          "BookingsApi.Client": "[1.44.3, )",
           "LaunchDarkly.ServerSdk": "[6.3.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2282,10 +2282,10 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[1.44.1, )",
+          "BookingsApi.Client": "[1.44.3, )",
           "LaunchDarkly.ServerSdk": "[6.3.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[1.44.1, )",
+          "NotificationApi.Client": "[1.44.2, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[1.44.1, )",
