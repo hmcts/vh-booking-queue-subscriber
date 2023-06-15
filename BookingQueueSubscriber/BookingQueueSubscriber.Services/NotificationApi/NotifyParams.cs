@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security.Permissions;
-
-namespace UserNotificationQueueSubscriber.Services
+﻿namespace BookingQueueSubscriber.Services.NotificationApi
 {
     public static class NotifyParams
     {

@@ -130,12 +130,14 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var userService = new UserService(userApiClient.Object, new Mock<ILogger<UserService>>().Object);
             var bookingsApiClient = new Mock<IBookingsApiClient>();
             var logger = new Mock<ILogger<UserCreationAndNotification>>();
+            var featureToggles = new Mock<IFeatureToggles>();
 
             var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(new UserCreationAndNotification(
                 notificationService.Object,
                 userService,
                 bookingsApiClient.Object,
-                logger.Object));
+                logger.Object,
+                featureToggles.Object));
 
             await messageHandler.HandleAsync(integrationEvent);
             
@@ -225,12 +227,14 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var userService = new UserService(userApiClient.Object, new Mock<ILogger<UserService>>().Object);
             var bookingsApiClient = new Mock<IBookingsApiClient>();
             var logger = new Mock<ILogger<UserCreationAndNotification>>();
+            var featureToggles = new Mock<IFeatureToggles>();
 
-            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(new UserCreationAndNotification(
+            var messageHandler = (IMessageHandler) new CreateAndNotifyUserHandler(new UserCreationAndNotification(
                 notificationService.Object,
                 userService,
                 bookingsApiClient.Object,
-                logger.Object));
+                logger.Object, 
+                featureToggles.Object));
 
             await messageHandler.HandleAsync(integrationEvent);
 

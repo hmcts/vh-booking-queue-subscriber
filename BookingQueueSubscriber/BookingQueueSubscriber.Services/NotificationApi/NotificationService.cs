@@ -18,6 +18,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime,
              IList<ParticipantDto> participants);
 
+        Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
+
         Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
     }
 
@@ -73,6 +75,16 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 .ToList();
 
             await CreateNotifications(requests);
+        }
+
+        public Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            if (hearing.IsGenericHearing())
+            {
+                return Task.CompletedTask;
+            }
+            var request = AddNotificationRequestMapper.MapToNewUserWelcomeEmail(hearing, participant);
+            return _notificationApiClient.CreateNewNotificationAsync(request);
         }
 
         public async Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)

@@ -1,6 +1,7 @@
 ﻿using BookingsApi.Contract.Enums;
 using System;
 using System.Collections.Generic;
+using BookingQueueSubscriber.Services.UserApi;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {
@@ -23,5 +24,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         public string ContactEmailForNonEJudJudgeUser { get; set; }
         public string ContactPhoneForNonEJudJudgeUser { get; set; }
         public bool SendHearingNotificationIfNew { get; set; }
+
+        public bool IsIndividual() => UserRole.Equals(RoleNames.Individual, StringComparison.CurrentCultureIgnoreCase);
     }
 }

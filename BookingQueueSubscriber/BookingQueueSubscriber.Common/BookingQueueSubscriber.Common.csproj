@@ -11,7 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="BookingsApi.Client" Version="1.44.4" />
-        <PackageReference Include="LaunchDarkly.ServerSdk" Version="6.3.3" />
+        <PackageReference Include="LaunchDarkly.ServerSdk" Version="7.0.3" />
         <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />

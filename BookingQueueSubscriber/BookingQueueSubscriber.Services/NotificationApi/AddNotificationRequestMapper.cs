@@ -4,7 +4,6 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.UserApi;
 using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
-using UserNotificationQueueSubscriber.Services;
 
 namespace BookingQueueSubscriber.Services.NotificationApi
 {
@@ -26,6 +25,33 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             var addNotificationRequest = new AddNotificationRequest
             {
                 HearingId = hearingId,
+                MessageType = MessageType.Email,
+                ContactEmail = participant.ContactEmail,
+                NotificationType = notificationType,
+                ParticipantId = participant.ParticipantId,
+                PhoneNumber = participant.ContactTelephone,
+                Parameters = parameters
+            };
+            return addNotificationRequest;
+        }
+        
+        
+        public static AddNotificationRequest MapToNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                {NotifyParams.Name, $"{participant.FirstName} {participant.LastName}"},
+                {NotifyParams.CaseName, hearing.CaseName},
+                {NotifyParams.CaseNumber, hearing.CaseNumber}
+            };
+            
+            var notificationType = participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
+                ? NotificationType.NewUserLipFirst
+                : throw new NotSupportedException($"Only {RoleNames.Individual} is supported for {nameof(MapToNewUserWelcomeEmail)}. Current participant is {participant.UserRole}");
+            
+            var addNotificationRequest = new AddNotificationRequest
+            {
+                HearingId = hearing.HearingId,
                 MessageType = MessageType.Email,
                 ContactEmail = participant.ContactEmail,
                 NotificationType = notificationType,
@@ -290,5 +316,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 ? participant.ContactPhoneForNonEJudJudgeUser
                 : null;
         }
+
     }
 }

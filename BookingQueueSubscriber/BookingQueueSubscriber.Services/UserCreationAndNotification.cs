@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -21,17 +22,19 @@ namespace BookingQueueSubscriber.Services
     public class UserCreationAndNotification : IUserCreationAndNotification
     {
         private readonly INotificationService _notificationService;
+        private readonly IFeatureToggles _featureToggles;
         private readonly IUserService _userService;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<UserCreationAndNotification> _logger;
 
         public UserCreationAndNotification(INotificationService notificationService, IUserService userService, IBookingsApiClient bookingsApiClient,
-             ILogger<UserCreationAndNotification> logger)
+             ILogger<UserCreationAndNotification> logger, IFeatureToggles featureToggles)
         {
             _notificationService = notificationService;
             _userService = userService;
             _bookingsApiClient = bookingsApiClient;
             _logger = logger;
+            _featureToggles = featureToggles;
         }
 
         public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)
@@ -39,7 +42,7 @@ namespace BookingQueueSubscriber.Services
             var createUserTasks = new List<Task<User>>();
             foreach (var participant in participants)
             {
-                var task = CreateUserAndSendNotificationAsync(hearing.HearingId, participant);
+                var task = CreateUserAndSendNotificationAsync(hearing, participant);
                 createUserTasks.Add(task);
             }
             
@@ -76,7 +79,7 @@ namespace BookingQueueSubscriber.Services
             }
         }
 
-        private async Task<User> CreateUserAndSendNotificationAsync(Guid hearingId, ParticipantDto participant)
+        private async Task<User> CreateUserAndSendNotificationAsync(HearingDto hearing, ParticipantDto participant)
         {
             User user = null;
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
@@ -95,7 +98,13 @@ namespace BookingQueueSubscriber.Services
 
             if (user != null)
             {
-                await _notificationService.SendNewUserAccountNotificationAsync(hearingId, participant, user.Password);
+                if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
+                {
+                    await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
+                    // await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, user.Password);
+                    // when VIH-9899 is implemented, send the 'New' NewUserAccountNotification here and put the original in the else block
+                }
+                await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
             }
 
             return user;

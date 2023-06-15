@@ -1,4 +1,6 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
+using LaunchDarkly.Logging;
 using LaunchDarkly.Sdk;
 using LaunchDarkly.Sdk.Server;
 using LaunchDarkly.Sdk.Server.Interfaces;
@@ -8,21 +10,44 @@ namespace BookingQueueSubscriber.Common.Configuration
     public interface IFeatureToggles
     {
         public bool SsprToggle();
+        bool UsePostMay2023Template();
     }
 
     [ExcludeFromCodeCoverage]
     public class FeatureToggles : IFeatureToggles
     {
         private readonly ILdClient _ldClient;
-        private readonly User _user;
+        private readonly Context _context;
         private const string LdUser = "vh-booking-queue-subscriber";
+        
         private const string SsprToggleKey = "sspr";
-        public FeatureToggles(string sdkKey)
+        private const string NewNotifyTemplatesToggleKey = "notify-post-may-2023-templates";
+        
+        public FeatureToggles(string sdkKey, string environmentName)
         {
-            _ldClient = new LdClient(sdkKey);
-            _user = User.WithKey(LdUser);
+            var config = LaunchDarkly.Sdk.Server.Configuration.Builder(sdkKey)
+                .Logging(Components.Logging(Logs.ToWriter(Console.Out)).Level(LogLevel.Warn)).Build();
+            _context = Context.Builder(LdUser).Name(environmentName).Build();
+            _ldClient = new LdClient(config);
         }
 
-        public bool SsprToggle() => _ldClient.BoolVariation(SsprToggleKey, _user);
+        public bool SsprToggle()
+        {
+            if (!_ldClient.Initialized)
+            {
+                throw new InvalidOperationException("LaunchDarkly client not initialized");
+            }
+            return _ldClient.BoolVariation(SsprToggleKey, _context);
+        }
+
+        public bool UsePostMay2023Template()
+        {
+            if (!_ldClient.Initialized)
+            {
+                throw new InvalidOperationException("LaunchDarkly client not initialized");
+            }
+
+            return _ldClient.BoolVariation(NewNotifyTemplatesToggleKey, _context);
+        }
     }
 }
