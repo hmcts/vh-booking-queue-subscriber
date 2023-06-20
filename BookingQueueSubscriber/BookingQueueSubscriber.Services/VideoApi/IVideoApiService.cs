@@ -20,5 +20,6 @@ namespace BookingQueueSubscriber.Services.VideoApi
         Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request);
         Task RemoveEndpointFromConference(Guid conferenceId, string sip);
         Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request);
+        Task CloseConsultation(Guid conferenceId, Guid participantId);
     }
 }

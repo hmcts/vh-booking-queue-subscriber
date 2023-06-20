@@ -12,9 +12,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
     {
         public int PushParticipantsUpdatedMessageCount { get; set; }
         public int PushNewConferenceAddedMessageCount { get; set; }
-        
         public int PushAllocationToCsoUpdatedMessageCount { get; set; }
-
         public int PushEndpointsUpdatedMessageCount { get; set; }
 
         public Task PushEndpointsUpdatedMessage(Guid conferenceId, UpdateConferenceEndpointsRequest request)
@@ -38,6 +36,21 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         public Task PushAllocationToCsoUpdatedMessage(AllocationHearingsToCsoRequest request)
         {
             PushAllocationToCsoUpdatedMessageCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task PushUnlinkedParticipantFromEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task PushLinkedNewParticipantToEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task PushCloseConsultationBetweenEndpointAndParticipant(Guid conferenceId, string participantUserName, string jvsEndpointName)
+        {
             return Task.FromResult(HttpStatusCode.OK);
         }
     }
