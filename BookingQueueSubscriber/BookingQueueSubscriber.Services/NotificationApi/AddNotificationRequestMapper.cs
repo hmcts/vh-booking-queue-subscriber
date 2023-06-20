@@ -46,7 +46,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
             
             var notificationType = participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
-                ? NotificationType.NewUserLipFirst
+                ? NotificationType.NewUserLipWelcome
                 : throw new NotSupportedException($"Only {RoleNames.Individual} is supported for {nameof(MapToNewUserWelcomeEmail)}. Current participant is {participant.UserRole}");
             
             var addNotificationRequest = new AddNotificationRequest

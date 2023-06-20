@@ -95,7 +95,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             result.HearingId.Should().Be(hearingId);
             result.ParticipantId.Should().Be(participantId);
             result.ContactEmail.Should().Be(participant.ContactEmail);
-            result.NotificationType.Should().Be(NotificationType.NewUserLipFirst);
+            result.NotificationType.Should().Be(NotificationType.NewUserLipWelcome);
             result.MessageType.Should().Be(MessageType.Email);
             result.PhoneNumber.Should().Be(participant.ContactTelephone);
             result.Parameters.Should().BeEquivalentTo(parameters);

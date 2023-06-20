@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using BookingQueueSubscriber;
@@ -28,6 +29,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
 {
+    [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
