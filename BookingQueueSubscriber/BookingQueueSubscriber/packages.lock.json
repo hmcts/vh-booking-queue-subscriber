@@ -4,9 +4,9 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.44.4, )",
-        "resolved": "1.44.4",
-        "contentHash": "u5lF6AQGQUDl8/Jzk2g7mRfblUlfD3ve7ZU24lk7pKdGoYP7Ijt4IY7qUTYuV1uVABPmgWh/6NYdcu2bLRCNaw==",
+        "requested": "[1.45.3, )",
+        "resolved": "1.45.3",
+        "contentHash": "ulQHqYQS8S5ssq2qsud5d1JlGUUrVv0+9gT0qYe0hQGi8Z33BKoLH2hjRpZOIhh9FnCrqTFnJGuLWv5D4n8bPQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2229,8 +2229,8 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "1.44.2",
-        "contentHash": "sL9YCnF9D1MuXULRgMkz8pbUfuevzX78BLMtIbJcRLgOsv0X+FCIEImQa6ytPmqjQhl5PpuP/s72uC9bSzdxIA==",
+        "resolved": "1.45.2",
+        "contentHash": "2lLsvcl0ttT5dR+SAF3UMIkFAFmaqOxKnQwQ4AEW2SKX7YfTrT84SBCaHtv+knQ1cLMk77VSw5fxQGdM2qMgQg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2249,8 +2249,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.44.4",
-        "contentHash": "1IKyhSuXJbAOUk+R2E2/Wu6NYNkJth82gz0VTjmTsWMS8qSftOinOoWJ8wPOHh2tXZAWUwRI4rk/8tXnIieC9g==",
+        "resolved": "1.45.1",
+        "contentHash": "dBVTq1yWO4eLTOdAEG5jI7kNeBnPK6yLAK+Aqlbzt+anRN38pvKWVK15g82eEWtQaptB9llZGSnsl5urkxCQhA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2267,7 +2267,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.44.4, )",
+          "BookingsApi.Client": "[1.45.3, )",
           "LaunchDarkly.ServerSdk": "[6.3.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2282,14 +2282,14 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[1.44.4, )",
+          "BookingsApi.Client": "[1.45.3, )",
           "LaunchDarkly.ServerSdk": "[6.3.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
           "NotificationApi.Client": "[1.44.2, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[1.44.2, )",
-          "VideoApi.Client": "[1.44.4, )"
+          "UserApi.Client": "[1.45.2, )",
+          "VideoApi.Client": "[1.45.1, )"
         }
       }
     }
