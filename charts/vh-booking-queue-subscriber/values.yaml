@@ -81,6 +81,7 @@ java:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    APPLICATIONINSIGHTS_CONNECTION_STRING: applicationinsights--instrumentationkey
 function:
   releaseNameOverride: vh-booking-queue-subscriber
   scaleType: Object
