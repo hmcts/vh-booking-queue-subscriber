@@ -94,10 +94,10 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return _apiClient.UpdateDisplayNameForEndpointAsync(conferenceId, sip, request);
         }
 
-        public Task CloseConsultation(Guid conferenceId, Guid ParticipantId)
+        public Task CloseConsultation(Guid conferenceId, Guid participantId)
         {
             _logger.LogInformation("Closing consultation for conference {ConferenceId}", conferenceId);
-            return _apiClient.LeaveConsultationAsync(new LeaveConsultationRequest{ConferenceId = conferenceId, ParticipantId = ParticipantId});
+            return _apiClient.LeaveConsultationAsync(new LeaveConsultationRequest{ConferenceId = conferenceId, ParticipantId = participantId});
         }
     }
 }

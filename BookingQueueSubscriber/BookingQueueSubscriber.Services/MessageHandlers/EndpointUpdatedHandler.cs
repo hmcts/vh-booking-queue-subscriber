@@ -87,7 +87,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
                 //if old rep is in a private consultation with endpoint, and new rep is not also present in the same room, force closure of the consultation
                 if (endpointBeingUpdated.Status == EndpointState.InConsultation &&
-                    IsParticipantIsInPrivateConsultationWithEndpoint(newDefenceAdvocate, endpointBeingUpdated) == false &&
+                    !IsParticipantIsInPrivateConsultationWithEndpoint(newDefenceAdvocate, endpointBeingUpdated) &&
                     IsParticipantIsInPrivateConsultationWithEndpoint(oldDefenceAdvocate, endpointBeingUpdated))
                 {
                     await _videoApiService.CloseConsultation(conference.Id, oldDefenceAdvocate.Id);
