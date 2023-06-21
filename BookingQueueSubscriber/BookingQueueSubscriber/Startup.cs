@@ -102,7 +102,9 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            services.AddApplicationInsightsTelemetry();
+            services.AddLogging(builder => 
+                builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
+            );
             services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"]));
             RegisterMessageHandlers(services);
 
