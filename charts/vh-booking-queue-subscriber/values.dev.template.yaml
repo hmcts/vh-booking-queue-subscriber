@@ -10,7 +10,7 @@ function:
   triggers:
     - type: azure-servicebus
       serviceBusName: "vh-infra-core-dev"
-      queueName: booking-will-with-retries
+      queueName: booking-will
       messageCount: 1
   object:
     name: '${RELEASE_NAME}'

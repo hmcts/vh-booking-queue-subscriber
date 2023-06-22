@@ -101,8 +101,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await HandleAsync((EndpointUpdatedIntegrationEvent)integrationEvent);
         }
         
-        private static ParticipantDetailsResponse GetDefenceAdvocate(ConferenceDetailsResponse conference, string contactEmail) =>
-            conference.Participants.SingleOrDefault(x => x.ContactEmail == contactEmail);
+        private static ParticipantDetailsResponse GetDefenceAdvocate(ConferenceDetailsResponse conference, string userName) =>
+            conference.Participants.SingleOrDefault(x => x.Username == userName);
         
         private static bool IsParticipantIsInPrivateConsultationWithEndpoint(ParticipantDetailsResponse participant, EndpointResponse endpoint)
         {
