@@ -5,7 +5,7 @@ java:
   environment:
     VHSERVICES__VIDEOWEBURL: https://vh-video-web-pr-2026.dev.platform.hmcts.net/
     VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-584.dev.platform.hmcts.net/
-    QUEUENAME: booking-will-with-retries
+    QUEUENAME: booking-will
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
