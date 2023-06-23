@@ -224,5 +224,55 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoWebServiceMock.Verify(x
                 => x.PushCloseConsultationBetweenEndpointAndParticipant(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
+        
+        [Test]
+          public async Task Should_throw_exception_and_log_error_when_cant_find_defence_advocate_but_handle_rest_of_process()
+        {
+            //Arrange
+            VideoApiServiceMock
+                .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
+                .ReturnsAsync(GetEndpointsForConference(DefenceAdvocate2, EndpointState.InConsultation));
+            VideoApiServiceMock
+                .Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
+                .ReturnsAsync(new ConferenceDetailsResponse
+                {
+                    Id = _conferenceId,
+                    HearingId = _hearingId,
+                    Participants = new List<ParticipantDetailsResponse>()
+                    {
+                        new ParticipantDetailsResponse()
+                        {
+                            Id = Guid.NewGuid(),
+                            Username = DefenceAdvocate1,
+                            ContactEmail = DefenceAdvocate1,
+                            CurrentStatus = ParticipantState.Available
+                        },
+                        new ParticipantDetailsResponse()
+                        {
+                            Id = Guid.NewGuid(),
+                            Username = "",
+                            ContactEmail = "",
+                            CurrentRoom = new RoomResponse {Id = 1, Label = "Private Consultation Room", Locked = false},
+                            CurrentStatus = ParticipantState.InConsultation
+                        }
+                    }
+                });
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
+            var integrationEvent = GetIntegrationEventValid();
+            
+            //Act
+            await messageHandler.HandleAsync(integrationEvent);
+
+            //Arrange
+            _logger.Verify(x => x.Log(
+                It.Is<LogLevel>(log => log == LogLevel.Error),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((@object, @type) => @object.ToString().Contains("Error notifying defence advocates")),
+                It.Is<ArgumentException>(ex => ex.Message.Contains("Unable to find defence advocate in participant list Rep2")),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
+            VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<UpdateEndpointRequest>()), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(), It.IsAny<UpdateConferenceEndpointsRequest>()), Times.Once);
+
+        }
     }
 }

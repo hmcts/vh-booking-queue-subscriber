@@ -62,11 +62,17 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             
             var endpoints = await _videoApiService.GetEndpointsForConference(conference.Id);
             var endpointBeingUpdated = endpoints.SingleOrDefault(x => x.SipAddress == endpointEvent.Sip);
-            
-            //Has the defence advocate changed?
-            if (endpointBeingUpdated is not null &&!ReferenceEquals(endpointBeingUpdated.DefenceAdvocate, endpointEvent.DefenceAdvocate))
-                await NotifyDefenceAdvocates(conference, endpointEvent, newDefenceAdvocate, endpointBeingUpdated);
-            
+
+            try
+            {
+                //Has the defence advocate changed?
+                if (endpointBeingUpdated is not null &&!ReferenceEquals(endpointBeingUpdated.DefenceAdvocate, endpointEvent.DefenceAdvocate))
+                    await NotifyDefenceAdvocates(conference, endpointEvent, newDefenceAdvocate, endpointBeingUpdated);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error notifying defence advocates");
+            }
             return newDefenceAdvocate;
         }
 
@@ -82,7 +88,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             //Was there a previously linked Rep
             if (endpointBeingUpdated.DefenceAdvocate is not null)
             {
-                var oldDefenceAdvocate = GetDefenceAdvocate(conference, endpointBeingUpdated.DefenceAdvocate);
+                var previousDefenceAdvocateName = endpointBeingUpdated.DefenceAdvocate;
+                var oldDefenceAdvocate = GetDefenceAdvocate(conference, previousDefenceAdvocateName);
                 await _videoWebService.PushUnlinkedParticipantFromEndpoint(conference.Id, oldDefenceAdvocate.Username, endpointEvent.DisplayName);
 
                 //if old rep is in a private consultation with endpoint, and new rep is not also present in the same room, force closure of the consultation
@@ -100,9 +107,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             await HandleAsync((EndpointUpdatedIntegrationEvent)integrationEvent);
         }
-        
-        private static ParticipantDetailsResponse GetDefenceAdvocate(ConferenceDetailsResponse conference, string userName) =>
-            conference.Participants.SingleOrDefault(x => x.Username == userName);
+
+        private static ParticipantDetailsResponse GetDefenceAdvocate(ConferenceDetailsResponse conference, string defenceAdvocate)
+        {
+            return conference.Participants.SingleOrDefault(x => x.Username == defenceAdvocate) ??
+                   conference.Participants.SingleOrDefault(x => x.ContactEmail == defenceAdvocate) ??
+                   throw new ArgumentException($"Unable to find defence advocate in participant list {defenceAdvocate}");
+        }
         
         private static bool IsParticipantIsInPrivateConsultationWithEndpoint(ParticipantDetailsResponse participant, EndpointResponse endpoint)
         {
