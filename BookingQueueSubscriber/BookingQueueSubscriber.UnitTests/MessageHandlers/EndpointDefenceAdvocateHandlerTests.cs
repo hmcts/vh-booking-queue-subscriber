@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Responses;
 using System.Collections.Generic;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+using FluentAssertions;
 using VideoApi.Contract.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -83,6 +84,16 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 .ReturnsAsync(GetEndpointsForConference());
         }
 
+        [Test]
+        public async Task should_throw_exception_when_retry_limit_is_reached()
+        {
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
+
+            var integrationEvent = GetIntegrationEventValid("Random Defence Advocate");
+            var handler = async () => { await messageHandler.HandleAsync(integrationEvent); };
+            await handler.Should().ThrowAsync<ArgumentException>();
+        }
+        
         [Test]
         public async Task should_log_error_when_conference_is_null()
         {
@@ -224,9 +235,28 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoWebServiceMock.Verify(x
                 => x.PushCloseConsultationBetweenEndpointAndParticipant(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
+                
+        [Test]
+        public async Task Should_handle_rep_being_unlinked_whilst_in_a_consultation_with_but_no_new_rep()
+        {
+            //Arrange
+            VideoApiServiceMock
+                .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
+                .ReturnsAsync(GetEndpointsForConference(DefenceAdvocate1, EndpointState.InConsultation));
+            
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
+            var integrationEvent = GetIntegrationEventValid(null);
+            
+            //Act
+            await messageHandler.HandleAsync(integrationEvent);
+            
+            //Arrange
+            VideoWebServiceMock.Verify(x
+                => x.PushCloseConsultationBetweenEndpointAndParticipant(_conferenceId, DefenceAdvocate1, Endpoint), Times.Once);
+        }
         
         [Test]
-          public async Task Should_throw_exception_and_log_error_when_cant_find_defence_advocate_but_handle_rest_of_process()
+          public async Task Should_log_error_when_cant_find_defence_advocate_but_handle_rest_of_process()
         {
             //Arrange
             VideoApiServiceMock
