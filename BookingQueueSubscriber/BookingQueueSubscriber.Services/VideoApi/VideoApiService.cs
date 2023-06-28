@@ -91,7 +91,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         public Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request)
         {
             _logger.LogInformation("Updating endpoint {Sip} in conference {ConferenceId}", sip, conferenceId);
-            return _apiClient.UpdateDisplayNameForEndpointAsync(conferenceId, sip, request);
+            return _apiClient.UpdateEndpointInConferenceAsync(conferenceId, sip, request);
         }
 
         public Task CloseConsultation(Guid conferenceId, Guid participantId)

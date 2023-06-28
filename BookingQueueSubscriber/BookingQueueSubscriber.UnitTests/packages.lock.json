@@ -2196,8 +2196,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.45.1",
-        "contentHash": "dBVTq1yWO4eLTOdAEG5jI7kNeBnPK6yLAK+Aqlbzt+anRN38pvKWVK15g82eEWtQaptB9llZGSnsl5urkxCQhA==",
+        "resolved": "1.44.6-pr-0584-0003",
+        "contentHash": "1P3hU93Ur9tMhba1iCYTlhP05UQgSgvJ3celKtFnhLibLwC3cBS0rP+ktyyY96j9juc4cADPrKaWIGT0HVDcYg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2255,7 +2255,7 @@
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[1.45.2, )",
-          "VideoApi.Client": "[1.45.1, )"
+          "VideoApi.Client": "[1.44.6-pr-0584-0003, )"
         }
       }
     }
