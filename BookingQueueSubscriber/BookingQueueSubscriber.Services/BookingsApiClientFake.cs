@@ -24,15 +24,6 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task AddParticipantsToHearingAsync(Guid hearingId, AddParticipantsToHearingRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddParticipantsToHearingAsync(Guid hearingId, AddParticipantsToHearingRequest request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task AnonymiseHearingsAsync()
         {
@@ -215,6 +206,17 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<ParticipantResponse>> GetAllParticipantsInHearingAsync(Guid hearingId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ParticipantResponse>> AddParticipantsToHearingAsync(Guid hearingId, AddParticipantsToHearingRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ParticipantResponse>> AddParticipantsToHearingAsync(Guid hearingId, AddParticipantsToHearingRequest request,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -561,6 +563,17 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task RemoveParticipantFromHearingAsync(Guid hearingId, Guid participantId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ParticipantResponse> IBookingsApiClient.UpdateParticipantDetailsAsync(Guid hearingId, Guid participantId, UpdateParticipantRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ParticipantResponse> IBookingsApiClient.UpdateParticipantDetailsAsync(Guid hearingId, Guid participantId, UpdateParticipantRequest request,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
