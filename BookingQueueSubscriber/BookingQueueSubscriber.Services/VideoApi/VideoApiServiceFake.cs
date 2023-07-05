@@ -124,6 +124,11 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
+        public Task CloseConsultation(Guid conferenceId, Guid participantId)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
         public void ClearRequests()
         {
             BookNewConferenceCount = UpdateConferenceCount = DeleteConferenceCount = GetConferenceByHearingRefIdCount =
