@@ -2252,6 +2252,7 @@
           "LaunchDarkly.ServerSdk": "[6.3.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
           "NotificationApi.Client": "[1.44.2, )",
+          "SonarAnalyzer.CSharp": "[8.55.0.65544, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[1.45.2, )",
