@@ -106,6 +106,7 @@ namespace BookingQueueSubscriber
                 builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
             services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"]));
+            services.AddTransient<IConferenceCreationAndNotification, ConferenceCreationAndNotification>();
             RegisterMessageHandlers(services);
 
             var container = services.BuildServiceProvider();

@@ -14,6 +14,7 @@ namespace BookingQueueSubscriber.Services.UserApi
     {
         Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser);
         Task AssignUserToGroup(string userId, string userRole);
+        Task<UserProfile> GetUserByContactEmail(string emailAddress);
     }
 
     public class UserService : IUserService
@@ -130,7 +131,7 @@ namespace BookingQueueSubscriber.Services.UserApi
             return newUserResponse;
         }
 
-        private async Task<UserProfile> GetUserByContactEmail(string emailAddress)
+        public async Task<UserProfile> GetUserByContactEmail(string emailAddress)
         {
             _logger.LogInformation("Attempt to get username by contact email {contactEmail}.", emailAddress);
             try

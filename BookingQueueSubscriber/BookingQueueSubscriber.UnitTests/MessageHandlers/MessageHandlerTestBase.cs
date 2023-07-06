@@ -19,7 +19,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         protected Mock<IUserService> UserServiceMock { get; set; }
         protected Mock<INotificationService> NotificationServiceMock { get; set; }
         protected Mock<IUserCreationAndNotification> UserCreationAndNotificationMock { get; set; }
-
+        protected Mock<IConferenceCreationAndNotification> ConferenceCreationAndNotificationMock { get; set; }
         protected Mock<IBookingsApiClient> BookingsApiClientMock { get; set; }
 
         protected Guid ParticipantId { get; set; }
@@ -49,6 +49,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             NotificationServiceMock = new Mock<INotificationService>();
             UserCreationAndNotificationMock = new Mock<IUserCreationAndNotification>();
             BookingsApiClientMock = new Mock<IBookingsApiClient>();
+            ConferenceCreationAndNotificationMock = new Mock<IConferenceCreationAndNotification>();
         }
     }
 }

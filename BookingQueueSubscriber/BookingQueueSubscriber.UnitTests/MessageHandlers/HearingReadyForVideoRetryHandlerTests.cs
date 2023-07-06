@@ -9,23 +9,49 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using UserApi.Contract.Responses;
 using VideoApi.Contract.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
-    public class HearingReadyForVideoHandlerTests : MessageHandlerTestBase
+    public class HearingReadyForVideoRetryHandlerTests : MessageHandlerTestBase
     {
         [Test]
-        public async Task should_call_create_conference_and_notify_async()
+        public async Task should_call_create_conference_and_notify_async_when_users_do_not_exist()
         {
-            var messageHandler = new HearingReadyForVideoHandler(ConferenceCreationAndNotificationMock.Object );
+            var messageHandler = new HearingReadyForVideoRetryHandler(UserServiceMock.Object, ConferenceCreationAndNotificationMock.Object );
             
             var integrationEvent = CreateEvent();
+            UserServiceMock.Setup(x => x.GetUserByContactEmail(It.IsAny<string>())).ReturnsAsync((UserProfile)null);
             await messageHandler.HandleAsync(integrationEvent);
             
             ConferenceCreationAndNotificationMock.Verify(x => x.CreateConferenceAndNotifyAsync(It.Is<CreateConferenceAndNotifyRequest>(
                     r => r.Hearing == integrationEvent.Hearing &&
-                         r.ParticipantUsersToCreate == integrationEvent.Participants &&
+                         r.ParticipantUsersToCreate.Count == integrationEvent.Participants.Count &&
+                         r.Participants == integrationEvent.Participants &&
+                         r.Endpoints == integrationEvent.Endpoints)), 
+                Times.Once);
+        }
+        
+        [Test]
+        public async Task should_call_create_conference_and_notify_async_when_users_exist()
+        {
+            var messageHandler = new HearingReadyForVideoRetryHandler(UserServiceMock.Object, ConferenceCreationAndNotificationMock.Object );
+            
+            var integrationEvent = CreateEvent();
+            foreach (var participant in integrationEvent.Participants)
+            {
+                UserServiceMock.Setup(x => x.GetUserByContactEmail(participant.ContactEmail)).ReturnsAsync(new UserProfile
+                {
+                    UserName = participant.Username, 
+                    Email = participant.ContactEmail
+                });
+            }
+            await messageHandler.HandleAsync(integrationEvent);
+            
+            ConferenceCreationAndNotificationMock.Verify(x => x.CreateConferenceAndNotifyAsync(It.Is<CreateConferenceAndNotifyRequest>(
+                    r => r.Hearing == integrationEvent.Hearing &&
+                         r.ParticipantUsersToCreate.Count == 0 &&
                          r.Participants == integrationEvent.Participants &&
                          r.Endpoints == integrationEvent.Endpoints)), 
                 Times.Once);
@@ -34,21 +60,20 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_create_conference_and_notify_async_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(ConferenceCreationAndNotificationMock.Object);
+            var messageHandler = (IMessageHandler) new HearingReadyForVideoRetryHandler(UserServiceMock.Object, ConferenceCreationAndNotificationMock.Object);
             
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
             
             ConferenceCreationAndNotificationMock.Verify(x => x.CreateConferenceAndNotifyAsync(It.Is<CreateConferenceAndNotifyRequest>(
                     r => r.Hearing == integrationEvent.Hearing &&
-                         r.ParticipantUsersToCreate == integrationEvent.Participants &&
+                         r.ParticipantUsersToCreate.Count == integrationEvent.Participants.Count &&
                          r.Participants == integrationEvent.Participants &&
                          r.Endpoints == integrationEvent.Endpoints)), 
                 Times.Once);
         }
 
-
-        private static HearingIsReadyForVideoIntegrationEvent CreateEvent()
+        private static HearingIsReadyForVideoRetryIntegrationEvent CreateEvent()
         {
             var hearingDto = new HearingDto
             {
@@ -66,7 +91,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             var endpoints = Builder<EndpointDto>.CreateListOfSize(4).Build().ToList();
             
-            var message = new HearingIsReadyForVideoIntegrationEvent
+            var message = new HearingIsReadyForVideoRetryIntegrationEvent
             {
                 Hearing = hearingDto,
                 Participants = participants,

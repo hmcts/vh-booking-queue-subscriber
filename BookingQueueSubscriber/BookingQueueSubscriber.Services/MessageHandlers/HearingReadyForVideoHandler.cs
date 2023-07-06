@@ -1,54 +1,29 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
-using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.VideoApi;
-using BookingQueueSubscriber.Services.VideoWeb;
-using BookingsApi.Client;
-using BookingsApi.Contract.Requests;
-using BookingsApi.Contract.Requests.Enums;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
     public class HearingReadyForVideoHandler : IMessageHandler<HearingIsReadyForVideoIntegrationEvent>
     {
-        private readonly IVideoApiService _videoApiService;
-        private readonly IVideoWebService _videoWebService;
-        private readonly IUserCreationAndNotification _userCreationAndNotification;
-        private readonly IBookingsApiClient _bookingsApiClient;
+        private readonly IConferenceCreationAndNotification _conferenceCreationAndNotification;
 
-        public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService,
-             IUserCreationAndNotification userCreationAndNotification, IBookingsApiClient bookingsApiClient)
+        public HearingReadyForVideoHandler(IConferenceCreationAndNotification conferenceCreationAndNotification)
         {
-            _videoApiService = videoApiService;
-            _videoWebService = videoWebService;
-            _userCreationAndNotification = userCreationAndNotification;
-            _bookingsApiClient = bookingsApiClient;
+            _conferenceCreationAndNotification = conferenceCreationAndNotification;
         }
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
-                eventMessage.Hearing, eventMessage.Participants);
-
-            if (!eventMessage.Hearing.GroupId.HasValue || eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty)
+            var request = new CreateConferenceAndNotifyRequest
             {
-                // Not a multiday hearing
-                await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
-                eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
-            }
-
-            var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
-                eventMessage.Participants, eventMessage.Endpoints);
-
-            var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
-            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
-            { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
-
-            await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
-            await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
+                Hearing = eventMessage.Hearing,
+                ParticipantUsersToCreate = eventMessage.Participants,
+                Participants = eventMessage.Participants,
+                Endpoints = eventMessage.Endpoints
+            };
+            
+            await _conferenceCreationAndNotification.CreateConferenceAndNotifyAsync(request);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

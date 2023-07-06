@@ -31,5 +31,14 @@ namespace BookingQueueSubscriber.Services.UserApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
+
+        public Task<UserProfile> GetUserByContactEmail(string emailAddress)
+        {
+            return Task.FromResult(new UserProfile
+            {
+                Email = emailAddress,
+                UserName = emailAddress
+            });
+        }
     }
 }
