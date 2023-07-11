@@ -16,8 +16,8 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         private readonly ILogger<VideoWebService> _logger;
         public VideoWebService(HttpClient httpClient, ILogger<VideoWebService> logger)
         {
-            this._httpClient = httpClient;
-            this._logger = logger;
+            _httpClient = httpClient;
+            _logger = logger;
         }
 
         public async Task PushNewConferenceAdded(Guid conferenceId)
@@ -73,6 +73,27 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             var result = await _httpClient.PostAsync(path, httpContent);
 
             _logger.LogDebug("PushAllocationToCsoUpdatedMessage result: {Result}", result);
+        }
+
+        public async Task PushUnlinkedParticipantFromEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName)
+        {
+            var path = $"internalevent/UnlinkedParticipantFromEndpoint?conferenceId={conferenceId}&participant={participantUserName}&endpoint={jvsEndpointName}";
+            _logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
+            await _httpClient.PostAsync(path, null);
+        }
+
+        public async Task PushLinkedNewParticipantToEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName)
+        {
+            var path = $"internalevent/LinkedNewParticipantToEndpoint?conferenceId={conferenceId}&participant={participantUserName}&endpoint={jvsEndpointName}";
+            _logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
+            await _httpClient.PostAsync(path, null);
+        }
+
+        public async Task PushCloseConsultationBetweenEndpointAndParticipant(Guid conferenceId, string participantUserName, string jvsEndpointName)
+        {
+            var path = $"internalevent/CloseConsultationBetweenEndpointAndParticipant?conferenceId={conferenceId}&participant={participantUserName}&endpoint={jvsEndpointName}";
+            _logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
+            await _httpClient.PostAsync(path, null);
         }
 
         public async Task PushEndpointsUpdatedMessage(Guid conferenceId, UpdateConferenceEndpointsRequest request)
