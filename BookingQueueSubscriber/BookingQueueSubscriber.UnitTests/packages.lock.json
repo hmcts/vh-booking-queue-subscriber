@@ -135,8 +135,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.45.3",
-        "contentHash": "ulQHqYQS8S5ssq2qsud5d1JlGUUrVv0+9gT0qYe0hQGi8Z33BKoLH2hjRpZOIhh9FnCrqTFnJGuLWv5D4n8bPQ==",
+        "resolved": "1.45.18",
+        "contentHash": "OwzLhDkm9znCO3PIHzKLpAcmv41BUPnZdjk5JL8IpNoHPhlbT7BHU/evK/sxuI33SI9kj0qWKr/dKJHypk6Zmg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -1065,8 +1065,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "1.45.2-pr-0134-0008",
-        "contentHash": "Ca+rH/MJq4vLq5xG8KH7ogVf9WuIXB7LK8orr3+YOKk/FdFU1KpQGEkNz+CPOo1NmnKRppAq+wSamKGpgjUiOw==",
+        "resolved": "1.45.4",
+        "contentHash": "TmGviZi2ZQMJM1ZmIJIWSjV/6sDJIeeTIa3a0H917GhvFGGtd5m5RCC10k6N4qQqE/Nu+cUVhgP2m1F7lIJSkg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
@@ -2208,7 +2208,7 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Services": "[1.0.0, )",
-          "BookingsApi.Client": "[1.45.3, )",
+          "BookingsApi.Client": "[1.45.18, )",
           "Microsoft.ApplicationInsights.AspNetCore": "[2.21.0, )",
           "Microsoft.AspNetCore.Hosting": "[2.2.7, )",
           "Microsoft.Azure.WebJobs": "[3.0.33, )",
@@ -2226,7 +2226,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.45.3, )",
+          "BookingsApi.Client": "[1.45.18, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2241,10 +2241,10 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[1.45.3, )",
+          "BookingsApi.Client": "[1.45.18, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[1.45.2-pr-0134-0008, )",
+          "NotificationApi.Client": "[1.45.4, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[1.45.2, )",

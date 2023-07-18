@@ -35,6 +35,11 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<HearingDetailsResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task AnonymiseParticipantAndCaseByHearingIdAsync(string hearingIdsPath, IEnumerable<Guid> hearingIdsBody)
         {
             throw new NotImplementedException();
@@ -71,6 +76,11 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<HearingDetailsResponse> BookNewHearingAsync(BookNewHearingRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username)
         {
             throw new NotImplementedException();
         }
@@ -190,12 +200,27 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task RebookHearingAsync(Guid hearingId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task CloneHearingAsync(Guid hearingId, CloneHearingRequest request)
         {
             throw new NotImplementedException();
         }
 
         public Task CloneHearingAsync(Guid hearingId, CloneHearingRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CancelBookingAsync(Guid hearingId, CancelBookingRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CancelBookingAsync(Guid hearingId, CancelBookingRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -327,6 +352,11 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<HearingDetailsResponse>> GetHearingsForNotificationAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RebookHearingAsync(Guid hearingId)
         {
             throw new NotImplementedException();
         }
