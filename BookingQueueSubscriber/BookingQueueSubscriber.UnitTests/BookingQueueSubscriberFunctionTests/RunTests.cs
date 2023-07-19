@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
@@ -23,6 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private NotificationServiceFake _notificationService;
         private UserServiceFake _userService;
         private BookingsApiClientFake _bookingsApi;
+        private FeatureTogglesClientFake _featureTogglesClient;
         private BookingQueueSubscriberFunction _sut;
     
         [OneTimeSetUp]
@@ -33,6 +35,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
             _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
+            _featureTogglesClient = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using BookingQueueSubscriber;
@@ -28,6 +29,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
 {
+    [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
@@ -105,7 +107,7 @@ namespace BookingQueueSubscriber
             services.AddLogging(builder => 
                 builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
-            services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"]));
+            
             RegisterMessageHandlers(services);
 
             var container = services.BuildServiceProvider();
@@ -117,6 +119,7 @@ namespace BookingQueueSubscriber
                 services.AddScoped<INotificationService, NotificationServiceFake>();
                 services.AddScoped<IUserService, UserServiceFake>();
                 services.AddScoped<IBookingsApiClient, BookingsApiClientFake>();
+                services.AddScoped<IFeatureToggles, FeatureTogglesClientFake>();
             }
             else
             {
@@ -166,6 +169,9 @@ namespace BookingQueueSubscriber
                     client.ReadResponseAsString = true;
                     return (IBookingsApiClient)client;
                 });
+                 
+                 var envName = configuration["VhServices:BookingsApiUrl"]; // any service url will do here since we only care about the env name
+                 services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"], envName));
             }
 
 

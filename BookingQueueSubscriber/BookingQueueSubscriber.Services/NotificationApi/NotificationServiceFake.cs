@@ -32,6 +32,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
+        public Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            NotificationRequests = new List<AddNotificationRequest>
+                {AddNotificationRequestMapper.MapToNewUserWelcomeEmail(hearing, participant)};
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
         public Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             return Task.FromResult(HttpStatusCode.OK);
