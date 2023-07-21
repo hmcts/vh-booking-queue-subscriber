@@ -175,7 +175,7 @@ namespace BookingQueueSubscriber
 
         }
 
-        private void RegisterMessageHandlers(IServiceCollection serviceCollection)
+        private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
         {
             var messageHandlers = GetAllTypesOf(typeof(IMessageHandler<>)).ToList();
             foreach (var messageHandler in messageHandlers)
