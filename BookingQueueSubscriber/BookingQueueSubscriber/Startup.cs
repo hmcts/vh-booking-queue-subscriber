@@ -185,7 +185,7 @@ namespace BookingQueueSubscriber
             }
         }
 
-        private IEnumerable<Type> GetAllTypesOf(Type i)
+        private static IEnumerable<Type> GetAllTypesOf(Type i)
         {
             return i.Assembly.GetTypes().Where(t =>
                 t.GetInterfaces().Any(x =>
