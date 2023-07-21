@@ -13,7 +13,8 @@ java:
       usePodIdentity: true
       secrets:
         - azuread--tenantid
-        - applicationinsights--instrumentationkey
+        - name: connectionstrings--applicationinsights
+          alias: applicationinsights--connectionstring
         - name: servicebusqueue--connectionstring
           alias: servicebusconnection
     vh-booking-queue:
