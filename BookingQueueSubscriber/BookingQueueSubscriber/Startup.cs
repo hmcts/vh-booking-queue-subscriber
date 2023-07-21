@@ -77,7 +77,7 @@ namespace BookingQueueSubscriber
             RegisterServices(builder.Services, context.Configuration);
         }
 
-        public void RegisterServices(IServiceCollection services, IConfiguration configuration)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
