@@ -77,7 +77,7 @@ namespace BookingQueueSubscriber
             RegisterServices(builder.Services, context.Configuration);
         }
 
-        public void RegisterServices(IServiceCollection services, IConfiguration configuration)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
@@ -104,9 +104,11 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            services.AddLogging(builder => 
-                builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
-            );
+            services.AddLogging(builder =>
+                builder.AddApplicationInsights(
+                    configureTelemetryConfiguration: config => config.ConnectionString = configuration["ApplicationInsights:ConnectionString"],
+                    configureApplicationInsightsLoggerOptions: _ => {}
+                ));
             
             RegisterMessageHandlers(services);
 
@@ -177,7 +179,7 @@ namespace BookingQueueSubscriber
 
         }
 
-        private void RegisterMessageHandlers(IServiceCollection serviceCollection)
+        private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
         {
             var messageHandlers = GetAllTypesOf(typeof(IMessageHandler<>)).ToList();
             foreach (var messageHandler in messageHandlers)
@@ -187,10 +189,10 @@ namespace BookingQueueSubscriber
             }
         }
 
-        private IEnumerable<Type> GetAllTypesOf(Type i)
+        private static IEnumerable<Type> GetAllTypesOf(Type i)
         {
             return i.Assembly.GetTypes().Where(t =>
-                t.GetInterfaces().Any(x =>
+                t.GetInterfaces().ToList().Exists(x =>
                     x.IsGenericType &&
                     x.GetGenericTypeDefinition() == i));
         }

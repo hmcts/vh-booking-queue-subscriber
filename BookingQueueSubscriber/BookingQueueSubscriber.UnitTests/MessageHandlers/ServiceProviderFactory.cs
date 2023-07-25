@@ -12,8 +12,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             ServiceCollection sc = new ServiceCollection();
-            var startup = new Startup();
-            startup.RegisterServices(sc, configuration);
+            Startup.RegisterServices(sc, configuration);
             ServiceProvider = sc.BuildServiceProvider();
         }
     }
