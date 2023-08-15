@@ -1,5 +1,3 @@
-using System;
-
 namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {
     public class LinkedParticipantDto

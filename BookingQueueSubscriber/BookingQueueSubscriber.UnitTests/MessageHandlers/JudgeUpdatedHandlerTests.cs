@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
 

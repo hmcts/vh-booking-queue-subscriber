@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
+﻿namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {
     public class HearingDto
     {

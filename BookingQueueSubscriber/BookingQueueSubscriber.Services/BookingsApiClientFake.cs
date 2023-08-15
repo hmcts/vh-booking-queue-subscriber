@@ -2,11 +2,7 @@ using BookingsApi.Client;
 using BookingsApi.Contract.V1.Enums;
 using BookingsApi.Contract.V1.Requests;
 using BookingsApi.Contract.V1.Responses;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Threading.Tasks;
 using BookingsApi.Contract.V2.Requests;
 using BookingsApi.Contract.V2.Responses;
 

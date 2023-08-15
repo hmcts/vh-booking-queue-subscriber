@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingsApi.Client;
-using Moq;
-using NUnit.Framework;
 using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers

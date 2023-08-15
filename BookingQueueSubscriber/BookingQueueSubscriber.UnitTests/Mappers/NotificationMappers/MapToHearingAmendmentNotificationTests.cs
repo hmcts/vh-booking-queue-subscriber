@@ -1,14 +1,6 @@
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
-using BookingsApi.Contract.V1.Responses;
-using FluentAssertions;
-using Newtonsoft.Json;
 using NotificationApi.Contract;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CaseResponse = BookingsApi.Contract.V1.Responses.CaseResponse;
 
 namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
 {

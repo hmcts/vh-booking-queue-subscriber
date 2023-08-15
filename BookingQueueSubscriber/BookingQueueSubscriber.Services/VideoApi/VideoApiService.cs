@@ -1,10 +1,6 @@
-using System;
-using System.Threading.Tasks;
 using VideoApi.Contract.Requests;
-using Microsoft.Extensions.Logging;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
-using System.Collections.Generic;
 
 namespace BookingQueueSubscriber.Services.VideoApi
 {

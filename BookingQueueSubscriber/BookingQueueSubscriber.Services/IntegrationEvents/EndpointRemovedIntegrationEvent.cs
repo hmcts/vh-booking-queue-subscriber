@@ -1,5 +1,3 @@
-using System;
-
 namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
     public class EndpointRemovedIntegrationEvent : IIntegrationEvent

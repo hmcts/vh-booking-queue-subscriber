@@ -1,8 +1,5 @@
-﻿using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Threading.Tasks;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoWeb

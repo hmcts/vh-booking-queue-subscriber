@@ -1,13 +1,8 @@
-using System;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
-using FluentAssertions;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {

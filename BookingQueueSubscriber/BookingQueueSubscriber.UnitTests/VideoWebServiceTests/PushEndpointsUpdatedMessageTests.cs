@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoWeb;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
 using VideoApi.Contract.Responses;
 

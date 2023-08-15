@@ -1,13 +1,3 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using BookingQueueSubscriber.Common.Configuration;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-
 namespace BookingQueueSubscriber
 {
     public class VideoWebTokenHandler : DelegatingHandler

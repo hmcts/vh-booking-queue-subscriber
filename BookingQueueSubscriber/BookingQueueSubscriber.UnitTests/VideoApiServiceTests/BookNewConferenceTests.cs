@@ -1,11 +1,6 @@
 ﻿using BookingQueueSubscriber.Services.VideoApi;
 using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using VideoApi.Client;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;

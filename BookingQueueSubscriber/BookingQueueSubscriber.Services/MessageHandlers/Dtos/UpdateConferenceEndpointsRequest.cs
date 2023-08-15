@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using VideoApi.Contract.Responses;
+﻿using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {

@@ -1,13 +1,4 @@
 ﻿using BookingQueueSubscriber.Contract.Responses;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Net;
-using System.Reflection;
-using System.Threading.Tasks;
 using VideoApi.Client;
 
 namespace BookingQueueSubscriber

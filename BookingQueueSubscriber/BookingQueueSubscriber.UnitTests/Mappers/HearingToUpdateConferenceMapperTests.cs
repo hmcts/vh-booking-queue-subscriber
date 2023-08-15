@@ -1,8 +1,5 @@
-using System;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.Mappers
 {

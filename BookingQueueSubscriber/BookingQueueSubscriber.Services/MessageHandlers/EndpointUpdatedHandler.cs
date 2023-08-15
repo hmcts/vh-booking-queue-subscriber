@@ -1,17 +1,8 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.IntegrationEvents;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
-using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
-using static System.String;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -85,7 +76,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             ParticipantDetailsResponse newDefenceAdvocate = null;
 
-            if (!IsNullOrEmpty(endpointEvent.DefenceAdvocate))
+            if (!string.IsNullOrEmpty(endpointEvent.DefenceAdvocate))
             {
                 for (var retry = 0; retry <= RetryLimit; retry++)
                 {

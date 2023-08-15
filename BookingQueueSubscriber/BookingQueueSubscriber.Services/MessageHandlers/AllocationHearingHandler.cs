@@ -1,16 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.IntegrationEvents;
-using BookingQueueSubscriber.Services.Mappers;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
-using BookingsApi.Client;
-using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers

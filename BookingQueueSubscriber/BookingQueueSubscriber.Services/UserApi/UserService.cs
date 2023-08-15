@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 using BookingQueueSubscriber.Common.Configuration;
-using Microsoft.Extensions.Logging;
 using UserApi.Client;
 using UserApi.Contract.Requests;
 using UserApi.Contract.Responses;

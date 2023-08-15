@@ -1,12 +1,7 @@
-using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.IntegrationEvents;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using VideoApi.Contract.Requests;
-using System.Linq;
 using VideoApi.Contract.Responses;
 using BookingQueueSubscriber.Services.VideoWeb;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {

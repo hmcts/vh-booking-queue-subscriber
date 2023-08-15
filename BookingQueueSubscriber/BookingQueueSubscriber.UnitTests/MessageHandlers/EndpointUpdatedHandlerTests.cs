@@ -1,16 +1,10 @@
-using System;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using VideoApi.Contract.Requests;
-using Moq;
-using NUnit.Framework;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using VideoApi.Contract.Responses;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using Azure.Core;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {

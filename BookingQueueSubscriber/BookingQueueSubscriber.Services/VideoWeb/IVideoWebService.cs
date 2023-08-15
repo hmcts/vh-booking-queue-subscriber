@@ -1,7 +1,4 @@
-﻿using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using System;
-using System.Threading.Tasks;
-using VideoApi.Contract.Requests;
+﻿using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoWeb
 {

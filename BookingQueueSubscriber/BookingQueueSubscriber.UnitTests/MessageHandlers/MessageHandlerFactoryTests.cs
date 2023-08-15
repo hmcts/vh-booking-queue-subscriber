@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {

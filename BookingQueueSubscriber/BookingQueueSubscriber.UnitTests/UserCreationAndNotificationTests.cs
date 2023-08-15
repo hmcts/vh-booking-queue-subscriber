@@ -1,15 +1,10 @@
-﻿using System;
-using BookingQueueSubscriber.Services.NotificationApi;
+﻿using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingsApi.Contract.V1.Configuration;
 using UserApi.Client;

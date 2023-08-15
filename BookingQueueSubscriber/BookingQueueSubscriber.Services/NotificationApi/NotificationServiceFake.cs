@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.NotificationApi
