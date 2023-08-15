@@ -1,5 +1,3 @@
-using System;
-
 namespace BookingQueueSubscriber.Common.ApiHelper
 {
     public class ApiUriFactory

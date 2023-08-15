@@ -1,8 +1,4 @@
-using System.Linq;
-using System.Threading.Tasks;
-using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.Mappers;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using VideoApi.Contract.Requests;

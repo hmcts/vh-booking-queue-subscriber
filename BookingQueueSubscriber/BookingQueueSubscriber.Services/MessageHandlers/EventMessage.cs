@@ -1,6 +1,3 @@
-using System;
-using BookingQueueSubscriber.Services.IntegrationEvents;
-
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
     public class EventMessage

@@ -1,6 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-
 namespace BookingQueueSubscriber.Common.ApiHelper
 {
     public static class ApiRequestHelper

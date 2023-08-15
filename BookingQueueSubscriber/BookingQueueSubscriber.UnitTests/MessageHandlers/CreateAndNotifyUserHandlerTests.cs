@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.IntegrationEvents;
@@ -10,10 +7,8 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
-using Moq;
-using NUnit.Framework;
 using VideoApi.Contract.Enums;
-using BookingsApi.Contract.Enums;
+using BookingsApi.Contract.V1.Enums;
 using Microsoft.Extensions.Logging;
 using UserApi.Client;
 using UserApi.Contract.Requests;

@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using FizzWare.NBuilder;
-using FluentAssertions;
-using NUnit.Framework;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 using LinkedParticipantType = BookingQueueSubscriber.Services.MessageHandlers.Dtos.LinkedParticipantType;

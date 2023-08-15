@@ -1,12 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Common.Security;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace BookingQueueSubscriber
+﻿namespace BookingQueueSubscriber
 {
     public class BookingsServiceTokenHandler : DelegatingHandler
     {

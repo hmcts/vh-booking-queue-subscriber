@@ -1,8 +1,5 @@
-﻿using System;
-using BookingQueueSubscriber.Common.Configuration;
+﻿using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Common.Security;
-using Microsoft.Extensions.Options;
-using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BookingQueueSubscriber.Services.Consts
+﻿namespace BookingQueueSubscriber.Services.Consts
 {
     /// <summary>
     ///     User Hearing Roles

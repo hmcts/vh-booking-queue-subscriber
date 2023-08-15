@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BookingQueueSubscriber.Services.IntegrationEvents
+﻿namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
     public class ParticipantRemovedIntegrationEvent : IIntegrationEvent
     {

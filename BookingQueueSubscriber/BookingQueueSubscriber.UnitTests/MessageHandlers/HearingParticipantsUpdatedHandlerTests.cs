@@ -1,12 +1,7 @@
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingsApi.Contract.Enums;
-using Moq;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using BookingsApi.Contract.V1.Enums;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers

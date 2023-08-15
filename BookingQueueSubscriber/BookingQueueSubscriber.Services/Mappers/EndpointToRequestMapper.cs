@@ -1,4 +1,3 @@
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers

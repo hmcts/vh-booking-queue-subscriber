@@ -1,4 +1,3 @@
-using System;
 using BookingQueueSubscriber.Common.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;

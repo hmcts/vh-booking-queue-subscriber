@@ -1,15 +1,9 @@
-using System;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using VideoApi.Contract.Requests;
-using Moq;
-using NUnit.Framework;
 using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Responses;
-using System.Collections.Generic;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using FluentAssertions;
 using VideoApi.Contract.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers

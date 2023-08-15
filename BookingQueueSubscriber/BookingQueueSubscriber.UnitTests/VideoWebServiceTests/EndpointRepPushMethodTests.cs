@@ -1,13 +1,9 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.VideoWeb;
 using Microsoft.Extensions.Logging;
-using Moq;
 using Moq.Protected;
-using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests;
 

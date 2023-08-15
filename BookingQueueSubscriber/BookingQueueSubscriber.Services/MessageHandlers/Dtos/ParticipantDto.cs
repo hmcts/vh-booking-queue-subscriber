@@ -1,6 +1,4 @@
-﻿using BookingsApi.Contract.Enums;
-using System;
-using System.Collections.Generic;
+﻿using BookingsApi.Contract.V1.Enums;
 using BookingQueueSubscriber.Services.UserApi;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos

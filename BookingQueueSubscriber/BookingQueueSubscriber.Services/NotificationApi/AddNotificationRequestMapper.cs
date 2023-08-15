@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingQueueSubscriber.Services.UserApi;
+﻿using BookingQueueSubscriber.Services.UserApi;
 using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
 

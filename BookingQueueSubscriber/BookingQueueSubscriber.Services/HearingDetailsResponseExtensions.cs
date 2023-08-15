@@ -1,6 +1,3 @@
-using System;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-
 namespace BookingQueueSubscriber.Services
 {
     public static class HearingExtensions

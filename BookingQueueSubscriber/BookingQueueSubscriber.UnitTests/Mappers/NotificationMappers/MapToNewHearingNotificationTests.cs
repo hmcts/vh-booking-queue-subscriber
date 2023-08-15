@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.NotificationApi;
-using FluentAssertions;
 using NotificationApi.Contract;
-using NUnit.Framework;
 
 namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
 {

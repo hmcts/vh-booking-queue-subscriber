@@ -1,12 +1,3 @@
-using System;
-using System.Threading.Tasks;
-using BookingQueueSubscriber.Services;
-using BookingQueueSubscriber.Services.IntegrationEvents;
-using BookingQueueSubscriber.Services.MessageHandlers;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
-
 namespace BookingQueueSubscriber
 {
     public class BookingQueueSubscriberFunction
