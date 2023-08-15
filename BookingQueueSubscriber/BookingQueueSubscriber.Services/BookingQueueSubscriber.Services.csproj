@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BookingsApi.Client" Version="1.46.3-pr-0691-0059" />
+      <PackageReference Include="BookingsApi.Client" Version="1.46.3" />
       <PackageReference Include="LaunchDarkly.ServerSdk" Version="7.0.3" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
       <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
