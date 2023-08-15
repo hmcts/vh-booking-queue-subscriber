@@ -11,7 +11,7 @@ using Moq;
 using NUnit.Framework;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Responses;
-using BookingsApi.Contract.Requests;
+using BookingsApi.Contract.V1.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingsApi.Contract.Configuration;
+using BookingsApi.Contract.V1.Configuration;
 using UserApi.Client;
 using UserApi.Contract.Requests;
 using UserApi.Contract.Responses;

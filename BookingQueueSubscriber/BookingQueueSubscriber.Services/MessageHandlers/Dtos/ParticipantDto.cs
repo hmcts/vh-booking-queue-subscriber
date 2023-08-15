@@ -1,4 +1,4 @@
-﻿using BookingsApi.Contract.Enums;
+﻿using BookingsApi.Contract.V1.Enums;
 using System;
 using System.Collections.Generic;
 using BookingQueueSubscriber.Services.UserApi;

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Requests;
 using Moq;
 using NUnit.Framework;
-using BookingsApi.Contract.Enums;
+using BookingsApi.Contract.V1.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {

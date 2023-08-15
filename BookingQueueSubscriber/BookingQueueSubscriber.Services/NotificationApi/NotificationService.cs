@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingsApi.Client;
-using BookingsApi.Contract.Configuration;
+using BookingsApi.Contract.V1.Configuration;
 using Microsoft.Extensions.Logging;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;

@@ -13,7 +13,7 @@ using BookingsApi.Client;
 using Moq;
 using NUnit.Framework;
 using VideoApi.Contract.Enums;
-using BookingsApi.Contract.Enums;
+using BookingsApi.Contract.V1.Enums;
 using Microsoft.Extensions.Logging;
 using UserApi.Client;
 using UserApi.Contract.Requests;

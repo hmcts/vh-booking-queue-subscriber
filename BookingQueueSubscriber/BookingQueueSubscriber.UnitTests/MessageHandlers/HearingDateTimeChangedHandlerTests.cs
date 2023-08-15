@@ -8,7 +8,7 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using Moq;
 using NUnit.Framework;
 using VideoApi.Contract.Enums;
-using BookingsApi.Contract.Enums;
+using BookingsApi.Contract.V1.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {

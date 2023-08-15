@@ -1,7 +1,7 @@
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingsApi.Contract.Enums;
+using BookingsApi.Contract.V1.Enums;
 using Moq;
 using NUnit.Framework;
 using System;

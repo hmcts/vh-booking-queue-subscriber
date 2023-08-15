@@ -12,7 +12,7 @@ using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BookingsApi.Contract.Configuration;
+using BookingsApi.Contract.V1.Configuration;
 using NotificationApi.Client;
 using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;

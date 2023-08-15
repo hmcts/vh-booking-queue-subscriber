@@ -8,7 +8,7 @@ using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using Microsoft.Extensions.Logging;
 using BookingsApi.Client;
-using BookingsApi.Contract.Configuration;
+using BookingsApi.Contract.V1.Configuration;
 
 namespace BookingQueueSubscriber.Services
 {
