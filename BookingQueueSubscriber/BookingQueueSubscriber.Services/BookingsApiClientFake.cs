@@ -254,6 +254,16 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        
         public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeName)
         {
             throw new NotImplementedException();
@@ -526,6 +536,16 @@ namespace BookingQueueSubscriber.Services
 
         public Task UpdateVhoNonAvailabilityHoursAsync(string username, UpdateNonWorkingHoursRequest request,
                                                        CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
