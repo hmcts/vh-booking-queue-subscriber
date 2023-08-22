@@ -18,6 +18,7 @@ namespace BookingQueueSubscriber.UnitTests
         private Mock<INotificationApiClient> _notificationApiMock;
         private Mock<IBookingsApiClient> _bookingsApiMock;
         private Mock<ILogger<NotificationService>> _logger;
+        private Mock<IFeatureToggles> _featureToggles;
 
         [SetUp]
         public void TestSetup()
@@ -25,6 +26,7 @@ namespace BookingQueueSubscriber.UnitTests
             _notificationApiMock = new Mock<INotificationApiClient>();
             _bookingsApiMock = new Mock<IBookingsApiClient>();
             _logger = new Mock<ILogger<NotificationService>>();
+            _featureToggles = new Mock<IFeatureToggles>();
         }
 
         [Test]
@@ -34,7 +36,7 @@ namespace BookingQueueSubscriber.UnitTests
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic" };
 
             var notificationService = new NotificationService(_notificationApiMock.Object, 
-                _bookingsApiMock.Object, _logger.Object);
+                _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
 
             await notificationService.SendNewHearingNotification(hearing, new List<ParticipantDto>
                 {
@@ -51,7 +53,7 @@ namespace BookingQueueSubscriber.UnitTests
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic", ScheduledDateTime = DateTime.UtcNow.AddDays(1) };
 
             var notificationService = new NotificationService(_notificationApiMock.Object,
-                _bookingsApiMock.Object, _logger.Object);
+                _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
 
             await notificationService.SendHearingAmendmentNotificationAsync(hearing, DateTime.UtcNow, new List<ParticipantDto>
                 {
@@ -68,7 +70,7 @@ namespace BookingQueueSubscriber.UnitTests
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic", CaseName = "multi day test" };
 
             var notificationService = new NotificationService(_notificationApiMock.Object,
-                _bookingsApiMock.Object, _logger.Object);
+                _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
 
             await notificationService.SendMultiDayHearingNotificationAsync(hearing, new List<ParticipantDto>
                 {
@@ -98,7 +100,7 @@ namespace BookingQueueSubscriber.UnitTests
             };
             
             var notificationService = new NotificationService(_notificationApiMock.Object,
-                _bookingsApiMock.Object, _logger.Object);
+                _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
             
             // act
             await notificationService.SendNewUserWelcomeEmail(hearing, participant);
