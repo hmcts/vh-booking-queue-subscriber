@@ -2,15 +2,11 @@
 java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
-  environment:
-    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-698.dev.platform.hmcts.net/
-    QUEUENAME: oliver-booking
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: oliver-booking
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'

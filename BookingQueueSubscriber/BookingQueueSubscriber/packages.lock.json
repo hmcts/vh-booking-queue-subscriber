@@ -4,9 +4,9 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.46.5-pr-0698-0006, )",
-        "resolved": "1.46.5-pr-0698-0006",
-        "contentHash": "6QbfQLISR2tvFYwN4mHSqAVw5zOL5TfF4o9rmbYau+pIqNAC/FWTT4Mn8d7UgYDSCNCHMCef/eVoFTvlQTi/Xw==",
+        "requested": "[1.46.10, )",
+        "resolved": "1.46.10",
+        "contentHash": "luZR2jva31rQN3YuXmRo2tbc4YnLJOCHaVkqVDqnUx/vArUdH0JRaVExxT+gJQvGWe6ewJfQFvhLoDZlDtx0SQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2260,7 +2260,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.46.5-pr-0698-0006, )",
+          "BookingsApi.Client": "[1.46.10, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2275,7 +2275,7 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[1.46.5-pr-0698-0006, )",
+          "BookingsApi.Client": "[1.46.10, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
           "NotificationApi.Client": "[1.45.4, )",
