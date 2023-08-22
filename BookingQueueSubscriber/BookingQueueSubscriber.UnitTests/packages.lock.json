@@ -1065,8 +1065,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "1.45.4",
-        "contentHash": "TmGviZi2ZQMJM1ZmIJIWSjV/6sDJIeeTIa3a0H917GhvFGGtd5m5RCC10k6N4qQqE/Nu+cUVhgP2m1F7lIJSkg==",
+        "resolved": "1.45.6-pr-0138-0003",
+        "contentHash": "ziYzQsLbt6fX974iOuzFurXjp+Qc99E1vzPBlrQ9avlGEgiDeWT+7wImYvmXiL0NU23XAAZj24tq/krESqimuw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
@@ -2244,7 +2244,7 @@
           "BookingsApi.Client": "[1.46.3, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[1.45.4, )",
+          "NotificationApi.Client": "[1.45.6-pr-0138-0003, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[1.45.2, )",

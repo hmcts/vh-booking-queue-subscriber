@@ -170,7 +170,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         public static AddNotificationRequest MapToMultiDayHearingConfirmationNotification(
-            HearingDto hearing, ParticipantDto participant, int days, bool eJudFeatureEnabled)
+            HearingDto hearing, ParticipantDto participant, int days, bool eJudFeatureEnabled, bool usePostMay2023Template = false)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
@@ -212,7 +212,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else
             {
-                notificationType = NotificationType.HearingConfirmationLipMultiDay;
+                notificationType = (usePostMay2023Template) ? NotificationType.NewUserLipConfirmationMultiDay : NotificationType.HearingConfirmationLipMultiDay;
                 parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
             }
 
@@ -286,6 +286,37 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 Parameters = parameters
             };
         }
+        
+        public static AddNotificationRequest MapToNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
+        {
+            var contactEmail = participant.ContactEmail;
+            var parameters = new Dictionary<string, string>()
+            {
+                {NotifyParams.Name, $"{participant.FirstName} {participant.LastName}" },
+                {NotifyParams.CaseName, hearing.CaseName },
+                {NotifyParams.CaseNumber, hearing.CaseNumber },
+                
+                {NotifyParams.Date,hearing.ScheduledDateTime.ToEmailDateGbLocale() },
+                
+                {NotifyParams.Time,hearing.ScheduledDateTime.ToEmailTimeGbLocale() },
+                {NotifyParams.UserName,participant.Username.ToLower() },
+                {NotifyParams.RandomPassword, userPassword }
+            };
+            
+            var notificationType = NotificationType.NewUserLipConfirmation;
+        
+            var addNotificationRequest = new AddNotificationRequest
+            {
+                HearingId = hearing.HearingId,
+                MessageType = MessageType.Email,
+                ContactEmail = contactEmail,
+                NotificationType = notificationType,
+                ParticipantId = participant.ParticipantId,
+                PhoneNumber = participant.ContactTelephone,
+                Parameters = parameters
+            };
+            return addNotificationRequest;
+        }
 
         private static Dictionary<string, string> InitHearingNotificationParams(HearingDto hearing)
         {   
@@ -313,6 +344,5 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 ? participant.ContactPhoneForNonEJudJudgeUser
                 : null;
         }
-
     }
 }

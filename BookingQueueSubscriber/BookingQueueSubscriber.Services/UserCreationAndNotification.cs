@@ -95,10 +95,14 @@ namespace BookingQueueSubscriber.Services
                 if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
                 {
                     await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
-                    // await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, user.Password);
+                    await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, user.Password);
                     // when VIH-9899 is implemented, send the 'New' NewUserAccountNotification here and put the original in the else block
                 }
-                await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
+                else
+                {
+                    await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
+                }
+                
             }
 
             return user;

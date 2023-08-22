@@ -1,4 +1,5 @@
-﻿using BookingsApi.Client;
+﻿using BookingQueueSubscriber.Common.Configuration;
+using BookingsApi.Client;
 using BookingsApi.Contract.V1.Configuration;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
@@ -13,6 +14,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
              IList<ParticipantDto> participants);
 
         Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
+        
+        Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword);
 
         Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
     }
@@ -22,12 +25,14 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         private readonly INotificationApiClient _notificationApiClient;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<NotificationService> _logger;
+        private readonly IFeatureToggles _featureToggles;
 
-        public NotificationService(INotificationApiClient notificationApiClient, IBookingsApiClient bookingsApiClient, ILogger<NotificationService> logger)
+        public NotificationService(INotificationApiClient notificationApiClient, IBookingsApiClient bookingsApiClient, ILogger<NotificationService> logger, IFeatureToggles featureToggles)
         {
             _notificationApiClient = notificationApiClient;
             _bookingsApiClient = bookingsApiClient;
             _logger = logger;
+            _featureToggles = featureToggles;
         }
 
         public async Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
@@ -81,6 +86,16 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return _notificationApiClient.CreateNewNotificationAsync(request);
         }
 
+        public Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
+        {
+            if (hearing.IsGenericHearing())
+            {
+                return Task.CompletedTask;
+            }
+            var request = AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant, userPassword);
+            return _notificationApiClient.CreateNewNotificationAsync(request);
+        }
+
         public async Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             if (hearing.IsGenericHearing())
@@ -89,9 +104,11 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
-            var requests = participants
-                .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag))
+            var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
+            List<AddNotificationRequest> requests = participants
+                .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template))
                 .ToList();
+            
 
               await CreateNotifications(requests);
         }
