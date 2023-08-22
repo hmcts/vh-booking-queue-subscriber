@@ -244,6 +244,40 @@ namespace BookingQueueSubscriber.UnitTests
   
             
             _notificationServiceMock.Verify(x=> x.SendNewUserWelcomeEmail(hearing, participant), Times.Once);
+            _notificationServiceMock.Verify(x=> x.SendNewUserAccountDetailsEmail(hearing, participant, PasswordForNotification), Times.Once);
+            _notificationServiceMock.Verify(x=> x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification), Times.Never);
+            
+        }
+        
+        [Test]
+        public async Task should_send_old_new_user_welcome_email_when_new_template_toggle_is_off()
+        {
+            // arrange
+            var participant = new ParticipantDto
+            {
+                ContactEmail = "part1@ejudiciary.net",
+                Username = "part1@ejudiciary.net",
+                UserRole = "Individual",
+                FirstName = "part1",
+                LastName = "Individual"
+            };
+            var hearing = new HearingDto { HearingId = Guid.NewGuid() };
+            SetupDependencyCalls(participant, hearing, false, false);
+            
+            var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object, 
+                _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object, _featureToggles.Object);
+
+            // act
+            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            {
+                participant
+            });
+
+            // assert
+  
+            
+            _notificationServiceMock.Verify(x=> x.SendNewUserWelcomeEmail(hearing, participant), Times.Never);
+            _notificationServiceMock.Verify(x=> x.SendNewUserAccountDetailsEmail(hearing, participant, PasswordForNotification), Times.Never);
             _notificationServiceMock.Verify(x=> x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification), Times.Once);
             
         }
