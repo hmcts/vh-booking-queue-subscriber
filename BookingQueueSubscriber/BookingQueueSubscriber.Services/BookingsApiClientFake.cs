@@ -33,6 +33,11 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<HearingDetailsResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username)
+        {
+            throw new NotImplementedException();
+        }
+        
         public Task<ICollection<HearingDetailsResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -78,22 +83,12 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<BulkJudiciaryLeaverResponse> BulkJudiciaryLeaversAsync(IEnumerable<JudiciaryLeaverRequest> request)
         {
             throw new NotImplementedException();
         }
 
         public Task<BulkJudiciaryLeaverResponse> BulkJudiciaryLeaversAsync(IEnumerable<JudiciaryLeaverRequest> request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<JobHistoryResponse>> GetJobHistoryAsync(string jobName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -198,6 +193,11 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task RebookHearingAsync(Guid hearingId)
+        {
+            throw new NotImplementedException();
+        }
+        
         public Task RebookHearingAsync(Guid hearingId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -253,23 +253,23 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeName)
+  
+        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeName, CancellationToken cancellationToken)
+        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeParam)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(CancellationToken cancellationToken)
+        public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeParam, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -354,21 +354,11 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task RebookHearingAsync(Guid hearingId)
+        public Task<ICollection<HearingVenueResponse>> GetHearingVenuesForHearingsTodayAsync()
         {
             throw new NotImplementedException();
         }
-
-        public Task<ICollection<HearingVenueResponse>> GetHearingVenuesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingVenueResponse>> GetHearingVenuesAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public Task<ICollection<HearingVenueResponse>> GetHearingVenuesForHearingsTodayAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -395,6 +385,11 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<JobHistoryResponse>> GetJobHistoryAsync(string jobName)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task<ICollection<JobHistoryResponse>> GetJobHistoryAsync(string jobName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -526,6 +521,16 @@ namespace BookingQueueSubscriber.Services
 
         public Task UpdateVhoNonAvailabilityHoursAsync(string username, UpdateNonWorkingHoursRequest request,
                                                        CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -881,21 +886,6 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<HearingVenueResponse>> GetHearingVenuesAsync(bool? excludeExpiredVenue, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingVenueResponse>> GetHearingVenuesForHearingsTodayAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<JusticeUserResponse>> GetJusticeUserListAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
