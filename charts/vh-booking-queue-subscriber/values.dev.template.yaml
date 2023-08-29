@@ -2,12 +2,14 @@
 java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
+  environment:
+    QUEUENAME: booking-will
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: booking
+    queueName: booking-will
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'

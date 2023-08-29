@@ -29,17 +29,14 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
             {
-                ExistingParticipants =
-                    eventMessage.ExistingParticipants.Select(x => ParticipantToUpdateParticipantMapper.MapToParticipantRequest(x)).ToList(),
-                NewParticipants =
-                    eventMessage.NewParticipants.Select(x => ParticipantToParticipantRequestMapper.MapToParticipantRequest(x)).ToList(),
+                ExistingParticipants = eventMessage.ExistingParticipants.Select(x => ParticipantToUpdateParticipantMapper.MapToParticipantRequest(x)).ToList(),
+                NewParticipants = eventMessage.NewParticipants.Select(x => ParticipantToParticipantRequestMapper.MapToParticipantRequest(x)).ToList(),
                 RemovedParticipants = eventMessage.RemovedParticipants,
-                LinkedParticipants =
-                    eventMessage.LinkedParticipants.Select(x => LinkedParticipantToRequestMapper.MapToLinkedParticipantRequest(x)).ToList(),
+                LinkedParticipants = eventMessage.LinkedParticipants.Select(x => LinkedParticipantToRequestMapper.MapToLinkedParticipantRequest(x)).ToList(),
             };
 
-            await _videoApiService.UpdateConferenceParticipantsAsync(conferenceResponse.Id, updateConferenceParticipantsRequest);
             await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
+            await _videoApiService.UpdateConferenceParticipantsAsync(conferenceResponse.Id, updateConferenceParticipantsRequest);
 
             await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
         }
