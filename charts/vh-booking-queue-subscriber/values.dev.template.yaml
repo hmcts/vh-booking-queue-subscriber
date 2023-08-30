@@ -2,6 +2,9 @@
 java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
+  environment:
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-707.dev.platform.hmcts.net/
+    QUEUENAME: oliver-booking
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
