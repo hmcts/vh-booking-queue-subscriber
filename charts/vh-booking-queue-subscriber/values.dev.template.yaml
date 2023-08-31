@@ -11,7 +11,7 @@ function:
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: oliver-booking
+    queueName: oliver-booking-2
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
