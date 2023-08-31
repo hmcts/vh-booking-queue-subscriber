@@ -5,7 +5,7 @@ java:
   environment:
     VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-692.dev.platform.hmcts.net/
     VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-594.dev.platform.hmcts.net/
-    QUEUENAME: oliver-booking
+    QUEUENAME: oliver-booking-2
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
