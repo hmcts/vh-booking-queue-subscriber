@@ -44,5 +44,10 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
+
+        public Task SendExistingUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

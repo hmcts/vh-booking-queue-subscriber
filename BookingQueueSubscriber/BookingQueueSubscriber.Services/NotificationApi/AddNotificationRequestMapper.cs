@@ -170,7 +170,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         public static AddNotificationRequest MapToMultiDayHearingConfirmationNotification(
-            HearingDto hearing, ParticipantDto participant, int days, bool eJudFeatureEnabled, bool usePostMay2023Template = false)
+            HearingDto hearing, ParticipantDto participant, int days, bool eJudFeatureEnabled, bool usePostMay2023Template = false, string userPassword = null)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
@@ -181,8 +181,9 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.CaseNumber, hearing.CaseNumber},
                 {NotifyParams.Time, hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
                 {NotifyParams.StartDayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale()},
-                {NotifyParams.NumberOfDays, days.ToString()}
+                {NotifyParams.NumberOfDays, days.ToString()},
             };
+            
             NotificationType notificationType;
             if (participant.UserRole.Contains(NotifyParams.Judge, StringComparison.InvariantCultureIgnoreCase) &&
                 eJudFeatureEnabled && participant.HasEjdUsername())
@@ -212,7 +213,26 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else
             {
-                notificationType = (usePostMay2023Template) ? NotificationType.NewUserLipConfirmationMultiDay : NotificationType.HearingConfirmationLipMultiDay;
+                if (usePostMay2023Template)
+                {
+                    notificationType = NotificationType.NewUserLipConfirmationMultiDay;
+                    parameters.Add(NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale());
+                    parameters.Add(NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale());
+                    parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+                    parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+                    if (!string.IsNullOrEmpty(userPassword))
+                    {
+                        parameters.Add(NotifyParams.RandomPassword, userPassword);
+                    }
+                    else
+                    {
+                        notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
+                    }
+                }
+                else
+                {
+                    notificationType = NotificationType.HearingConfirmationLipMultiDay;
+                }
                 parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
             }
 
@@ -287,7 +307,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
         }
         
-        public static AddNotificationRequest MapToNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
+        public static AddNotificationRequest MapToNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword = null)
         {
             var contactEmail = participant.ContactEmail;
             var parameters = new Dictionary<string, string>()
@@ -296,14 +316,25 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.CaseName, hearing.CaseName },
                 {NotifyParams.CaseNumber, hearing.CaseNumber },
                 
-                {NotifyParams.Date,hearing.ScheduledDateTime.ToEmailDateGbLocale() },
+                {NotifyParams.DayMonthYear,hearing.ScheduledDateTime.ToEmailDateGbLocale() },
+                {NotifyParams.DayMonthYearCy,hearing.ScheduledDateTime.ToEmailDateCyLocale() },
                 
-                {NotifyParams.Time,hearing.ScheduledDateTime.ToEmailTimeGbLocale() },
-                {NotifyParams.UserName,participant.Username.ToLower() },
-                {NotifyParams.RandomPassword, userPassword }
+                {NotifyParams.StartTime,hearing.ScheduledDateTime.ToEmailTimeGbLocale() },
+                {NotifyParams.UserName,participant.Username.ToLower() }
             };
-            
+
             var notificationType = NotificationType.NewUserLipConfirmation;
+
+            if (!string.IsNullOrEmpty(userPassword))
+            {
+                parameters.Add(NotifyParams.RandomPassword, userPassword);
+            }
+            else
+            {
+                notificationType = NotificationType.ExistingUserLipConfirmation;
+            }
+            
+            
         
             var addNotificationRequest = new AddNotificationRequest
             {

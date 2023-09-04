@@ -15,4 +15,9 @@ public class FeatureTogglesClientFake : IFeatureToggles
     {
         return PostMayTemplateToggle;
     }
+
+    public bool EjudFeatureToggle()
+    {
+        return false;
+    }
 }

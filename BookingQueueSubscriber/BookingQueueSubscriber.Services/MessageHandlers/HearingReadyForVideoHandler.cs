@@ -15,7 +15,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly IBookingsApiClient _bookingsApiClient;
 
         public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService,
-             IUserCreationAndNotification userCreationAndNotification, IBookingsApiClient bookingsApiClient)
+            IUserCreationAndNotification userCreationAndNotification, IBookingsApiClient bookingsApiClient)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
@@ -28,19 +28,21 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
                 eventMessage.Hearing, eventMessage.Participants);
 
-            if (!eventMessage.Hearing.GroupId.HasValue || eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty)
+            if (!eventMessage.Hearing.GroupId.HasValue ||
+                eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty)
             {
                 // Not a multiday hearing
                 await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
-                eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
+                    eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
             }
 
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);
 
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
-            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
-            { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
+            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId,
+                new UpdateBookingStatusRequest
+                    {Status = UpdateBookingStatus.Created, UpdatedBy = "System"});
 
             await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
@@ -48,7 +50,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
-            await HandleAsync((HearingIsReadyForVideoIntegrationEvent)integrationEvent);
+            await HandleAsync((HearingIsReadyForVideoIntegrationEvent) integrationEvent);
         }
     }
 }

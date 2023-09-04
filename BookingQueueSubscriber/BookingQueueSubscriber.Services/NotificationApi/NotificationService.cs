@@ -1,8 +1,10 @@
 ﻿using BookingQueueSubscriber.Common.Configuration;
+using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
 using BookingsApi.Contract.V1.Configuration;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
+using UserApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.NotificationApi
 {
@@ -18,6 +20,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword);
 
         Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
+        Task SendExistingUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant);
     }
 
     public class NotificationService : INotificationService
@@ -26,13 +29,15 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<NotificationService> _logger;
         private readonly IFeatureToggles _featureToggles;
+        private readonly IUserService _userService;
 
-        public NotificationService(INotificationApiClient notificationApiClient, IBookingsApiClient bookingsApiClient, ILogger<NotificationService> logger, IFeatureToggles featureToggles)
+        public NotificationService(INotificationApiClient notificationApiClient, IBookingsApiClient bookingsApiClient, ILogger<NotificationService> logger, IFeatureToggles featureToggles, IUserService userService)
         {
             _notificationApiClient = notificationApiClient;
             _bookingsApiClient = bookingsApiClient;
             _logger = logger;
             _featureToggles = featureToggles;
+            _userService = userService;
         }
 
         public async Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
@@ -98,23 +103,56 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         public async Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
+            
             if (hearing.IsGenericHearing())
             {
                 await ProcessGenericEmail(hearing, participants); 
                 return;
             }
+            
+            List<AddNotificationRequest> requests = await CreateUserRequest(hearing, participants, days); 
+           
+            await CreateNotifications(requests);
+        }
+
+        private async Task<List<AddNotificationRequest>> CreateUserRequest(HearingDto hearing, IList<ParticipantDto> participants, int days)
+        {
+            List<AddNotificationRequest> list = new List<AddNotificationRequest>();
+            User user = null;
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
-            List<AddNotificationRequest> requests = participants
-                .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template))
-                .ToList();
             
+            foreach (var participant in participants)
+            {
+                if (!string.Equals(participant.UserRole, RoleNames.Judge))
+                {
+                    user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
+                        participant.LastName, participant.ContactEmail, false);
+                }
 
-              await CreateNotifications(requests);
+                if (user != null)
+                {
+                    var userPassword = user.Password;
+                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template, userPassword));
+                }
+                
+            }
+
+            return list;
+        }
+
+        public Task SendExistingUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            if (hearing.IsGenericHearing())
+            {
+                return Task.CompletedTask;
+            }
+            var request = AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant);
+            return _notificationApiClient.CreateNewNotificationAsync(request);
         }
 
         private async Task ProcessGenericEmail(HearingDto hearing, IEnumerable<ParticipantDto> participants)
-        {
+        { 
             if (string.Equals(hearing.HearingType, "Automated Test", StringComparison.CurrentCultureIgnoreCase))
             {
                 return;
