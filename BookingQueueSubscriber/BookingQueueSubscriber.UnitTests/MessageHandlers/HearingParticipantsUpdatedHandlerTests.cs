@@ -2,6 +2,7 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingsApi.Contract.V1.Enums;
+using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -16,9 +17,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public void SetUp()
         {
             _integrationEvent = GetIntegrationEvent();
-
-            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object,
-                UserCreationAndNotificationMock.Object);
+            var loggerMock = new Mock<ILogger<HearingParticipantsUpdatedHandler>>();
+            _handler = new HearingParticipantsUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, loggerMock.Object);
         }
 
 

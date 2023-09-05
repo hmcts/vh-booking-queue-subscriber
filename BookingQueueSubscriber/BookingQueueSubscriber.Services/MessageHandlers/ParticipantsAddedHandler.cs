@@ -39,8 +39,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 NewParticipants =
                     eventMessage.Participants.Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList(),
             };
-            await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, updateConferenceParticipantsRequest);
             await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
+            await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, updateConferenceParticipantsRequest);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

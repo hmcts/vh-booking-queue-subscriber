@@ -144,14 +144,14 @@ namespace BookingQueueSubscriber
                         return (INotificationApiClient)client;
                     });
                  services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
-                .AddHttpMessageHandler<BookingsServiceTokenHandler>()
-                .AddTypedClient(httpClient =>
-                {
-                    var client = BookingsApiClient.GetClient(httpClient);
-                    client.BaseUrl = serviceConfiguration.BookingsApiUrl;
-                    client.ReadResponseAsString = true;
-                    return (IBookingsApiClient)client;
-                });
+                    .AddHttpMessageHandler<BookingsServiceTokenHandler>()
+                    .AddTypedClient(httpClient =>
+                    {
+                        var client = BookingsApiClient.GetClient(httpClient);
+                        client.BaseUrl = serviceConfiguration.BookingsApiUrl;
+                        client.ReadResponseAsString = true;
+                        return (IBookingsApiClient)client;
+                    });
                  
                  var envName = configuration["VhServices:BookingsApiUrl"]; // any service url will do here since we only care about the env name
                  services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"], envName));

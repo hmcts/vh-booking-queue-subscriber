@@ -42,8 +42,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
             { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
 
-            await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
+            await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
