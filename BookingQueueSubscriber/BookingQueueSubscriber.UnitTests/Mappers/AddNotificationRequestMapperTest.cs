@@ -155,7 +155,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 CaseName = caseName,
                 CaseNumber = caseNumber,
                 HearingId = hearingId,
-                ScheduledDateTime = DateTime.Now
+                ScheduledDateTime = DateTime.UtcNow
             };
             
 
@@ -189,7 +189,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             result.HearingId.Should().Be(hearingId);
             result.ParticipantId.Should().Be(participantId);
             result.ContactEmail.Should().Be(participant.ContactEmail);
-            result.NotificationType.Should().Be(NotificationType.NewUserLipWelcome);
+            result.NotificationType.Should().Be(NotificationType.ExistingUserLipConfirmation);
             result.MessageType.Should().Be(MessageType.Email);
             result.PhoneNumber.Should().Be(participant.ContactTelephone);
             result.Parameters.Should().BeEquivalentTo(parameters);

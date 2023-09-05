@@ -285,6 +285,7 @@ namespace BookingQueueSubscriber.UnitTests
         private void SetupDependencyCalls(ParticipantDto participant, HearingDto hearing, bool eJudFeatureFlag, bool newTemplatesFlag = false, Boolean newUser = true)
         {
             _featureToggles.Setup(x => x.UsePostMay2023Template()).Returns(newTemplatesFlag);
+            _featureToggles.Setup(x => x.EjudFeatureToggle()).Returns(eJudFeatureFlag);
             _bookingsAPIMock.Setup(x => x.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature))).ReturnsAsync(eJudFeatureFlag);
             _bookingsAPIMock.Setup(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username));
             _notificationServiceMock.Setup(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification));
