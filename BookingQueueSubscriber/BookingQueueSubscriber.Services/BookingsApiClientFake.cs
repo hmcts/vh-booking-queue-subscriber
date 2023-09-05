@@ -535,16 +535,6 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task DeleteVhoNonAvailabilityHoursAsync(long? id)
         {
             throw new NotImplementedException();

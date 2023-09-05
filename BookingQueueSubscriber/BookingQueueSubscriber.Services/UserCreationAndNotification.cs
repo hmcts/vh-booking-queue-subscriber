@@ -111,7 +111,6 @@ namespace BookingQueueSubscriber.Services
                 {
                     await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
                 }
-                // when VIH-9899 is implemented
             }
 
             return user;
