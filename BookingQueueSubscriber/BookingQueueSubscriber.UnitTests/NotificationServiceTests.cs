@@ -110,7 +110,77 @@ namespace BookingQueueSubscriber.UnitTests
                         request.ContactEmail == participant.ContactEmail &&
                         request.MessageType == MessageType.Email
                     )
+                )
+                , Times.Once);
+        }
+        
+        [Test]
+        public async Task SendNewUserAccountDetailsEmail_should_map_to_account_details_email()
+        {
+            // arrange
+            var hearing = new HearingDto
+            {
+                HearingId = Guid.NewGuid(), CaseType = "Civil Money Claims", CaseName = "Hearing for Civil Money Claims"
+            }; 
+            
+            var participant = new ParticipantDto
+            {
+                ParticipantId = Guid.NewGuid(),
+                ContactEmail = "part1@ejudiciary.net",
+                Username = "part1@ejudiciary.net",
+                UserRole = "Individual",
+                FirstName = "part1",
+                LastName = "Individual"
+            };
+            
+            // act
+            await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, "xyz");
+            
+            // assert
+            _notificationApiMock.Verify(
+                x => x.CreateNewNotificationAsync(
+                    It.Is<AddNotificationRequest>(request =>
+                        request.HearingId == hearing.HearingId &&
+                        request.NotificationType == NotificationType.NewUserLipConfirmation &&
+                        request.ContactEmail == participant.ContactEmail &&
+                        request.MessageType == MessageType.Email
                     )
+                )
+                , Times.Once);
+        }
+        
+        [Test]
+        public async Task SendExistingUserAccountDetailsEmail_should_map_to_account_details_email()
+        {
+            // arrange
+            var hearing = new HearingDto
+            {
+                HearingId = Guid.NewGuid(), CaseType = "Civil Money Claims", CaseName = "Hearing for Civil Money Claims"
+            }; 
+            
+            var participant = new ParticipantDto
+            {
+                ParticipantId = Guid.NewGuid(),
+                ContactEmail = "part1@ejudiciary.net",
+                Username = "part1@ejudiciary.net",
+                UserRole = "Individual",
+                FirstName = "part1",
+                LastName = "Individual"
+            };
+            
+            // act
+            await _notificationService.SendExistingUserAccountDetailsEmail(hearing, participant);
+            
+            // assert
+            _notificationApiMock.Verify(
+                x => x.CreateNewNotificationAsync(
+                    It.Is<AddNotificationRequest>(request =>
+                        request.HearingId == hearing.HearingId &&
+                        request.NotificationType == NotificationType.ExistingUserLipConfirmation &&
+                        request.ContactEmail == participant.ContactEmail &&
+                        request.MessageType == MessageType.Email
+                    )
+                )
                 , Times.Once);
         }
         
