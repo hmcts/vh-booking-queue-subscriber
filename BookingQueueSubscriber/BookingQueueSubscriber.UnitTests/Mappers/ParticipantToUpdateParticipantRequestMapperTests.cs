@@ -1,5 +1,7 @@
+using BookingQueueSubscriber.Services.Consts;
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+using BookingQueueSubscriber.Services.MessageHandlers.Extensions;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 using LinkedParticipantType = BookingQueueSubscriber.Services.MessageHandlers.Dtos.LinkedParticipantType;
@@ -8,10 +10,10 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
 {
     public class ParticipantToUpdateParticipantRequestMapperTests
     {
-        [TestCase(UserRole.Individual)]
-        [TestCase(UserRole.JudicialOfficeHolder)]
-        [TestCase(UserRole.StaffMember)]
-        public void should_map_participant_dto_to_participant_request(UserRole userRole)
+        [TestCase(UserRoleName.Individual)]
+        [TestCase(UserRoleName.JudicialOfficeHolder)]
+        [TestCase(UserRoleName.StaffMember)]
+        public void should_map_participant_dto_to_participant_request(string userRole)
         {
             
             var participantDto = CreateParticipantDto(userRole: userRole);
@@ -28,7 +30,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
             request.Username.Should().Be(participantDto.Username);
-            request.UserRole.Should().Be(userRole);
+            request.UserRole.Should().Be(participantDto.MapUserRoleToContractEnum());
             request.HearingRole.Should().Be(participantDto.HearingRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.LinkedParticipants.Should().BeEquivalentTo(new List<LinkedParticipantRequest>());
@@ -51,7 +53,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
             request.Username.Should().Be(participantDto.Username);
-            request.UserRole.Should().Be(participantDto.UserRole);
+            request.UserRole.Should().Be(UserRole.Individual);
             request.HearingRole.Should().Be(participantDto.HearingRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             var linkedParticipant = request.LinkedParticipants[0];
@@ -60,10 +62,10 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
         }
         
-        private static ParticipantDto CreateParticipantDto(UserRole userRole = UserRole.Individual)
+        private static ParticipantDto CreateParticipantDto(string userRole = UserRoleName.Individual)
         {
             return Builder<ParticipantDto>.CreateNew()
-                .With(x => x.UserRole = userRole.ToString())
+                .With(x => x.UserRole = userRole)
                 .With(x => x.ParticipantId = Guid.NewGuid())
                 .Build();
         }
