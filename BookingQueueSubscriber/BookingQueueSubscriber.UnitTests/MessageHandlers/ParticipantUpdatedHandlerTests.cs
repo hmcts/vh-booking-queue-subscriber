@@ -106,7 +106,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     ContactTelephone = "012748465859",
                     HearingRole = "hearingRole",
                     Representee = "representee",
-                    UserRole = "useRole",
+                    UserRole = "Individual",
                     Username = "username"
                 }
             };
