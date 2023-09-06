@@ -214,7 +214,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             };
         }
 
-        private ParticipantDto GetParticipantDto(string userRole, string representee = null)
+        private static ParticipantDto GetParticipantDto(string userRole, string representee = null)
         {
             return new ParticipantDto
             {

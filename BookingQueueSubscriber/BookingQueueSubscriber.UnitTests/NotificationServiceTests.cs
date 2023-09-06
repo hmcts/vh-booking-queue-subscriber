@@ -184,7 +184,7 @@ namespace BookingQueueSubscriber.UnitTests
                 , Times.Once);
         }
         
-        private ParticipantDto GetJoh()
+        private static ParticipantDto GetJoh()
         {
             return new ParticipantDto
             {

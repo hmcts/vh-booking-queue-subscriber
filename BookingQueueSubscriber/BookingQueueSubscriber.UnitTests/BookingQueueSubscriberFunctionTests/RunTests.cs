@@ -640,8 +640,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _userService.Users.Should().HaveCount(1);
             _userService.Users[0].UserName.Should().Be("Manual 7.Panel 7");
             _notificationService.NotificationRequests.Should().HaveCount(2);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJoh);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJudge);
+            var addNotificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJoh);
+            var notificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 
@@ -719,8 +719,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
             _userService.Users.Should().HaveCount(0);
             _notificationService.NotificationRequests.Should().HaveCount(2);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
+            var addNotificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
+            var notificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 
