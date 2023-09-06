@@ -1,3 +1,4 @@
+using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
@@ -18,8 +19,27 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Representee = participant.Representee,
                 Username = participant.Username,
                 LinkedParticipants = LinkedParticipantToRequestMapper
-                    .MapToLinkedParticipantRequestList(participant.LinkedParticipants)
+                    .MapToLinkedParticipantRequestList(participant.LinkedParticipants),
+                UserRole = GetUserRole(participant.UserRole),
+                HearingRole = participant.HearingRole
             };
+        }
+        
+        // TODO refactor as duplicated in ParticipantToParticipantRequestMapper
+        private static UserRole GetUserRole(string dtoUserRole)
+        {
+            if (dtoUserRole == UserRoleName.JudicialOfficeHolder)
+            {
+                return UserRole.JudicialOfficeHolder;
+            }
+            else if (dtoUserRole == UserRoleName.StaffMember)
+            {
+                return UserRole.StaffMember;
+            }
+            else
+            {
+                return Enum.Parse<UserRole>(dtoUserRole);
+            }
         }
     }
 }
