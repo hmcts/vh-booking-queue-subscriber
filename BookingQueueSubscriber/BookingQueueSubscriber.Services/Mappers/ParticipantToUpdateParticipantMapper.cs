@@ -21,7 +21,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 LinkedParticipants = LinkedParticipantToRequestMapper
                     .MapToLinkedParticipantRequestList(participant.LinkedParticipants),
                 UserRole = GetUserRole(participant.UserRole),
-                HearingRole = participant.HearingRole
+                HearingRole = participant.HearingRole,
+                CaseTypeGroup = participant.CaseGroupType.ToString()
             };
         }
         
