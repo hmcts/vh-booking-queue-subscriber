@@ -8,11 +8,13 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
 {
     public class ParticipantToUpdateParticipantRequestMapperTests
     {
-        [Test]
-        public void should_map_participant_dto_to_participant_request()
+        [TestCase(UserRole.Individual)]
+        [TestCase(UserRole.JudicialOfficeHolder)]
+        [TestCase(UserRole.StaffMember)]
+        public void should_map_participant_dto_to_participant_request(UserRole userRole)
         {
             
-            var participantDto = CreateParticipantDto();
+            var participantDto = CreateParticipantDto(userRole: userRole);
 
             var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(participantDto);
             
@@ -26,10 +28,12 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
             request.Username.Should().Be(participantDto.Username);
+            request.UserRole.Should().Be(userRole);
+            request.HearingRole.Should().Be(participantDto.HearingRole);
+            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.LinkedParticipants.Should().BeEquivalentTo(new List<LinkedParticipantRequest>());
         }
-        
-        [Test]
+
         public void should_map_participant_dto_with_linked_participant_to_participant_request()
         {
             
@@ -46,16 +50,19 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
             request.Username.Should().Be(participantDto.Username);
+            request.UserRole.Should().Be(participantDto.UserRole);
+            request.HearingRole.Should().Be(participantDto.HearingRole);
+            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             var linkedParticipant = request.LinkedParticipants.First();
             linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
         }
         
-        private static ParticipantDto CreateParticipantDto()
+        private static ParticipantDto CreateParticipantDto(UserRole userRole = UserRole.Individual)
         {
             return Builder<ParticipantDto>.CreateNew()
-                .With(x => x.UserRole = UserRole.Individual.ToString())
+                .With(x => x.UserRole = userRole.ToString())
                 .With(x => x.ParticipantId = Guid.NewGuid())
                 .Build();
         }
