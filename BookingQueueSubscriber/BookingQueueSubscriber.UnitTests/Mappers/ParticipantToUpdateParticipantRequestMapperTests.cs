@@ -34,6 +34,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.LinkedParticipants.Should().BeEquivalentTo(new List<LinkedParticipantRequest>());
         }
 
+        [Test]
         public void should_map_participant_dto_with_linked_participant_to_participant_request()
         {
             
@@ -53,7 +54,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.UserRole.Should().Be(participantDto.UserRole);
             request.HearingRole.Should().Be(participantDto.HearingRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
-            var linkedParticipant = request.LinkedParticipants.First();
+            var linkedParticipant = request.LinkedParticipants[0];
             linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
