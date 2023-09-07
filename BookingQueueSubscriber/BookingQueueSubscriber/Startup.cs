@@ -85,11 +85,7 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            services.AddLogging(builder =>
-                builder.AddApplicationInsights(
-                    configureTelemetryConfiguration: config => config.ConnectionString = configuration["ApplicationInsights:ConnectionString"],
-                    configureApplicationInsightsLoggerOptions: _ => {}
-                ));
+            services.AddLogging(builder => builder.AddApplicationInsights());
             
             RegisterMessageHandlers(services);
 

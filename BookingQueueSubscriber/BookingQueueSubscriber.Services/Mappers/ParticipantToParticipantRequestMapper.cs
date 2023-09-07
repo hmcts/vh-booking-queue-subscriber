@@ -24,8 +24,7 @@ namespace BookingQueueSubscriber.Services.Mappers
                 CaseTypeGroup = participant.CaseGroupType.ToString(),
                 ParticipantRefId = participant.ParticipantId,
                 Representee = participant.Representee,
-                LinkedParticipants = LinkedParticipantToRequestMapper
-                    .MapToLinkedParticipantRequestList(participant.LinkedParticipants)
+                LinkedParticipants = LinkedParticipantToRequestMapper.MapToLinkedParticipantRequestList(participant.LinkedParticipants)
             };
             
             return request;

@@ -30,10 +30,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 _logger.LogInformation("GettingConference be hearing ref Id: {HearingId}", eventMessage.Hearing.HearingId);
                 var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId, true);
+                
                 _logger.LogInformation("Successfully got Conference: {@ConferenceResponse}", conferenceResponse);
                 var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
+                
                 _logger.LogInformation("Sending User Notification for: {@Hearing} with {@NewParticipants} ", eventMessage.Hearing, eventMessage.NewParticipants);
                 await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
+                
                 _logger.LogInformation("Successfully send notification for: {@NewParticipants}", eventMessage.NewParticipants);
 
                 var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
