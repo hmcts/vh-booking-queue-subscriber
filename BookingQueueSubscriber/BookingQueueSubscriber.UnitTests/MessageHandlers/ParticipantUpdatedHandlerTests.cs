@@ -106,7 +106,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     ContactTelephone = "012748465859",
                     HearingRole = "hearingRole",
                     Representee = "representee",
-                    UserRole = "useRole",
+                    UserRole = "Individual",
                     Username = "username"
                 }
             };
@@ -127,7 +127,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             return integrationEvent;
         }
 
-        private IList<LinkedParticipantRequest> MapToRequestFromDto(IList<LinkedParticipantDto> linked)
+        private static IList<LinkedParticipantRequest> MapToRequestFromDto(IList<LinkedParticipantDto> linked)
         {
             return linked.Select(l => new LinkedParticipantRequest()
             {

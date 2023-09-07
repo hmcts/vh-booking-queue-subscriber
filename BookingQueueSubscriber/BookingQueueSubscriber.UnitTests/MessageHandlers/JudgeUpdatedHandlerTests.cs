@@ -31,7 +31,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, UserCreationAndNotificationMock.Object, _logger.Object);
 
-            var integrationEvent = new JudgeUpdatedIntegrationEvent() { Hearing = new HearingDto(), Judge = new ParticipantDto{ContactEmail = "new_judge@email.com"}};
+            var integrationEvent = new JudgeUpdatedIntegrationEvent() { Hearing = new HearingDto(), Judge = new ParticipantDto{ContactEmail = "new_judge@email.com", UserRole = "Judge", HearingRole = "Judge"}};
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), Times.Once);
             UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<ParticipantDto[]>()), Times.Once);
@@ -41,7 +41,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, UserCreationAndNotificationMock.Object, _logger.Object);
 
-            var integrationEvent = new JudgeUpdatedIntegrationEvent() { Hearing = new HearingDto(), Judge = new ParticipantDto{ContactEmail = "Judge@email.com"}};
+            var integrationEvent = new JudgeUpdatedIntegrationEvent() { Hearing = new HearingDto(), Judge = new ParticipantDto{ContactEmail = "Judge@email.com", UserRole = "Judge", HearingRole = "Judge"}};
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), Times.Once);
             UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<ParticipantDto[]>()), Times.Never);
