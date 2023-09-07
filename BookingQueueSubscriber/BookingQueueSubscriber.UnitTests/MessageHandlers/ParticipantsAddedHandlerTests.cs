@@ -6,6 +6,7 @@ using VideoApi.Contract.Requests;
 using VideoApi.Contract.Enums;
 using LinkedParticipantType = BookingQueueSubscriber.Services.MessageHandlers.Dtos.LinkedParticipantType;
 using BookingsApi.Contract.V1.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -15,7 +16,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_request_is_valid()
         {
             var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object,
-                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object);
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, new Mock<ILogger<ParticipantsAddedHandler>>().Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -27,7 +28,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
             var messageHandler = (IMessageHandler) new ParticipantsAddedHandler(VideoApiServiceMock.Object,
-                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object);
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, new Mock<ILogger<ParticipantsAddedHandler>>().Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -55,7 +56,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_request_has_linked_participants_and_is_valid()
         {
             var messageHandler = new ParticipantsAddedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object,
-                UserCreationAndNotificationMock.Object);
+                UserCreationAndNotificationMock.Object, new Mock<ILogger<ParticipantsAddedHandler>>().Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -66,7 +67,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_request_has_linked_participants_and_handler_is_called_with_explicit_interface()
         {
             var messageHandler = (IMessageHandler) new ParticipantsAddedHandler(VideoApiServiceMock.Object,
-                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object);
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, new Mock<ILogger<ParticipantsAddedHandler>>().Object);
 
             var integrationEvent = GetIntegrationEventWithLinkedParticipant();
             var dtoList = MapToRequestFromDto(integrationEvent.Participants[0].LinkedParticipants);
@@ -125,9 +126,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         
         private ParticipantsAddedIntegrationEvent GetIntegrationEventWithLinkedParticipant()
         {
-            var participantId = Guid.NewGuid();
-            var linkedParId = Guid.NewGuid();
-
             return new ParticipantsAddedIntegrationEvent
             {
                 Hearing = GetHearingDto(),

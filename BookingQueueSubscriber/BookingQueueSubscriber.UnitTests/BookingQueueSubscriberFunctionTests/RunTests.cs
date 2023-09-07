@@ -1,5 +1,4 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services;
+﻿using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -8,6 +7,7 @@ using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -306,11 +306,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
               }
             }
           }";
-          var logger = new LoggerFake();
-          const string errorMessageMatch = "Unable to deserialize into EventMessage";
           Func<Task> f = async () => { await _sut.Run(message); };
-          f.Should().ThrowAsync<Exception>().WithMessage(errorMessageMatch);
-          logger.Messages.Should().ContainMatch($"{errorMessageMatch}*");
+          f.Should().ThrowAsync<JsonSerializationException>();
         }
 
         [Test]
