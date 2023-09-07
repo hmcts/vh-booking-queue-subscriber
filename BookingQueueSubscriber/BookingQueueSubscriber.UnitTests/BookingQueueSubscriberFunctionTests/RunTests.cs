@@ -1,5 +1,4 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services;
+﻿using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -7,6 +6,8 @@ using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
 using BookingsApi.Client;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -18,19 +19,19 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private NotificationServiceFake _notificationService;
         private UserServiceFake _userService;
         private BookingsApiClientFake _bookingsApi;
-        private FeatureTogglesClientFake _featureTogglesClient;
         private BookingQueueSubscriberFunction _sut;
-    
+        private ILogger<BookingQueueSubscriberFunction> _logger;
+
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
+            _logger = new Mock<ILogger<BookingQueueSubscriberFunction>>().Object;
             _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
             _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
             _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
             _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
-            _featureTogglesClient = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
-            _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider));
+            _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
         }
 
         [TearDown]
@@ -125,7 +126,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
       ]
    }
 }";
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
 
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
@@ -144,7 +145,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
               }
             }";
 
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
             
             _videoApiService.DeleteConferenceCount.Should().Be(1);
         }
@@ -170,7 +171,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
     }
   }
 }";
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
             _videoApiService.UpdateConferenceCount.Should().Be(1);
         }
 
@@ -220,7 +221,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 }
 }";
             
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
             _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
             _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
@@ -243,7 +244,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _videoApiService.ConferenceResponse.Id = Guid.Parse("9e4bb2b7-3187-419c-a7c8-b1e17a3cbb6f");
             _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("ea801426-0ea2-4eab-aaf0-647ae146397a");
             
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
             _videoApiService.RemoveParticipantFromConferenceCount.Should().Be(1);
         }
 
@@ -278,7 +279,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _videoApiService.ConferenceResponse.Id = Guid.Parse("ab013e39-d159-4836-848e-034d2ebbe37a");
             _videoApiService.ConferenceResponse.Participants[0].RefId = Guid.Parse("af9afb87-5cf8-4813-b3dc-0ea96f77e752");
             
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
         }
 
@@ -305,11 +306,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
               }
             }
           }";
-          var logger = new LoggerFake();
-          const string errorMessageMatch = "Unable to deserialize into EventMessage";
-          Func<Task> f = async () => { await _sut.Run(message, logger); };
-          f.Should().ThrowAsync<Exception>().WithMessage(errorMessageMatch);
-          logger.Messages.Should().ContainMatch($"{errorMessageMatch}*");
+          Func<Task> f = async () => { await _sut.Run(message); };
+          f.Should().ThrowAsync<JsonSerializationException>();
         }
 
         [Test]
@@ -355,7 +353,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             ]
             }
             }";
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
 
             _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
@@ -458,7 +456,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             ]
             }
             }";
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
 
             _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
@@ -562,7 +560,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }
             }";
 
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
 
             _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
@@ -634,7 +632,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }";
 
             _userService.Users.Clear();
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(1);
             _userService.Users[0].UserName.Should().Be("Manual 7.Panel 7");
@@ -713,7 +711,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService.EJudFetaureEnabled = true;
             _bookingsApi.EJudFeatureEnabled = true;
             _userService.Users.Clear();
-            await _sut.Run(message, new LoggerFake());
+            await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(0);
             _notificationService.NotificationRequests.Should().HaveCount(2);
