@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Services.MessageHandlers.Extensions;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
@@ -18,7 +19,10 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Representee = participant.Representee,
                 Username = participant.Username,
                 LinkedParticipants = LinkedParticipantToRequestMapper
-                    .MapToLinkedParticipantRequestList(participant.LinkedParticipants)
+                    .MapToLinkedParticipantRequestList(participant.LinkedParticipants),
+                UserRole = participant.MapUserRoleToContractEnum(),
+                HearingRole = participant.HearingRole,
+                CaseTypeGroup = participant.CaseGroupType.ToString()
             };
         }
     }

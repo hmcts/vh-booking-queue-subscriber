@@ -1,5 +1,6 @@
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+using BookingQueueSubscriber.Services.MessageHandlers.Extensions;
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 using LinkedParticipantType = BookingQueueSubscriber.Services.MessageHandlers.Dtos.LinkedParticipantType;
@@ -34,7 +35,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.LastName.Should().Be(participantDto.LastName);
             request.ContactEmail.Should().Be(participantDto.ContactEmail);
             request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
-            request.UserRole.ToString().Should().Be(participantDto.UserRole);
+            request.UserRole.Should().Be(participantDto.MapUserRoleToContractEnum());
             request.HearingRole.Should().Be(participantDto.HearingRole);
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.Representee.Should().Be(participantDto.Representee);
