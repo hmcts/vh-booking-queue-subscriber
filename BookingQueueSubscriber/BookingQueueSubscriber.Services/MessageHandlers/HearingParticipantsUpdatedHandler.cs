@@ -50,6 +50,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 _logger.LogInformation("Pushing participant update message to video-web conference:{Id}  request:{@UpdateConferenceParticipantsRequest}", 
                     conferenceResponse.Id, updateConferenceParticipantsRequest);
                 await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
+                
+                _logger.LogInformation("AssigningUserToGroup: {@NewParticipantUsers}", newParticipantUsers);
                 await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
                 
             }
