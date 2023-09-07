@@ -9,11 +9,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     {
         Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password);
         Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants);
-        Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime,
-             IList<ParticipantDto> participants);
-
+        Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime, IList<ParticipantDto> participants);
         Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
-
         Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
     }
 
