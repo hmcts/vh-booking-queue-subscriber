@@ -1,4 +1,5 @@
-﻿using BookingQueueSubscriber.Services;
+﻿using BookingQueueSubscriber.Common.Configuration;
+using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -634,10 +635,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }";
 
             _userService.Users.Clear();
-            await _sut.Run(message);
             _featureTogglesClient.EjudFeatureToggleValue = false;
-            await _sut.Run(message, new LoggerFake());
-
+            
+            await _sut.Run(message);
             _userService.Users.Should().HaveCount(1);
             _userService.Users[0].UserName.Should().Be("Manual 7.Panel 7");
             _notificationService.NotificationRequests.Should().HaveCount(2);

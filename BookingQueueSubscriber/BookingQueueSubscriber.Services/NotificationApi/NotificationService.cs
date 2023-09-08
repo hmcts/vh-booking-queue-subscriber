@@ -1,4 +1,6 @@
-﻿using BookingsApi.Client;
+﻿using BookingQueueSubscriber.Common.Configuration;
+using BookingQueueSubscriber.Services.UserApi;
+using BookingsApi.Client;
 using BookingsApi.Contract.V1.Configuration;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
