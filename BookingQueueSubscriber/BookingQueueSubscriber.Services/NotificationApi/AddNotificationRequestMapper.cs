@@ -213,27 +213,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else
             {
-                if (usePostMay2023Template)
-                {
-                    notificationType = NotificationType.NewUserLipConfirmationMultiDay;
-                    parameters.Add(NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale());
-                    parameters.Add(NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale());
-                    parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
-                    parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
-                    if (!string.IsNullOrEmpty(userPassword))
-                    {
-                        parameters.Add(NotifyParams.RandomPassword, userPassword);
-                    }
-                    else
-                    {
-                        notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
-                    }
-                }
-                else
-                {
-                    notificationType = NotificationType.HearingConfirmationLipMultiDay;
-                }
-                parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
+                parameters = MapRequestForLipPostMay2023(participant, hearing, parameters, usePostMay2023Template, userPassword, out notificationType);
             }
 
             return new AddNotificationRequest
@@ -246,6 +226,33 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 PhoneNumber = contactTelephone,
                 Parameters = parameters
             };
+        }
+
+        private static Dictionary<string, string> MapRequestForLipPostMay2023(
+            ParticipantDto participant, HearingDto hearing, Dictionary<string, string> parameters, bool usePostMay2023Template, string userPassword, out NotificationType notificationType)
+        {
+            if (usePostMay2023Template)
+            {
+                notificationType = NotificationType.NewUserLipConfirmationMultiDay;
+                parameters.Add(NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale());
+                parameters.Add(NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale());
+                parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+                parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+                if (!string.IsNullOrEmpty(userPassword))
+                {
+                    parameters.Add(NotifyParams.RandomPassword, userPassword);
+                }
+                else
+                {
+                    notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
+                }
+            }
+            else
+            {
+                notificationType = NotificationType.HearingConfirmationLipMultiDay;
+            }
+            parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
+            return parameters;
         }
 
         public static AddNotificationRequest MapToDemoOrTestNotification(HearingDto hearing, ParticipantDto participant, string testType, bool eJudFeatureEnabled)
