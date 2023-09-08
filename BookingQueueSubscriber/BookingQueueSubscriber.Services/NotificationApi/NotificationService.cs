@@ -1,6 +1,4 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services.UserApi;
-using BookingsApi.Client;
+﻿using BookingsApi.Client;
 using BookingsApi.Contract.V1.Configuration;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
@@ -12,9 +10,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     {
         Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password);
         Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants);
-        Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime,
-             IList<ParticipantDto> participants);
-
+        Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime, IList<ParticipantDto> participants);
         Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
         
         Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword);
@@ -103,7 +99,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         public async Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
-            
             if (hearing.IsGenericHearing())
             {
                 await ProcessGenericEmail(hearing, participants); 

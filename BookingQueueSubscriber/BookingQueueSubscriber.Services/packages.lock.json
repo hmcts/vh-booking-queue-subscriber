@@ -43,9 +43,9 @@
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
-        "requested": "[8.55.0.65544, )",
-        "resolved": "8.55.0.65544",
-        "contentHash": "YyvIQwnu4lKiYsXPA6/px4rbMqJtql6tiDZRTd9IBG04M0UN1P7QrjxFQhVsnQSabHwgUX/zemUAGn2hamNa8A=="
+        "requested": "[9.9.0.77355, )",
+        "resolved": "9.9.0.77355",
+        "contentHash": "zuF3evXam55/+6En2//ggUeI+MWApgYi0K7Z5nMJkuQoRso0NYMVISGZnR+u1LilwSHPP/ZWDrhpVYNEH4v2Xw=="
       },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Direct",
@@ -74,9 +74,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[1.44.6, )",
-        "resolved": "1.44.6",
-        "contentHash": "gMcnXaysO+kT390Ehc9IZBCiek4ec5L9WF9zExkRXh+9EL8RW5duiQIlDprD5iIfpp/YmIkAgXo+OW8j7TGlYg==",
+        "requested": "[1.44.16, )",
+        "resolved": "1.44.16",
+        "contentHash": "yQr0vJ/gpgyW1gcVeAm9NKKpX2i4aQ2OJTrEh6VECn4ZaCjV6vB8xcv7zB5FvO9qmMVewNGsKBciVte5kP83fA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }

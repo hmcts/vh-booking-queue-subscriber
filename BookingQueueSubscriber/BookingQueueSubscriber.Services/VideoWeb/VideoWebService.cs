@@ -22,7 +22,8 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 
             _logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
 
-            await _httpClient.PostAsync(path, null);
+            var result = await _httpClient.PostAsync(path, null);
+            result.EnsureSuccessStatusCode();
         }
 
         public async Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request)
@@ -41,10 +42,12 @@ namespace BookingQueueSubscriber.Services.VideoWeb
                 ContractResolver = contractResolver,
                 Formatting = Formatting.Indented
             });
+            
+            _logger.LogDebug("PushParticipantsUpdatedMessage json: {Json} to {Url}", json, $"{_httpClient.BaseAddress}/{path}");
 
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var result = await _httpClient.PostAsync(path, httpContent);
-
+            result.EnsureSuccessStatusCode();
             _logger.LogDebug("PushParticipantsUpdatedMessage result: {Result}", result);
         }
         
