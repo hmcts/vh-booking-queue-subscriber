@@ -88,8 +88,7 @@ namespace BookingQueueSubscriber
             
             //AppInsights setup
             services.AddSingleton<ITelemetryInitializer, CloudRoleNameInitializer>();
-            services.AddApplicationInsightsTelemetry();
-            
+            services.AddLogging(builder => builder.AddApplicationInsights());
             RegisterMessageHandlers(services);
 
             var container = services.BuildServiceProvider();
