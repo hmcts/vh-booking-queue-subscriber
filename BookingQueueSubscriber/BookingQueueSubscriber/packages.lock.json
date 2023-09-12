@@ -160,6 +160,16 @@
           "Newtonsoft.Json": "13.0.1"
         }
       },
+      "Rixian.Extensions.ApplicationInsights.WorkerService": {
+        "type": "Direct",
+        "requested": "[2.1.19, )",
+        "resolved": "2.1.19",
+        "contentHash": "V9YGadB0L6LqpskOZ0/FvPuXTkNSUo2yhwKROkwd2q4QHlNO2eO3aYpc4zHP0hZgc1TBytSvQFLlWQulq9ovYg==",
+        "dependencies": {
+          "Microsoft.ApplicationInsights.WorkerService": "2.18.0",
+          "Rixian.Extensions.ApplicationInsights": "2.1.19"
+        }
+      },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
         "requested": "[9.9.0.77355, )",
@@ -336,6 +346,21 @@
         "dependencies": {
           "Microsoft.ApplicationInsights": "2.21.0",
           "System.IO.FileSystem.AccessControl": "4.7.0"
+        }
+      },
+      "Microsoft.ApplicationInsights.WorkerService": {
+        "type": "Transitive",
+        "resolved": "2.18.0",
+        "contentHash": "eyhVvY8be7Wwx1Ud8G4dMF0rKbywYFDVwZn/E3rPGtU3CCyiIGYTemBcEKKF0l4NHBm96sMI3CxG/yUxAnyxYQ==",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "2.18.0",
+          "Microsoft.ApplicationInsights.DependencyCollector": "2.18.0",
+          "Microsoft.ApplicationInsights.EventCounterCollector": "2.18.0",
+          "Microsoft.ApplicationInsights.PerfCounterCollector": "2.18.0",
+          "Microsoft.ApplicationInsights.WindowsServer": "2.18.0",
+          "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel": "2.18.0",
+          "Microsoft.Extensions.DependencyInjection": "2.1.1",
+          "Microsoft.Extensions.Logging.ApplicationInsights": "2.18.0"
         }
       },
       "Microsoft.AspNet.WebApi.Client": {
@@ -1038,6 +1063,15 @@
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
+        }
+      },
+      "Rixian.Extensions.ApplicationInsights": {
+        "type": "Transitive",
+        "resolved": "2.1.19",
+        "contentHash": "34qg2wNa22ajngzkRds8R1ukfU//399lK0bgsjPhdYBiqTVTxodrGvzqwuni81qvNAhU4t7xDpkW1nWQ8aPUIQ==",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "2.17.0",
+          "Microsoft.Extensions.Options": "5.0.0"
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {

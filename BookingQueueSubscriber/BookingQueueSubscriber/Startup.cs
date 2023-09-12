@@ -85,10 +85,8 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
+            services.AddApplicationInsightsTelemetryWorkerService();
             
-            //AppInsights setup
-            services.AddSingleton<ITelemetryInitializer, CloudRoleNameInitializer>();
-            services.AddLogging(builder => builder.AddApplicationInsights());
             RegisterMessageHandlers(services);
 
             var container = services.BuildServiceProvider();
