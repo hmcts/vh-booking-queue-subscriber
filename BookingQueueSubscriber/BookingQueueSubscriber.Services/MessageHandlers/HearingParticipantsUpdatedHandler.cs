@@ -28,33 +28,23 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             try
             {
-                _logger.LogInformation("GettingConference be hearing ref Id: {HearingId}", eventMessage.Hearing.HearingId);
                 var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId, true);
                 
-                _logger.LogInformation("Successfully got Conference: {@ConferenceResponse}", conferenceResponse);
                 var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
                 
-                _logger.LogInformation("Sending User Notification for: {@Hearing} with {@NewParticipants} ", eventMessage.Hearing, eventMessage.NewParticipants);
                 await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
                 
-                _logger.LogInformation("Successfully send notification for: {@NewParticipants}", eventMessage.NewParticipants);
-
                 var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
                 {
-                    ExistingParticipants = eventMessage.ExistingParticipants.Select(x => ParticipantToUpdateParticipantMapper.MapToParticipantRequest(x)).ToList(),
-                    NewParticipants = eventMessage.NewParticipants.Select(x => ParticipantToParticipantRequestMapper.MapToParticipantRequest(x)).ToList(),
+                    ExistingParticipants = eventMessage.ExistingParticipants.Select(ParticipantToUpdateParticipantMapper.MapToParticipantRequest).ToList(),
+                    NewParticipants = eventMessage.NewParticipants.Select(ParticipantToParticipantRequestMapper.MapToParticipantRequest).ToList(),
                     RemovedParticipants = eventMessage.RemovedParticipants,
-                    LinkedParticipants = eventMessage.LinkedParticipants.Select(x => LinkedParticipantToRequestMapper.MapToLinkedParticipantRequest(x)).ToList(),
+                    LinkedParticipants = eventMessage.LinkedParticipants.Select(LinkedParticipantToRequestMapper.MapToLinkedParticipantRequest).ToList(),
                 };
-                _logger.LogInformation("Created updateParticipantRequest for conference {Id} to send to videoApi {@UpdateConferenceParticipantsRequest}", 
-                    conferenceResponse.Id, updateConferenceParticipantsRequest);
                 await _videoApiService.UpdateConferenceParticipantsAsync(conferenceResponse.Id, updateConferenceParticipantsRequest);
                 
-                _logger.LogInformation("Pushing participant update message to video-web conference:{Id}  request:{@UpdateConferenceParticipantsRequest}", 
-                    conferenceResponse.Id, updateConferenceParticipantsRequest);
                 await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
                 
-                _logger.LogInformation("AssigningUserToGroup: {@NewParticipantUsers}", newParticipantUsers);
                 await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
                 
             }
