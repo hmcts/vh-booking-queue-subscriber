@@ -15,5 +15,16 @@
       "maxConcurrentRequests": 100,
       "dynamicThrottlesEnabled": true
     }
+  },
+  "logging": {
+    "logLevel": {
+      "default": "Information"
+    },
+    "applicationInsights": {
+      "enableDependencyTracking": true,
+      "samplingSettings": {
+        "isEnabled": false
+      }
+    }
   }
 }
