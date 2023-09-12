@@ -4,7 +4,6 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   environment:
     QUEUENAME: marco-dev-booking
-    VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api-pr-138.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
