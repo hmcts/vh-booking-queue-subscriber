@@ -63,6 +63,7 @@ namespace BookingQueueSubscriber
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
             services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
+            services.AddSingleton<ITelemetryInitializer, RequestBodyInitializer>();
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);
