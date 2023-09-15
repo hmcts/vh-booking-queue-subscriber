@@ -67,17 +67,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
             NotificationType notificationType;
             var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
-            if (eJudFeatureEnabled && isJudge && !participant.HasEjdUsername())
-            {
-                throw new InvalidOperationException("Ejud feature is enabled but participant does not have an Ejud username");
-            }
             
-            if (isJudge && eJudFeatureEnabled)
+            if (isJudge && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
-            else if (isJudge && !eJudFeatureEnabled)
+            else if (isJudge) // default to non ejud template for judges without ejud username
             {
                 notificationType = NotificationType.HearingConfirmationJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -191,17 +187,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             NotificationType notificationType;
             
             var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
-            if (eJudFeatureEnabled && isJudge && !participant.HasEjdUsername())
-            {
-                throw new InvalidOperationException("Ejud feature is enabled but participant does not have an Ejud username");
-            }
-            
+
             if (isJudge && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
-            else if (isJudge && !eJudFeatureEnabled)
+            else if (isJudge)
             {
                 notificationType = NotificationType.HearingConfirmationJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -253,10 +245,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             NotificationType notificationType;
             var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
             var isJudicialOfficeHolder = participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase);
-            if (eJudFeatureEnabled && isJudge && !participant.HasEjdUsername())
-            {
-                throw new InvalidOperationException("Ejud feature is enabled but participant does not have an Ejud username");
-            }
             
             if (isJudicialOfficeHolder && eJudFeatureEnabled && participant.HasEjdUsername())
             {

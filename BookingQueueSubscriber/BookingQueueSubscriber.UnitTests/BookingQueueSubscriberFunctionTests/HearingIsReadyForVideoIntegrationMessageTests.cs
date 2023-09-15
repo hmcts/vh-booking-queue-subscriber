@@ -92,64 +92,6 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     }
     
     [Test]
-    public void should_throw_exception_when_ejud_is_on_but_judge_not_an_ejud()
-    {
-      _notificationService.EJudFetaureEnabled = true;
-      var judgeEmail = "automation_judge_judge_1@hmcts.net";
-        const string message = @"{
-  '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
-  'id': 'e0bbb9ed-ce49-4e69-94e7-3e35e7010206',
-  'timestamp': '2023-09-15T09:03:50.889496Z',
-  'integration_event': {
-    '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingIsReadyForVideoIntegrationEvent, BookingsApi.Infrastructure.Services',
-    'hearing': {
-      '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
-      'hearing_id': 'e2ef8a71-6d22-486b-8876-a69aceac86d7',
-      'group_id': null,
-      'scheduled_date_time': '2023-09-15T09:08:46.636188Z',
-      'scheduled_duration': 5,
-      'case_type': 'Civil Money Claims',
-      'case_number': '6918/2815',
-      'case_name': 'Bookings Api Integration Automated 9532050',
-      'hearing_venue_name': 'Birmingham Civil and Family Justice Centre',
-      'record_audio': true,
-      'hearing_type': 'First Application'
-    },
-    'participants': [
-      {
-        '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-        'participant_id': 'c20b90b2-8fb1-4e65-b77b-fd381821ccad',
-        'fullname': 'Mrs Automation_Judge Judge_1',
-        'username': 'automation_judge_judge_1@hearings.reform.hmcts.net',
-        'first_name': 'Automation_Judge',
-        'last_name': 'Judge_1',
-        'contact_email': 'automation_judge_judge_1@hmcts.net',
-        'contact_telephone': '01234567890',
-        'display_name': 'Automation_Judge Judge_1',
-        'hearing_role': 'Judge',
-        'user_role': 'Judge',
-        'case_group_type': 'judge',
-        'representee': '',
-        'linked_participants': [],
-        'contact_email_for_non_e_jud_judge_user': '',
-        'contact_phone_for_non_e_jud_judge_user': '',
-        'send_hearing_notification_if_new': true
-      }
-    ],
-    'endpoints': []
-  }
-}";
-        Assert.ThrowsAsync<InvalidOperationException>(() => _sut.Run(message)).Message.Should()
-          .Be("Ejud feature is enabled but participant does not have an Ejud username");
-
-        _videoApiService.BookNewConferenceCount.Should().Be(0);
-        _videoWebService.PushNewConferenceAddedMessageCount.Should().Be(0);
-        _notificationService.NotificationRequests.Should()
-          .NotContain(x =>
-            x.ContactEmail == judgeEmail && x.NotificationType == NotificationType.HearingConfirmationJudge);
-    }
-    
-    [Test]
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_and_participants()
     {
         const string message = @"{
