@@ -66,13 +66,18 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             var parameters = InitHearingNotificationParams(hearing);
 
             NotificationType notificationType;
-            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) && eJudFeatureEnabled && participant.HasEjdUsername())
+            var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
+            if (eJudFeatureEnabled && isJudge && !participant.HasEjdUsername())
+            {
+                throw new InvalidOperationException("Ejud feature is enabled but participant does not have an Ejud username");
+            }
+            
+            if (isJudge && eJudFeatureEnabled)
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
-            else if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) &&
-                     !eJudFeatureEnabled)
+            else if (isJudge && !eJudFeatureEnabled)
             {
                 notificationType = NotificationType.HearingConfirmationJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -184,14 +189,19 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.NumberOfDays, days.ToString()}
             };
             NotificationType notificationType;
-            if (participant.UserRole.Contains(NotifyParams.Judge, StringComparison.InvariantCultureIgnoreCase) &&
-                eJudFeatureEnabled && participant.HasEjdUsername())
+            
+            var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
+            if (eJudFeatureEnabled && isJudge && !participant.HasEjdUsername())
+            {
+                throw new InvalidOperationException("Ejud feature is enabled but participant does not have an Ejud username");
+            }
+            
+            if (isJudge && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
-            else if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) &&
-                     !eJudFeatureEnabled)
+            else if (isJudge && !eJudFeatureEnabled)
             {
                 notificationType = NotificationType.HearingConfirmationJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -241,13 +251,18 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
 
             NotificationType notificationType;
-            if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase) && eJudFeatureEnabled 
-                && participant.HasEjdUsername())
+            var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
+            if (eJudFeatureEnabled && isJudge && !participant.HasEjdUsername())
+            {
+                throw new InvalidOperationException("Ejud feature is enabled but participant does not have an Ejud username");
+            }
+            
+            if (isJudge && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.EJudJohDemoOrTest;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
-            else if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase))
+            else if (isJudge)
             {
                 var contactEmailForNonEJudJudgeUser = GetContactEmailForNonEJudJudgeUser(participant);
                 bool isEmailEjud = participant.HasEjdUsername();
