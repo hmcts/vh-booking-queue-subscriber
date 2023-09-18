@@ -185,47 +185,53 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _videoWebService.PushParticipantsUpdatedMessageCount = 0;
 
             const string message = @"{
-'$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
-'id': 'd0089d35-7a49-4fa3-8414-fb3c77186bfc',
-'timestamp': '2022-06-16T09:45:35.5875542Z',
-'integration_event': {
-'$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.ParticipantsAddedIntegrationEvent, BookingsApi.Infrastructure.Services',
-'hearing': {
-'$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
-'hearing_id': 'fe5bcb33-f950-4b64-978b-1d130280b154',
-'group_id': null,
-'scheduled_date_time': '2022-07-12T09:49:56.924Z',
-'scheduled_duration': 45,
-'case_type': 'Civil Money Claims',
-'case_number': '123333',
-'case_name': 'Rambo5 vs terminator5',
-'hearing_venue_name': 'Aberdeen Tribunal Hearing Centre',
-'record_audio': false
-},
-'participants': [
-{
-'$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-'participant_id': '96c04fca-b3d0-4526-9120-7916b55a4657',
-'fullname': 'Mr Partcipant Eleven',
-'username': 'Partcipant.Eleven@hearings.reform.hmcts.net',
-'first_name': 'Partcipant',
-'last_name': 'Eleven',
-'contact_email': 'Part.eleven@gmail.com',
-'contact_telephone': '1213131321',
-'display_name': 'One',
-'hearing_role': 'Litigant in person',
-'user_role': 'Individual',
-'case_group_type': 'claimant',
-'representee': '',
-'linked_participants': [],
-'contact_email_for_non_e_jud_judge_user': ''
-}
-]
-}
+  '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+  'id': 'e9a5bfac-08cc-40e1-ac55-47c2ee44a10a',
+  'timestamp': '2023-09-12T09:38:34.445399Z',
+  'integration_event': {
+    '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingParticipantsUpdatedIntegrationEvent, BookingsApi.Infrastructure.Services',
+    'hearing': {
+      '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
+      'hearing_id': 'c502cb11-1f1c-4865-82e6-37be39cd4ece',
+      'group_id': null,
+      'scheduled_date_time': '2023-09-12T09:40:00Z',
+      'scheduled_duration': 100,
+      'case_type': 'Generic',
+      'case_number': 'SP ',
+      'case_name': 'SP Spike notifications',
+      'hearing_venue_name': 'Atlantic Quay Glasgow',
+      'record_audio': true,
+      'hearing_type': 'Test'
+    },
+    'existing_participants': [],
+    'new_participants': [
+      {
+        '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+        'participant_id': '9df618cf-5110-454d-951d-edc8cf6b3a46',
+        'fullname': 'Ms Jane Doe',
+        'username': 'jane.doe@hearings.reform.hmcts.net',
+        'first_name': 'Jane',
+        'last_name': 'Doe',
+        'contact_email': 'jane@doe.com',
+        'contact_telephone': '0123456789',
+        'display_name': 'Ms Jane Doe',
+        'hearing_role': 'Witness',
+        'user_role': 'Individual',
+        'case_group_type': 'applicant',
+        'representee': '',
+        'linked_participants': [],
+        'contact_email_for_non_e_jud_judge_user': null,
+        'contact_phone_for_non_e_jud_judge_user': null,
+        'send_hearing_notification_if_new': false
+      }
+    ],
+    'removed_participants': [],
+    'linked_participants': []
+  }
 }";
             
             await _sut.Run(message);
-            _videoApiService.AddParticipantsToConferenceCount.Should().Be(1);
+            _videoApiService.UpdateConferenceParticipantsAsyncCount.Should().Be(1);
             _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
 
