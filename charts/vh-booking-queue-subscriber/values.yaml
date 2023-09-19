@@ -1,10 +1,11 @@
 ---
 java:
-  image: 'sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest'
+  image: "sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest"
   releaseNameOverride: vh-booking-queue-subscriber
   aadIdentityName: vh-aad-identity
   readinessPath: /health/liveness
   livenessPath: /health/liveness
+  startupPath: /health/liveness
   applicationPort: 8080
   keyVaults:
     vh-infra-core:
@@ -85,7 +86,7 @@ java:
 function:
   releaseNameOverride: vh-booking-queue-subscriber
   scaleType: Object
-  object: 
+  object:
     apiVersion: apps/v1
     kind: Deployment
     name: vh-booking-queue-subscriber
@@ -99,4 +100,3 @@ function:
     enabled: true
     triggerPodIdentityProvider: azure
   triggers: []
-  
