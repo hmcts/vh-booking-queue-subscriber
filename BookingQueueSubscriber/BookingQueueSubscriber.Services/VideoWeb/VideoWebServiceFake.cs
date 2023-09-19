@@ -28,16 +28,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 
         public Task PushParticipantsUpdatedMessage(Guid conferenceId, UpdateConferenceParticipantsRequest request)
         {
-            DefaultContractResolver contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            };
-
-            string json = JsonConvert.SerializeObject(request, new JsonSerializerSettings
-            {
-                ContractResolver = contractResolver,
-                Formatting = Formatting.Indented
-            });
             PushParticipantsUpdatedMessageCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
@@ -61,6 +51,12 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         public Task PushCloseConsultationBetweenEndpointAndParticipant(Guid conferenceId, string participantUserName, string jvsEndpointName)
         {
             return Task.FromResult(HttpStatusCode.OK);
+        }
+        
+        public void ClearRequests()
+        {
+            PushParticipantsUpdatedMessageCount = PushNewConferenceAddedMessageCount =
+                PushAllocationToCsoUpdatedMessageCount = PushEndpointsUpdatedMessageCount = 0;
         }
     }
 }

@@ -41,6 +41,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         public void TearDown()
         {
           _videoApiService.ClearRequests();
+          _notificationService.EJudFetaureEnabled = false;
+          _bookingsApi.EJudFeatureEnabled = false;
         }
 
         [Test]
