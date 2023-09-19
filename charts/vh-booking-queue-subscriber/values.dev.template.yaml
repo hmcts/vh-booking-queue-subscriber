@@ -3,7 +3,7 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   environment:
-    QUEUENAME: marco-dev-booking-noretries
+    QUEUENAME: marco-dev-booking
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
