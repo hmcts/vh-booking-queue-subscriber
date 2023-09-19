@@ -25,11 +25,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
+             var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
                 eventMessage.Hearing, eventMessage.Participants);
 
-            if (!eventMessage.Hearing.GroupId.HasValue ||
-                eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty)
+            var isNotMultiDayHearing = !eventMessage.Hearing.GroupId.HasValue ||
+                                    eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty;
+            
+            if (isNotMultiDayHearing)
             {
                 // Not a multiday hearing
                 await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,

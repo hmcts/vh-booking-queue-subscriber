@@ -106,7 +106,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 await ProcessGenericEmail(hearing, participants); 
                 return;
             }
-            
+
             List<AddNotificationRequest> requests = await CreateUserRequest(hearing, participants, days); 
            
             await CreateNotifications(requests);
@@ -114,26 +114,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         private async Task<List<AddNotificationRequest>> CreateUserRequest(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
-            List<AddNotificationRequest> list = new List<AddNotificationRequest>();
-            User user = null;
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
             
-            foreach (var participant in participants)
-            {
-                if (!string.Equals(participant.UserRole, RoleNames.Judge))
-                {
-                    user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
-                        participant.LastName, participant.ContactEmail, false);
-                }
-
-                if (user != null)
-                {
-                    var userPassword = user.Password;
-                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template, userPassword));
-                }
-                
-            }
+            List<AddNotificationRequest> list = participants
+                .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template))
+                .ToList();
 
             return list;
         }
