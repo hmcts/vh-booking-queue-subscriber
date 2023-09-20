@@ -11,10 +11,10 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(CreateAndNotifyUserIntegrationEvent eventMessage)
         {
-            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
+            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndSendNotificationAsync(
                 eventMessage.Hearing, eventMessage.Participants);
 
-            await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
+            await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

@@ -6,6 +6,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 {
     public static class AddNotificationRequestMapper
     {
+        /// <summary>
+        /// Maps to the <see cref="NotificationType.CreateIndividual"/> or <see cref="NotificationType.CreateRepresentative"/> notification type
+        /// </summary>
+        /// <param name="hearingId"></param>
+        /// <param name="participant"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public static AddNotificationRequest MapToNewUserNotification(Guid hearingId, ParticipantDto participant, string password)
         {
             var parameters = new Dictionary<string, string>
@@ -32,7 +39,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return addNotificationRequest;
         }
         
-        
+        /// <summary>
+        /// Maps to the <see cref="NotificationType.NewUserLipWelcome"/>
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <returns></returns>
+        /// <exception cref="NotSupportedException"></exception>
         public static AddNotificationRequest MapToNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant)
         {
             var parameters = new Dictionary<string, string>
@@ -59,7 +72,14 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return addNotificationRequest;
         }
 
-        public static AddNotificationRequest MapToNewHearingNotification(HearingDto hearing, ParticipantDto participant, bool eJudFeatureEnabled)
+        /// <summary>
+        /// Maps to HearingConfirmation for respective participant type
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <param name="eJudFeatureEnabled"></param>
+        /// <returns></returns>
+        public static AddNotificationRequest MapToNewHearingConfirmationNotification(HearingDto hearing, ParticipantDto participant, bool eJudFeatureEnabled)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
@@ -110,6 +130,15 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
         }
 
+        /// <summary>
+        /// Maps to hearing amendment notification for respective participant type
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <param name="originalDateTime"></param>
+        /// <param name="newDateTime"></param>
+        /// <param name="eJudFeatureEnabled"></param>
+        /// <returns></returns>
         public static AddNotificationRequest MapToHearingAmendmentNotification(HearingDto hearing, ParticipantDto participant, DateTime originalDateTime,
             DateTime newDateTime, bool eJudFeatureEnabled)
         {
@@ -170,6 +199,14 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
         }
 
+        /// <summary>
+        /// Map to hearing confirmation for multi day hearing for respective participant type
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <param name="days"></param>
+        /// <param name="eJudFeatureEnabled"></param>
+        /// <returns></returns>
         public static AddNotificationRequest MapToMultiDayHearingConfirmationNotification(
             HearingDto hearing, ParticipantDto participant, int days, bool eJudFeatureEnabled)
         {

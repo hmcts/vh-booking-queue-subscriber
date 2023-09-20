@@ -45,7 +45,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object, 
                 _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object, _featureToggles.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndSendNotificationAsync(hearing, new List<ParticipantDto>
                 {
                    participant
                 });
@@ -66,7 +66,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 _userServiceMock.Object, _bookingsAPIMock.Object,_logger.Object, _featureToggles.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndSendNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -105,7 +105,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsAPIMock.Object,_logger.Object, _featureToggles.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndSendNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -142,7 +142,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsAPIMock.Object,_logger.Object, _featureToggles.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndSendNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -163,11 +163,6 @@ namespace BookingQueueSubscriber.UnitTests
 
             _userApi.Reset();
             _bookingsAPIMock.Reset();
-            var user = new UserProfile()
-            {
-                UserId = "1",
-                UserName = participant.Username
-            };
             
             _userApi.Setup(x => x.GetUserByEmailAsync(participant.ContactEmail))
                 .ThrowsAsync(new UserApiException("Not Found",
@@ -184,7 +179,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsAPIMock.Object,_logger.Object, _featureToggles.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndSendNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -208,7 +203,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 _userServiceMock.Object, _bookingsAPIMock.Object,_logger.Object, _featureToggles.Object);
 
-            var users = await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            var users = await userCreationAndNotification.CreateUserAndSendNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -235,7 +230,7 @@ namespace BookingQueueSubscriber.UnitTests
                 _userServiceMock.Object, _bookingsAPIMock.Object, _logger.Object, _featureToggles.Object);
 
             // act
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndSendNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });

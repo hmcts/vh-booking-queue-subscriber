@@ -13,7 +13,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(MultiDayHearingIntegrationEvent eventMessage)
         {
-            await _notificationService.SendMultiDayHearingNotificationAsync(eventMessage.Hearing,
+            await _notificationService.SendNewMultiDayHearingConfirmationNotificationAsync(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.TotalDays);
         }
 

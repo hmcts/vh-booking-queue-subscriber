@@ -24,8 +24,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var messageHandler = new CreateAndNotifyUserHandler(UserCreationAndNotificationMock.Object);
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            UserCreationAndNotificationMock.Verify(x => x.CreateUserAndNotifcationAsync(It.IsAny<HearingDto>(), It.IsAny<IList<ParticipantDto>>()), Times.Once);
-            UserCreationAndNotificationMock.Verify(x => x.HandleAssignUserToGroup(It.IsAny<IList<UserDto>>()), Times.Once);
+            UserCreationAndNotificationMock.Verify(x => x.CreateUserAndSendNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IList<ParticipantDto>>()), Times.Once);
+            UserCreationAndNotificationMock.Verify(x => x.AssignUserToGroupForHearing(It.IsAny<IList<UserDto>>()), Times.Once);
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             
-            UserCreationAndNotificationMock.Verify(x => x.CreateUserAndNotifcationAsync(It.IsAny<HearingDto>(), It.Is<IList<ParticipantDto>>
+            UserCreationAndNotificationMock.Verify(x => x.CreateUserAndSendNotificationAsync(It.IsAny<HearingDto>(), It.Is<IList<ParticipantDto>>
             (
                 request =>
                     request.Count == integrationEvent.Participants.Count &&
@@ -59,11 +59,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             var integrationEvent = GetIntegrationEvent();
             var users = new List<UserDto> { new UserDto() { UserId = "mm@mm.com", Username = "mm@mm.com", UserRole = "Judge" } };
-            UserCreationAndNotificationMock.Setup(x => x.CreateUserAndNotifcationAsync(It.IsAny<HearingDto>(), It.IsAny<IList<ParticipantDto>>()))
+            UserCreationAndNotificationMock.Setup(x => x.CreateUserAndSendNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IList<ParticipantDto>>()))
                 .ReturnsAsync(users);
 
             await messageHandler.HandleAsync(integrationEvent);
-            UserCreationAndNotificationMock.Verify(x => x.HandleAssignUserToGroup(It.Is<IList<UserDto>>(
+            UserCreationAndNotificationMock.Verify(x => x.AssignUserToGroupForHearing(It.Is<IList<UserDto>>(
                 request => 
                     request.Count == users.Count &&
                     request[0].UserId == users[0].UserId && 

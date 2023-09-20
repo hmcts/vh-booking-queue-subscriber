@@ -8,9 +8,24 @@ namespace BookingQueueSubscriber.Services
 {
     public interface IUserCreationAndNotification
     {
-        Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants);
-        Task HandleAssignUserToGroup(IList<UserDto> users);
-        Task SendHearingNotificationAsync(HearingDto hearing, IEnumerable<ParticipantDto> participants);
+        /// <summary>
+        /// Create a new user in AD.
+        /// <para>
+        ///     Sends the new user a welcome email, if the participant meets the requirements. (NewUserLipWelcome)
+        ///     Sends the new user their account details (username and password). (CreateIndividual, CreateRepresentative)
+        /// </para>
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participants"></param>
+        /// <returns></returns>
+        Task<IList<UserDto>> CreateUserAndSendNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants);
+        
+        /// <summary>
+        /// Add the user to the correct group in AD based on their hearing role
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
+        Task AssignUserToGroupForHearing(IList<UserDto> users);
     }
 
     public class UserCreationAndNotification : IUserCreationAndNotification
@@ -31,7 +46,7 @@ namespace BookingQueueSubscriber.Services
             _featureToggles = featureToggles;
         }
 
-        public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)
+        public async Task<IList<UserDto>> CreateUserAndSendNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants)
         {
             var createUserTasks = new List<Task<User>>();
             foreach (var participant in participants)
@@ -59,12 +74,7 @@ namespace BookingQueueSubscriber.Services
 
         }
 
-        public async Task SendHearingNotificationAsync(HearingDto hearing, IEnumerable<ParticipantDto> participants)
-        {
-            await _notificationService.SendNewHearingNotification(hearing, participants);
-        }
-
-        public async Task HandleAssignUserToGroup(IList<UserDto> users)
+        public async Task AssignUserToGroupForHearing(IList<UserDto> users)
         {
             foreach (var user in users)
             {
@@ -73,6 +83,15 @@ namespace BookingQueueSubscriber.Services
             }
         }
 
+        /// <summary>
+        /// <para>Create a new users via User API that is not a panel member or winger.</para>
+        /// <para>For panel members and wingers, the username is provided by the Ejud service.</para>
+        /// <para>Then send a welcome email to the new user.</para>
+        /// <para>Then send new account details (username and password) to the new user.</para>
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <returns></returns>
         private async Task<User> CreateUserAndSendNotificationAsync(HearingDto hearing, ParticipantDto participant)
         {
             User user = null;
@@ -90,13 +109,12 @@ namespace BookingQueueSubscriber.Services
                 }
             }
 
+            // this will not be null when a user has been successfully created
             if (user != null)
             {
                 if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
                 {
                     await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
-                    // await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, user.Password);
-                    // when VIH-9899 is implemented, send the 'New' NewUserAccountNotification here and put the original in the else block
                 }
                 await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
             }

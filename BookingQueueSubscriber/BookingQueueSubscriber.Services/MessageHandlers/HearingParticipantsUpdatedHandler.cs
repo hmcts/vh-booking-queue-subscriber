@@ -1,4 +1,5 @@
 using BookingQueueSubscriber.Services.Mappers;
+using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using VideoApi.Contract.Requests;
@@ -10,18 +11,20 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly IVideoApiService _videoApiService;
         private readonly IVideoWebService _videoWebService;
         private readonly IUserCreationAndNotification _userCreationAndNotification;
+        private readonly INotificationService _notificationService;
         private readonly ILogger<HearingParticipantsUpdatedHandler> _logger;
 
 
         public HearingParticipantsUpdatedHandler(IVideoApiService videoApiService, 
             IVideoWebService videoWebService, 
             IUserCreationAndNotification userCreationAndNotification, 
-            ILogger<HearingParticipantsUpdatedHandler> logger)
+            ILogger<HearingParticipantsUpdatedHandler> logger, INotificationService notificationService)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
             _userCreationAndNotification = userCreationAndNotification;
             _logger = logger;
+            _notificationService = notificationService;
         }
 
         public async Task HandleAsync(HearingParticipantsUpdatedIntegrationEvent eventMessage)
@@ -30,9 +33,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId, true);
                 
-                var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
+                var newParticipantUsers = await _userCreationAndNotification.CreateUserAndSendNotificationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
                 
-                await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
+                await _notificationService.SendNewSingleDayHearingConfirmationNotification(eventMessage.Hearing, eventMessage.NewParticipants);
                 
                 var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
                 {
@@ -45,7 +48,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 
                 await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
                 
-                await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
+                await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);
                 
             }
             catch (Exception e)

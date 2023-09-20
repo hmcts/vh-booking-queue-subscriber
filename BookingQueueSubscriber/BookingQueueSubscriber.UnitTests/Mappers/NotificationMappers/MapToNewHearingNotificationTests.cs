@@ -16,7 +16,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
 
             var expectedParameters = GetExpectedParameters(hearing, participant);
 
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, true);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, true);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -38,7 +38,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
 
             var expectedParameters = GetExpectedParameters(hearing, participant);
             expectedParameters.Add("courtroom account username", "contact@judiciary.hmcts.net");
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, false);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -61,7 +61,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Remove("judge");
             expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
 
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, true);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, true);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -88,7 +88,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var expectedParameters = GetExpectedParameters(hearing, participant);
             expectedParameters.Add("courtroom account username", participant.Username);
 
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, false);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -113,7 +113,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var expectedParameters = GetExpectedParameters(hearing, participant);
             expectedParameters.Add("courtroom account username", participant.Username);
 
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, false);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -135,7 +135,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Remove("judge");
             expectedParameters.Add("name", $"{participant.FirstName} {participant.LastName}");
 
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, false);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -159,7 +159,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Add("solicitor name", $"{participant.FirstName} {participant.LastName}");
             expectedParameters.Add("client name", $"{participant.Representee}");
             
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, false);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -182,7 +182,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Remove("judge");
             expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
 
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, false);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -204,7 +204,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Remove("judge");
             expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
 
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, false);
+            var result = AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, false);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);

@@ -36,7 +36,7 @@ namespace BookingQueueSubscriber.UnitTests
             var notificationService = new NotificationService(_notificationApiMock.Object, 
                 _bookingsApiMock.Object, _logger.Object);
 
-            await notificationService.SendNewHearingNotification(hearing, new List<ParticipantDto>
+            await notificationService.SendNewSingleDayHearingConfirmationNotification(hearing, new List<ParticipantDto>
                 {
                    participant
                 });
@@ -70,7 +70,7 @@ namespace BookingQueueSubscriber.UnitTests
             var notificationService = new NotificationService(_notificationApiMock.Object,
                 _bookingsApiMock.Object, _logger.Object);
 
-            await notificationService.SendMultiDayHearingNotificationAsync(hearing, new List<ParticipantDto>
+            await notificationService.SendNewMultiDayHearingConfirmationNotificationAsync(hearing, new List<ParticipantDto>
                 {
                    participant
                 }, 10);

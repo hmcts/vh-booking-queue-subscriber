@@ -1,17 +1,20 @@
+using BookingQueueSubscriber.Services.NotificationApi;
+
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
     public class HearingNotificationHandler : IMessageHandler<HearingNotificationIntegrationEvent>
     {
-        private readonly IUserCreationAndNotification _userCreationAndNotification;
+        private readonly INotificationService _notificationServiceService;
 
-        public HearingNotificationHandler(IUserCreationAndNotification userCreationAndNotification)
+        public HearingNotificationHandler(INotificationService notificationService)
         {
-            _userCreationAndNotification = userCreationAndNotification;
+            _notificationServiceService = notificationService;
         }
 
         public async Task HandleAsync(HearingNotificationIntegrationEvent eventMessage)
         {
-            await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.Participants);
+            await _notificationServiceService.SendNewSingleDayHearingConfirmationNotification(eventMessage.Hearing,
+                eventMessage.Participants);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

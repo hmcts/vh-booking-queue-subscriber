@@ -13,12 +13,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
-        public Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
+        public Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
             NotificationRequests = new List<AddNotificationRequest>();
             foreach (var participant in participants)
             {
-                NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, EJudFetaureEnabled));
+                NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, EJudFetaureEnabled));
             }
             return Task.FromResult(HttpStatusCode.OK);
         }
@@ -35,7 +35,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
+        public Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }

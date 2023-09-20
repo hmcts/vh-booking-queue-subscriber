@@ -16,7 +16,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var messageHandler = new MultiDayHearingHandler(NotificationServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
-            NotificationServiceMock.Verify(x => x.SendMultiDayHearingNotificationAsync(It.IsAny<HearingDto>(),
+            NotificationServiceMock.Verify(x => x.SendNewMultiDayHearingConfirmationNotificationAsync(It.IsAny<HearingDto>(),
                 It.IsAny<IList<ParticipantDto>>(), It.IsAny<int>()), Times.Once);
         }
 
@@ -28,7 +28,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
 
-            NotificationServiceMock.Verify(x => x.SendMultiDayHearingNotificationAsync(It.Is<HearingDto>(
+            NotificationServiceMock.Verify(x => x.SendNewMultiDayHearingConfirmationNotificationAsync(It.Is<HearingDto>(
                 request => request.ScheduledDateTime == integrationEvent.Hearing.ScheduledDateTime), 
                 It.Is<IList<ParticipantDto>>
             (
@@ -88,16 +88,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 HearingVenueName = "MyVenue",
                 RecordAudio = true
             };
-        }
-
-        private IList<LinkedParticipantRequest> MapToRequestFromDto(IList<LinkedParticipantDto> linked)
-        {
-            return linked.Select(l => new LinkedParticipantRequest()
-            {
-                LinkedRefId = l.LinkedId,
-                ParticipantRefId = l.ParticipantId,
-                Type = Enum.Parse<VideoApi.Contract.Enums.LinkedParticipantType>(l.Type.ToString())
-            }).ToList();
         }
     }
 }

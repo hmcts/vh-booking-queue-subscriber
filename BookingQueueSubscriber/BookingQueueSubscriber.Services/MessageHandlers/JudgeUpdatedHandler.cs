@@ -1,4 +1,5 @@
 using BookingQueueSubscriber.Services.Mappers;
+using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.VideoApi;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
@@ -6,14 +7,14 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     public class JudgeUpdatedHandler : IMessageHandler<JudgeUpdatedIntegrationEvent>
     {
         private readonly IVideoApiService _apiService;
-        private readonly IUserCreationAndNotification _userCreationAndNotification;
+        private readonly INotificationService _notificationService;
         private readonly ILogger _logger;
 
-        public JudgeUpdatedHandler(IVideoApiService apiService, IUserCreationAndNotification userCreationAndNotification, ILogger logger)
+        public JudgeUpdatedHandler(IVideoApiService apiService, INotificationService notificationService, ILogger logger)
         {
             _logger = logger;
             _apiService = apiService;
-            _userCreationAndNotification = userCreationAndNotification;
+            _notificationService = notificationService;
         }
 
         public async Task HandleAsync(JudgeUpdatedIntegrationEvent eventMessage)
@@ -25,7 +26,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(eventMessage.Judge);
                 if(judgeResponse.ContactEmail != request.ContactEmail)
-                    await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, new[] {eventMessage.Judge});
+                    await _notificationService.SendNewSingleDayHearingConfirmationNotification(eventMessage.Hearing, new[] {eventMessage.Judge});
                 await _apiService.UpdateParticipantDetails(conferenceResponse.Id, judgeResponse.Id, request);
             }
             else

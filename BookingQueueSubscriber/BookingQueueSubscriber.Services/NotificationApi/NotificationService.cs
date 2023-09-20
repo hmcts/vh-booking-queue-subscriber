@@ -7,11 +7,59 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 {
     public interface INotificationService
     {
+        /// <summary>
+        /// This sends a notification to the participant with their username and password
+        /// <list type="bullet">
+        ///     <item>NotificationType.CreateIndividual</item>
+        ///     <item>NotificationType.CreateRepresentative</item> 
+        /// </list>
+        /// </summary>
+        /// <param name="hearingId"></param>
+        /// <param name="participant"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password);
-        Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants);
+        
+        /// <summary>
+        /// This send the hearing confirmation notification for a single day hearing
+        /// <list type="bullet">
+        /// <item>HearingConfirmationLip</item>
+        /// <item>HearingConfirmationRepresentative</item>
+        /// <item>HearingConfirmationJudge</item>
+        /// <item>HearingConfirmationJoh</item>
+        /// </list>
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participants"></param>
+        /// <returns></returns>
+        Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants);
+        
+        /// <summary>
+        /// Send the hearing amendment notification for a single hearing
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="originalDateTime"></param>
+        /// <param name="participants"></param>
+        /// <returns></returns>
         Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime, IList<ParticipantDto> participants);
+        
+        /// <summary>
+        /// Send a welcome to VH email to new users. Part of the 1st of 3 new template
+        /// <remarks>NOTE: Do not send to existing users</remarks>
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <returns></returns>
         Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
-        Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
+        
+        /// <summary>
+        /// Send the hearing confirmation notification for a multi day hearing
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participants"></param>
+        /// <param name="days"></param>
+        /// <returns></returns>
+        Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
     }
 
     public class NotificationService : INotificationService
@@ -36,7 +84,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 await _notificationApiClient.CreateNewNotificationAsync(request);
             }
         }
-        public async Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
+        public async Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
             if (hearing.IsGenericHearing())
             {
@@ -45,7 +93,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var requests = participants
-                .Select(participant => AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, ejudFeatureFlag))
+                .Select(participant => AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, ejudFeatureFlag))
                 .ToList();
             await CreateNotifications(requests);
             _logger.LogInformation("Created hearing notification for the users in the hearing {hearingid}", hearing.HearingId);
@@ -78,7 +126,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return _notificationApiClient.CreateNewNotificationAsync(request);
         }
 
-        public async Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
+        public async Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             if (hearing.IsGenericHearing())
             {
