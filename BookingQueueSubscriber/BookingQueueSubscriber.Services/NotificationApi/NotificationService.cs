@@ -44,6 +44,15 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime, IList<ParticipantDto> participants);
         
         /// <summary>
+        /// Send the hearing confirmation notification for a multi day hearing
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participants"></param>
+        /// <param name="days"></param>
+        /// <returns></returns>
+        Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
+        
+        /// <summary>
         /// Send a welcome to VH email to new users. Part of the 1st of 3 new template
         /// <remarks>NOTE: Do not send to existing users</remarks>
         /// </summary>
@@ -52,14 +61,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <returns></returns>
         Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
         
-        /// <summary>
-        /// Send the hearing confirmation notification for a multi day hearing
-        /// </summary>
-        /// <param name="hearing"></param>
-        /// <param name="participants"></param>
-        /// <param name="days"></param>
-        /// <returns></returns>
-        Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
+        Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password);
+        
+        Task SendExistingUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant);
+        
+        Task SendNewUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password, int days);
+        
+        Task SendExistingUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, int days);
     }
 
     public class NotificationService : INotificationService
@@ -124,6 +132,27 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             var request = AddNotificationRequestMapper.MapToNewUserWelcomeEmail(hearing, participant);
             return _notificationApiClient.CreateNewNotificationAsync(request);
+        }
+
+        public Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendExistingUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendNewUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password,
+            int days)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendExistingUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, int days)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)

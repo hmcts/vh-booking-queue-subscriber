@@ -24,5 +24,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         public bool SendHearingNotificationIfNew { get; set; }
 
         public bool IsIndividual() => UserRole.Equals(RoleNames.Individual, StringComparison.CurrentCultureIgnoreCase);
+        public bool IsRepresentative() => UserRole.Equals(RoleNames.Representative, StringComparison.CurrentCultureIgnoreCase);
     }
 }

@@ -328,6 +328,73 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
         }
 
+        public static AddNotificationRequest MapToPostMay2023NewUserHearingConfirmationNotification(HearingDto hearing,
+            ParticipantDto participant, string password)
+        {
+            if (!participant.IsIndividual())
+            {
+                throw new InvalidOperationException("Only individual participants are supported for this notification");
+            }
+            
+            var contactEmail = participant.ContactEmail;
+            var contactTelephone = participant.ContactTelephone;
+            var parameters = InitHearingNotificationParams(hearing);
+
+            var notificationType = NotificationType.NewUserLipConfirmation;
+
+            throw new NotImplementedException("Please finish this off");
+        }
+        
+        public static AddNotificationRequest MapToPostMay2023ExistingUserHearingConfirmationNotification(HearingDto hearing, ParticipantDto participant)
+        {
+            if (!participant.IsIndividual())
+            {
+                throw new InvalidOperationException("Only individual participants are supported for this notification");
+            }
+            
+            var contactEmail = participant.ContactEmail;
+            var contactTelephone = participant.ContactTelephone;
+            var parameters = InitHearingNotificationParams(hearing);
+
+            var notificationType = NotificationType.ExistingUserLipConfirmation;
+
+            throw new NotImplementedException("Please finish this off");
+        }
+        
+        public static AddNotificationRequest MapToPostMay2023NewUserMultiDayHearingConfirmationNotification(HearingDto hearing,
+            ParticipantDto participant, string password)
+        {
+            if (!participant.IsIndividual())
+            {
+                throw new InvalidOperationException("Only individual participants are supported for this notification");
+            }
+            
+            var contactEmail = participant.ContactEmail;
+            var contactTelephone = participant.ContactTelephone;
+            var parameters = InitHearingNotificationParams(hearing);
+
+            var notificationType = NotificationType.NewUserLipConfirmationMultiDay;
+
+            throw new NotImplementedException("Please finish this off");
+        }
+        
+        public static AddNotificationRequest MapToPostMay2023ExistingUserMultiHearingConfirmationNotification(HearingDto hearing,
+            ParticipantDto participant)
+        {
+            if (!participant.IsIndividual())
+            {
+                throw new InvalidOperationException("Only individual participants are supported for this notification");
+            }
+            
+            var contactEmail = participant.ContactEmail;
+            var contactTelephone = participant.ContactTelephone;
+            var parameters = InitHearingNotificationParams(hearing);
+
+            var notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
+
+            throw new NotImplementedException("Please finish this off");
+        }
+        
         private static Dictionary<string, string> InitHearingNotificationParams(HearingDto hearing)
         {   
             return new Dictionary<string, string>

@@ -13,11 +13,14 @@ namespace BookingQueueSubscriber.Services
         /// <para>
         ///     Sends the new user a welcome email, if the participant meets the requirements. (NewUserLipWelcome)
         ///     Sends the new user their account details (username and password). (CreateIndividual, CreateRepresentative)
+        /// <remarks>
+        ///     If the new template toggle is on, then the new confirmation email is sent with the credentials. (NewUserHearingConfirmation)
+        /// </remarks>
         /// </para>
         /// </summary>
         /// <param name="hearing"></param>
         /// <param name="participants"></param>
-        /// <returns></returns>
+        /// <returns>a list of newly created accounts</returns>
         Task<IList<UserDto>> CreateUserAndSendNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants);
         
         /// <summary>
@@ -91,7 +94,7 @@ namespace BookingQueueSubscriber.Services
         /// </summary>
         /// <param name="hearing"></param>
         /// <param name="participant"></param>
-        /// <returns></returns>
+        /// <returns>a User object only if an account has been created</returns>
         private async Task<User> CreateUserAndSendNotificationAsync(HearingDto hearing, ParticipantDto participant)
         {
             User user = null;
@@ -115,8 +118,13 @@ namespace BookingQueueSubscriber.Services
                 if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
                 {
                     await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
+                    await _notificationService.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, user.Password);
                 }
-                await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
+                else
+                {
+                    await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);    
+                }
+                
             }
 
             return user;
