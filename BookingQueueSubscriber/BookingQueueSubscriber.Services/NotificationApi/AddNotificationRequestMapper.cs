@@ -336,9 +336,11 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 throw new InvalidOperationException("Only individual participants are supported for this notification");
             }
             
-            var contactEmail = participant.ContactEmail;
-            var contactTelephone = participant.ContactTelephone;
             var parameters = InitHearingNotificationParams(hearing);
+            parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
+            parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+            parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+            parameters.Add(NotifyParams.RandomPassword, password);
 
             var notificationType = NotificationType.NewUserLipConfirmation;
 
@@ -346,14 +348,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 HearingId = hearing.HearingId,
                 MessageType = MessageType.Email,
-                ContactEmail = contactEmail,
+                ContactEmail = participant.ContactEmail,
                 NotificationType = notificationType,
                 ParticipantId = participant.ParticipantId,
                 PhoneNumber = participant.ContactTelephone,
                 Parameters = parameters
             };
-            
-            throw new NotImplementedException("Please finish this off");
         }
         
         public static AddNotificationRequest MapToPostMay2023ExistingUserHearingConfirmationNotification(HearingDto hearing, ParticipantDto participant)
@@ -363,24 +363,23 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 throw new InvalidOperationException("Only individual participants are supported for this notification");
             }
             
-            var contactEmail = participant.ContactEmail;
-            var contactTelephone = participant.ContactTelephone;
             var parameters = InitHearingNotificationParams(hearing);
-
+            parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
+            parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+            parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+            
             var notificationType = NotificationType.ExistingUserLipConfirmation;
 
             return new AddNotificationRequest
             {
                 HearingId = hearing.HearingId,
                 MessageType = MessageType.Email,
-                ContactEmail = contactEmail,
+                ContactEmail = participant.ContactEmail,
                 NotificationType = notificationType,
                 ParticipantId = participant.ParticipantId,
                 PhoneNumber = participant.ContactTelephone,
                 Parameters = parameters
             };
-            
-            throw new NotImplementedException("Please finish this off");
         }
         
         public static AddNotificationRequest MapToPostMay2023NewUserMultiDayHearingConfirmationNotification(HearingDto hearing,
@@ -391,13 +390,25 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 throw new InvalidOperationException("Only individual participants are supported for this notification");
             }
             
-            var contactEmail = participant.ContactEmail;
-            var contactTelephone = participant.ContactTelephone;
             var parameters = InitHearingNotificationParams(hearing);
+            parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
+            parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+            parameters.Add(NotifyParams.NumberOfDays, totalDays.ToString());
+            parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+            parameters.Add(NotifyParams.RandomPassword, password);
 
             var notificationType = NotificationType.NewUserLipConfirmationMultiDay;
-
-            throw new NotImplementedException("Please finish this off");
+            
+            return new AddNotificationRequest
+            {
+                HearingId = hearing.HearingId,
+                MessageType = MessageType.Email,
+                ContactEmail = participant.ContactEmail,
+                NotificationType = notificationType,
+                ParticipantId = participant.ParticipantId,
+                PhoneNumber = participant.ContactTelephone,
+                Parameters = parameters
+            };
         }
         
         public static AddNotificationRequest MapToPostMay2023ExistingUserMultiHearingConfirmationNotification(HearingDto hearing,
@@ -408,11 +419,24 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 throw new InvalidOperationException("Only individual participants are supported for this notification");
             }
             
-            var contactEmail = participant.ContactEmail;
-            var contactTelephone = participant.ContactTelephone;
             var parameters = InitHearingNotificationParams(hearing);
 
             var notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
+            parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
+            parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+            parameters.Add(NotifyParams.NumberOfDays, totalDays.ToString());
+            parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+            
+            return new AddNotificationRequest
+            {
+                HearingId = hearing.HearingId,
+                MessageType = MessageType.Email,
+                ContactEmail = participant.ContactEmail,
+                NotificationType = notificationType,
+                ParticipantId = participant.ParticipantId,
+                PhoneNumber = participant.ContactTelephone,
+                Parameters = parameters
+            };
 
             throw new NotImplementedException("Please finish this off");
         }
@@ -424,7 +448,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.CaseName, hearing.CaseName},
                 {NotifyParams.CaseNumber, hearing.CaseNumber},
                 {NotifyParams.Time, hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
-                {NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale()}
+                {NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale()},
+                {NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale()}
             };
         }
 

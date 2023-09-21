@@ -33,6 +33,42 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
             // Send the hearing confirmation email
+            if (_featureToggles.UsePostMay2023Template())
+            {
+                await ProcessNotificationWithNewTemplateToggleOn(eventMessage);
+            }
+            else
+            {
+                await ProcessNotificationWithNewTemplateToggleOff(eventMessage);
+            }
+
+            await CreateNewConferenceAndPublishInternalEvent(eventMessage);
+        }
+
+        private async Task CreateNewConferenceAndPublishInternalEvent(HearingIsReadyForVideoIntegrationEvent eventMessage)
+        {
+            var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
+                eventMessage.Participants, eventMessage.Endpoints);
+            var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
+            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
+                {Status = UpdateBookingStatus.Created, UpdatedBy = "System"});
+            await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
+        }
+
+        private async Task ProcessNotificationWithNewTemplateToggleOff(HearingIsReadyForVideoIntegrationEvent eventMessage)
+        {
+            // Create new users. if new template is toggled on then the welcome and new confirmation email is sent
+            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndSendNotificationAsync(
+                eventMessage.Hearing, eventMessage.Participants);
+            await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);
+            if (!eventMessage.Hearing.IsMultiDayHearing())
+            {
+                await SendSingleDayHearingConfirmationEmail(eventMessage, newParticipantUsers);
+            }
+        }
+
+        private async Task ProcessNotificationWithNewTemplateToggleOn(HearingIsReadyForVideoIntegrationEvent eventMessage)
+        {
             if (!eventMessage.Hearing.IsMultiDayHearing())
             {
                 // Create new users. if new template is toggled on then the welcome and new confirmation email is sent
@@ -41,18 +77,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);
                 await SendSingleDayHearingConfirmationEmail(eventMessage, newParticipantUsers);
             }
-
-            var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
-                eventMessage.Participants, eventMessage.Endpoints);
-
-            var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
-            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
-            { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
-
-            
-            await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
         }
-        
+
         private async Task SendSingleDayHearingConfirmationEmail(HearingIsReadyForVideoIntegrationEvent eventMessage,
             IList<UserDto> newParticipantUsers)
         {
