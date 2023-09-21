@@ -11,6 +11,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         public bool EJudFeatureEnabled { get; set; }
         public Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
         {
+            NotificationRequests.Add(AddNotificationRequestMapper.MapToNewUserNotification(hearingId, participant, password));
             return Task.FromResult(HttpStatusCode.OK);
         }
         public Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
@@ -98,6 +99,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         public Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
+            foreach (var participant in participants)
+            {
+                NotificationRequests.Add(
+                    AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant,
+                        days, EJudFeatureEnabled));
+            }
+            
             return Task.FromResult(HttpStatusCode.OK);
         }
         

@@ -2,7 +2,7 @@ using BookingQueueSubscriber.Services.Consts;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Consts;
 
-namespace BookingQueueSubscriber.UnitTests.V2Tests;
+namespace BookingQueueSubscriber.UnitTests.Emails;
 
 public static class HearingEventBuilders
 {
@@ -10,8 +10,9 @@ public static class HearingEventBuilders
     /// Create a hearing dto with a judge, individual, representative and judicial office holder
     /// </summary>
     /// <returns></returns>
-    public static HearingDto CreateHearing()
+    public static HearingDto CreateHearing(bool isMultiDay = false)
     {
+        var groupId = isMultiDay ? Guid.NewGuid() : (Guid?)null;
         return new HearingDto()
         {
             HearingId = Guid.NewGuid(),
@@ -23,7 +24,7 @@ public static class HearingEventBuilders
             ScheduledDuration = 30,
             HearingVenueName = "Made Up Venue",
             HearingType = "Standard",
-            GroupId = null
+            GroupId = groupId
         };
     }
 

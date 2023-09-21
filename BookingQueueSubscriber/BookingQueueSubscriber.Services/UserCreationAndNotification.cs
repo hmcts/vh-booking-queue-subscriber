@@ -69,7 +69,7 @@ namespace BookingQueueSubscriber.Services
 
                 if (!string.IsNullOrEmpty(user.UserName) && participant != null)
                 {
-                    newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole });
+                    newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole, Password = user.Password });
                 }
             }
 
@@ -99,8 +99,8 @@ namespace BookingQueueSubscriber.Services
         {
             User user = null;
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
-            if (!string.Equals(participant.UserRole, RoleNames.Judge) &&
-                !IsPanelMemberOrWingerWithEJudUsername(participant, ejudFeatureFlag))
+            participant.IsJudge();
+            if (!participant.IsJudge() && !IsPanelMemberOrWingerWithEJudUsername(participant, ejudFeatureFlag))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);
@@ -115,24 +115,40 @@ namespace BookingQueueSubscriber.Services
             // this will not be null when a user has been successfully created
             if (user != null)
             {
-                if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
-                {
-                    await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
-                    await _notificationService.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, user.Password);
-                }
-                else
-                {
-                    await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);    
-                }
-                
+                await SendNewUserNotifications(hearing, participant, user);
             }
 
             return user;
         }
 
+        private async Task SendNewUserNotifications(HearingDto hearing, ParticipantDto participant, User user)
+        {
+            // currently only individuals have new templates until VIH-9905
+            if (participant.IsJudicialOfficeHolder())
+            {
+                // we don't have account created email templates for JoHs
+                return;
+            }
+            if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
+            {
+                await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
+                if (hearing.IsMultiDayHearing()) return;
+                await _notificationService.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, user.Password);
+            } 
+            else if (_featureToggles.UsePostMay2023Template() && !participant.IsIndividual())
+            {
+                await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
+            }
+            else
+            {
+                await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);    
+            }
+        }
+        
+
         private static bool IsPanelMemberOrWingerWithEJudUsername(ParticipantDto participant, bool ejudFeatureFlag)
         {
-            if (string.Equals(participant.UserRole, RoleNames.JudicialOfficeHolder) && ejudFeatureFlag)
+            if (participant.IsJudicialOfficeHolder() && ejudFeatureFlag)
             {
                 return participant.HasEjdUsername();
             }

@@ -1,36 +1,53 @@
 using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.NotificationApi;
-using LaunchDarkly.Sdk;
-using UserApi.Client;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
     public class MultiDayHearingHandler : IMessageHandler<MultiDayHearingIntegrationEvent>
     {
         private readonly INotificationService _notificationService;
-        private readonly IUserApiClient _userApiClient;
+        private readonly IUserCreationAndNotification _userCreationAndNotification;
         private readonly IFeatureToggles _featureToggles;
 
-        public MultiDayHearingHandler(INotificationService notificationService, IFeatureToggles featureToggles)
+        public MultiDayHearingHandler(INotificationService notificationService, IFeatureToggles featureToggles,
+            IUserCreationAndNotification userCreationAndNotification)
         {
             _notificationService = notificationService;
             _featureToggles = featureToggles;
+            _userCreationAndNotification = userCreationAndNotification;
         }
 
         public async Task HandleAsync(MultiDayHearingIntegrationEvent eventMessage)
         {
+            if (_featureToggles.UsePostMay2023Template())
+            {
+                await ProcessFeatureToggleOn(eventMessage);
+            }
+            else
+            {
+                await ProcessFeatureToggleOff(eventMessage);
+            }
+        }
+
+        private async Task ProcessFeatureToggleOn(MultiDayHearingIntegrationEvent eventMessage)
+        {
+            // Create new users. if new template is toggled on then the welcome and new confirmation email is sent
+            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndSendNotificationAsync(
+                eventMessage.Hearing, eventMessage.Participants);
+            await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);
+            var newUsernames  = newParticipantUsers.Select(x => x.Username).ToList();
             foreach (var participant in eventMessage.Participants)
             {
-                bool isNewUser = true; // TODO: determine if the user is new somehow. Maybe use redis?
-                if (participant.IsIndividual() && _featureToggles.UsePostMay2023Template() && !isNewUser)
+                var isUserNew = newUsernames.Contains(participant.Username);
+                if (participant.IsIndividual() && isUserNew)
                 {
-                   await _notificationService.SendExistingUserMultiDayHearingConfirmationEmail(eventMessage.Hearing, participant, eventMessage.TotalDays);
+                    var password = newParticipantUsers.First(x => x.Username == participant.Username).Password;
+                    await _notificationService.SendNewUserMultiDayHearingConfirmationEmail(eventMessage.Hearing,
+                        participant, password, eventMessage.TotalDays);
                 }
-                else if(participant.IsIndividual() && _featureToggles.UsePostMay2023Template() && isNewUser)
+                else if(participant.IsIndividual() && !isUserNew)
                 {
-                    // var password = await _userApiClient.ResetUserPasswordAsync(participant.Username);
-                    var password = "password"; // TODO: generate a password. call user api to reset it?
-                    await _notificationService.SendNewUserMultiDayHearingConfirmationEmail(eventMessage.Hearing, participant, password, eventMessage.TotalDays);
+                    await _notificationService.SendExistingUserMultiDayHearingConfirmationEmail(eventMessage.Hearing, participant, eventMessage.TotalDays);
                 }
                 else
                 {
@@ -38,6 +55,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                         new List<ParticipantDto>() {participant}, eventMessage.TotalDays);
                 }
             }
+        }
+
+        private async Task ProcessFeatureToggleOff(MultiDayHearingIntegrationEvent eventMessage)
+        {
+            await _notificationService.SendNewMultiDayHearingConfirmationNotificationAsync(eventMessage.Hearing,
+                eventMessage.Participants, eventMessage.TotalDays);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

@@ -25,5 +25,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 
         public bool IsIndividual() => UserRole.Equals(RoleNames.Individual, StringComparison.CurrentCultureIgnoreCase);
         public bool IsRepresentative() => UserRole.Equals(RoleNames.Representative, StringComparison.CurrentCultureIgnoreCase);
+
+        public bool IsJudge() => UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase);
+
+        public bool IsJudicialOfficeHolder() => UserRole.Equals(RoleNames.JudicialOfficeHolder, StringComparison.CurrentCultureIgnoreCase);
     }
 }

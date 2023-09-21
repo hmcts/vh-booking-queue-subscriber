@@ -32,13 +32,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            // Create new users. if new template is toggled on then the welcome and new confirmation email is sent
-            var newParticipantUsers = await _userCreationAndNotification.CreateUserAndSendNotificationAsync(
-                eventMessage.Hearing, eventMessage.Participants);
-            
             // Send the hearing confirmation email
-            if (!eventMessage.Hearing.GroupId.HasValue || eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty)
+            if (!eventMessage.Hearing.IsMultiDayHearing())
             {
+                // Create new users. if new template is toggled on then the welcome and new confirmation email is sent
+                var newParticipantUsers = await _userCreationAndNotification.CreateUserAndSendNotificationAsync(
+                    eventMessage.Hearing, eventMessage.Participants);
+                await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);
                 await SendSingleDayHearingConfirmationEmail(eventMessage, newParticipantUsers);
             }
 
@@ -49,7 +49,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
             { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
 
-            await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);
+            
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
         }
         
@@ -57,7 +57,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             IList<UserDto> newParticipantUsers)
         {
             var newUsernames  = newParticipantUsers.Select(x => x.Username).ToList();
-            // Not a multiday hearing
             foreach (var participant in eventMessage.Participants)
             {
                 var isUserNew = newUsernames.Contains(participant.Username);
