@@ -219,11 +219,12 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
         {
             return new Dictionary<string, string>
             {
-                {"case name", "1234"},
-                {"case number", hearing.CaseNumber},
-                {"time", "12:15 PM"},
-                {"day month year", "10 February 2020"},
-                {"judge", participant.DisplayName}
+                {NotifyParams.CaseName, "1234"},
+                {NotifyParams.CaseNumber, hearing.CaseNumber},
+                {NotifyParams.Time, "12:15 PM"},
+                {NotifyParams.DayMonthYear, "10 February 2020"},
+                {NotifyParams.DayMonthYearCy, "10 Chwefror 2020"},
+                {NotifyParams.Judge, participant.DisplayName}
             };
         }
 
