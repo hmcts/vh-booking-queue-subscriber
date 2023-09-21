@@ -60,8 +60,15 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             // Not a multiday hearing
             foreach (var participant in eventMessage.Participants)
             {
-                if (participant.IsIndividual() && _featureToggles.UsePostMay2023Template() &&
-                    !newUsernames.Contains(participant.Username))
+                var isUserNew = newUsernames.Contains(participant.Username);
+
+                if (participant.IsIndividual() && _featureToggles.UsePostMay2023Template() && isUserNew)
+                {
+                    // the new creation process sends the welcome email and the new confirmation email that includes account details
+                    continue;
+                }
+                
+                if (participant.IsIndividual() && _featureToggles.UsePostMay2023Template() && !isUserNew)
                 {
                     await _notificationService.SendExistingUserSingleDayHearingConfirmationEmail(eventMessage.Hearing,
                         participant);

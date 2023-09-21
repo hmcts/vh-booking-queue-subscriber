@@ -342,6 +342,17 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
             var notificationType = NotificationType.NewUserLipConfirmation;
 
+            return new AddNotificationRequest
+            {
+                HearingId = hearing.HearingId,
+                MessageType = MessageType.Email,
+                ContactEmail = contactEmail,
+                NotificationType = notificationType,
+                ParticipantId = participant.ParticipantId,
+                PhoneNumber = participant.ContactTelephone,
+                Parameters = parameters
+            };
+            
             throw new NotImplementedException("Please finish this off");
         }
         
@@ -358,11 +369,22 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
             var notificationType = NotificationType.ExistingUserLipConfirmation;
 
+            return new AddNotificationRequest
+            {
+                HearingId = hearing.HearingId,
+                MessageType = MessageType.Email,
+                ContactEmail = contactEmail,
+                NotificationType = notificationType,
+                ParticipantId = participant.ParticipantId,
+                PhoneNumber = participant.ContactTelephone,
+                Parameters = parameters
+            };
+            
             throw new NotImplementedException("Please finish this off");
         }
         
         public static AddNotificationRequest MapToPostMay2023NewUserMultiDayHearingConfirmationNotification(HearingDto hearing,
-            ParticipantDto participant, string password)
+            ParticipantDto participant, string password, int totalDays)
         {
             if (!participant.IsIndividual())
             {
@@ -379,7 +401,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
         
         public static AddNotificationRequest MapToPostMay2023ExistingUserMultiHearingConfirmationNotification(HearingDto hearing,
-            ParticipantDto participant)
+            ParticipantDto participant, int totalDays)
         {
             if (!participant.IsIndividual())
             {

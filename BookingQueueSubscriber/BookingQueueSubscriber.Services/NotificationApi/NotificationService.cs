@@ -61,12 +61,41 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <returns></returns>
         Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
         
+        /// <summary>
+        /// Send a single day hearing confirmation to new users. Part of the 2nd of 3 new template
+        /// This is a combination of account details and hearing details
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password);
         
+        /// <summary>
+        /// Send a single day hearing confirmation to existing users. Part of the 2nd of 3 new template
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <returns></returns>
         Task SendExistingUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant);
-        
+
+        /// <summary>
+        /// Send a multi-day hearing confirmation to new users. Part of the 2nd of 3 new template
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <param name="password"></param>
+        /// <param name="days"></param>
+        /// <returns></returns>
         Task SendNewUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password, int days);
         
+        /// <summary>
+        /// Send a multi-day hearing confirmation to existing users. Part of the 2nd of 3 new template
+        /// </summary>
+        /// <param name="hearing"></param>
+        /// <param name="participant"></param>
+        /// <param name="days"></param>
+        /// <returns></returns>
         Task SendExistingUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, int days);
     }
 
