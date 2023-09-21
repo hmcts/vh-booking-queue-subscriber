@@ -7,18 +7,17 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     [ExcludeFromCodeCoverage]
     public class NotificationServiceFake : INotificationService
     {
-        public List<AddNotificationRequest> NotificationRequests { get; set; }
-        public bool EJudFetaureEnabled { get; set; }
+        public List<AddNotificationRequest> NotificationRequests { get; set; } = new();
+        public bool EJudFeatureEnabled { get; set; }
         public Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
         public Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
-            NotificationRequests = new List<AddNotificationRequest>();
             foreach (var participant in participants)
             {
-                NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, EJudFetaureEnabled));
+                NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingConfirmationNotification(hearing, participant, EJudFeatureEnabled));
             }
             return Task.FromResult(HttpStatusCode.OK);
         }
@@ -35,9 +34,35 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
+        public Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendExistingUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendNewUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password,
+            int days)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendExistingUserMultiDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, int days)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task SendNewMultiDayHearingConfirmationNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             return Task.FromResult(HttpStatusCode.OK);
+        }
+        
+        public void ClearRequests()
+        {
+            NotificationRequests.Clear();
         }
     }
 }

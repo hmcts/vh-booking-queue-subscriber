@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;

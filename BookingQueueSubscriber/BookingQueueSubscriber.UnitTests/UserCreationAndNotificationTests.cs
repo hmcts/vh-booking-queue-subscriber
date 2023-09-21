@@ -16,23 +16,13 @@ namespace BookingQueueSubscriber.UnitTests
     public class UserCreationAndNotificationTests
     {
         private const string PasswordForNotification = "xyz";
-        private Mock<INotificationService> _notificationServiceMock;
-        private Mock<IUserService> _userServiceMock;
-        private Mock<IBookingsApiClient> _bookingsAPIMock;
-        private Mock<ILogger<UserCreationAndNotification>> _logger;
-        private Mock<ILogger<UserService>> _logger2;
-        private Mock<IUserApiClient> _userApi;
-        private Mock<IFeatureToggles> _featureToggles;
-        public UserCreationAndNotificationTests()
-        {
-            _featureToggles = new Mock<IFeatureToggles>();
-            _notificationServiceMock = new Mock<INotificationService>();
-            _userServiceMock = new Mock<IUserService>();
-            _bookingsAPIMock = new Mock<IBookingsApiClient>();
-            _logger = new Mock<ILogger<UserCreationAndNotification>>();
-            _logger2 = new Mock<ILogger<UserService>>();
-            _userApi = new Mock<IUserApiClient>();
-        }
+        private Mock<INotificationService> _notificationServiceMock = new();
+        private Mock<IUserService> _userServiceMock = new();
+        private Mock<IBookingsApiClient> _bookingsAPIMock = new();
+        private Mock<ILogger<UserCreationAndNotification>> _logger = new();
+        private Mock<ILogger<UserService>> _logger2 = new();
+        private Mock<IUserApiClient> _userApi = new();
+        private Mock<IFeatureToggles> _featureToggles = new();
 
         [Test]
         public async Task should_have_called_CreateNewUserForParticipantAsync_for_joh_when_eJudfeature_disabled()
@@ -239,7 +229,7 @@ namespace BookingQueueSubscriber.UnitTests
   
             
             _notificationServiceMock.Verify(x=> x.SendNewUserWelcomeEmail(hearing, participant), Times.Once);
-            _notificationServiceMock.Verify(x=> x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification), Times.Once);
+            _notificationServiceMock.Verify(x=> x.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, PasswordForNotification), Times.Once);
             
         }
 

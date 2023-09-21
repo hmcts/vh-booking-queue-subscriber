@@ -1,4 +1,5 @@
-﻿using BookingQueueSubscriber.Services;
+﻿using BookingQueueSubscriber.Common.Configuration;
+using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -21,6 +22,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private BookingsApiClientFake _bookingsApi;
         private BookingQueueSubscriberFunction _sut;
         private ILogger<BookingQueueSubscriberFunction> _logger;
+        private FeatureTogglesClientFake _featureToggle;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -31,6 +33,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
             _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
+            _featureToggle = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
         }
 
@@ -38,8 +41,10 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         public void TearDown()
         {
           _videoApiService.ClearRequests();
-          _notificationService.EJudFetaureEnabled = false;
+          _notificationService.EJudFeatureEnabled = false;
+          _notificationService.ClearRequests();
           _bookingsApi.EJudFeatureEnabled = false;
+          _featureToggle.PostMayTemplateToggle = false;
         }
 
         [Test]
@@ -639,14 +644,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }
             }";
 
+            _notificationService.ClearRequests();
             _userService.Users.Clear();
             await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(1);
             _userService.Users[0].UserName.Should().Be("Manual 7.Panel 7");
-            _notificationService.NotificationRequests.Should().HaveCount(2);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJoh);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJudge);
+            _notificationService.NotificationRequests.Should().ContainSingle(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJoh);
+            _notificationService.NotificationRequests.Should().ContainSingle(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 
@@ -716,15 +721,15 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }
             }";
 
-            _notificationService.EJudFetaureEnabled = true;
+            _notificationService.EJudFeatureEnabled = true;
             _bookingsApi.EJudFeatureEnabled = true;
             _userService.Users.Clear();
             await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(0);
             _notificationService.NotificationRequests.Should().HaveCount(2);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
+            _notificationService.NotificationRequests.Should().ContainSingle(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
+            _notificationService.NotificationRequests.Should().ContainSingle(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 

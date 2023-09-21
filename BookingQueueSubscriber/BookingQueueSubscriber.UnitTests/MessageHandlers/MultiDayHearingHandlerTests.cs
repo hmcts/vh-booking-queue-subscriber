@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
@@ -13,7 +14,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_SendHearingAmendmentNotificationAsync_when_request_is_valid()
         {
-            var messageHandler = new MultiDayHearingHandler(NotificationServiceMock.Object);
+            var messageHandler = new MultiDayHearingHandler(NotificationServiceMock.Object, new FeatureTogglesClientFake());
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             NotificationServiceMock.Verify(x => x.SendNewMultiDayHearingConfirmationNotificationAsync(It.IsAny<HearingDto>(),
@@ -23,7 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_SendHearingAmendmentNotificationAsync_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler) new MultiDayHearingHandler(NotificationServiceMock.Object);
+            var messageHandler = (IMessageHandler) new MultiDayHearingHandler(NotificationServiceMock.Object, new FeatureTogglesClientFake());
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);

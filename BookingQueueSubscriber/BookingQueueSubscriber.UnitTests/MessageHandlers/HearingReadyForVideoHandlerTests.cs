@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
@@ -15,9 +16,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_and_bookings_api_when_request_is_valid()
         {
             var messageHandler = new HearingReadyForVideoHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object,
-                UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, NotificationServiceMock.Object);
+                UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, NotificationServiceMock.Object, new FeatureTogglesClientFake());
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()))
                 .ReturnsAsync(new ConferenceDetailsResponse());
+            UserCreationAndNotificationMock.Setup(x=> x.CreateUserAndSendNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IList<ParticipantDto>>()))
+                .ReturnsAsync(new List<UserDto>());
 
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -31,9 +34,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
                 VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object,
-                NotificationServiceMock.Object);
+                NotificationServiceMock.Object, new FeatureTogglesClientFake());
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()))
                 .ReturnsAsync(new ConferenceDetailsResponse());
+            UserCreationAndNotificationMock.Setup(x=> x.CreateUserAndSendNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IList<ParticipantDto>>()))
+                .ReturnsAsync(new List<UserDto>());
 
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -48,7 +53,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var expectedConferenceId = Guid.NewGuid();
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
                 VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object,
-                NotificationServiceMock.Object);
+                NotificationServiceMock.Object, new FeatureTogglesClientFake());
+            UserCreationAndNotificationMock.Setup(x=> x.CreateUserAndSendNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IList<ParticipantDto>>()))
+                .ReturnsAsync(new List<UserDto>());
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()))
                 .ReturnsAsync(new ConferenceDetailsResponse {Id = expectedConferenceId});
 
