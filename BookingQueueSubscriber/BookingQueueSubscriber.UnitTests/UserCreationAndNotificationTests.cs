@@ -16,13 +16,13 @@ namespace BookingQueueSubscriber.UnitTests
     public class UserCreationAndNotificationTests
     {
         private const string PasswordForNotification = "xyz";
-        private Mock<INotificationService> _notificationServiceMock = new();
-        private Mock<IUserService> _userServiceMock = new();
-        private Mock<IBookingsApiClient> _bookingsAPIMock = new();
-        private Mock<ILogger<UserCreationAndNotification>> _logger = new();
-        private Mock<ILogger<UserService>> _logger2 = new();
-        private Mock<IUserApiClient> _userApi = new();
-        private Mock<IFeatureToggles> _featureToggles = new();
+        private readonly Mock<INotificationService> _notificationServiceMock = new();
+        private readonly Mock<IUserService> _userServiceMock = new();
+        private readonly Mock<IBookingsApiClient> _bookingsAPIMock = new();
+        private readonly Mock<ILogger<UserCreationAndNotification>> _logger = new();
+        private readonly Mock<ILogger<UserService>> _logger2 = new();
+        private readonly Mock<IUserApiClient> _userApi = new();
+        private readonly Mock<IFeatureToggles> _featureToggles = new();
 
         [Test]
         public async Task should_have_called_CreateNewUserForParticipantAsync_for_joh_when_eJudfeature_disabled()

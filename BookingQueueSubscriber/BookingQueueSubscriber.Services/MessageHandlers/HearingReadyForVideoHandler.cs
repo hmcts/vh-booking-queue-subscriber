@@ -32,7 +32,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            // Send the hearing confirmation email
             if (_featureToggles.UsePostMay2023Template())
             {
                 await ProcessNotificationWithNewTemplateToggleOn(eventMessage);
@@ -45,6 +44,11 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await CreateNewConferenceAndPublishInternalEvent(eventMessage);
         }
 
+        async Task IMessageHandler.HandleAsync(object integrationEvent)
+        {
+            await HandleAsync((HearingIsReadyForVideoIntegrationEvent)integrationEvent);
+        }
+        
         private async Task CreateNewConferenceAndPublishInternalEvent(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
@@ -55,6 +59,11 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
         }
 
+        /// <summary>
+        /// The old template journey sends the welcome email and the hearing confirmation email separately.
+        /// If the booking is a multi-day hearing, the hearing confirmation email is left to the <see cref="MultiDayHearingHandler"/>
+        /// </summary>
+        /// <param name="eventMessage"></param>
         private async Task ProcessNotificationWithNewTemplateToggleOff(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
             // Create new users. if new template is toggled on then the welcome and new confirmation email is sent
@@ -67,6 +76,11 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }
         }
 
+        /// <summary>
+        /// The new template journey combines the account details and hearing details into one email.
+        /// This applies to multi-day hearings too. As a result user creation is deferred to the <see cref="MultiDayHearingHandler"/> when the booking is a multi-day hearing.
+        /// </summary>
+        /// <param name="eventMessage"></param>
         private async Task ProcessNotificationWithNewTemplateToggleOn(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
             if (!eventMessage.Hearing.IsMultiDayHearing())
@@ -104,11 +118,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                         new List<ParticipantDto>() {participant});
                 }
             }
-        }
-
-        async Task IMessageHandler.HandleAsync(object integrationEvent)
-        {
-            await HandleAsync((HearingIsReadyForVideoIntegrationEvent)integrationEvent);
         }
     }
 }

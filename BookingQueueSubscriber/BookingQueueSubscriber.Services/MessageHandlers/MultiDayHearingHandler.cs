@@ -29,9 +29,14 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }
         }
 
+        /// <summary>
+        /// The new template journey combines the account details and hearing details into one email.
+        /// As a result the handler will handle the creation of new accounts, including sending welcome emails, and the
+        /// hearing confirmation email. 
+        /// </summary>
+        /// <param name="eventMessage"></param>
         private async Task ProcessFeatureToggleOn(MultiDayHearingIntegrationEvent eventMessage)
         {
-            // Create new users. if new template is toggled on then the welcome and new confirmation email is sent
             var newParticipantUsers = await _userCreationAndNotification.CreateUserAndSendNotificationAsync(
                 eventMessage.Hearing, eventMessage.Participants);
             await _userCreationAndNotification.AssignUserToGroupForHearing(newParticipantUsers);

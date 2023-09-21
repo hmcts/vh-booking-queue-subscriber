@@ -22,7 +22,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.RandomPassword, $"{password}"}
             };
 
-            var notificationType = participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
+            var notificationType = participant.IsIndividual()
                     ? NotificationType.CreateIndividual
                     : NotificationType.CreateRepresentative;
         
@@ -55,7 +55,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.CaseNumber, hearing.CaseNumber}
             };
             
-            var notificationType = participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
+            var notificationType = participant.IsIndividual()
                 ? NotificationType.NewUserLipWelcome
                 : throw new NotSupportedException($"Only {RoleNames.Individual} is supported for {nameof(MapToNewUserWelcomeEmail)}. Current participant is {participant.UserRole}");
             
@@ -86,14 +86,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             var parameters = InitHearingNotificationParams(hearing);
 
             NotificationType notificationType;
-            var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
             
-            if (isJudge && eJudFeatureEnabled && participant.HasEjdUsername())
+            if (participant.IsJudge() && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
-            else if (isJudge) // default to non ejud template for judges without ejud username
+            else if (participant.IsJudge()) // default to non ejud template for judges without ejud username
             {
                 notificationType = NotificationType.HearingConfirmationJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -101,12 +100,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 contactEmail = GetContactEmailForNonEJudJudgeUser(participant) ?? participant.ContactEmail;
                 contactTelephone = GetContactPhoneForNonEJudJudgeUser(participant) ?? participant.ContactTelephone;
             }
-            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.IsJudicialOfficeHolder())
             {
                 notificationType = eJudFeatureEnabled && participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJoh : NotificationType.HearingConfirmationJoh;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
-            else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.IsRepresentative())
             {
                 notificationType = NotificationType.HearingConfirmationRepresentative;
                 parameters.Add(NotifyParams.ClientName, participant.Representee);
@@ -155,12 +154,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
 
             NotificationType notificationType;
-            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) && eJudFeatureEnabled && participant.HasEjdUsername())
+            if (participant.IsJudge() && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingAmendmentEJudJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
-            else if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) &&
+            else if (participant.IsJudge() &&
                      !eJudFeatureEnabled)
             {
                 notificationType = NotificationType.HearingAmendmentJudge;
@@ -169,13 +168,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 contactEmail = GetContactEmailForNonEJudJudgeUser(participant) ?? participant.ContactEmail;
                 contactTelephone = GetContactPhoneForNonEJudJudgeUser(participant) ?? participant.ContactTelephone;
             }
-            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.IsJudicialOfficeHolder())
             {
                 notificationType = eJudFeatureEnabled && participant.HasEjdUsername() ? NotificationType.HearingAmendmentEJudJoh : NotificationType.HearingAmendmentJoh;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
 
             }
-            else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.IsRepresentative())
             {
                 notificationType = NotificationType.HearingAmendmentRepresentative;
                 parameters.Add(NotifyParams.ClientName, participant.Representee);
@@ -223,14 +222,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
             NotificationType notificationType;
             
-            var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
 
-            if (isJudge && eJudFeatureEnabled && participant.HasEjdUsername())
+            if (participant.IsJudge() && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
             }
-            else if (isJudge)
+            else if (participant.IsJudge())
             {
                 notificationType = NotificationType.HearingConfirmationJudgeMultiDay;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -238,12 +236,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 contactEmail = GetContactEmailForNonEJudJudgeUser(participant) ?? participant.ContactEmail;
                 contactTelephone = GetContactPhoneForNonEJudJudgeUser(participant) ?? participant.ContactTelephone;
             }
-            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.IsJudicialOfficeHolder())
             {
                 notificationType = eJudFeatureEnabled && participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJohMultiDay : NotificationType.HearingConfirmationJohMultiDay;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
-            else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.IsRepresentative())
             {
                 notificationType = NotificationType.HearingConfirmationRepresentativeMultiDay;
                 parameters.Add(NotifyParams.ClientName, participant.Representee);
@@ -280,15 +278,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
 
             NotificationType notificationType;
-            var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
-            var isJudicialOfficeHolder = participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase);
             
-            if (isJudicialOfficeHolder && eJudFeatureEnabled && participant.HasEjdUsername())
+            if (participant.IsJudicialOfficeHolder() && eJudFeatureEnabled && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.EJudJohDemoOrTest;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
-            else if (isJudge)
+            else if (participant.IsJudge())
             {
                 var contactEmailForNonEJudJudgeUser = GetContactEmailForNonEJudJudgeUser(participant);
                 bool isEmailEjud = participant.HasEjdUsername();
@@ -437,8 +433,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 PhoneNumber = participant.ContactTelephone,
                 Parameters = parameters
             };
-
-            throw new NotImplementedException("Please finish this off");
         }
         
         private static Dictionary<string, string> InitHearingNotificationParams(HearingDto hearing)
@@ -455,7 +449,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         private static string GetContactEmailForNonEJudJudgeUser(ParticipantDto participant)
         {
-            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
+            return participant.IsJudge() && !participant.HasEjdUsername()
                 && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser)
                 ? participant.ContactEmailForNonEJudJudgeUser
                 : null;
@@ -463,7 +457,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
   
         private static string GetContactPhoneForNonEJudJudgeUser(ParticipantDto participant)
         {
-            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
+            return participant.IsJudge() && !participant.HasEjdUsername()
                 && !string.IsNullOrEmpty(participant.ContactPhoneForNonEJudJudgeUser)
                 ? participant.ContactPhoneForNonEJudJudgeUser
                 : null;

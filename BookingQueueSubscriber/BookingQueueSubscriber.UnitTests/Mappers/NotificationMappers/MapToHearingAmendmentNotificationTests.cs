@@ -17,7 +17,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var newDate = new DateTime(2020, 10, 12, 13, 10, 0, DateTimeKind.Utc);
             ParticipantDto participant = GetParticipantDto("Judicial Office Holder");
 
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
 
             //Act
@@ -42,7 +42,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var oldDate = new DateTime(2020, 2, 10, 11, 30, 0, DateTimeKind.Utc);
             var newDate = new DateTime(2020, 10, 12, 13, 10, 0, DateTimeKind.Utc);
             ParticipantDto participant = GetParticipantDto("Judge");
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("judge", $"{participant.DisplayName}");
             participant.ContactEmail = "user@judiciarytest.com";
 
@@ -70,7 +70,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             participant.ContactEmailForNonEJudJudgeUser = "judge@hmcts.net";
             participant.ContactPhoneForNonEJudJudgeUser = "123456789";
 
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("judge", $"{participant.DisplayName}");
             expectedParameters.Add("courtroom account username", participant.Username);
             var result = AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant, oldDate, newDate, false);
@@ -94,7 +94,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var newDate = new DateTime(2020, 10, 12, 13, 10, 0, DateTimeKind.Utc);
             var participant = GetParticipantDto("Individual");
 
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("name", $"{participant.FirstName} {participant.LastName}");
             var result = AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant, oldDate, newDate, false);
 
@@ -118,7 +118,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var participant = GetParticipantDto("Representative");
             participant.Representee = "random person";
 
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("client name", $"{participant.Representee}");
             expectedParameters.Add("solicitor name", $"{participant.FirstName} {participant.LastName}");
             var result = AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant, oldDate, newDate, false);
@@ -142,7 +142,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var newDate = new DateTime(2020, 10, 12, 13, 10, 0, DateTimeKind.Utc);
             var participant = GetParticipantDto("Judicial Office Holder");
             participant.Username = "judge@heairng.net";
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
 
             var result = AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant, oldDate, newDate, false);
@@ -165,7 +165,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var oldDate = new DateTime(2020, 2, 10, 11, 30, 0, DateTimeKind.Utc);
             var newDate = new DateTime(2020, 10, 12, 13, 10, 0, DateTimeKind.Utc);
             var participant = GetParticipantDto("Judicial Office Holder");
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
 
             var result = AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant, oldDate, newDate, true);
@@ -189,7 +189,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var newDate = new DateTime(2020, 10, 12, 13, 10, 0, DateTimeKind.Utc);
             var participant = GetParticipantDto("Judicial Office Holder");
             participant.Username = "jj@jj.com";
-            var expectedParameters = GetExpectedParameters(hearing, participant);
+            var expectedParameters = GetExpectedParameters(hearing);
             expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
 
             var result = AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant, oldDate, newDate, true);
@@ -215,7 +215,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
                 CaseType = "test"
             };
         }
-        private static Dictionary<string, string> GetExpectedParameters(HearingDto hearing, ParticipantDto participant)
+        private static Dictionary<string, string> GetExpectedParameters(HearingDto hearing)
         {
             return new Dictionary<string, string>
             {
