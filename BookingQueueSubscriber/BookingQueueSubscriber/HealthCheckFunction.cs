@@ -1,67 +1,43 @@
-﻿using BookingQueueSubscriber.Contract.Responses;
-using VideoApi.Client;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace BookingQueueSubscriber
 {
     public class HealthCheckFunction
     {
-        private readonly IVideoApiClient _videoApiClient;
+        
+        private readonly HealthCheckService _healthCheck;
 
-        public HealthCheckFunction(IVideoApiClient videoApiClient)
+        public HealthCheckFunction(HealthCheckService healthCheck)
         {
-            _videoApiClient = videoApiClient;
+            _healthCheck = healthCheck;
         }
 
         [FunctionName("HealthCheck")]
         public async Task<IActionResult> HealthCheck(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")]
+            HttpRequest req, ILogger log)
         {
-            var response = new HealthCheckResponse
+            var report = await _healthCheck.CheckHealthAsync();
+            var healthCheckResponse = new
             {
-                VideoApiHealth = { Successful = true },
-                AppVersion = GetApplicationVersion()
+                status = report.Status.ToString(),
+                details = report.Entries.Select(e => new
+                {
+                    key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status),
+                    error = e.Value.Exception?.Message
+                })
             };
 
-            try
+            var statusCode = report.Status == HealthStatus.Healthy
+                ? (int) HttpStatusCode.OK
+                : (int) HttpStatusCode.ServiceUnavailable;
+
+            return new ObjectResult(healthCheckResponse)
             {
-                await _videoApiClient.GetExpiredOpenConferencesAsync();
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, "Unable to retrieve expired open conferences");
-                response.VideoApiHealth = HandleVideoApiCallException(ex);
-            }
+                StatusCode = statusCode
+            };
 
-            return new OkObjectResult(response);
-        }
 
-        private HealthCheck HandleVideoApiCallException(Exception ex)
-        {
-            var isApiException = ex is VideoApiException;
-            var healthCheck = new HealthCheck { Successful = true };
-            if (isApiException && ((VideoApiException)ex).StatusCode != (int)HttpStatusCode.InternalServerError)
-            {
-                return healthCheck;
-            }
-
-            healthCheck.Successful = false;
-            healthCheck.ErrorMessage = ex.Message;
-            healthCheck.Data = ex.Data;
-
-            return healthCheck;
-        }
-        private ApplicationVersion GetApplicationVersion()
-        {
-            var applicationVersion = new ApplicationVersion();
-            applicationVersion.FileVersion = GetExecutingAssemblyAttribute<AssemblyFileVersionAttribute>(a => a.Version);
-            applicationVersion.InformationVersion = GetExecutingAssemblyAttribute<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
-            return applicationVersion;
-        }
-
-        private string GetExecutingAssemblyAttribute<T>(Func<T, string> value) where T : Attribute
-        {
-            T attribute = (T)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(T));
-            return value.Invoke(attribute);
         }
     }
 }

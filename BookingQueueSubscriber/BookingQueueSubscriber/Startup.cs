@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Health;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
@@ -155,7 +156,7 @@ namespace BookingQueueSubscriber
                  services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"], envName));
             }
 
-
+            services.AddVhHealthChecks();
         }
 
         private static void RegisterMessageHandlers(IServiceCollection serviceCollection)
