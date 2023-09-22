@@ -3,13 +3,13 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   environment:
-    QUEUENAME: marco-dev-booking
+    QUEUENAME: marco-dev-booking-noretries
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: marco-dev-booking
+    queueName: marco-dev-booking-noretries
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
