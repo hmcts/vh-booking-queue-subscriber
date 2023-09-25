@@ -24,11 +24,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         }
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
-        { 
-            var isNotMultiDayHearing = !eventMessage.Hearing.GroupId.HasValue ||
-                                       eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty;
-
-            if (isNotMultiDayHearing)
+        {
+            if (!eventMessage.Hearing.IsMultiDayHearing())
             {
                 // create user and notification only if it is not a multiday hearing
                 var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
