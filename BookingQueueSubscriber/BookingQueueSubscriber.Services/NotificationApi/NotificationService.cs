@@ -114,12 +114,32 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         private async Task<List<AddNotificationRequest>> CreateUserRequest(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
+            List<AddNotificationRequest> list = new List<AddNotificationRequest>();
+            User user = null;
             var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
             var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
             
-            List<AddNotificationRequest> list = participants
-                .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template))
-                .ToList();
+            foreach (var participant in participants)
+            {
+                if (!string.Equals(participant.UserRole, RoleNames.Judge))
+                {
+                    user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
+                        participant.LastName, participant.ContactEmail, false);
+                }
+                if (user != null)
+                {
+                    var userPassword = user.Password;
+                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template, userPassword));
+                    if (!string.IsNullOrEmpty(userPassword))
+                    {
+                        await SendNewUserWelcomeEmail(hearing, participant);
+                    }
+                }
+            }
+            
+            // List<AddNotificationRequest> list = participants
+            //     .Select(participant => AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template))
+            //     .ToList();
 
             return list;
         }

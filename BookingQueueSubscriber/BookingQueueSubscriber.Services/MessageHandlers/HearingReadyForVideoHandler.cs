@@ -24,18 +24,21 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         }
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
-        {
-             var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
-                eventMessage.Hearing, eventMessage.Participants);
-
+        { 
             var isNotMultiDayHearing = !eventMessage.Hearing.GroupId.HasValue ||
-                                    eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty;
-            
+                                       eventMessage.Hearing.GroupId.GetValueOrDefault() == Guid.Empty;
+
             if (isNotMultiDayHearing)
             {
+                // create user and notification only if it is not a multiday hearing
+                var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
+                    eventMessage.Hearing, eventMessage.Participants);
+                
                 // Not a multiday hearing
                 await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
                     eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
+                
+                await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
             }
 
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
@@ -46,9 +49,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 new UpdateBookingStatusRequest
                     {Status = UpdateBookingStatus.Created, UpdatedBy = "System"});
 
-            await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
+            
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
         }
+        
+        
+        
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
