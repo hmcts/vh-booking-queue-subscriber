@@ -32,8 +32,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                     eventMessage.Hearing, eventMessage.Participants);
                 
                 // Not a multiday hearing
-                // await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
-                //     eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
+                await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
+                    eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
                 
                 await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
             }
