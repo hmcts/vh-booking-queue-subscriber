@@ -43,12 +43,13 @@ namespace BookingQueueSubscriber.UnitTests
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic" };
 
 
-            await _notificationService.SendNewHearingNotification(hearing, new List<ParticipantDto>
+            await _notificationService.SendNewSingleDayHearingConfirmationNotification(hearing, new List<ParticipantDto>
                 {
                    participant
                 });
+            
+            _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
 
-            _bookingsApiMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
         }
 
         [Test]
@@ -62,7 +63,7 @@ namespace BookingQueueSubscriber.UnitTests
                    participant
                 });
 
-            _bookingsApiMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
+            _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
         }
 
         [Test]
@@ -134,7 +135,7 @@ namespace BookingQueueSubscriber.UnitTests
             };
             
             // act
-            await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, "xyz");
+            await _notificationService.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, "xyz");
             
             // assert
             _notificationApiMock.Verify(
@@ -169,7 +170,7 @@ namespace BookingQueueSubscriber.UnitTests
             };
             
             // act
-            await _notificationService.SendExistingUserAccountDetailsEmail(hearing, participant);
+            await _notificationService.SendExistingUserSingleDayHearingConfirmationEmail(hearing, participant);
             
             // assert
             _notificationApiMock.Verify(

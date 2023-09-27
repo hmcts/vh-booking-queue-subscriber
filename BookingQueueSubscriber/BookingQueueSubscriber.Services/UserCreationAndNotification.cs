@@ -61,7 +61,7 @@ namespace BookingQueueSubscriber.Services
 
         public async Task SendHearingNotificationAsync(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
-            await _notificationService.SendNewHearingNotification(hearing, participants);
+            await _notificationService.SendNewSingleDayHearingConfirmationNotification(hearing, participants);
         }
 
         public async Task HandleAssignUserToGroup(IList<UserDto> users)
@@ -99,11 +99,11 @@ namespace BookingQueueSubscriber.Services
                     if (!string.IsNullOrEmpty(userPassword))
                     {
                         await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
-                        await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, userPassword);
+                        await _notificationService.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, userPassword);
                     }
                     else
                     {
-                        await _notificationService.SendExistingUserAccountDetailsEmail(hearing, participant);
+                        await _notificationService.SendExistingUserSingleDayHearingConfirmationEmail(hearing, participant);
                     }
                     
                 }

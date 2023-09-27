@@ -244,8 +244,8 @@ namespace BookingQueueSubscriber.UnitTests
   
             
             _notificationServiceMock.Verify(x=> x.SendNewUserWelcomeEmail(hearing, participant), Times.Never);
-            _notificationServiceMock.Verify(x=> x.SendNewUserAccountDetailsEmail(hearing, participant, PasswordForNotification), Times.Never);
-            _notificationServiceMock.Verify(x=> x.SendExistingUserAccountDetailsEmail(hearing, participant), Times.Once);
+            _notificationServiceMock.Verify(x=> x.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, PasswordForNotification), Times.Never);
+            _notificationServiceMock.Verify(x=> x.SendExistingUserSingleDayHearingConfirmationEmail(hearing, participant), Times.Once);
             _notificationServiceMock.Verify(x=> x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification), Times.Never);
             
         }
@@ -277,7 +277,7 @@ namespace BookingQueueSubscriber.UnitTests
             // assert
 
             _notificationServiceMock.Verify(x=> x.SendNewUserWelcomeEmail(hearing, participant), Times.Never);
-            _notificationServiceMock.Verify(x=> x.SendNewUserAccountDetailsEmail(hearing, participant, PasswordForNotification), Times.Never);
+            _notificationServiceMock.Verify(x=> x.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, PasswordForNotification), Times.Never);
             _notificationServiceMock.Verify(x=> x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification), Times.Once);
             
         }

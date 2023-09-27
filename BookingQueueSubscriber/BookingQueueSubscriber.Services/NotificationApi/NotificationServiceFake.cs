@@ -13,6 +13,17 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
+
+        public Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
+        {
+            NotificationRequests = new List<AddNotificationRequest>();
+            foreach (var participant in participants)
+            {
+                NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, EJudFetaureEnabled));
+            }
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
         public Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
             NotificationRequests = new List<AddNotificationRequest>();
@@ -35,9 +46,25 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
+        public Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password)
+        {
+            NotificationRequests = new List<AddNotificationRequest>
+                {AddNotificationRequestMapper.MapToNewUserNotification(hearing.HearingId, participant, password)};
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendExistingUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            NotificationRequests = new List<AddNotificationRequest>
+                {AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant)};
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
         public Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
         {
-            throw new NotImplementedException();
+            NotificationRequests = new List<AddNotificationRequest>
+                {AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant)};
+            return Task.FromResult(HttpStatusCode.OK);
         }
 
         public Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
