@@ -4,7 +4,6 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace BookingQueueSubscriber.Common.Logging;
 
@@ -31,7 +30,7 @@ public class RequestBodyInitializer : ITelemetryInitializer
             }
 
             //Allows re-usage of the stream
-            httpContextAccessor.HttpContext.Request.EnableRewind();
+            httpContextAccessor.HttpContext.Request.EnableBuffering();
 
             var stream = new StreamReader(httpContextAccessor.HttpContext.Request.Body);
             var body = stream.ReadToEnd();
