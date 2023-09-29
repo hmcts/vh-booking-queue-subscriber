@@ -16,17 +16,15 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly IUserCreationAndNotification _userCreationAndNotification;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly IFeatureToggles _featureToggles;
-        private readonly INotificationService _notificationService;
 
         public HearingReadyForVideoHandler(IVideoApiService videoApiService, IVideoWebService videoWebService,
-            IUserCreationAndNotification userCreationAndNotification, IBookingsApiClient bookingsApiClient, IFeatureToggles featureToggles, INotificationService notificationService)
+            IUserCreationAndNotification userCreationAndNotification, IBookingsApiClient bookingsApiClient, IFeatureToggles featureToggles)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
             _userCreationAndNotification = userCreationAndNotification;
             _bookingsApiClient = bookingsApiClient;
             _featureToggles = featureToggles;
-            _notificationService = notificationService;
         }
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)

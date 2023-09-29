@@ -109,7 +109,7 @@ namespace BookingQueueSubscriber.Services
                 }
                 else
                 {
-                    await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
+                    await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, userPassword);
                 }
             }
 

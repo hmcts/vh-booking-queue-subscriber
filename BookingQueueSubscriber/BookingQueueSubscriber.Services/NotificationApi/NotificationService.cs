@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="participant"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password);
+        Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string userPassword);
         
         /// <summary>
         /// This send the hearing confirmation notification for a single day hearing
@@ -63,7 +63,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="participant"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password);
+        Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string userPassword);
         
         /// <summary>
         /// Send a single day hearing confirmation to existing users. Part of the 2nd of 3 new template
@@ -82,22 +82,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <returns></returns>
         Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
         
-        
-        
-        
-        
-        
-        
-        
-        // Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password);
-        // Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants);
-        // Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime, IList<ParticipantDto> participants);
-        // Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
-        // Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword);
-        // 
-        //
-        
-        // Task SendExistingUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant);
     }
 
     public class NotificationService : INotificationService
@@ -117,22 +101,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             _userService = userService;
         }
 
-        // public async Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
-        // {
-        //     if (!string.IsNullOrEmpty(password))
-        //     {
-        //         _logger.LogInformation("Creating Notification for new user {username}", participant.Username);
-        //         var request = AddNotificationRequestMapper.MapToNewUserNotification(hearingId, participant, password);
-        //         await _notificationApiClient.CreateNewNotificationAsync(request);
-        //     }
-        // }
-
-        public async Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
+        public async Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string userPassword)
         {
-            if (!string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(userPassword))
             {
                 _logger.LogInformation("Creating Notification for new user {username}", participant.Username);
-                var request = AddNotificationRequestMapper.MapToNewUserNotification(hearingId, participant, password);
+                var request = AddNotificationRequestMapper.MapToNewUserNotification(hearingId, participant, userPassword);
                 await _notificationApiClient.CreateNewNotificationAsync(request);
             }
         }
