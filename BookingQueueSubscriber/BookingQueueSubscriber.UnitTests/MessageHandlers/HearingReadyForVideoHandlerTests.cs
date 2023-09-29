@@ -36,6 +36,30 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
             BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
         }
+        
+        [Test]
+        public async Task should_call_send_hearing_notification_without_participant_already_notified_new_template_on()
+        {
+            var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
+            var integrationEvent = CreateEvent();
+            var usersNotified = new List<UserDto>()
+                {new UserDto() {Username = integrationEvent.Participants[0].Username}};
+            VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
+            FeatureTogglesMock.Setup(x => x.UsePostMay2023Template()).Returns(true);
+            UserCreationAndNotificationMock.Setup(x => x.SendHearingNotificationAsync(integrationEvent.Hearing, 
+                integrationEvent.Participants.Where(dto => usersNotified.All(y=>y.Username != dto.Username))
+                ));
+            UserCreationAndNotificationMock.Setup(x => 
+                    x.CreateUserAndNotifcationAsync(integrationEvent.Hearing, It.IsAny<IList<ParticipantDto>>()))
+                .ReturnsAsync(new Func<IList<UserDto>>(() => usersNotified));
+            
+            
+            
+            await messageHandler.HandleAsync(integrationEvent);
+            VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+        }
 
         [Test]
         public async Task Pushes_New_Conference_Added_Event_To_Video_Web()

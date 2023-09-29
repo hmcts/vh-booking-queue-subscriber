@@ -51,6 +51,19 @@ namespace BookingQueueSubscriber.UnitTests
             _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
 
         }
+        
+        [Test]
+        public async Task SendNewUserAccountNotification_should_map_to_newUser_notification_with_feature_flag()
+        {
+            var participant = GetJoh();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic" };
+
+
+            await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, "myPassword" );
+            
+            _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
+
+        }
 
         [Test]
         public async Task SendHearingAmendmentNotification_should_have_map_to_hearingamendment_notification_with_feature_flag()
