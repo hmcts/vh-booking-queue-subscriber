@@ -37,16 +37,32 @@ namespace BookingQueueSubscriber.UnitTests
         }
 
         [Test]
-        public async Task SendNewHearingNotification_should_have_map_to_newhearing_notification_with_feature_flag()
+        public async Task SendNewHearingNotification_should_have_map_to_newhearing_notification_with_feature_flag_not_generic_hearing()
         {
             var participant = GetJoh();
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic" };
 
 
             await _notificationService.SendNewSingleDayHearingConfirmationNotification(hearing, new List<ParticipantDto>
-                {
-                   participant
-                });
+            {
+                participant
+            });
+            
+            _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
+
+        }
+        
+        [Test]
+        public async Task SendNewHearingNotification_should_have_map_to_newhearing_notification_with_feature_flag_generic_hearing()
+        {
+            var participant = GetJoh();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Generic" };
+
+
+            await _notificationService.SendNewSingleDayHearingConfirmationNotification(hearing, new List<ParticipantDto>
+            {
+                participant
+            });
             
             _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
 
@@ -72,11 +88,25 @@ namespace BookingQueueSubscriber.UnitTests
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic", ScheduledDateTime = DateTime.UtcNow.AddDays(1) };
             
             await _notificationService.SendHearingAmendmentNotificationAsync(hearing, DateTime.UtcNow, new List<ParticipantDto>
-                {
-                   participant
-                });
+            {
+                participant
+            });
 
             _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
+        }
+        
+        [Test]
+        public async Task SendHearingAmendmentNotification_should_have_map_to_hearingamendment_notification_with_feature_flag_generic()
+        {
+            var participant = GetJoh();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Generic", ScheduledDateTime = DateTime.UtcNow.AddDays(1) };
+            
+            await _notificationService.SendHearingAmendmentNotificationAsync(hearing, DateTime.UtcNow, new List<ParticipantDto>
+            {
+                participant
+            });
+
+            _notificationApiMock.Verify(x=>x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Never);
         }
 
         [Test]
@@ -86,9 +116,23 @@ namespace BookingQueueSubscriber.UnitTests
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic", CaseName = "multi day test" };
             
             await _notificationService.SendMultiDayHearingNotificationAsync(hearing, new List<ParticipantDto>
-                {
-                   participant
-                }, 10);
+            {
+                participant
+            }, 10);
+
+            _bookingsApiMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
+        }
+        
+        [Test]
+        public async Task SendMultiDayHearingNotification_should_have_map_to_hearingamendment_notification_with_feature_flag_generic()
+        {
+            var participant = GetJoh();
+            var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Generic", CaseName = "multi day test" };
+            
+            await _notificationService.SendMultiDayHearingNotificationAsync(hearing, new List<ParticipantDto>
+            {
+                participant
+            }, 10);
 
             _bookingsApiMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
         }
@@ -126,6 +170,41 @@ namespace BookingQueueSubscriber.UnitTests
                     )
                 )
                 , Times.Once);
+        }
+        
+        [Test]
+        public async Task SendNewUserWelcomeEmail_should_map_to_welcome_email_generic()
+        {
+            // arrange
+            var hearing = new HearingDto
+            {
+                HearingId = Guid.NewGuid(), CaseType = "Generic", CaseName = "Hearing for Civil Money Claims"
+            }; 
+            
+            var participant = new ParticipantDto
+            {
+                ParticipantId = Guid.NewGuid(),
+                ContactEmail = "part1@ejudiciary.net",
+                Username = "part1@ejudiciary.net",
+                UserRole = "Individual",
+                FirstName = "part1",
+                LastName = "Individual"
+            };
+            
+            // act
+            await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
+            
+            // assert
+            _notificationApiMock.Verify(
+                x => x.CreateNewNotificationAsync(
+                    It.Is<AddNotificationRequest>(request =>
+                        request.HearingId == hearing.HearingId &&
+                        request.NotificationType == NotificationType.ParticipantDemoOrTest &&
+                        request.ContactEmail == participant.ContactEmail &&
+                        request.MessageType == MessageType.Email
+                    )
+                )
+                , Times.Never);
         }
         
         [Test]
