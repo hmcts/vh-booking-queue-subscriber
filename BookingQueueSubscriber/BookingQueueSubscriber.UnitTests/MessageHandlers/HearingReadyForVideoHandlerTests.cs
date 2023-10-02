@@ -42,7 +42,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
                 VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
-            var integrationEvent = CreateEvent();
+            var integrationEvent = CreateEvent(notGeneric: true);
             var usersNotified = new List<UserDto>()
                 {new UserDto() {Username = integrationEvent.Participants[0].Username}};
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
@@ -90,13 +90,13 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
 
 
-        private static HearingIsReadyForVideoIntegrationEvent CreateEvent(bool isMultiHearing = false)
+        private static HearingIsReadyForVideoIntegrationEvent CreateEvent(bool isMultiHearing = false, bool notGeneric = false)
         {
             var hearingDto = new HearingDto
             {
                 HearingId = Guid.NewGuid(),
                 CaseNumber = "Test1234",
-                CaseType = "Generic",
+                CaseType = (notGeneric) ? "Not-Generic": "Generic",
                 CaseName = "Automated Case vs Humans",
                 ScheduledDuration = 60,
                 ScheduledDateTime = DateTime.UtcNow,
