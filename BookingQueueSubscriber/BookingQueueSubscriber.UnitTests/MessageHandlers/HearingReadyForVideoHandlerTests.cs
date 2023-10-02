@@ -49,7 +49,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             FeatureTogglesMock.Setup(x => x.UsePostMay2023Template()).Returns(true);
             UserCreationAndNotificationMock.Setup(x => x.SendHearingNotificationAsync(integrationEvent.Hearing, 
                 integrationEvent.Participants.Where(dto => usersNotified.All(y=>y.Username != dto.Username))
-                ));
+            ));
             UserCreationAndNotificationMock.Setup(x => 
                     x.CreateUserAndNotifcationAsync(integrationEvent.Hearing, It.IsAny<IList<ParticipantDto>>()))
                 .ReturnsAsync(new Func<IList<UserDto>>(() => usersNotified));
@@ -57,6 +57,20 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             
             
             await messageHandler.HandleAsync(integrationEvent);
+            VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+        }
+        
+        [Test]
+        public async Task should_call_send_hearing_notification_without_create_participant_for_multiday_hearing()
+        {
+            var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
+                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
+            var integrationEvent = CreateEvent(true);
+            VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
+            
+            await messageHandler.HandleAsync(integrationEvent);
+            UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IEnumerable<ParticipantDto>>()), Times.Never);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
             BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
         }
@@ -76,7 +90,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
 
 
-        private static HearingIsReadyForVideoIntegrationEvent CreateEvent()
+        private static HearingIsReadyForVideoIntegrationEvent CreateEvent(bool isMultiHearing = false)
         {
             var hearingDto = new HearingDto
             {
@@ -87,7 +101,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 ScheduledDuration = 60,
                 ScheduledDateTime = DateTime.UtcNow,
                 HearingVenueName = "MyVenue",
-                RecordAudio = true
+                RecordAudio = true,
+                GroupId = (isMultiHearing) ? Guid.NewGuid() : null
             };
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();
