@@ -9,7 +9,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     {
         public List<AddNotificationRequest> NotificationRequests { get; set; }
         public bool EJudFetaureEnabled { get; set; }
-        public Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
+        public Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string userPassword)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
@@ -36,10 +36,10 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string password)
+        public Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
         {
             NotificationRequests = new List<AddNotificationRequest>
-                {AddNotificationRequestMapper.MapToNewUserNotification(hearing.HearingId, participant, password)};
+                {AddNotificationRequestMapper.MapToNewUserNotification(hearing.HearingId, participant, userPassword)};
             return Task.FromResult(HttpStatusCode.OK);
         }
 
