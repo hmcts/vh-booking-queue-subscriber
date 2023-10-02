@@ -193,8 +193,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         private async Task<List<AddNotificationRequest>> CreateUserRequest(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             List<AddNotificationRequest> list = new List<AddNotificationRequest>();
-            
-            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
+
+            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
             
             foreach (var participant in participants)
@@ -230,7 +230,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 return;
             }
-            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
+
+            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             var notificationRequests = participants
                 .Select(participant => AddNotificationRequestMapper.MapToDemoOrTestNotification(
                     hearing, participant, hearing.HearingType, ejudFeatureFlag))

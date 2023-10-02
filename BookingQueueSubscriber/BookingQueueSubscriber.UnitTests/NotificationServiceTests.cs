@@ -112,15 +112,13 @@ namespace BookingQueueSubscriber.UnitTests
         [Test]
         public async Task SendMultiDayHearingNotification_should_have_map_to_hearingamendment_notification_with_feature_flag()
         {
-            var participant = GetJoh();
             var hearing = new HearingDto { HearingId = Guid.NewGuid(), CaseType = "Non-Generic", CaseName = "multi day test" };
+            _userService.Setup(us=> us.CreateNewUserForParticipantAsync("part2","individual","part2@ejudiciary.net",It.IsAny<bool>()))
+                .ReturnsAsync(new Func<User>(() => new User(){ ContactEmail = "part2@ejudiciary.net", Password = "MyPassword", UserName = "part2@ejudiciary.net"}));
             
-            await _notificationService.SendMultiDayHearingNotificationAsync(hearing, new List<ParticipantDto>
-            {
-                participant
-            }, 10);
+            await _notificationService.SendMultiDayHearingNotificationAsync(hearing, CreateParticipants(), 10);
 
-            _bookingsApiMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
+            _notificationApiMock.Verify(x => x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.AtLeastOnce);
         }
         
         [Test]
@@ -134,7 +132,7 @@ namespace BookingQueueSubscriber.UnitTests
                 participant
             }, 10);
 
-            _bookingsApiMock.Verify(x => x.GetFeatureFlagAsync(It.IsAny<String>()), Times.Once);
+            _notificationApiMock.Verify(x => x.CreateNewNotificationAsync(It.IsAny<AddNotificationRequest>()), Times.Once);
         }
 
         [Test]
@@ -208,7 +206,7 @@ namespace BookingQueueSubscriber.UnitTests
         }
         
         [Test]
-        public async Task SendNewUserAccountDetailsEmail_should_map_to_account_details_email()
+        public async Task SendNewUserSingleDayHearingConfirmationEmail_should_map_to_account_details_email()
         {
             // arrange
             var hearing = new HearingDto
@@ -243,7 +241,42 @@ namespace BookingQueueSubscriber.UnitTests
         }
         
         [Test]
-        public async Task SendExistingUserAccountDetailsEmail_should_map_to_account_details_email()
+        public async Task SendNewUserSingleDayHearingConfirmationEmail_should_map_to_account_details_email_generic()
+        {
+            // arrange
+            var hearing = new HearingDto
+            {
+                HearingId = Guid.NewGuid(), CaseType = "Generic", CaseName = "Hearing for Civil Money Claims"
+            }; 
+            
+            var participant = new ParticipantDto
+            {
+                ParticipantId = Guid.NewGuid(),
+                ContactEmail = "part1@ejudiciary.net",
+                Username = "part1@ejudiciary.net",
+                UserRole = "Individual",
+                FirstName = "part1",
+                LastName = "Individual"
+            };
+            
+            // act
+            await _notificationService.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, "xyz");
+            
+            // assert
+            _notificationApiMock.Verify(
+                x => x.CreateNewNotificationAsync(
+                    It.Is<AddNotificationRequest>(request =>
+                        request.HearingId == hearing.HearingId &&
+                        request.NotificationType == NotificationType.NewUserLipConfirmation &&
+                        request.ContactEmail == participant.ContactEmail &&
+                        request.MessageType == MessageType.Email
+                    )
+                )
+                , Times.Never);
+        }
+        
+        [Test]
+        public async Task SendExistingUserSingleDayHearingConfirmationEmail_should_map_to_account_details_email()
         {
             // arrange
             var hearing = new HearingDto
@@ -277,6 +310,53 @@ namespace BookingQueueSubscriber.UnitTests
                 , Times.Once);
         }
         
+        [Test]
+        public async Task SendExistingUserSingleDayHearingConfirmationEmail_should_map_to_account_details_email_generic()
+        {
+            // arrange
+            var hearing = new HearingDto
+            {
+                HearingId = Guid.NewGuid(), CaseType = "Generic", CaseName = "Hearing for Civil Money Claims"
+            }; 
+            
+            var participant = new ParticipantDto
+            {
+                ParticipantId = Guid.NewGuid(),
+                ContactEmail = "part1@ejudiciary.net",
+                Username = "part1@ejudiciary.net",
+                UserRole = "Individual",
+                FirstName = "part1",
+                LastName = "Individual"
+            };
+            
+            // act
+            await _notificationService.SendExistingUserSingleDayHearingConfirmationEmail(hearing, participant);
+            
+            // assert
+            _notificationApiMock.Verify(
+                x => x.CreateNewNotificationAsync(
+                    It.Is<AddNotificationRequest>(request =>
+                        request.HearingId == hearing.HearingId &&
+                        request.NotificationType == NotificationType.ExistingUserLipConfirmation &&
+                        request.ContactEmail == participant.ContactEmail &&
+                        request.MessageType == MessageType.Email
+                    )
+                )
+                , Times.Never);
+        }
+
+        private static List<ParticipantDto> CreateParticipants()
+        {
+            List<ParticipantDto> list = new List<ParticipantDto>();
+            
+            list.Add(GetJoh());
+            list.Add(GetJudge());
+            list.Add(GetIndividual());
+            
+            
+            return list;
+        }
+        
         private static ParticipantDto GetJoh()
         {
             return new ParticipantDto
@@ -286,6 +366,30 @@ namespace BookingQueueSubscriber.UnitTests
                 UserRole = "Judicial Office Holder",
                 FirstName = "part1",
                 LastName = "joh"
+            };
+        }
+        
+        private static ParticipantDto GetIndividual()
+        {
+            return new ParticipantDto
+            {
+                ContactEmail = "part2@ejudiciary.net",
+                Username = "part2@ejudiciary.net",
+                UserRole = "Individual",
+                FirstName = "part2",
+                LastName = "individual"
+            };
+        }
+        
+        private static ParticipantDto GetJudge()
+        {
+            return new ParticipantDto
+            {
+                ContactEmail = "judge@ejudiciary.net",
+                Username = "judge@ejudiciary.net",
+                UserRole = "Judge",
+                FirstName = "part1",
+                LastName = "Judge"
             };
         }
     }
