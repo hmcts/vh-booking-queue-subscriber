@@ -9,7 +9,7 @@ function:
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: marco-dev-booking-noretries
+    #queueName: marco-dev-booking
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
