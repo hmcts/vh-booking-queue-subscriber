@@ -2,7 +2,6 @@
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
-using BookingsApi.Contract.V1.Configuration;
 
 namespace BookingQueueSubscriber.Services
 {
