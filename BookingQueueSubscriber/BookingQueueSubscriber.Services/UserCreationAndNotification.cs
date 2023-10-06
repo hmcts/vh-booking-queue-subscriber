@@ -2,7 +2,6 @@
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
-using BookingsApi.Contract.V1.Configuration;
 
 namespace BookingQueueSubscriber.Services
 {
@@ -61,7 +60,7 @@ namespace BookingQueueSubscriber.Services
 
         public async Task SendHearingNotificationAsync(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
-            await _notificationService.SendNewHearingNotification(hearing, participants);
+            await _notificationService.SendNewSingleDayHearingConfirmationNotification(hearing, participants);
         }
 
         public async Task HandleAssignUserToGroup(IList<UserDto> users)
@@ -76,7 +75,7 @@ namespace BookingQueueSubscriber.Services
         private async Task<User> CreateUserAndSendNotificationAsync(HearingDto hearing, ParticipantDto participant)
         {
             User user = null;
-            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
+            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             if (!string.Equals(participant.UserRole, RoleNames.Judge) &&
                 !IsPanelMemberOrWingerWithEJudUsername(participant, ejudFeatureFlag))
             {
@@ -89,16 +88,28 @@ namespace BookingQueueSubscriber.Services
                     await _bookingsApiClient.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username);
                 }
             }
+            
 
             if (user != null)
             {
+                var userPassword = user.Password;
                 if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
                 {
-                    await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
-                    // await _notificationService.SendNewUserAccountDetailsEmail(hearing, participant, user.Password);
-                    // when VIH-9899 is implemented, send the 'New' NewUserAccountNotification here and put the original in the else block
+                    if (!string.IsNullOrEmpty(userPassword))
+                    {
+                        await _notificationService.SendNewUserWelcomeEmail(hearing, participant);
+                        await _notificationService.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, userPassword);
+                    }
+                    else
+                    {
+                        await _notificationService.SendExistingUserSingleDayHearingConfirmationEmail(hearing, participant);
+                    }
+                    
                 }
-                await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, user.Password);
+                else
+                {
+                    await _notificationService.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, userPassword);
+                }
             }
 
             return user;

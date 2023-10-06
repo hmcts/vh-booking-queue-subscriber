@@ -1,4 +1,5 @@
-﻿using BookingQueueSubscriber.Services;
+﻿using BookingQueueSubscriber.Common.Configuration;
+using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -20,6 +21,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private UserServiceFake _userService;
         private BookingsApiClientFake _bookingsApi;
         private BookingQueueSubscriberFunction _sut;
+        private FeatureTogglesClientFake _featureTogglesClient;
         private ILogger<BookingQueueSubscriberFunction> _logger;
 
         [OneTimeSetUp]
@@ -31,6 +33,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
             _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
+            _featureTogglesClient = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
         }
 
@@ -640,13 +643,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }";
 
             _userService.Users.Clear();
+            _featureTogglesClient.EjudFeatureToggleValue = false;
+            
             await _sut.Run(message);
-
             _userService.Users.Should().HaveCount(1);
             _userService.Users[0].UserName.Should().Be("Manual 7.Panel 7");
             _notificationService.NotificationRequests.Should().HaveCount(2);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJoh);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJudge);
+            var addNotificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJoh);
+            var notificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 
@@ -718,13 +722,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
             _notificationService.EJudFetaureEnabled = true;
             _bookingsApi.EJudFeatureEnabled = true;
+            _featureTogglesClient.EjudFeatureToggleValue = true;
             _userService.Users.Clear();
             await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(0);
             _notificationService.NotificationRequests.Should().HaveCount(2);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
-            _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
+            var addNotificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
+            var notificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 

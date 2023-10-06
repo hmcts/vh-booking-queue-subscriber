@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -17,6 +18,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         protected Mock<IUserCreationAndNotification> UserCreationAndNotificationMock { get; set; }
 
         protected Mock<IBookingsApiClient> BookingsApiClientMock { get; set; }
+        
+        protected Mock<IFeatureToggles> FeatureTogglesMock { get; set; }
 
         protected Guid ParticipantId { get; set; }
         protected Guid HearingId { get; set; }
@@ -45,6 +48,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             NotificationServiceMock = new Mock<INotificationService>();
             UserCreationAndNotificationMock = new Mock<IUserCreationAndNotification>();
             BookingsApiClientMock = new Mock<IBookingsApiClient>();
+            FeatureTogglesMock = new Mock<IFeatureToggles>();
         }
     }
 }
