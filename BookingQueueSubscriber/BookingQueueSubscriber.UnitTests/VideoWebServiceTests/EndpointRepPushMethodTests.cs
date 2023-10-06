@@ -11,9 +11,9 @@ public class EndpointRepPushMethodTests
 {
     private VideoWebService _videoWebService;
     private Mock<HttpMessageHandler>  _handler;
-    private string _username = "random.user@hmcts.net";
-    private string _endpoint = "JVS Endpoint Name";
-    private Guid _conferenceId = Guid.NewGuid();
+    private readonly string _username = "random.user@hmcts.net";
+    private readonly string _endpoint = "JVS Endpoint Name";
+    private readonly Guid _conferenceId = Guid.NewGuid();
 
     [SetUp]
     public void Setup()
