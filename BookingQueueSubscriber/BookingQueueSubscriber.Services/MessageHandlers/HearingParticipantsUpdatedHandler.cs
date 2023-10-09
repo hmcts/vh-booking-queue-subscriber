@@ -42,10 +42,10 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                     LinkedParticipants = eventMessage.LinkedParticipants.Select(LinkedParticipantToRequestMapper.MapToLinkedParticipantRequest).ToList(),
                 };
                 await _videoApiService.UpdateConferenceParticipantsAsync(conferenceResponse.Id, updateConferenceParticipantsRequest);
+       
+                await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
                 
                 await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
-                
-                await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
                 
             }
             catch (Exception e)
