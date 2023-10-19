@@ -23,7 +23,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Participants = participants,
                 HearingVenueName = hearingDto.HearingVenueName,
                 AudioRecordingRequired = hearingDto.RecordAudio,
-                Endpoints = PopulateAddEndpointRequests(endpointDtos, participantDtos).ToList()
+                Endpoints = PopulateAddEndpointRequests(endpointDtos, participantDtos).ToList(),
+                CaseTypeServiceId = hearingDto.CaseTypeServiceId
             };
             
             return request;
