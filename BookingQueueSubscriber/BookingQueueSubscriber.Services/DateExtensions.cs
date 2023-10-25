@@ -14,10 +14,10 @@ namespace BookingQueueSubscriber.Services
             return gmtDate.ToString("d MMMM yyyy", CultureInfo);
         }
         public static string ToEmailDateCyLocale(this DateTime datetime)
-                {
-                    var gmtDate = TimeZoneInfo.ConvertTimeFromUtc(datetime, BritishZone);
-                    return gmtDate.ToString("d MMMM yyyy", CultureInfoWelsh);
-                }
+        {
+            var gmtDate = TimeZoneInfo.ConvertTimeFromUtc(datetime, BritishZone);
+            return gmtDate.ToString("d MMMM yyyy", CultureInfoWelsh);
+        }
                 
         public static string ToEmailTimeGbLocale(this DateTime datetime)
         {

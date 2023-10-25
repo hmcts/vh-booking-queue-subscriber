@@ -35,12 +35,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
                     eventMessage.Hearing, eventMessage.Participants);
                 
-                if (_featureToggles.UsePostMay2023Template() && newParticipantUsers is {Count: > 0})
+                if (_featureToggles.UsePostMay2023Template())
                 {
                     // The new template journey combines the account details and hearing details into one email.
                     // we need to remove the new user created in the previous step because they already received notifications for hearing
                     await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
-                        eventMessage.Participants.Where(x => newParticipantUsers.All(y=>y.Username != x.Username)));
+                        eventMessage.Participants.Where(x => newParticipantUsers.All(y=>y.Username != x.Username && !x.IsIndividual())));
                 }
                 else
                 {
