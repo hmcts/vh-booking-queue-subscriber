@@ -40,7 +40,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                     // The new template journey combines the account details and hearing details into one email.
                     // we need to remove the new user created in the previous step because they already received notifications for hearing
                     var participants = eventMessage.Participants.Where(x =>
-                        newParticipantUsers.Count() > 0 &&
                         newParticipantUsers.All(y => y.Username != x.Username || !x.IsIndividual()));
                     await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, participants);
                 }
