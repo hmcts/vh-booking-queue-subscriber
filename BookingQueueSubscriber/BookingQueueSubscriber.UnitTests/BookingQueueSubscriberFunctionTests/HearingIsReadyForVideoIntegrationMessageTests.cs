@@ -224,6 +224,8 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_and_participants_feauture_toogle_new_template_on()
     {
       _featureToggles.PostMayTemplateToggle = true;
+      string representativeEmail = "marco6@email.com";
+      string judgeEmail = "manual.judge_06@hearings.reform.hmcts.net";
         const string message = @"{
   '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
   'id': '1f690c34-353b-4d8b-99a3-e9240088faff',
@@ -291,5 +293,11 @@ public class HearingIsReadyForVideoIntegrationMessageTests
         _videoApiService.BookNewConferenceCount.Should().Be(1);
         _videoWebService.PushNewConferenceAddedMessageCount.Should().Be(1);
         _notificationService.NotificationRequests.Should().NotBeNullOrEmpty();
+        _notificationService.NotificationRequests.Should()
+          .Contain(x =>
+            x.ContactEmail == representativeEmail && x.NotificationType == NotificationType.HearingConfirmationRepresentative);
+        _notificationService.NotificationRequests.Should()
+          .Contain(x =>
+            x.ContactEmail == judgeEmail && x.NotificationType == NotificationType.HearingConfirmationJudge);
     }
 }
