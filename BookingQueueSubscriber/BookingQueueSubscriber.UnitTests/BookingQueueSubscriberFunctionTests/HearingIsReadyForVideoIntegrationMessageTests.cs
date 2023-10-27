@@ -224,7 +224,8 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_and_participants_feauture_toogle_new_template_on()
     {
       _featureToggles.PostMayTemplateToggle = true;
-      string representativeEmail = "marco6@email.com";
+      string representativeEmail = "user6@email.com";
+      string lipEmail = "user2@email.com";
       string judgeEmail = "manual.judge_06@hearings.reform.hmcts.net";
         const string message = @"{
   '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
@@ -239,7 +240,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
       'scheduled_date_time': '2023-10-30T12:00:00Z',
       'scheduled_duration': 480,
       'case_type': 'Asylum Support',
-      'case_number': 'test Marco 6 10204',
+      'case_number': 'test user 6 10204',
       'case_name': 'Pippo6 10204',
       'hearing_venue_name': 'Bedford County Court and Family Court',
       'record_audio': true,
@@ -268,17 +269,36 @@ public class HearingIsReadyForVideoIntegrationMessageTests
       {
         '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
         'participant_id': '5eb27388-7e02-4ab7-8dca-e70a0e606746',
-        'fullname': 'Mr Ma Gagliardi',
-        'username': 'ma.gagliardi@hearings.reform.hmcts.net',
+        'fullname': 'Mr Ma participant',
+        'username': 'ma.participant@hearings.reform.hmcts.net',
         'first_name': 'Ma',
-        'last_name': 'Gagliardi',
-        'contact_email': 'marco6@email.com',
+        'last_name': 'participant',
+        'contact_email': 'user6@email.com',
         'contact_telephone': '+4412346786',
-        'display_name': 'marco6 rep',
+        'display_name': 'user6 rep',
         'hearing_role': 'Representative',
         'user_role': 'Representative',
         'case_group_type': 'appellant',
-        'representee': 'marco',
+        'representee': 'user',
+        'linked_participants': [],
+        'contact_email_for_non_e_jud_judge_user': null,
+        'contact_phone_for_non_e_jud_judge_user': null,
+        'send_hearing_notification_if_new': true
+      },
+      {
+        '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+        'participant_id': '5eb27388-7e02-4ab7-8dca-e70a0e606746',
+        'fullname': 'Mr Ma participant2',
+        'username': 'ma.participant2@hearings.reform.hmcts.net',
+        'first_name': 'Ma',
+        'last_name': 'participant',
+        'contact_email': 'user2@email.com',
+        'contact_telephone': '+4412346786',
+        'display_name': 'user6 rep',
+        'hearing_role': 'Litigant in person',
+        'user_role': 'Individual',
+        'case_group_type': 'appellant',
+        'representee': '',
         'linked_participants': [],
         'contact_email_for_non_e_jud_judge_user': null,
         'contact_phone_for_non_e_jud_judge_user': null,
@@ -299,5 +319,8 @@ public class HearingIsReadyForVideoIntegrationMessageTests
         _notificationService.NotificationRequests.Should()
           .Contain(x =>
             x.ContactEmail == judgeEmail && x.NotificationType == NotificationType.HearingConfirmationJudge);
+        _notificationService.NotificationRequests.Should()
+          .Contain(x =>
+            x.ContactEmail == lipEmail && x.NotificationType == NotificationType.ExistingUserLipConfirmation);
     }
 }
