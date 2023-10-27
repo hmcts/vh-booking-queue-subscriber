@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.VideoApi;
@@ -16,6 +17,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     private NotificationServiceFake _notificationService;
     private BookingQueueSubscriberFunction _sut;
     private ILogger<BookingQueueSubscriberFunction> _logger;
+    private FeatureTogglesClientFake _featureToggles;
     
     [SetUp]
     public void SetUp()
@@ -25,6 +27,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
         _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
         _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
         _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
+        _featureToggles = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
     }
     
     [TearDown]
@@ -130,8 +133,6 @@ public class HearingIsReadyForVideoIntegrationMessageTests
         'representee': '',
         'linked_participants': [],
         'contact_email_for_non_e_jud_judge_user': null,
-        'contact_phone_for_non_e_jud_judge_user': null,
-        'send_hearing_notification_if_new': true
       },
       {
         '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
@@ -218,5 +219,108 @@ public class HearingIsReadyForVideoIntegrationMessageTests
         _videoApiService.BookNewConferenceCount.Should().Be(1);
         _videoWebService.PushNewConferenceAddedMessageCount.Should().Be(1);
         _notificationService.NotificationRequests.Should().NotBeNullOrEmpty();
+    }
+    [Test]
+    public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_and_participants_feauture_toogle_new_template_on()
+    {
+      _featureToggles.PostMayTemplateToggle = true;
+      string representativeEmail = "user6@email.com";
+      string lipEmail = "user2@email.com";
+      string judgeEmail = "manual.judge_06@hearings.reform.hmcts.net";
+        const string message = @"{
+  '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+  'id': '1f690c34-353b-4d8b-99a3-e9240088faff',
+  'timestamp': '2023-10-25T13:13:10.8432746Z',
+  'integration_event': {
+    '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingIsReadyForVideoIntegrationEvent, BookingsApi.Infrastructure.Services',
+    'hearing': {
+      '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
+      'hearing_id': 'a562fc34-6b0a-4ca0-a963-46678ac4573d',
+      'group_id': null,
+      'scheduled_date_time': '2023-10-30T12:00:00Z',
+      'scheduled_duration': 480,
+      'case_type': 'Asylum Support',
+      'case_number': 'test user 6 10204',
+      'case_name': 'Pippo6 10204',
+      'hearing_venue_name': 'Bedford County Court and Family Court',
+      'record_audio': true,
+      'hearing_type': 'Adjourned/Resumed Hearing'
+    },
+    'participants': [
+      {
+        '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+        'participant_id': '068f8ff6-0800-4cfa-9640-dd5eee0ac744',
+        'fullname': ' Manual Judge_06',
+        'username': 'manual.judge_06@hearings.reform.hmcts.net',
+        'first_name': 'Manual',
+        'last_name': 'Judge_06',
+        'contact_email': 'manual.judge_06@hearings.reform.hmcts.net',
+        'contact_telephone': '011234556789',
+        'display_name': 'Manual Judge_06',
+        'hearing_role': 'Judge',
+        'user_role': 'Judge',
+        'case_group_type': 'judge',
+        'representee': '',
+        'linked_participants': [],
+        'contact_email_for_non_e_jud_judge_user': null,
+        'contact_phone_for_non_e_jud_judge_user': null,
+        'send_hearing_notification_if_new': true
+      },
+      {
+        '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+        'participant_id': '5eb27388-7e02-4ab7-8dca-e70a0e606746',
+        'fullname': 'Mr Ma participant',
+        'username': 'ma.participant@hearings.reform.hmcts.net',
+        'first_name': 'Ma',
+        'last_name': 'participant',
+        'contact_email': 'user6@email.com',
+        'contact_telephone': '+4412346786',
+        'display_name': 'user6 rep',
+        'hearing_role': 'Representative',
+        'user_role': 'Representative',
+        'case_group_type': 'appellant',
+        'representee': 'user',
+        'linked_participants': [],
+        'contact_email_for_non_e_jud_judge_user': null,
+        'contact_phone_for_non_e_jud_judge_user': null,
+        'send_hearing_notification_if_new': true
+      },
+      {
+        '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+        'participant_id': '5eb27388-7e02-4ab7-8dca-e70a0e606746',
+        'fullname': 'Mr Ma participant2',
+        'username': 'ma.participant2@hearings.reform.hmcts.net',
+        'first_name': 'Ma',
+        'last_name': 'participant',
+        'contact_email': 'user2@email.com',
+        'contact_telephone': '+4412346786',
+        'display_name': 'user6 rep',
+        'hearing_role': 'Litigant in person',
+        'user_role': 'Individual',
+        'case_group_type': 'appellant',
+        'representee': '',
+        'linked_participants': [],
+        'contact_email_for_non_e_jud_judge_user': null,
+        'contact_phone_for_non_e_jud_judge_user': null,
+        'send_hearing_notification_if_new': true
+      }
+    ],
+    'endpoints': []
+  }
+}";
+        await _sut.Run(message);
+
+        _videoApiService.BookNewConferenceCount.Should().Be(1);
+        _videoWebService.PushNewConferenceAddedMessageCount.Should().Be(1);
+        _notificationService.NotificationRequests.Should().NotBeNullOrEmpty();
+        _notificationService.NotificationRequests.Should()
+          .Contain(x =>
+            x.ContactEmail == representativeEmail && x.NotificationType == NotificationType.HearingConfirmationRepresentative);
+        _notificationService.NotificationRequests.Should()
+          .Contain(x =>
+            x.ContactEmail == judgeEmail && x.NotificationType == NotificationType.HearingConfirmationJudge);
+        _notificationService.NotificationRequests.Should()
+          .Contain(x =>
+            x.ContactEmail == lipEmail && x.NotificationType == NotificationType.ExistingUserLipConfirmation);
     }
 }
