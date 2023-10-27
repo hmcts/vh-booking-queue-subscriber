@@ -47,8 +47,8 @@ namespace BookingQueueSubscriber.Services
                 if (user == null) continue;
             
                 var participant = participants.FirstOrDefault(p => p.ContactEmail == user.ContactEmail);
-
-                if (!string.IsNullOrEmpty(user.UserName) && participant != null)
+                
+                if (!string.IsNullOrEmpty(user.UserName) && participant != null) 
                 {
                     newUsers.Add(new UserDto { UserId = user.UserId, Username = user.UserName, UserRole = participant.UserRole });
                 }

@@ -644,6 +644,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
             _userService.Users.Clear();
             _featureTogglesClient.EjudFeatureToggleValue = false;
+            _notificationService.NotificationRequests.Clear();
             
             await _sut.Run(message);
             _userService.Users.Should().HaveCount(1);
@@ -724,6 +725,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _bookingsApi.EJudFeatureEnabled = true;
             _featureTogglesClient.EjudFeatureToggleValue = true;
             _userService.Users.Clear();
+            _notificationService.NotificationRequests.Clear();
             await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(0);
