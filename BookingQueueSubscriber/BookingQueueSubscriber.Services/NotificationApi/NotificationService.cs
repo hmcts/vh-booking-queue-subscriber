@@ -1,6 +1,5 @@
 ﻿using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.UserApi;
-using BookingsApi.Client;
 using BookingsApi.Contract.V1.Configuration;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
@@ -22,7 +21,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="password"></param>
         /// <returns></returns>
         Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string userPassword);
-        
+
         /// <summary>
         /// This send the hearing confirmation notification for a single day hearing
         /// <list type="bullet">
@@ -36,7 +35,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="participants"></param>
         /// <returns></returns>
         Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants);
-        
+
         /// <summary>
         /// Send the hearing amendment notification for a single hearing
         /// </summary>
@@ -45,7 +44,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="participants"></param>
         /// <returns></returns>
         Task SendHearingAmendmentNotificationAsync(HearingDto hearing, DateTime originalDateTime, IList<ParticipantDto> participants);
-        
+
         /// <summary>
         /// Send a welcome to VH email to new users. Part of the 1st of 3 new template
         /// <remarks>NOTE: Do not send to existing users</remarks>
@@ -54,7 +53,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="participant"></param>
         /// <returns></returns>
         Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant);
-        
+
         /// <summary>
         /// Send a single day hearing confirmation to new users. Part of the 2nd of 3 new template
         /// This is a combination of account details and hearing details
@@ -64,7 +63,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="password"></param>
         /// <returns></returns>
         Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string userPassword);
-        
+
         /// <summary>
         /// Send a single day hearing confirmation to existing users. Part of the 2nd of 3 new template
         /// </summary>
@@ -81,21 +80,19 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="days"></param>
         /// <returns></returns>
         Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
-        
+
     }
 
     public class NotificationService : INotificationService
     {
         private readonly INotificationApiClient _notificationApiClient;
-        private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<NotificationService> _logger;
         private readonly IFeatureToggles _featureToggles;
         private readonly IUserService _userService;
 
-        public NotificationService(INotificationApiClient notificationApiClient, IBookingsApiClient bookingsApiClient, ILogger<NotificationService> logger, IFeatureToggles featureToggles, IUserService userService)
+        public NotificationService(INotificationApiClient notificationApiClient, ILogger<NotificationService> logger, IFeatureToggles featureToggles, IUserService userService)
         {
             _notificationApiClient = notificationApiClient;
-            _bookingsApiClient = bookingsApiClient;
             _logger = logger;
             _featureToggles = featureToggles;
             _userService = userService;
@@ -136,17 +133,17 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 return;
             }
-        
-            var ejudFeatureFlag = await _bookingsApiClient.GetFeatureFlagAsync(nameof(FeatureFlags.EJudFeature));
+
+            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             var requests = participants
                 .Select(participant =>
                     AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant,
                         originalDateTime, hearing.ScheduledDateTime, ejudFeatureFlag))
                 .ToList();
-        
+
             await CreateNotifications(requests);
         }
-        
+
         public Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant)
         {
             if (hearing.IsGenericHearing())
@@ -181,22 +178,22 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             if (hearing.IsGenericHearing())
             {
-                await ProcessGenericEmail(hearing, participants); 
+                await ProcessGenericEmail(hearing, participants);
                 return;
             }
-        
-            List<AddNotificationRequest> requests = await CreateUserRequest(hearing, participants, days); 
-           
+
+            List<AddNotificationRequest> requests = await CreateUserRequest(hearing, participants, days);
+
             await CreateNotifications(requests);
         }
-        
+
         private async Task<List<AddNotificationRequest>> CreateUserRequest(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             List<AddNotificationRequest> list = new List<AddNotificationRequest>();
 
             var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
-            
+
             foreach (var participant in participants)
             {
                 User user = null;
@@ -209,7 +206,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {
                     list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template));
                 }
-                
+
                 if (user != null)
                 {
                     var userPassword = user.Password;
@@ -220,12 +217,12 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                     }
                 }
             }
-        
+
             return list;
         }
-        
+
         private async Task ProcessGenericEmail(HearingDto hearing, IEnumerable<ParticipantDto> participants)
-        { 
+        {
             if (string.Equals(hearing.HearingType, "Automated Test", StringComparison.CurrentCultureIgnoreCase))
             {
                 return;

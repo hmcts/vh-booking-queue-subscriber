@@ -37,7 +37,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task<ICollection<HearingDetailsResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -197,7 +197,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task RebookHearingAsync(Guid hearingId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -253,7 +253,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-  
+
         public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted)
         {
             throw new NotImplementedException();
@@ -263,7 +263,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeParam)
         {
             throw new NotImplementedException();
@@ -281,7 +281,7 @@ namespace BookingQueueSubscriber.Services
 
         public Task<bool> GetFeatureFlagAsync(string featureName, CancellationToken cancellationToken)
         {
-            return Task.FromResult(false);
+            return Task.FromResult(EJudFeatureEnabled);
         }
 
         public Task<HearingDetailsResponse> GetHearingDetailsByIdAsync(Guid hearingId)
@@ -358,7 +358,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task<ICollection<HearingVenueResponse>> GetHearingVenuesForHearingsTodayAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -388,7 +388,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task<ICollection<JobHistoryResponse>> GetJobHistoryAsync(string jobName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -524,12 +524,12 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId)
         {
             throw new NotImplementedException();
         }
-        
+
         public Task DeleteVhoNonAvailabilityHoursAsync(string username, long nonAvailabilityId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -770,7 +770,7 @@ namespace BookingQueueSubscriber.Services
 
         public Task UpdatePersonUsernameAsync(string contactEmail, string username)
         {
-           return Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         public Task UpdatePersonUsernameAsync(string contactEmail, string username, CancellationToken cancellationToken)
