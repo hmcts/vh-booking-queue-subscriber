@@ -9,6 +9,7 @@ using BookingQueueSubscriber.UnitTests.MessageHandlers;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NotificationApi.Client;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -17,6 +18,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
         private VideoApiServiceFake _videoApiService;
         private VideoWebServiceFake _videoWebService;
+        private NotificationApiClientFake _notificationApiClient;
         private NotificationServiceFake _notificationService;
         private UserServiceFake _userService;
         private BookingsApiClientFake _bookingsApi;
@@ -30,6 +32,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _logger = new Mock<ILogger<BookingQueueSubscriberFunction>>().Object;
             _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
             _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
+            _notificationApiClient = (NotificationApiClientFake)_serviceProvider.GetService<INotificationApiClient>();
             _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
             _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
@@ -733,6 +736,181 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             var addNotificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
             var notificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
+        }
+
+        [Test]
+        public async Task Should_send_welcome_notifications_for_new_participant()
+        {
+            const string message = @" {
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': '22c2627c-d93e-4084-8351-20358f724010',
+              'timestamp': '2023-11-01T22:07:14.7852801Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.NewParticipantWelcomeEmailEvent, BookingsApi.Infrastructure.Services',
+                'welcome_email': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.WelcomeEmailDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': 'faf75f2e-8e40-424a-8b30-767b57e9477e',
+                  'case_name': 'Test',
+                  'case_number': 'AutoTest',
+                  'participnat_id': '6b4f565c-2eb2-404c-86e3-a00389657845',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'contact_email': 'Automation_129055124@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Representative'
+                }
+              }
+            }";
+
+            _userService.Users.Clear();
+            _notificationService.NotificationRequests.Clear();
+            await _sut.Run(message);
+
+            _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.NewUserLipWelcome);
+        }
+
+        [Test]
+        public async Task Should_create_user_send_confirmation_notifications_for_new_participant()
+        {
+            const string message = @" {
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': '004ad2e6-e643-4696-9c4a-34ad7c74cb85',
+              'timestamp': '2023-11-01T22:10:06.4925888Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.NewParticipantHearingConfirmationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': 'faf75f2e-8e40-424a-8b30-767b57e9477e',
+                  'scheduled_date_time': '2023-11-02T11:45:00Z',
+                  'case_name': 'Test',
+                  'case_number': 'AutoTest',
+                  'participnat_id': '702dd1c2-c8f4-40b4-a096-5b77796c2dcd',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_1316542910@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Individual',
+                  'username': 'Automation_1680416252@hmcts.net',
+                  'representee': ''
+                }
+              }
+            }";
+
+            _userService.Users.Clear();
+            _notificationService.NotificationRequests.Clear();
+            await _sut.Run(message);
+            
+            _userService.Users.Should().HaveCount(1);
+            _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+
+            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.NewUserLipConfirmation);
+        }
+
+        [Test]
+        public async Task Should_send_confirmation_notifications_for_existing_participant()
+        {
+            const string message = @" {
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': 'ad43b989-4ffa-4817-9175-4afe1c559d4c',
+              'timestamp': '2023-11-01T22:11:15.5866489Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.ExistingParticipantHearingConfirmationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': 'faf75f2e-8e40-424a-8b30-767b57e9477e',
+                  'scheduled_date_time': '2023-11-02T11:45:00Z',
+                  'case_name': 'Test',
+                  'case_number': 'AutoTest',
+                  'participnat_id': '246ab9d2-993b-4c7d-9e4c-ec6246d5a9a5',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_54514578@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Individual',
+                  'username': 'Automation_311869852@hmcts.net',
+                  'representee': ''
+                }
+              }
+            }";
+
+            await _sut.Run(message);
+
+            _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.ExistingUserLipConfirmation);
+        }
+
+        [Test]
+        public async Task Should_send_multiday_confirmation_notifications_for_new_participant()
+        {
+            const string message = @" {
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': 'eedf8d6d-901d-44f3-ba41-544ebf43c610',
+              'timestamp': '2023-11-01T22:12:22.1124871Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.NewParticipantMultidayHearingConfirmationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': 'fa9edabe-6d48-48df-b5c4-1a43caad8e6f',
+                  'scheduled_date_time': '2023-11-02T11:45:00Z',
+                  'case_name': 'Test',
+                  'case_number': 'AutoTest',
+                  'participnat_id': '43065898-c18f-4f42-b39f-dc56b4906445',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_1007248621@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Representative',
+                  'username': 'Automation_15661803@hmcts.net',
+                  'representee': ''
+                },
+                'total_days': 2
+              }
+            }";
+
+            await _sut.Run(message);
+            _userService.Users.Should().HaveCount(1);
+
+            _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.NewUserLipConfirmationMultiDay);
+        }
+
+        [Test]
+        public async Task Should_send_multiday_confirmation_notifications_for_existing_participant()
+        {
+            const string message = @" {
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': '64d759f7-3b2f-491a-a3b3-17d2b22f3ab8',
+              'timestamp': '2023-11-01T22:13:18.8512123Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.ExistingParticipantMultidayHearingConfirmationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': 'fa9edabe-6d48-48df-b5c4-1a43caad8e6f',
+                  'scheduled_date_time': '2023-11-02T11:45:00Z',
+                  'case_name': 'Test',
+                  'case_number': 'AutoTest',
+                  'participnat_id': '79cef9a1-c040-45da-8f9b-891583be1b59',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_1172867501@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Individual',
+                  'username': 'Automation_1125238517@hmcts.net',
+                  'representee': ''
+                },
+                'total_days': 2
+              }
+            }";
+
+            await _sut.Run(message);
+
+            _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.ExistingUserLipConfirmationMultiDay);
         }
 
     }

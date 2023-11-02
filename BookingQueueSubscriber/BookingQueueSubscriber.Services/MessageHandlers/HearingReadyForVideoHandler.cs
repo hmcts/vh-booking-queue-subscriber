@@ -29,31 +29,31 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         public async Task HandleAsync(HearingIsReadyForVideoIntegrationEvent eventMessage)
         {
-            if (!eventMessage.Hearing.IsMultiDayHearing())
-            {
-                // create user and notification only if it is not a multiday hearing
-                var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
-                    eventMessage.Hearing, eventMessage.Participants);
+            //if (!eventMessage.Hearing.IsMultiDayHearing())
+            //{
+            //    // create user and notification only if it is not a multiday hearing
+            //    var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(
+            //        eventMessage.Hearing, eventMessage.Participants);
                 
-                if (_featureToggles.UsePostMay2023Template())
-                {
-                    // The new template journey combines the account details and hearing details into one email.
-                    // we need to remove the new user created in the previous step because they already received notifications for hearing
-                    var participants = eventMessage.Participants.Where(x =>
-                        newParticipantUsers.All(y => y.Username != x.Username || !x.IsIndividual()));
-                    await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, participants);
-                }
-                else
-                {
-                    // The old template journey sends the welcome email and the hearing confirmation email separately.
-                    await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
-                        eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
-                }
+            //    if (_featureToggles.UsePostMay2023Template())
+            //    {
+            //        // The new template journey combines the account details and hearing details into one email.
+            //        // we need to remove the new user created in the previous step because they already received notifications for hearing
+            //        var participants = eventMessage.Participants.Where(x =>
+            //            newParticipantUsers.All(y => y.Username != x.Username || !x.IsIndividual()));
+            //        await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, participants);
+            //    }
+            //    else
+            //    {
+            //        // The old template journey sends the welcome email and the hearing confirmation email separately.
+            //        await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing,
+            //            eventMessage.Participants.Where(x => x.SendHearingNotificationIfNew));
+            //    }
                 
                 
-                await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
+            //    await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
                 
-            }
+            //}
 
             await CreateNewConferenceAndPublishInternalEvent(eventMessage);
         }

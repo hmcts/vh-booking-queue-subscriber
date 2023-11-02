@@ -2,12 +2,7 @@
 {
     public class NewParticipantMultidayHearingConfirmationEvent : IIntegrationEvent
     {
-        public NewParticipantMultidayHearingConfirmationEvent(HearingConfirmationForParticipantDto dto, int totalDays)
-        {
-            HearingConfirmationForParticipant = dto;
-            TotalDays = totalDays;
-        }
-        public HearingConfirmationForParticipantDto HearingConfirmationForParticipant { get; }
-        public int TotalDays { get; }
+        public HearingConfirmationForParticipantDto HearingConfirmationForParticipant { get; set; }
+        public int TotalDays { get; set; }
     }
 }

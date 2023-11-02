@@ -24,7 +24,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 HearingId = message.HearingId,
                 MessageType = MessageType.Email,
                 ContactEmail = message.ContactEmail,
-                NotificationType = NotificationType.ExistingUserLipConfirmation,
+                NotificationType = NotificationType.ExistingUserLipConfirmationMultiDay,
                 ParticipantId = message.ParticipantId,
                 PhoneNumber = message.ContactTelephone,
                 Parameters = new Dictionary<string, string>

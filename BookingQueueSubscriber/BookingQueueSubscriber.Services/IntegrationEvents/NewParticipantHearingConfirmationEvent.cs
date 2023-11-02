@@ -2,11 +2,7 @@
 {
     public class NewParticipantHearingConfirmationEvent: IIntegrationEvent
     {
-        public NewParticipantHearingConfirmationEvent(HearingConfirmationForParticipantDto dto)
-        {
-            HearingConfirmationForParticipant = dto;
-        }
-        public HearingConfirmationForParticipantDto HearingConfirmationForParticipant { get; }
+        public HearingConfirmationForParticipantDto HearingConfirmationForParticipant { get; set; }
 
     }
 }

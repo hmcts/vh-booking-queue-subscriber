@@ -23,7 +23,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 HearingId = message.HearingId,
                 MessageType = MessageType.Email,
                 ContactEmail = message.ContactEmail,
-                NotificationType = NotificationType.ExistingUserLipConfirmationMultiDay,
+                NotificationType = NotificationType.ExistingUserLipConfirmation,
                 ParticipantId = message.ParticipantId,
                 PhoneNumber = message.ContactTelephone,
                 Parameters = new Dictionary<string, string>

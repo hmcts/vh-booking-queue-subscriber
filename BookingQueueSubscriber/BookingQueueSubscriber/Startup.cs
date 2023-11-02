@@ -98,6 +98,7 @@ namespace BookingQueueSubscriber
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
                 services.AddScoped<IVideoWebService, VideoWebServiceFake>();
                 services.AddScoped<INotificationService, NotificationServiceFake>();
+                services.AddScoped<INotificationApiClient, NotificationApiClientFake>();
                 services.AddScoped<IUserService, UserServiceFake>();
                 services.AddScoped<IBookingsApiClient, BookingsApiClientFake>();
                 services.AddScoped<IFeatureToggles, FeatureTogglesClientFake>();
