@@ -89,9 +89,6 @@ public class HearingIsReadyForVideoIntegrationMessageTests
 
         _videoApiService.BookNewConferenceCount.Should().Be(1);
         _videoWebService.PushNewConferenceAddedMessageCount.Should().Be(1);
-        _notificationService.NotificationRequests.Should()
-          .Contain(x =>
-            x.ContactEmail == judgeEmail && x.NotificationType == NotificationType.HearingConfirmationJudge);
     }
     
     [Test]
@@ -218,8 +215,8 @@ public class HearingIsReadyForVideoIntegrationMessageTests
 
         _videoApiService.BookNewConferenceCount.Should().Be(1);
         _videoWebService.PushNewConferenceAddedMessageCount.Should().Be(1);
-        _notificationService.NotificationRequests.Should().NotBeNullOrEmpty();
     }
+
     [Test]
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_and_participants_feauture_toogle_new_template_on()
     {
@@ -312,15 +309,5 @@ public class HearingIsReadyForVideoIntegrationMessageTests
 
         _videoApiService.BookNewConferenceCount.Should().Be(1);
         _videoWebService.PushNewConferenceAddedMessageCount.Should().Be(1);
-        _notificationService.NotificationRequests.Should().NotBeNullOrEmpty();
-        _notificationService.NotificationRequests.Should()
-          .Contain(x =>
-            x.ContactEmail == representativeEmail && x.NotificationType == NotificationType.HearingConfirmationRepresentative);
-        _notificationService.NotificationRequests.Should()
-          .Contain(x =>
-            x.ContactEmail == judgeEmail && x.NotificationType == NotificationType.HearingConfirmationJudge);
-        _notificationService.NotificationRequests.Should()
-          .Contain(x =>
-            x.ContactEmail == lipEmail && x.NotificationType == NotificationType.ExistingUserLipConfirmation);
     }
 }

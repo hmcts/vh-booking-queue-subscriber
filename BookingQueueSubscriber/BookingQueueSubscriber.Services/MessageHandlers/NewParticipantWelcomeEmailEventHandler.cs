@@ -1,6 +1,4 @@
-﻿using BookingQueueSubscriber.Services.NotificationApi;
-using NotificationApi.Client;
-using NotificationApi.Contract;
+﻿using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
@@ -17,22 +15,16 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(NewParticipantWelcomeEmailEvent eventMessage)
         {
             var message = eventMessage.WelcomeEmail;
-            var request = new AddNotificationRequest
-            {
-                HearingId = message.HearingId,
-                MessageType = MessageType.Email,
-                ContactEmail = message.ContactEmail,
-                NotificationType = NotificationType.NewUserLipWelcome,
-                PhoneNumber = message.ContactTelephone,
-                Parameters = new Dictionary<string, string>
-                {
-                    {NotifyParams.Name, $"{message.FirstName} {message.LastName}" },
-                    {NotifyParams.CaseName, message.CaseName },
-                    {NotifyParams.CaseNumber, message.CaseNumber },
-                }
-            };
+            var request = new NewUserWelcomeEmailRequest { 
+                Name = $"{message.FirstName} {message.LastName}",
+                CaseName = message.CaseName, 
+                CaseNumber = message.CaseNumber, 
+                ContactEmail = message.ContactEmail, 
+                HearingId = message.HearingId, 
+                ParticipantId = message.ParticipnatId,  
+                RoleName = message.UserRole };
 
-            await _notificationApiClient.CreateNewNotificationAsync(request);
+            await _notificationApiClient.SendParticipantWelcomeEmailAsync(request);
         }
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {

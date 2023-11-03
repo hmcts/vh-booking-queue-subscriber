@@ -30,31 +30,23 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             message.Username = newUser.UserName;
 
-            var request = new AddNotificationRequest
+            var request = new NewUserSingleDayHearingConfirmationRequest
             {
                 HearingId = message.HearingId,
-                MessageType = MessageType.Email,
                 ContactEmail = message.ContactEmail,
-                NotificationType = NotificationType.NewUserLipConfirmation,
                 ParticipantId = message.ParticipantId,
-                PhoneNumber = message.ContactTelephone,
-                Parameters = new Dictionary<string, string>
-                {
-                    {NotifyParams.Name, $"{message.FirstName} {message.LastName}" },
-                    {NotifyParams.CaseName, message.CaseName },
-                    {NotifyParams.CaseNumber, message.CaseNumber },
-
-                    {NotifyParams.DayMonthYear,message.ScheduledDateTime.ToEmailDateGbLocale() },
-                    {NotifyParams.DayMonthYearCy,message.ScheduledDateTime.ToEmailDateCyLocale() },
-
-                    {NotifyParams.StartTime,message.ScheduledDateTime.ToEmailTimeGbLocale() },
-                    {NotifyParams.UserName,message.Username.ToLower() },
-                    {NotifyParams.RandomPassword, newUser.Password }
-                }
+                CaseName = message.CaseName,
+                ScheduledDateTime = message.ScheduledDateTime,
+                Username = newUser.UserName,
+                RoleName = message.UserRole,
+                CaseNumber = message.CaseNumber,
+                RandomPassword = newUser.Password,
+                Name = $"{message.FirstName} {message.LastName}"
             };
 
             await _bookingsApiClient.UpdatePersonUsernameAsync(message.ContactEmail, message.Username);
-            await _notificationApiClient.CreateNewNotificationAsync(request);
+
+            await _notificationApiClient.SendParticipantSingleDayHearingConfirmationForNewUserEmailAsync(request);
             await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
         }
         async Task IMessageHandler.HandleAsync(object integrationEvent)

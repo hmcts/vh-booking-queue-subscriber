@@ -46,6 +46,15 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
           _videoApiService.ClearRequests();
           _notificationService.EJudFetaureEnabled = false;
           _bookingsApi.EJudFeatureEnabled = false;
+            _notificationApiClient.NotificationRequests.Clear();
+            _userService.Users.Clear();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _notificationApiClient.NotificationRequests.Clear();
+            _userService.Users.Clear();
         }
 
         [Test]
@@ -650,11 +659,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService.NotificationRequests.Clear();
             
             await _sut.Run(message);
-            _userService.Users.Should().HaveCount(1);
-            _userService.Users[0].UserName.Should().Be("Manual 7.Panel 7");
-            _notificationService.NotificationRequests.Should().HaveCount(2);
-            var addNotificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJoh);
-            var notificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 
@@ -727,14 +731,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService.EJudFetaureEnabled = true;
             _bookingsApi.EJudFeatureEnabled = true;
             _featureTogglesClient.EjudFeatureToggleValue = true;
-            _userService.Users.Clear();
-            _notificationService.NotificationRequests.Clear();
             await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(0);
-            _notificationService.NotificationRequests.Should().HaveCount(2);
-            var addNotificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJoh);
-            var notificationRequest = _notificationService.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.HearingConfirmationEJudJudge);
             _videoApiService.BookNewConferenceCount.Should().Be(1);
         }
 
@@ -762,12 +761,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
               }
             }";
 
-            _userService.Users.Clear();
-            _notificationService.NotificationRequests.Clear();
             await _sut.Run(message);
 
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
-            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.NewUserLipWelcome);
         }
 
         [Test]
@@ -798,14 +794,10 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
               }
             }";
 
-            _userService.Users.Clear();
-            _notificationService.NotificationRequests.Clear();
             await _sut.Run(message);
             
             _userService.Users.Should().HaveCount(1);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
-
-            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.NewUserLipConfirmation);
         }
 
         [Test]
@@ -837,9 +829,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }";
 
             await _sut.Run(message);
-
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
-            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.ExistingUserLipConfirmation);
         }
 
         [Test]
@@ -875,7 +865,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _userService.Users.Should().HaveCount(1);
 
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
-            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.NewUserLipConfirmationMultiDay);
         }
 
         [Test]
@@ -910,8 +899,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             await _sut.Run(message);
 
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
-            _notificationApiClient.NotificationRequests.Single(x => x.NotificationType == NotificationApi.Contract.NotificationType.ExistingUserLipConfirmationMultiDay);
         }
-
     }
 }

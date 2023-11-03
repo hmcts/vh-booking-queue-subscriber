@@ -18,29 +18,22 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             var message = eventMessage.HearingConfirmationForParticipant;
 
-            var request = new AddNotificationRequest
+            var request = new ExistingUserSingleDayHearingConfirmationRequest
             {
                 HearingId = message.HearingId,
-                MessageType = MessageType.Email,
                 ContactEmail = message.ContactEmail,
-                NotificationType = NotificationType.ExistingUserLipConfirmation,
                 ParticipantId = message.ParticipantId,
-                PhoneNumber = message.ContactTelephone,
-                Parameters = new Dictionary<string, string>
-                {
-                    {NotifyParams.Name, $"{message.FirstName} {message.LastName}" },
-                    {NotifyParams.CaseName, message.CaseName },
-                    {NotifyParams.CaseNumber, message.CaseNumber },
-
-                    {NotifyParams.DayMonthYear,message.ScheduledDateTime.ToEmailDateGbLocale() },
-                    {NotifyParams.DayMonthYearCy,message.ScheduledDateTime.ToEmailDateCyLocale() },
-
-                    {NotifyParams.StartTime,message.ScheduledDateTime.ToEmailTimeGbLocale() },
-                    {NotifyParams.UserName,message.Username.ToLower() },
-                }
+                CaseName = message.CaseName,
+                CaseNumber = message.CaseNumber,
+                DisplayName = message.DisplayName,
+                Name = $"{message.FirstName} {message.LastName}",
+                Representee = message.Representee,
+                Username = message.Username,
+                RoleName = message.UserRole,
+                ScheduledDateTime = message.ScheduledDateTime
             };
 
-            await _notificationApiClient.CreateNewNotificationAsync(request);
+            await _notificationApiClient.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(request);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

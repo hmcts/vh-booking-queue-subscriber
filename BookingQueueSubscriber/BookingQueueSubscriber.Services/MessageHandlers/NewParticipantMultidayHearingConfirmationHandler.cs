@@ -1,8 +1,6 @@
-﻿using BookingQueueSubscriber.Services.NotificationApi;
-using BookingQueueSubscriber.Services.UserApi;
+﻿using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
 using NotificationApi.Client;
-using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
@@ -31,33 +29,23 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             message.Username = newUser.UserName;
 
-            var request = new AddNotificationRequest
+            var request = new NewUserMultiDayHearingConfirmationRequest
             {
                 HearingId = message.HearingId,
-                MessageType = MessageType.Email,
                 ContactEmail = message.ContactEmail,
-                NotificationType = NotificationType.NewUserLipConfirmationMultiDay,
                 ParticipantId = message.ParticipantId,
-                PhoneNumber = message.ContactTelephone,
-                Parameters = new Dictionary<string, string>
-                {
-                    { NotifyParams.Name, $"{message.FirstName} {message.LastName}" },
-                    { NotifyParams.CaseName, cleanedCaseName },
-                    { NotifyParams.CaseNumber, message.CaseNumber },
-
-                    { NotifyParams.StartDayMonthYear, message.ScheduledDateTime.ToEmailDateGbLocale() },
-                    { NotifyParams.Time,message.ScheduledDateTime.ToEmailTimeGbLocale() },
-                    { NotifyParams.DayMonthYear, message.ScheduledDateTime.ToEmailDateGbLocale() },
-                    { NotifyParams.DayMonthYearCy, message.ScheduledDateTime.ToEmailDateCyLocale() },
-                    { NotifyParams.StartTime, message.ScheduledDateTime.ToEmailTimeGbLocale() },
-                    { NotifyParams.UserName, message.Username.ToLower() },
-                    { NotifyParams.RandomPassword, newUser.Password },
-                    { NotifyParams.NumberOfDays, eventMessage.TotalDays.ToString() }
-                }
+                Name = $"{message.FirstName} {message.LastName}",
+                CaseName = cleanedCaseName,
+                CaseNumber = message.CaseNumber,
+                RandomPassword = newUser.Password,
+                RoleName = message.UserRole,
+                ScheduledDateTime = message.ScheduledDateTime,
+                TotalDays = eventMessage.TotalDays,
+                Username = message.Username
             };
 
             await _bookingsApiClient.UpdatePersonUsernameAsync(message.ContactEmail, message.Username);
-            await _notificationApiClient.CreateNewNotificationAsync(request);
+            await _notificationApiClient.SendParticipantMultiDayHearingConfirmationForNewUserEmailAsync(request);
             await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
         }
 

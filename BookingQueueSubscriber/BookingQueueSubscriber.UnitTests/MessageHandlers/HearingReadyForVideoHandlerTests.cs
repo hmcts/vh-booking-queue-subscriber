@@ -15,7 +15,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_and_bookings_api_when_request_is_valid()
         {
             var messageHandler = new HearingReadyForVideoHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object,
-                UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
+                 BookingsApiClientMock.Object);
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
          
             var integrationEvent = CreateEvent();
@@ -28,7 +28,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_and_bookings_api_when_handle_is_called_with_explicit_interface()
         {
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
-                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
+                VideoWebServiceMock.Object, BookingsApiClientMock.Object);
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
 
             var integrationEvent = CreateEvent();
@@ -41,7 +41,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_send_hearing_notification_without_participant_already_notified_new_template_on()
         {
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
-                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
+                VideoWebServiceMock.Object, BookingsApiClientMock.Object);
             var integrationEvent = CreateEvent(notGeneric: true);
             var usersNotified = new List<UserDto>()
                 {new UserDto() {Username = integrationEvent.Participants[0].Username}};
@@ -65,7 +65,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_send_hearing_notification_without_create_participant_for_multiday_hearing()
         {
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
-                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
+                VideoWebServiceMock.Object, BookingsApiClientMock.Object);
             var integrationEvent = CreateEvent(true);
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
             
@@ -80,7 +80,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var expectedConferenceId = Guid.NewGuid();
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
-                VideoWebServiceMock.Object, UserCreationAndNotificationMock.Object, BookingsApiClientMock.Object, FeatureTogglesMock.Object);
+                VideoWebServiceMock.Object, BookingsApiClientMock.Object);
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse { Id = expectedConferenceId});
 
             var integrationEvent = CreateEvent();
@@ -88,7 +88,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             VideoWebServiceMock.Verify(x => x.PushNewConferenceAdded(expectedConferenceId));
         }
-
 
         private static HearingIsReadyForVideoIntegrationEvent CreateEvent(bool isMultiHearing = false, bool notGeneric = false)
         {

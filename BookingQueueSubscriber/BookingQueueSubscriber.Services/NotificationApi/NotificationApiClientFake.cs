@@ -10,27 +10,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     [ExcludeFromCodeCoverage]
     public class NotificationApiClientFake : INotificationApiClient
     {
-        public List<AddNotificationRequest> NotificationRequests { get; set; } = new List<AddNotificationRequest>();
-        public Task<HealthResponse> CheckServiceHealthAuth2Async()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HealthResponse> CheckServiceHealthAuth2Async(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HealthResponse> CheckServiceHealthAuthAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HealthResponse> CheckServiceHealthAuthAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
+        public List<Object> NotificationRequests { get; set; } = new List<Object>();
         public Task CreateNewNotificationAsync(AddNotificationRequest request)
         {
             NotificationRequests.Add(request);
@@ -39,7 +19,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         public Task CreateNewNotificationAsync(AddNotificationRequest request, CancellationToken cancellationToken)
         {
-            NotificationRequests.Add(request);
             return Task.FromResult(HttpStatusCode.OK);
         }
 
@@ -59,6 +38,109 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         public Task HandleCallbackAsync(NotificationCallbackRequest notificationCallbackRequest, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendMultiDayHearingReminderEmailAsync(MultiDayHearingReminderRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendMultiDayHearingReminderEmailAsync(MultiDayHearingReminderRequest request, CancellationToken cancellationToken)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantCreatedAccountEmailAsync(SignInDetailsEmailRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendParticipantCreatedAccountEmailAsync(SignInDetailsEmailRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(ExistingUserMultiDayHearingConfirmationRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(ExistingUserMultiDayHearingConfirmationRequest request, CancellationToken cancellationToken)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantMultiDayHearingConfirmationForNewUserEmailAsync(NewUserMultiDayHearingConfirmationRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantMultiDayHearingConfirmationForNewUserEmailAsync(NewUserMultiDayHearingConfirmationRequest request, CancellationToken cancellationToken)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(ExistingUserSingleDayHearingConfirmationRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(ExistingUserSingleDayHearingConfirmationRequest request, CancellationToken cancellationToken)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantSingleDayHearingConfirmationForNewUserEmailAsync(NewUserSingleDayHearingConfirmationRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantSingleDayHearingConfirmationForNewUserEmailAsync(NewUserSingleDayHearingConfirmationRequest request, CancellationToken cancellationToken)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantWelcomeEmailAsync(NewUserWelcomeEmailRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendParticipantWelcomeEmailAsync(NewUserWelcomeEmailRequest request, CancellationToken cancellationToken)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendResetPasswordEmailAsync(PasswordResetEmailRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendResetPasswordEmailAsync(PasswordResetEmailRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendSingleDayHearingReminderEmailAsync(SingleDayHearingReminderRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendSingleDayHearingReminderEmailAsync(SingleDayHearingReminderRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

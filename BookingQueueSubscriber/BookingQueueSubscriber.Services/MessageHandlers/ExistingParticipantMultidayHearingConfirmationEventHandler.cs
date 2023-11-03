@@ -1,6 +1,4 @@
-﻿using BookingQueueSubscriber.Services.NotificationApi;
-using NotificationApi.Client;
-using NotificationApi.Contract;
+﻿using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
@@ -18,32 +16,23 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             var message = eventMessage.HearingConfirmationForParticipant;
             var cleanedCaseName = message.CaseName.Replace($"Day 1 of {eventMessage.TotalDays}", string.Empty).Trim();
-
-            var request = new AddNotificationRequest
+            var request = new ExistingUserMultiDayHearingConfirmationRequest
             {
-                HearingId = message.HearingId,
-                MessageType = MessageType.Email,
+                Name = $"{message.FirstName} {message.LastName}",
+                CaseName = cleanedCaseName,
+                CaseNumber = message.CaseNumber,
                 ContactEmail = message.ContactEmail,
-                NotificationType = NotificationType.ExistingUserLipConfirmationMultiDay,
+                DisplayName = message.DisplayName,
+                HearingId = message.HearingId,
                 ParticipantId = message.ParticipantId,
-                PhoneNumber = message.ContactTelephone,
-                Parameters = new Dictionary<string, string>
-                {
-                    { NotifyParams.Name, $"{message.FirstName} {message.LastName}" },
-                    { NotifyParams.CaseName, cleanedCaseName },
-                    { NotifyParams.CaseNumber, message.CaseNumber },
-
-                    { NotifyParams.StartDayMonthYear, message.ScheduledDateTime.ToEmailDateGbLocale()},
-                    { NotifyParams.Time,message.ScheduledDateTime.ToEmailTimeGbLocale() },
-                    { NotifyParams.DayMonthYear, message.ScheduledDateTime.ToEmailDateGbLocale() },
-                    { NotifyParams.DayMonthYearCy, message.ScheduledDateTime.ToEmailDateCyLocale() },
-                    { NotifyParams.StartTime, message.ScheduledDateTime.ToEmailTimeGbLocale() },
-                    { NotifyParams.UserName, message.Username.ToLower() },
-                    { NotifyParams.NumberOfDays, eventMessage.TotalDays.ToString() }
-                }
+                Representee = message.Representee,
+                RoleName = message.Username,
+                ScheduledDateTime = message.ScheduledDateTime,
+                TotalDays = eventMessage.TotalDays,
+                Username = message.Username
             };
 
-            await _notificationApiClient.CreateNewNotificationAsync(request);
+            await _notificationApiClient.SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(request);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

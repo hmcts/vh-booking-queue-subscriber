@@ -14,19 +14,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Core
             _serviceProvider = serviceProvider;
         }
 
-        public IMessageHandler Get<T>(T integrationEvent) where T: IIntegrationEvent
+        public IMessageHandler Get<T>(T integrationEvent) where T : IIntegrationEvent
         {
             var genericType = typeof(IMessageHandler<>).MakeGenericType(integrationEvent.GetType());
-            try
-            {
-                var service = _serviceProvider.GetService(genericType);
-                return (IMessageHandler)service;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return null;
+
+            var service = _serviceProvider.GetService(genericType);
+            return (IMessageHandler)service;
         }
     }
 }
