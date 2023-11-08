@@ -1,23 +1,41 @@
-using BookingQueueSubscriber.Services.NotificationApi;
+using NotificationApi.Client;
+using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
     public class MultiDayHearingHandler : IMessageHandler<MultiDayHearingIntegrationEvent>
     {
-        private readonly INotificationService _notificationService;
+        private readonly INotificationApiClient _notificationApiClient;
 
-        public MultiDayHearingHandler(INotificationService notificationService)
+        public MultiDayHearingHandler(INotificationApiClient notificationApiClient)
         {
-            _notificationService = notificationService;
+            _notificationApiClient = notificationApiClient;
         }
 
         public async Task HandleAsync(MultiDayHearingIntegrationEvent eventMessage)
         {
-            await _notificationService.SendMultiDayHearingNotificationAsync(eventMessage.Hearing,
-                eventMessage.Participants, eventMessage.TotalDays);
+            var message = eventMessage.HearingConfirmationForParticipant;
+            var cleanedCaseName = message.CaseName.Replace($"Day 1 of {eventMessage.TotalDays}", string.Empty).Trim();
+            var request = new ExistingUserMultiDayHearingConfirmationRequest
+            {
+                Name = $"{message.FirstName} {message.LastName}",
+                CaseName = cleanedCaseName,
+                CaseNumber = message.CaseNumber,
+                ContactEmail = message.ContactEmail,
+                DisplayName = message.DisplayName,
+                HearingId = message.HearingId,
+                ParticipantId = message.ParticipantId,
+                Representee = message.Representee,
+                RoleName = message.Username,
+                ScheduledDateTime = message.ScheduledDateTime,
+                TotalDays = eventMessage.TotalDays,
+                Username = message.Username
+            };
+
+            await _notificationApiClient.SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(request);
         }
 
-        async Task IMessageHandler.HandleAsync(object integrationEvent)
+        public async Task HandleAsync(object integrationEvent)
         {
             await HandleAsync((MultiDayHearingIntegrationEvent)integrationEvent);
         }
