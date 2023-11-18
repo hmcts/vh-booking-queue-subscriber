@@ -337,47 +337,64 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         public async Task Should_handle_hearing_create_and_notify_user_integration_event()
         {
             const string message = @"{
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
-            'id': '0473e722-a7e1-4af2-b76e-42332d988a4d',
-            'timestamp': '2022-06-24T16:04:11.3750446Z',
-            'integration_event': {
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.CreateAndNotifyUserIntegrationEvent, BookingsApi.Infrastructure.Services',
-            'hearing': {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
-            'hearing_id': '80b79a4e-a104-46ac-b31c-c20edc2c5c8a',
-            'group_id': null,
-            'scheduled_date_time': '2022-07-19T09:49:56.924Z',
-            'scheduled_duration': 45,
-            'case_type': 'Civil Money Claims',
-            'case_number': '54453434',
-            'case_name': 'Rambo4 vs terminator4',
-            'hearing_venue_name': 'Aberdeen Tribunal Hearing Centre',
-            'record_audio': false
-            },
-            'participants': [
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '6706c2f5-0698-4e8d-9034-9e148e9b8bf2',
-            'fullname': 'Mr Brew milkyOne',
-            'username': 'brewmilkyOne@gmail.com',
-            'first_name': 'Brew',
-            'last_name': 'milkyOne',
-            'contact_email': 'brewmilkyOne@gmail.com',
-            'contact_telephone': '1234444444',
-            'display_name': 'milk',
-            'hearing_role': 'Litigant in person',
-            'user_role': 'Individual',
-            'case_group_type': 'claimant',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null
-            }
-            ]
-            }
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': 'c4286e6a-d4e8-45f9-a992-068813990f8c',
+              'timestamp': '2023-11-18T22:45:25.7936899Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.CreateAndNotifyUserIntegrationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': '4dc310a9-0716-4dba-bfb8-a221936a4d3d',
+                  'scheduled_date_time': '2023-11-19T11:45:00Z',
+                  'case_name': 'Test',
+                  'case_number': 'AutoTest',
+                  'participnat_id': 'a259a318-8fcc-4820-aff4-be098c41be6c',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_1486595270@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Individual',
+                  'username': 'Automation_1829854172@hmcts.net',
+                  'representee': ''
+                }
+              }
             }";
             await _sut.Run(message);
+            _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            _videoApiService.BookNewConferenceCount.Should().Be(0);
+        }
 
+        [Test]
+        public async Task Should_handle_hearing_amendment_integration_event()
+        {
+            const string message = @"{
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': 'aaf7f048-faf5-4d40-b5b2-8afce08fbe9a',
+              'timestamp': '2023-11-18T23:37:04.670075Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingAmendmentNotificationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': '91c592d8-5ff8-4774-b456-87d7b4e319f3',
+                  'scheduled_date_time': '2023-11-19T11:45:00Z',
+                  'case_name': 'Case name',
+                  'case_number': 'Original Hearing',
+                  'participnat_id': '73f2053e-74f1-4d6c-b817-246f4b22e665',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_226153990@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Individual',
+                  'username': 'Automation_338564597@hmcts.net',
+                  'representee': ''
+                },
+                'new_scheduled_date_time': '2023-11-20T00:00:00Z'
+              }
+            }";
+            await _sut.Run(message);
+            _notificationApiClient.NotificationRequests.Should().HaveCount(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
 
@@ -488,103 +505,32 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         public async Task Should_handle_multiday_hearing_integration_event()
         {
             const string message = @" {
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
-            'id': '13be3fe8-6d24-4624-9a9e-2895e7c5dc15',
-            'timestamp': '2022-06-20T16:47:20.9793135Z',
-            'integration_event': {
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.MultiDayHearingIntegrationEvent, BookingsApi.Infrastructure.Services',
-            'hearing': {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
-            'hearing_id': '74e4b0f2-cbe0-4246-8f25-325d26d8df5e',
-            'group_id': '74e4b0f2-cbe0-4246-8f25-325d26d8df5e',
-            'scheduled_date_time': '2022-06-22T11:00:00Z',
-            'scheduled_duration': 480,
-            'case_type': 'Civil',
-            'case_number': 'MultiDayWithJudge',
-            'case_name': 'MultiDayWithJudge',
-            'hearing_venue_name': 'Aberdeen Tribunal Hearing Centre',
-            'record_audio': true
-            },
-            'participants': [
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '82d21eb0-2543-4c42-aee9-17ce7ba29091',
-            'fullname': ' Komal Judge',
-            'username': 'komal.judge@hearings.reform.hmcts.net',
-            'first_name': 'Komal',
-            'last_name': 'Judge',
-            'contact_email': 'komal.judge@hearings.reform.hmcts.net',
-            'contact_telephone': null,
-            'display_name': 'Komal Judge',
-            'hearing_role': 'Judge',
-            'user_role': 'Judge',
-            'case_group_type': 'judge',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': 'komal.dabhi@test.net',
-            'contact_phone_for_non_e_jud_judge_user': '98738'
-            },
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': 'ebd141d8-0046-4472-99ac-57fe2eeed2db',
-            'fullname': 'Mr manual observer136',
-            'username': 'manual.observer136@hmcts.net',
-            'first_name': 'manual',
-            'last_name': 'observer136',
-            'contact_email': 'manual.observer136@hmcts.net',
-            'contact_telephone': '9887544',
-            'display_name': 'OBS136',
-            'hearing_role': 'Observer',
-            'user_role': 'Individual',
-            'case_group_type': 'observer',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null
-            },
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '7b90e6bd-f4bf-4aed-a0a1-7dd6fd8af8fb',
-            'fullname': 'Mrs Manual_VW Individual_09',
-            'username': 'manual_vw.individual_09@hearings.reform.hmcts.net',
-            'first_name': 'Manual_VW',
-            'last_name': 'Individual_09',
-            'contact_email': 'manual_vw.individual_09@hmcts.net',
-            'contact_telephone': '+44(0)71234567891',
-            'display_name': 'LIP',
-            'hearing_role': 'Litigant in person',
-            'user_role': 'Individual',
-            'case_group_type': 'claimant',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null
-            },
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '9a192e70-9068-48f1-9396-d9e5bba6e9d2',
-            'fullname': 'Mrs Manual Representative_54',
-            'username': 'manual.representative_54@hearings.reform.hmcts.net',
-            'first_name': 'Manual',
-            'last_name': 'Representative_54',
-            'contact_email': 'manual.representative_54@hmcts.net',
-            'contact_telephone': '028900800',
-            'display_name': 'rgswr',
-            'hearing_role': 'Representative',
-            'user_role': 'Representative',
-            'case_group_type': 'defendant',
-            'representee': 'DLIP',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null
-            }
-            ],
-            'total_days': 3
-            }
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': 'e5c7fe37-15f6-4b76-b336-7cd02db7d34a',
+              'timestamp': '2023-11-18T23:25:22.2296966Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.MultiDayHearingIntegrationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': '1a77b12f-becc-43fa-891c-15e882d2f37b',
+                  'scheduled_date_time': '2023-11-19T11:45:00Z',
+                  'case_name': 'Test',
+                  'case_number': 'AutoTest',
+                  'participnat_id': '314cfdcc-af6a-443f-a89a-4dbdc652aa1b',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_556303923@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Individual',
+                  'username': 'Automation_840074883@hmcts.net',
+                  'representee': ''
+                }
+              }
             }";
 
             await _sut.Run(message);
-
+            _notificationApiClient.NotificationRequests.Count.Should().Be(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
 

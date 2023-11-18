@@ -26,7 +26,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 HearingId = message.HearingId,
                 ParticipantId = message.ParticipantId,
                 Representee = message.Representee,
-                RoleName = message.Username,
+                RoleName = message.UserRole,
                 ScheduledDateTime = message.ScheduledDateTime,
                 TotalDays = eventMessage.TotalDays,
                 Username = message.Username

@@ -28,7 +28,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             await messageHandler.HandleAsync(integrationEvent);
             var participant = integrationEvent.HearingConfirmationForParticipant;
 
-            NotificationApiClientMock.Verify(x => x.SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(It.Is<ExistingUserMultiDayHearingConfirmationRequest>(
+            NotificationApiClientMock.Verify(x => x.SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(
+                It.Is<ExistingUserMultiDayHearingConfirmationRequest>(
                             request =>
                                 request.TotalDays == integrationEvent.TotalDays &&
                                 request.Username == participant.Username &&

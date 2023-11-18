@@ -42,6 +42,17 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             throw new NotImplementedException();
         }
 
+        public Task SendHearingAmendmentEmailAsync(HearingAmendmentRequest request)
+        {
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendHearingAmendmentEmailAsync(HearingAmendmentRequest request, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
         public Task SendMultiDayHearingReminderEmailAsync(MultiDayHearingReminderRequest request)
         {
             NotificationRequests.Add(request);
@@ -56,12 +67,14 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         public Task SendParticipantCreatedAccountEmailAsync(SignInDetailsEmailRequest request)
         {
-            throw new NotImplementedException();
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
         }
 
         public Task SendParticipantCreatedAccountEmailAsync(SignInDetailsEmailRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            NotificationRequests.Add(request);
+            return Task.FromResult(HttpStatusCode.OK);
         }
 
         public Task SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(ExistingUserMultiDayHearingConfirmationRequest request)
