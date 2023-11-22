@@ -18,20 +18,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             var message = eventMessage.HearingConfirmationForParticipant;
 
-            var request = new ExistingUserSingleDayHearingConfirmationRequest
-            {
-                HearingId = message.HearingId,
-                ContactEmail = message.ContactEmail,
-                ParticipantId = message.ParticipantId,
-                CaseName = message.CaseName,
-                CaseNumber = message.CaseNumber,
-                DisplayName = message.DisplayName,
-                Name = $"{message.FirstName} {message.LastName}",
-                Representee = message.Representee,
-                Username = message.Username,
-                RoleName = message.UserRole,
-                ScheduledDateTime = message.ScheduledDateTime
-            };
+            var request = NotificationRequestHelper.BuildExistingUserSingleDayHearingConfirmationRequest(message);
 
             await _notificationApiClient.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(request);
         }
