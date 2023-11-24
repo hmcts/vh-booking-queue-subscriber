@@ -15,22 +15,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(MultiDayHearingIntegrationEvent eventMessage)
         {
             var message = eventMessage.HearingConfirmationForParticipant;
-            var cleanedCaseName = message.CaseName.Replace($"Day 1 of {eventMessage.TotalDays}", string.Empty).Trim();
-            var request = new ExistingUserMultiDayHearingConfirmationRequest
-            {
-                Name = $"{message.FirstName} {message.LastName}",
-                CaseName = cleanedCaseName,
-                CaseNumber = message.CaseNumber,
-                ContactEmail = message.ContactEmail,
-                DisplayName = message.DisplayName,
-                HearingId = message.HearingId,
-                ParticipantId = message.ParticipantId,
-                Representee = message.Representee,
-                RoleName = message.UserRole,
-                ScheduledDateTime = message.ScheduledDateTime,
-                TotalDays = eventMessage.TotalDays,
-                Username = message.Username
-            };
+            var request = NotificationRequestHelper.BuildExistingUserMultiDayHearingConfirmationRequest(message, eventMessage.TotalDays);
 
             await _notificationApiClient.SendParticipantMultiDayHearingConfirmationForExistingUserEmailAsync(request);
         }
