@@ -1,9 +1,8 @@
 ﻿using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.UserApi;
-using BookingsApi.Contract.V1.Configuration;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
-using UserApi.Contract.Requests;
+using RoleNames = BookingQueueSubscriber.Services.UserApi.RoleNames;
 
 namespace BookingQueueSubscriber.Services.NotificationApi
 {

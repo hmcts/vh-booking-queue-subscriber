@@ -170,6 +170,16 @@
           "Newtonsoft.Json": "13.0.1"
         }
       },
+      "NotificationApi.Client": {
+        "type": "Direct",
+        "requested": "[1.49.2, )",
+        "resolved": "1.49.2",
+        "contentHash": "R68J5+28nu5NZ/CUiImXuTAaxgy/ZzVYptNXH+z5trDJpFWCkek8JLANnQmuYqegm+WTq5VjHBcpIe0sC6taJg==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Newtonsoft.Json": "13.0.1"
+        }
+      },
       "Rixian.Extensions.ApplicationInsights.WorkerService": {
         "type": "Direct",
         "requested": "[2.1.19, )",
@@ -1079,15 +1089,6 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "10.0.1"
-        }
-      },
-      "NotificationApi.Client": {
-        "type": "Transitive",
-        "resolved": "1.45.7",
-        "contentHash": "fa1Xs/lh7Jp97IuqjyDRcz1dqW56i6bckI0Y2cgAB7gI9YABbi7XcfJ2YMpjTzXbUm4NZyqj23vGZmutFJ+2eg==",
-        "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "13.0.1"
         }
       },
       "Rixian.Extensions.ApplicationInsights": {
@@ -2319,29 +2320,29 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.46.10, )",
-          "LaunchDarkly.ServerSdk": "[7.0.3, )",
-          "Microsoft.ApplicationInsights": "[2.21.0, )",
-          "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
-          "Microsoft.Extensions.Configuration.Json": "[6.0.0, )",
-          "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
-          "Newtonsoft.Json": "[13.0.1, )",
-          "VH.Core.Configuration": "[0.1.13, )"
+          "BookingsApi.Client": "1.46.10",
+          "LaunchDarkly.ServerSdk": "7.0.3",
+          "Microsoft.ApplicationInsights": "2.21.0",
+          "Microsoft.Azure.Functions.Extensions": "1.1.0",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
+          "Microsoft.Extensions.Configuration.Json": "6.0.0",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
+          "Newtonsoft.Json": "13.0.1",
+          "VH.Core.Configuration": "0.1.13"
         }
       },
       "bookingqueuesubscriber.services": {
         "type": "Project",
         "dependencies": {
-          "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[1.46.10, )",
-          "LaunchDarkly.ServerSdk": "[7.0.3, )",
-          "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[1.45.7, )",
-          "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
-          "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[1.45.2, )",
-          "VideoApi.Client": "[1.48.6, )"
+          "BookingQueueSubscriber.Common": "1.0.0",
+          "BookingsApi.Client": "1.46.10",
+          "LaunchDarkly.ServerSdk": "7.0.3",
+          "Microsoft.Extensions.Logging.Abstractions": "6.0.2",
+          "NotificationApi.Client": "1.49.2",
+          "System.IdentityModel.Tokens.Jwt": "6.25.0",
+          "TimeZoneConverter": "3.3.0",
+          "UserApi.Client": "1.45.2",
+          "VideoApi.Client": "1.48.6"
         }
       }
     }

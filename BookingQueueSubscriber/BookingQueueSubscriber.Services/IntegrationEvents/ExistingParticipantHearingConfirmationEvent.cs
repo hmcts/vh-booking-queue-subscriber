@@ -1,9 +1,7 @@
 ﻿namespace BookingQueueSubscriber.Services.IntegrationEvents
 {
-    public class CreateAndNotifyUserIntegrationEvent : IIntegrationEvent
+    public class ExistingParticipantHearingConfirmationEvent: IIntegrationEvent
     {
         public HearingConfirmationForParticipantDto HearingConfirmationForParticipant { get; set; }
     }
 }
-
-    
