@@ -402,7 +402,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             
             notificationRequest.HearingId.Should().Be(new Guid("91c592d8-5ff8-4774-b456-87d7b4e319f3"));
             notificationRequest.ContactEmail.Should().Be("Automation_226153990@hmcts.net");
-            notificationRequest.ParticipantId = new Guid("73f2053e-74f1-4d6c-b817-246f4b22e665");
+            notificationRequest.ParticipantId.Should().Be(new Guid("73f2053e-74f1-4d6c-b817-246f4b22e665"));
             notificationRequest.CaseName = "Case name";
             notificationRequest.PreviousScheduledDateTime = DateTime.Parse($"2023-11-19T11:45:00Z");
             notificationRequest.NewScheduledDateTime = DateTime.Parse($"2023-11-20T00:00:00Z");
