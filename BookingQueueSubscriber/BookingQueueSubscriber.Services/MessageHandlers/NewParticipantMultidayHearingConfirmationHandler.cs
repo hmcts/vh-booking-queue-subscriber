@@ -45,8 +45,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             };
 
             await _bookingsApiClient.UpdatePersonUsernameAsync(message.ContactEmail, message.Username);
-            await _notificationApiClient.SendParticipantMultiDayHearingConfirmationForNewUserEmailAsync(request);
             await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
+            await _notificationApiClient.SendParticipantMultiDayHearingConfirmationForNewUserEmailAsync(request);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
