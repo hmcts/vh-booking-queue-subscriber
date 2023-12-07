@@ -29,6 +29,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 Name = $"{message.FirstName} {message.LastName}",
                 DisplayName = message.DisplayName,
                 Representee = message.Representee,
+                Username = message.Username
             };
 
             await _notificationApiClient.SendHearingAmendmentEmailAsync(request);
