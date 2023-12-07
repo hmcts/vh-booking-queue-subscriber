@@ -28,6 +28,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             message.Username = newUser.UserName;
 
+            await _bookingsApiClient.UpdatePersonUsernameAsync(message.ContactEmail, message.Username);
+            await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
+            
             await _notificationApiClient.SendParticipantCreatedAccountEmailAsync(new SignInDetailsEmailRequest
             {
                 ContactEmail = message.ContactEmail,
@@ -36,9 +39,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 Username = message.Username,
                 Password = newUser.Password,
             });
-
-            await _bookingsApiClient.UpdatePersonUsernameAsync(message.ContactEmail, message.Username);
-            await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
