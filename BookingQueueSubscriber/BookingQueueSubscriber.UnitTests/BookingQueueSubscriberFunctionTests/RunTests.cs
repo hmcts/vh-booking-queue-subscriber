@@ -10,6 +10,7 @@ using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NotificationApi.Client;
+using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -368,6 +369,21 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         [Test]
         public async Task Should_handle_hearing_amendment_integration_event()
         {
+           var request = new HearingAmendmentRequest
+           {
+             HearingId = new Guid("91c592d8-5ff8-4774-b456-87d7b4e319f3"),
+             ContactEmail = "Automation_226153990@hmcts.net",
+             ParticipantId = new Guid("73f2053e-74f1-4d6c-b817-246f4b22e665"),
+             CaseName = "Case name",
+             PreviousScheduledDateTime = DateTime.Parse($"2023-11-19T11:45:00Z"),
+             NewScheduledDateTime = DateTime.Parse($"2023-11-20T00:00:00Z"),
+             RoleName = "Individual",
+             CaseNumber = "Original Hearing",
+             Name = $"Automation_FirstName Automation_LastName",
+             DisplayName = "Automation_FirstName Automation_LastName",
+             Representee = "",
+             Username = "Automation_338564597@hmcts.net"
+           };
             const string message = @"{
               '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
               'id': 'aaf7f048-faf5-4d40-b5b2-8afce08fbe9a',
@@ -396,6 +412,17 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             await _sut.Run(message);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
+            var notificationRequest = (HearingAmendmentRequest)_notificationApiClient.NotificationRequests[0];
+            notificationRequest.HearingId.Should().Be(request.HearingId);
+            notificationRequest.ContactEmail.Should().Be(request.ContactEmail);
+            notificationRequest.Name = request.Name;
+            notificationRequest.Username = request.Username;
+            notificationRequest.CaseName = request.CaseName;
+            notificationRequest.CaseNumber = request.CaseNumber;
+            notificationRequest.NewScheduledDateTime = request.NewScheduledDateTime;
+            notificationRequest.PreviousScheduledDateTime = request.PreviousScheduledDateTime;
+            notificationRequest.ParticipantId = request.ParticipantId;
+            notificationRequest.RoleName = request.RoleName;
         }
 
         [Test]
