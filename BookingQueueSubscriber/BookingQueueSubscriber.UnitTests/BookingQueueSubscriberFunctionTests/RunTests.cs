@@ -382,7 +382,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'scheduled_date_time': '2023-11-19T11:45:00Z',
                   'case_name': 'Case name',
                   'case_number': 'Original Hearing',
-                  'participnat_id': '73f2053e-74f1-4d6c-b817-246f4b22e665',
+                  'participant_id': '73f2053e-74f1-4d6c-b817-246f4b22e665',
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
