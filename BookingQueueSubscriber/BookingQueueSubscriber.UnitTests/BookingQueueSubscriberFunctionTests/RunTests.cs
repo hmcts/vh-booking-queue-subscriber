@@ -409,7 +409,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             notificationRequest.RoleName.Should().Be("Individual");     
             notificationRequest.CaseNumber.Should().Be("Original Hearing");
             notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
-            notificationRequest.DisplayName.Should().Be("Automation_226153990@hmcts.net");
+            notificationRequest.DisplayName.Should().Be("Automation_FirstName Automation_LastName");
             notificationRequest.Representee.Should().Be("");
             notificationRequest.Username.Should().Be("Automation_338564597@hmcts.net");
                    
