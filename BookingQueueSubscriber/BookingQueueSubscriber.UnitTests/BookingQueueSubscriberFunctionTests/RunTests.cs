@@ -10,6 +10,7 @@ using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NotificationApi.Client;
+using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -368,6 +369,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         [Test]
         public async Task Should_handle_hearing_amendment_integration_event()
         {
+           
             const string message = @"{
               '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
               'id': 'aaf7f048-faf5-4d40-b5b2-8afce08fbe9a',
@@ -380,7 +382,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'scheduled_date_time': '2023-11-19T11:45:00Z',
                   'case_name': 'Case name',
                   'case_number': 'Original Hearing',
-                  'participnat_id': '73f2053e-74f1-4d6c-b817-246f4b22e665',
+                  'participant_id': '73f2053e-74f1-4d6c-b817-246f4b22e665',
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
@@ -396,6 +398,21 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             await _sut.Run(message);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
+            var notificationRequest = (HearingAmendmentRequest)_notificationApiClient.NotificationRequests[0];
+            
+            notificationRequest.HearingId.Should().Be(new Guid("91c592d8-5ff8-4774-b456-87d7b4e319f3"));
+            notificationRequest.ContactEmail.Should().Be("Automation_226153990@hmcts.net");
+            notificationRequest.ParticipantId.Should().Be(new Guid("73f2053e-74f1-4d6c-b817-246f4b22e665"));
+            notificationRequest.CaseName.Should().Be("Case name");
+            notificationRequest.PreviousScheduledDateTime.Should().Be(DateTime.Parse($"2023-11-19T11:45:00Z"));
+            notificationRequest.NewScheduledDateTime.Should().Be(DateTime.Parse($"2023-11-20T00:00:00Z"));
+            notificationRequest.RoleName.Should().Be("Individual");     
+            notificationRequest.CaseNumber.Should().Be("Original Hearing");
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.DisplayName.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.Representee.Should().Be("");
+            notificationRequest.Username.Should().Be("Automation_338564597@hmcts.net");
+                   
         }
 
         [Test]
