@@ -757,9 +757,12 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
               }
             }";
 
+          
+            
             await _sut.Run(message);
             
             _userService.Users.Should().HaveCount(1);
+            _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
         }
 

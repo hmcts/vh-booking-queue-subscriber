@@ -72,7 +72,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
                 Id = Guid.NewGuid(),
                 Participants = new List<ParticipantDetailsResponse>
                 {
-                    new ParticipantDetailsResponse {Id = Guid.NewGuid()}
+                    new ParticipantDetailsResponse {Id = Guid.NewGuid(), ContactEmail = "Automation_1316542910@hmcts.net"}
                 }
             };
         }
