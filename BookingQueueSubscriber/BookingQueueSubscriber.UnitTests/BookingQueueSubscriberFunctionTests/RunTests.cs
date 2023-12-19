@@ -353,7 +353,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
-                  'contact_email': 'Automation_1486595270@hmcts.net',
+                  'contact_email': 'Automation_1316542910@hmcts.net',
                   'contact_telephone': '01234567890',
                   'user_role': 'Individual',
                   'username': 'Automation_1829854172@hmcts.net',
