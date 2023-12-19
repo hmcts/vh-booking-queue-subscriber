@@ -30,7 +30,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
         }
         
         [Test]
-        public async Task should_poll_video_api_for_response_then_throw_error()
+        public void should_poll_video_api_for_response_then_throw_error()
         {
             _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(new User() { UserName = "username"});
