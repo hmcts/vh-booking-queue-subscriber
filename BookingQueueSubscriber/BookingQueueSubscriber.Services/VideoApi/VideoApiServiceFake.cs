@@ -125,7 +125,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
-
+    
         public void ClearRequests()
         {
             BookNewConferenceCount = UpdateConferenceCount = DeleteConferenceCount = GetConferenceByHearingRefIdCount =
@@ -139,5 +139,10 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
+        public Task UpdateParticipantDetailsWithPolling(Guid hearingId, string username, HearingConfirmationForParticipantDto message)
+        {
+            UpdateParticipantDetailsCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
     }
 }
