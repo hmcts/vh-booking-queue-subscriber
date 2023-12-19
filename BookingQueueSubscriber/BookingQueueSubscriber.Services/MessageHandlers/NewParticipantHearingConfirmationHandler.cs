@@ -16,6 +16,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly INotificationApiClient _notificationApiClient;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly IVideoApiService _videoApiService;
+        int pollCount = 0;
 
         public NewParticipantHearingConfirmationHandler(IUserService userService,
             INotificationApiClient notificationApiClient,
@@ -36,11 +37,10 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
             message.Username = newUser.UserName;
             ConferenceDetailsResponse conferenceResponse;
-            var count = 0;
             do {
                 conferenceResponse = await PollForConferenceDetails(message); 
-                count++;
-            } while (conferenceResponse == null && count < 5);
+                pollCount++;
+            } while (conferenceResponse == null);
             
             var request = new NewUserSingleDayHearingConfirmationRequest
             {
@@ -84,6 +84,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }
             catch (VideoApiException e)
             {
+                if(pollCount >= 3) 
+                    throw;
+                
                 if (e.StatusCode == (int) HttpStatusCode.NotFound)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(5));
