@@ -1,9 +1,12 @@
+using System.Net;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingsApi.Client;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
+using VideoApi.Client;
 using VideoApi.Contract.Requests;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -32,9 +35,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 message.LastName, message.ContactEmail, false);
 
             message.Username = newUser.UserName;
-
-            
-            var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(message.HearingId, true); 
+            ConferenceDetailsResponse conferenceResponse;
+            var count = 0;
+            do {
+                conferenceResponse = await PollForConferenceDetails(message); 
+                count++;
+            } while (conferenceResponse == null && count < 5);
             
             var request = new NewUserSingleDayHearingConfirmationRequest
             {
@@ -69,6 +75,25 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             };
             await _videoApiService.UpdateParticipantDetails(conferenceResponse.Id, participant.Id, updateParticipantDetailsRequest);
         }
+
+        private async Task<ConferenceDetailsResponse> PollForConferenceDetails(HearingConfirmationForParticipantDto message)
+        {
+            try
+            {
+                return await _videoApiService.GetConferenceByHearingRefId(message.HearingId, true);
+            }
+            catch (VideoApiException e)
+            {
+                if (e.StatusCode == (int) HttpStatusCode.NotFound)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                    return null;
+                }
+
+                throw;
+            }
+        }
+
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
             await HandleAsync((NewParticipantHearingConfirmationEvent)integrationEvent);
