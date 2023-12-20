@@ -364,6 +364,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             await _sut.Run(message);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
+            _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
         }
 
         [Test]
@@ -757,9 +758,12 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
               }
             }";
 
+          
+            
             await _sut.Run(message);
             
             _userService.Users.Should().HaveCount(1);
+            _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
         }
 

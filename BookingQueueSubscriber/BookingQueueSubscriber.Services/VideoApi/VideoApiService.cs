@@ -1,3 +1,4 @@
+using System.Net;
 using VideoApi.Contract.Requests;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
@@ -94,6 +95,53 @@ namespace BookingQueueSubscriber.Services.VideoApi
         {
             _logger.LogInformation("Closing consultation for conference {ConferenceId}", conferenceId);
             return _apiClient.LeaveConsultationAsync(new LeaveConsultationRequest{ConferenceId = conferenceId, ParticipantId = participantId});
+        }
+
+        public async Task UpdateParticipantDetailsWithPolling(Guid hearingId, string username, HearingConfirmationForParticipantDto message)
+        {
+            var pollCount = 0;
+            
+            ConferenceDetailsResponse conferenceResponse;
+            do {
+                conferenceResponse = await PollForConferenceDetails(); 
+                pollCount++;
+            } while (conferenceResponse == null);
+            
+            var participant = conferenceResponse.Participants.Single(x => x.ContactEmail == message.ContactEmail);
+            var updateParticipantDetailsRequest = new UpdateParticipantRequest
+            {
+                ParticipantRefId = participant.RefId,
+                FirstName = message.FirstName,
+                LastName = message.LastName,
+                Fullname = $"{message.FirstName} {message.LastName}",
+                DisplayName = message.DisplayName,
+                Representee = message.Representee,
+                ContactEmail = message.ContactEmail,
+                ContactTelephone = message.ContactTelephone,
+                Username = username
+            };
+            await UpdateParticipantDetails(conferenceResponse.Id, participant.Id, updateParticipantDetailsRequest);
+            
+            async Task<ConferenceDetailsResponse> PollForConferenceDetails()
+            {
+                try
+                {
+                    return await GetConferenceByHearingRefId(hearingId, true);
+                }
+                catch (VideoApiException e)
+                {
+                    if(pollCount >= 3) 
+                        throw;
+                
+                    if (e.StatusCode == (int) HttpStatusCode.NotFound)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(5));
+                        return null;
+                    }
+
+                    throw;
+                }
+            }
         }
     }
 }
