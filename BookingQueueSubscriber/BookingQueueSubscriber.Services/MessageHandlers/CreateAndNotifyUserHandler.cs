@@ -44,7 +44,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 Password = newUser.Password,
             });
 
-            await _videoApiService.UpdateParticipantDetailsWithPolling(message.HearingId, newUser.UserName, message);
+            await _videoApiService.UpdateParticipantUsernameWithPolling(message.HearingId, newUser.UserName, message.ParticipantId);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

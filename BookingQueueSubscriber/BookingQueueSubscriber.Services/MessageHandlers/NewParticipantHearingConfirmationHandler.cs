@@ -49,7 +49,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _bookingsApiClient.UpdatePersonUsernameAsync(message.ContactEmail, message.Username);
             await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
             await _notificationApiClient.SendParticipantSingleDayHearingConfirmationForNewUserEmailAsync(request);
-            await _videoApiService.UpdateParticipantDetailsWithPolling(message.HearingId, newUser.UserName, message);
+            await _videoApiService.UpdateParticipantUsernameWithPolling(message.HearingId, newUser.UserName, message.ParticipantId);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
