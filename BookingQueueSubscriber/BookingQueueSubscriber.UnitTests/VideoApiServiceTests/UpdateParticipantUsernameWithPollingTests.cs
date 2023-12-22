@@ -1,15 +1,13 @@
 using System.Net;
-using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
-using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
-using NotificationApi.Client;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
+
 namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
 {
-    public class UpdateParticipantDetailsWithPollingTests
+    public class UpdateParticipantUsernameWithPollingTests
     {
         private Mock<IUserService> _userServiceMock;
         private Mock<IVideoApiClient> _videoApiClientMock;
@@ -39,21 +37,8 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
             _videoApiClientMock.Setup(x => x.GetConferenceByHearingRefIdAsync(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ThrowsAsync(new VideoApiException("Conference not found", (int)HttpStatusCode.NotFound, "Conference not found", null, null));
             
-            var message = new HearingConfirmationForParticipantDto
-            {
-                HearingId = _hearingId,
-                ParticipantId = _participantId,
-                ContactEmail = "email@email.com",
-                FirstName = "John",
-                LastName = "Smith",
-                UserRole = "Individual",
-                CaseName = "Case Name",
-                CaseNumber = "1234567890",
-                ScheduledDateTime = DateTime.UtcNow
-            };
-            
             //assert that message handler throws exception
-            Assert.ThrowsAsync<VideoApiException>(() => _videoApiService.UpdateParticipantDetailsWithPolling(_hearingId, "username", message));
+            Assert.ThrowsAsync<VideoApiException>(() => _videoApiService.UpdateParticipantUsernameWithPolling(_hearingId, "username", "email@email.com"));
         }
     
         [Test]
@@ -76,21 +61,8 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
                         }
                     }
                 });
-                
-            
-            var message = new HearingConfirmationForParticipantDto
-            {
-                HearingId = _hearingId,
-                ParticipantId = _participantId,
-                ContactEmail = "email@email.com",
-                FirstName = "John",
-                LastName = "Smith",
-                UserRole = "Individual",
-                CaseName = "Case Name",
-                CaseNumber = "1234567890",
-                ScheduledDateTime = DateTime.UtcNow
-            };
-            await _videoApiService.UpdateParticipantDetailsWithPolling(_hearingId, "username", message);
+
+            await _videoApiService.UpdateParticipantUsernameWithPolling(_hearingId, "username", "email@email.com");
             //assert service does not throw exception
             Assert.Pass();
         }

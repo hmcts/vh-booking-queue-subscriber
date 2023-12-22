@@ -139,7 +139,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task UpdateParticipantDetailsWithPolling(Guid hearingId, string username, HearingConfirmationForParticipantDto message)
+        public Task UpdateParticipantUsernameWithPolling(Guid hearingId, string username, string contactEmail)
         {
             UpdateParticipantDetailsCount++;
             return Task.FromResult(HttpStatusCode.OK);

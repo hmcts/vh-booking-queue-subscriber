@@ -18,6 +18,6 @@ namespace BookingQueueSubscriber.Services.VideoApi
         Task RemoveEndpointFromConference(Guid conferenceId, string sip);
         Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request);
         Task CloseConsultation(Guid conferenceId, Guid participantId);
-        Task UpdateParticipantDetailsWithPolling(Guid hearingId, string username, HearingConfirmationForParticipantDto message);
+        Task UpdateParticipantUsernameWithPolling(Guid hearingId, string username, string contactEmail);
     }
 }
