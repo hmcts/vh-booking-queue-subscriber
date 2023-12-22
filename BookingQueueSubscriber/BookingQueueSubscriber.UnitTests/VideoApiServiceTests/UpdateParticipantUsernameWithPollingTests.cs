@@ -38,7 +38,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
                 .ThrowsAsync(new VideoApiException("Conference not found", (int)HttpStatusCode.NotFound, "Conference not found", null, null));
             
             //assert that message handler throws exception
-            Assert.ThrowsAsync<VideoApiException>(() => _videoApiService.UpdateParticipantUsernameWithPolling(_hearingId, "username", _participantId));
+            Assert.ThrowsAsync<VideoApiException>(() => _videoApiService.UpdateParticipantUsernameWithPolling(_hearingId, "username", "email@email.com"));
         }
     
         [Test]
@@ -62,7 +62,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
                     }
                 });
 
-            await _videoApiService.UpdateParticipantUsernameWithPolling(_hearingId, "username", _participantId);
+            await _videoApiService.UpdateParticipantUsernameWithPolling(_hearingId, "username", "email@email.com");
             //assert service does not throw exception
             Assert.Pass();
         }

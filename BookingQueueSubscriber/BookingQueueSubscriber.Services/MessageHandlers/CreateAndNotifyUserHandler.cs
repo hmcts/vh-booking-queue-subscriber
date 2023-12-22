@@ -34,7 +34,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             
             await _bookingsApiClient.UpdatePersonUsernameAsync(message.ContactEmail, message.Username);
             await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
-            await _videoApiService.UpdateParticipantUsernameWithPolling(message.HearingId, newUser.UserName, message.ParticipantId);
+            await _videoApiService.UpdateParticipantUsernameWithPolling(message.HearingId, newUser.UserName, message.ContactEmail);
             await _notificationApiClient.SendParticipantCreatedAccountEmailAsync(new SignInDetailsEmailRequest
             {
                 ContactEmail = message.ContactEmail,

@@ -103,7 +103,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return _apiClient.UpdateParticipantUsernameAsync(participantId, new UpdateParticipantUsernameRequest { Username = username });
         }
 
-        public async Task UpdateParticipantUsernameWithPolling(Guid hearingId, string username, Guid participantId)
+        public async Task UpdateParticipantUsernameWithPolling(Guid hearingId, string username, string contactEmail)
         {
             var pollCount = 0;
             
@@ -113,7 +113,8 @@ namespace BookingQueueSubscriber.Services.VideoApi
                 pollCount++;
             } while (conferenceResponse == null);
 
-            await UpdateParticipantUsername(participantId, username);
+            var participant = conferenceResponse.Participants.Single(x => x.ContactEmail == contactEmail);
+            await UpdateParticipantUsername(participant.Id, username);
             
             async Task<ConferenceDetailsResponse> PollForConferenceDetails()
             {
