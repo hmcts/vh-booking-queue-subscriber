@@ -6,7 +6,6 @@ using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using System.Net;
 using BookingQueueSubscriber.Common.Configuration;
-using BookingsApi.Contract.V1.Configuration;
 using UserApi.Client;
 using UserApi.Contract.Requests;
 using UserApi.Contract.Responses;
