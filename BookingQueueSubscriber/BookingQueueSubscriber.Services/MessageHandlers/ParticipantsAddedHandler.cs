@@ -75,8 +75,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         {
             await HandleAsync((ParticipantsAddedIntegrationEvent)integrationEvent);
         }
-
-        
     }
 
 
