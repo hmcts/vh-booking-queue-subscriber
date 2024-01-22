@@ -2,7 +2,7 @@
 apiVersion: v2
 name: vh-booking-queue-subscriber
 home: https://github.com/hmcts/vh-booking-queue-subscriber
-version: 0.0.16
+version: 0.0.17
 description: Helm Chart for VH Bookings Queue Subscriber
 maintainers:
   - name: VH Devops
