@@ -4,9 +4,9 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.50.16, )",
-        "resolved": "1.50.16",
-        "contentHash": "wtMHaYtTO5QcURzKjE2ynd3cIBoboMWPSFDkZ4X3iBO67JPtSs5B8784g5HnHB7Cb50GOiVAbOB3qJDQeq2eZw==",
+        "requested": "[1.50.8, )",
+        "resolved": "1.50.8",
+        "contentHash": "cP5Ds0y3rQoNZxdZByoTYN1qpPFwnKM9vsZDV24G/jRK5WmONopveereF3qtTYfaKM7slhSRFiN3aZbW58LdhA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -33,9 +33,9 @@
       },
       "NotificationApi.Client": {
         "type": "Direct",
-        "requested": "[1.45.4, )",
-        "resolved": "1.45.4",
-        "contentHash": "TmGviZi2ZQMJM1ZmIJIWSjV/6sDJIeeTIa3a0H917GhvFGGtd5m5RCC10k6N4qQqE/Nu+cUVhgP2m1F7lIJSkg==",
+        "requested": "[1.49.2, )",
+        "resolved": "1.49.2",
+        "contentHash": "R68J5+28nu5NZ/CUiImXuTAaxgy/ZzVYptNXH+z5trDJpFWCkek8JLANnQmuYqegm+WTq5VjHBcpIe0sC6taJg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
@@ -74,9 +74,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[1.44.16, )",
-        "resolved": "1.44.16",
-        "contentHash": "yQr0vJ/gpgyW1gcVeAm9NKKpX2i4aQ2OJTrEh6VECn4ZaCjV6vB8xcv7zB5FvO9qmMVewNGsKBciVte5kP83fA==",
+        "requested": "[1.50.1, )",
+        "resolved": "1.50.1",
+        "contentHash": "OJqOqsRFAdxGyHVfrj6zo7GdGl/aVXAoLl0EpiWnwbU+2wAIwzicI8u5TwxahmeG8Gjtji7SHx3x/A4n0WWOPQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -1762,7 +1762,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.50.16, )",
+          "BookingsApi.Client": "[1.50.8, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",

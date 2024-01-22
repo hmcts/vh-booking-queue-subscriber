@@ -1,9 +1,11 @@
+using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingsApi.Client;
+using NotificationApi.Client;
 using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -14,9 +16,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         protected Mock<IVideoWebService> VideoWebServiceMock { get; set; }
         protected Mock<IUserService> UserServiceMock { get; set; }
         protected Mock<INotificationService> NotificationServiceMock { get; set; }
+        protected Mock<INotificationApiClient> NotificationApiClientMock { get; set; }
         protected Mock<IUserCreationAndNotification> UserCreationAndNotificationMock { get; set; }
 
         protected Mock<IBookingsApiClient> BookingsApiClientMock { get; set; }
+        
+        protected Mock<IFeatureToggles> FeatureTogglesMock { get; set; }
 
         protected Guid ParticipantId { get; set; }
         protected Guid HearingId { get; set; }
@@ -45,6 +50,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             NotificationServiceMock = new Mock<INotificationService>();
             UserCreationAndNotificationMock = new Mock<IUserCreationAndNotification>();
             BookingsApiClientMock = new Mock<IBookingsApiClient>();
+            FeatureTogglesMock = new Mock<IFeatureToggles>();
+            NotificationApiClientMock = new Mock<INotificationApiClient>();
         }
     }
 }

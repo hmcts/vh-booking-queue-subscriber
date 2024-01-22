@@ -72,7 +72,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
                 Id = Guid.NewGuid(),
                 Participants = new List<ParticipantDetailsResponse>
                 {
-                    new ParticipantDetailsResponse {Id = Guid.NewGuid()}
+                    new ParticipantDetailsResponse {Id = Guid.NewGuid(), ContactEmail = "Automation_1316542910@hmcts.net"}
                 }
             };
         }
@@ -125,7 +125,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
-
+    
         public void ClearRequests()
         {
             BookNewConferenceCount = UpdateConferenceCount = DeleteConferenceCount = GetConferenceByHearingRefIdCount =
@@ -139,5 +139,10 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return Task.FromResult(HttpStatusCode.OK);
         }
 
+        public Task UpdateParticipantUsernameWithPolling(Guid hearingId, string username, string contactEmail)
+        {
+            UpdateParticipantDetailsCount++;
+            return Task.FromResult(HttpStatusCode.OK);
+        }
     }
 }

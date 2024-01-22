@@ -1,18 +1,20 @@
+﻿using BookingQueueSubscriber.Services.NotificationApi;
 using NotificationApi.Client;
+using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
-    public class HearingNotificationHandler : IMessageHandler<HearingNotificationIntegrationEvent>
+    public class ExistingParticipantHearingConfirmationHandler : IMessageHandler<ExistingParticipantHearingConfirmationEvent>
     {
         private readonly INotificationApiClient _notificationApiClient;
 
-        public HearingNotificationHandler(INotificationApiClient notificationApiClient)
+        public ExistingParticipantHearingConfirmationHandler(INotificationApiClient notificationApiClient)
         {
             _notificationApiClient = notificationApiClient;
         }
 
-        public async Task HandleAsync(HearingNotificationIntegrationEvent eventMessage)
+        public async Task HandleAsync(ExistingParticipantHearingConfirmationEvent eventMessage)
         {
             var message = eventMessage.HearingConfirmationForParticipant;
 
@@ -23,7 +25,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
         {
-            await HandleAsync((HearingNotificationIntegrationEvent)integrationEvent);
+            await HandleAsync((ExistingParticipantHearingConfirmationEvent)integrationEvent);
         }
     }
+
 }

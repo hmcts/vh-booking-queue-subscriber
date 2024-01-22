@@ -43,7 +43,8 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 ScheduledDuration = 60,
                 ScheduledDateTime = DateTime.UtcNow,
                 HearingVenueName = "MyVenue",
-                RecordAudio = true
+                RecordAudio = true,
+                CaseTypeServiceId = "ZZY1"
             };
             return dto;
         }

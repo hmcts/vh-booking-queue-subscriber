@@ -98,6 +98,34 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             result.PhoneNumber.Should().Be(participant.ContactTelephone);
             result.Parameters.Should().BeEquivalentTo(expectedParameters);
         }
+        
+        [Test]
+        public void should_map_to_new_lip_confirmation_notification_when_new_template_on()
+        {
+            var expectedNotificationType = NotificationType.NewUserLipConfirmationMultiDay;
+            var participant = GetParticipantDto("Individual");
+            var hearing = GetHearingDto();
+
+            var expectedParameters = GetExpectedParametersForPostMay2023(hearing, participant);
+            expectedParameters.Add("random password", "xyz");
+
+            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(
+                hearing, 
+                participant, 
+                4, 
+                false, 
+                true, 
+                "xyz");
+
+            result.Should().NotBeNull();
+            result.HearingId.Should().Be(hearing.HearingId);
+            result.ParticipantId.Should().Be(participant.ParticipantId);
+            result.ContactEmail.Should().Be(participant.ContactEmail);
+            result.NotificationType.Should().Be(expectedNotificationType);
+            result.MessageType.Should().Be(MessageType.Email);
+            result.PhoneNumber.Should().Be(participant.ContactTelephone);
+            result.Parameters.Should().BeEquivalentTo(expectedParameters);
+        }
 
         [Test]
         public void should_map_to_representative_confirmation_notification()
@@ -123,16 +151,16 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
         }
 
         [Test]
-        public void should_map_to_joh_confirmation_notification()
+        public void should_map_to_existing_lip_confirmation_notification_when_new_template_on()
         {
-            var expectedNotificationType = NotificationType.HearingConfirmationJohMultiDay;
-            var participant = GetParticipantDto("Judicial Office Holder");
+            var expectedNotificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
+            var participant = GetParticipantDto("Individual");
             participant.Username = "user@test.com";
 
             var hearing = GetHearingDto();
-            Dictionary<string, string> expectedParameters = GetExpectedParameters(hearing, participant);
+            Dictionary<string, string> expectedParameters = GetExpectedParametersForPostMay2023(hearing, participant);
 
-            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, false);
+            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, false, true);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -144,7 +172,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             result.Parameters.Should().BeEquivalentTo(expectedParameters);
         }
 
-        private static Dictionary<string, string> GetExpectedParameters( HearingDto hearing, ParticipantDto participant)
+        private static Dictionary<string, string> GetExpectedParameters(HearingDto hearing, ParticipantDto participant)
         {
             return new Dictionary<string, string>
             {
@@ -154,6 +182,23 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
                 {"Start Day Month Year", "12 October 2020"},
                 {"judicial office holder", $"{participant.FirstName} {participant.LastName}"},
                 {"number of days", "4"}
+            };
+        }
+        
+        private static Dictionary<string, string> GetExpectedParametersForPostMay2023(HearingDto hearing, ParticipantDto participant)
+        {
+            return new Dictionary<string, string>
+            {
+                {"name", $"{participant.FirstName} {participant.LastName}"},
+                {"case name", hearing.CaseName},
+                {"case number", hearing.CaseNumber},
+                {"number of days", "4"},
+                {"Start Day Month Year", "12 October 2020"},
+                {"day month year", "12 October 2020"},
+                {"day month year_CY", "12 Hydref 2020"},
+                {"username", participant.Username},
+                {"start time", "2:10 PM"},
+                {"time", "2:10 PM"}
             };
         }
 
@@ -169,7 +214,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             };
         }
 
-        private ParticipantDto GetParticipantDto(string userRole, string representee = null)
+        private static ParticipantDto GetParticipantDto(string userRole, string representee = null)
         {
             return new ParticipantDto
             {

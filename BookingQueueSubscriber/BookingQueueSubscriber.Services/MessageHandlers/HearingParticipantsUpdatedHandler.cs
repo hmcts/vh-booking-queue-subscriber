@@ -9,18 +9,15 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     {
         private readonly IVideoApiService _videoApiService;
         private readonly IVideoWebService _videoWebService;
-        private readonly IUserCreationAndNotification _userCreationAndNotification;
         private readonly ILogger<HearingParticipantsUpdatedHandler> _logger;
 
 
         public HearingParticipantsUpdatedHandler(IVideoApiService videoApiService, 
             IVideoWebService videoWebService, 
-            IUserCreationAndNotification userCreationAndNotification, 
             ILogger<HearingParticipantsUpdatedHandler> logger)
         {
             _videoApiService = videoApiService;
             _videoWebService = videoWebService;
-            _userCreationAndNotification = userCreationAndNotification;
             _logger = logger;
         }
 
@@ -30,10 +27,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 var conferenceResponse = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId, true);
                 
-                var newParticipantUsers = await _userCreationAndNotification.CreateUserAndNotifcationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
-                
-                await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, eventMessage.NewParticipants);
-                
                 var updateConferenceParticipantsRequest = new UpdateConferenceParticipantsRequest
                 {
                     ExistingParticipants = eventMessage.ExistingParticipants.Select(ParticipantToUpdateParticipantMapper.MapToParticipantRequest).ToList(),
@@ -42,11 +35,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                     LinkedParticipants = eventMessage.LinkedParticipants.Select(LinkedParticipantToRequestMapper.MapToLinkedParticipantRequest).ToList(),
                 };
                 await _videoApiService.UpdateConferenceParticipantsAsync(conferenceResponse.Id, updateConferenceParticipantsRequest);
-                
+       
                 await _videoWebService.PushParticipantsUpdatedMessage(conferenceResponse.Id, updateConferenceParticipantsRequest);
-                
-                await _userCreationAndNotification.HandleAssignUserToGroup(newParticipantUsers);
-                
             }
             catch (Exception e)
             {

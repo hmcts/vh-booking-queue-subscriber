@@ -9,13 +9,18 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     {
         public List<AddNotificationRequest> NotificationRequests { get; set; }
         public bool EJudFetaureEnabled { get; set; }
-        public Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string password)
+
+        public NotificationServiceFake()
+        {
+            NotificationRequests = new List<AddNotificationRequest>();
+        }
+        public Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string userPassword)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
-        public Task SendNewHearingNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
+
+        public Task SendNewSingleDayHearingConfirmationNotification(HearingDto hearing, IEnumerable<ParticipantDto> participants)
         {
-            NotificationRequests = new List<AddNotificationRequest>();
             foreach (var participant in participants)
             {
                 NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, EJudFetaureEnabled));
@@ -30,14 +35,40 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         public Task SendNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant)
         {
-            NotificationRequests = new List<AddNotificationRequest>
-                {AddNotificationRequestMapper.MapToNewUserWelcomeEmail(hearing, participant)};
+            NotificationRequests.Add(AddNotificationRequestMapper.MapToNewUserWelcomeEmail(hearing, participant));
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
+        {
+            NotificationRequests.Add(AddNotificationRequestMapper.MapToNewUserNotification(hearing.HearingId, participant, userPassword));
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendExistingUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            NotificationRequests.Add(AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant));
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
+        {
+            NotificationRequests.Add(AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant));
             return Task.FromResult(HttpStatusCode.OK);
         }
 
         public Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
+            foreach (var participant in participants)
+            {
+                NotificationRequests.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, EJudFetaureEnabled));
+            }
             return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task SendExistingUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant)
+        {
+            throw new NotImplementedException();
         }
     }
 }
