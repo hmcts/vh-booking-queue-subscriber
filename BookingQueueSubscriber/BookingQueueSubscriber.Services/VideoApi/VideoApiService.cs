@@ -1,3 +1,4 @@
+using System.Net;
 using VideoApi.Contract.Requests;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
@@ -94,6 +95,47 @@ namespace BookingQueueSubscriber.Services.VideoApi
         {
             _logger.LogInformation("Closing consultation for conference {ConferenceId}", conferenceId);
             return _apiClient.LeaveConsultationAsync(new LeaveConsultationRequest{ConferenceId = conferenceId, ParticipantId = participantId});
+        }
+
+        private Task UpdateParticipantUsername(Guid participantId, string username)
+        {
+            _logger.LogInformation("Updating username for participant {participantId}", participantId);
+            return _apiClient.UpdateParticipantUsernameAsync(participantId, new UpdateParticipantUsernameRequest { Username = username });
+        }
+
+        public async Task UpdateParticipantUsernameWithPolling(Guid hearingId, string username, string contactEmail)
+        {
+            var pollCount = 0;
+            
+            ConferenceDetailsResponse conferenceResponse;
+            do {
+                conferenceResponse = await PollForConferenceDetails(); 
+                pollCount++;
+            } while (conferenceResponse == null);
+
+            var participant = conferenceResponse.Participants.Single(x => x.ContactEmail == contactEmail);
+            await UpdateParticipantUsername(participant.Id, username);
+            
+            async Task<ConferenceDetailsResponse> PollForConferenceDetails()
+            {
+                try
+                {
+                    return await GetConferenceByHearingRefId(hearingId, true);
+                }
+                catch (VideoApiException e)
+                {
+                    if(pollCount >= 3) 
+                        throw;
+                
+                    if (e.StatusCode == (int) HttpStatusCode.NotFound)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(5));
+                        return null;
+                    }
+
+                    throw;
+                }
+            }
         }
     }
 }
