@@ -77,6 +77,45 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
         }
+
+        [Test]
+        public void should_map_participant_dto_with_participant_id_and_participant_ref_id_overloads_to_participant_request()
+        {
+            var participantDto = CreateParticipantDtoWithLinkedParticipants();
+
+            var participantId = Guid.NewGuid();
+            var participantRefId = Guid.NewGuid();
+            var request = ParticipantToParticipantRequestMapper.MapToParticipantRequest(participantDto, participantId, participantRefId);
+            
+            request.Should().NotBeNull();
+            request.Should().BeEquivalentTo(participantDto, options => 
+                options
+                    .Excluding(o => o.ParticipantId)
+                    .Excluding(o => o.Fullname)
+                    .Excluding(o => o.UserRole)
+                    .Excluding(o => o.CaseGroupType)
+                    .Excluding(o => o.Representee)
+                    .Excluding(o => o.LinkedParticipants)
+                    .Excluding(o => o.ContactEmailForNonEJudJudgeUser)
+                    .Excluding(o => o.ContactPhoneForNonEJudJudgeUser)
+                    .Excluding(o => o.SendHearingNotificationIfNew)
+            );
+            request.Id.Should().Be(participantId);
+            request.ParticipantRefId.Should().Be(participantRefId);
+            request.Name.Should().Be(participantDto.Fullname);
+            request.FirstName.Should().Be(participantDto.FirstName);
+            request.LastName.Should().Be(participantDto.LastName);
+            request.ContactEmail.Should().Be(participantDto.ContactEmail);
+            request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
+            request.UserRole.ToString().Should().Be(participantDto.UserRole);
+            request.HearingRole.Should().Be(participantDto.HearingRole);
+            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
+            request.Representee.Should().Be(participantDto.Representee);
+            var linkedParticipant = request.LinkedParticipants.First();
+            linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
+            linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
+            linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
+        }
         
         private static ParticipantDto CreateParticipantDtoWithoutLinkedParticipants()
         {

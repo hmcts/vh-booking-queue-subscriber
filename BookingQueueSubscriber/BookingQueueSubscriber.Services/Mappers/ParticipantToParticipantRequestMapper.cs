@@ -29,5 +29,13 @@ namespace BookingQueueSubscriber.Services.Mappers
             
             return request;
         }
+
+        public static ParticipantRequest MapToParticipantRequest(ParticipantDto participant, Guid participantId, Guid participantRefId)
+        {
+            var request = MapToParticipantRequest(participant);
+            request.Id = participantId;
+            request.ParticipantRefId = participantRefId;
+            return request;
+        }
     }
 }

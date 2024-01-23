@@ -21,7 +21,24 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.AddParticipantsToConference(It.IsAny<Guid>(), It.IsAny<AddParticipantsToConferenceRequest>()), Times.Once);
-            VideoWebServiceMock.Verify(x => x.PushParticipantsUpdatedMessage(It.IsAny<Guid>(), It.IsAny<UpdateConferenceParticipantsRequest>()), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushParticipantsUpdatedMessage(
+                ConferenceDetailsResponse.Id, 
+                It.Is<UpdateConferenceParticipantsRequest>(r => 
+                    r.NewParticipants[0].Id == ConferenceDetailsResponse.Participants[0].Id && 
+                    r.NewParticipants[0].Name == integrationEvent.Participants[0].Fullname &&
+                    r.NewParticipants[0].Username == integrationEvent.Participants[0].Username &&
+                    r.NewParticipants[0].FirstName == integrationEvent.Participants[0].FirstName &&
+                    r.NewParticipants[0].LastName == integrationEvent.Participants[0].LastName &&
+                    r.NewParticipants[0].ContactEmail == integrationEvent.Participants[0].ContactEmail &&
+                    r.NewParticipants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
+                    r.NewParticipants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
+                    r.NewParticipants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
+                    r.NewParticipants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
+                    r.NewParticipants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
+                    r.NewParticipants[0].ParticipantRefId == ConferenceDetailsResponse.Participants[0].RefId &&
+                    r.NewParticipants[0].Representee == integrationEvent.Participants[0].Representee &&
+                    r.NewParticipants[0].LinkedParticipants.Count.Equals(0)
+            )), Times.Once());
         }
 
         [Test]
@@ -172,7 +189,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             };
         }
 
-        private IList<LinkedParticipantRequest> MapToRequestFromDto(IList<LinkedParticipantDto> linked)
+        private static IList<LinkedParticipantRequest> MapToRequestFromDto(IList<LinkedParticipantDto> linked)
         {
             return linked.Select(l => new LinkedParticipantRequest()
             {
