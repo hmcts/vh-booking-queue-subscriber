@@ -3,13 +3,14 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   environment:
-    QUEUENAME: booking
+    QUEUENAME: booking-will-with-retries
+    VHSERVICES__VIDEOAPIURL: https://vh-booking-api-pr-816.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: booking
+    queueName: booking-will-with-retries
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
