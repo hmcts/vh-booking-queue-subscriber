@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
         
         [Test]
@@ -58,7 +58,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
         
         [Test]
@@ -72,7 +72,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             await messageHandler.HandleAsync(integrationEvent);
             UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IEnumerable<ParticipantDto>>()), Times.Never);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Test]
