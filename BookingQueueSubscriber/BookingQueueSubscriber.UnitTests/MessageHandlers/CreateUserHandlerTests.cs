@@ -45,9 +45,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Verify(x => x.UpdateParticipantUsernameWithPolling(hearingId, newUsername, contactEmail));
         }
         
-        private CreateUserIntegrationEvent GetIntegrationEvent()
+        private static CreateUserIntegrationEvent GetIntegrationEvent()
         {
-
             return new CreateUserIntegrationEvent
             {
                 Participant = new ParticipantUserDto

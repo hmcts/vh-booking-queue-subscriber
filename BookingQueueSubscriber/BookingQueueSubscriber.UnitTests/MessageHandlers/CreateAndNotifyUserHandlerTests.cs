@@ -124,7 +124,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             UserServiceMock.Verify(x => x.AssignUserToGroup(user.UserId, participant.UserRole));
         } 
 
-        private CreateAndNotifyUserIntegrationEvent GetIntegrationEvent()
+        private static CreateAndNotifyUserIntegrationEvent GetIntegrationEvent()
         {
 
             return new CreateAndNotifyUserIntegrationEvent
