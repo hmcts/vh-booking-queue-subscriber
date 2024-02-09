@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
@@ -13,11 +14,13 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_usercreation_and_notification_when_request_is_valid()
         {
-            var messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var hearingService = new HearingService(UserServiceMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var messageHandler = new CreateAndNotifyUserHandler(NotificationApiClientMock.Object, hearingService);
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
+            const string newUsername = "test.com";
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
-                new User { UserName = "test.com" });
+                new User { UserName = newUsername });
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse()
                 {
@@ -33,14 +36,15 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             await messageHandler.HandleAsync(integrationEvent);
 
-            BookingsApiClientMock.Verify(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, newUsername), Times.Once);
             UserServiceMock.Verify(x => x.AssignUserToGroup(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
         public async Task should_call_CreateUserAndNotifcationAsync_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler) new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var hearingService = new HearingService(UserServiceMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler) new CreateAndNotifyUserHandler(NotificationApiClientMock.Object, hearingService);
 
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
@@ -68,7 +72,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
          [Test]
         public async Task should_call_HandleAssignUserToGroup_when_request_has_created_useraccounts()
         {
-            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var hearingService = new HearingService(UserServiceMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(NotificationApiClientMock.Object, hearingService);
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
@@ -111,7 +116,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     }
                 });
 
-            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var hearingService = new HearingService(UserServiceMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(NotificationApiClientMock.Object, hearingService);
 
             await messageHandler.HandleAsync(integrationEvent);
 

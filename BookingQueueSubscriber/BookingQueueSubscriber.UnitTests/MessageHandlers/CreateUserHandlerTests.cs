@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Services;
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
@@ -13,14 +14,15 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_create_user_when_request_is_valid()
         {
             // Arrange
-            var messageHandler = new CreateUserHandler(UserServiceMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var hearingService = new HearingService(UserServiceMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var messageHandler = new CreateUserHandler(hearingService);
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.Participant;
             var hearingId = participant.HearingId;
-            const string username = "test.com";
+            const string newUsername = "test.com";
             var contactEmail = participant.ContactEmail;
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
-                new User { UserName = username });
+                new User { UserName = newUsername });
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse()
                 {
@@ -38,9 +40,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             await messageHandler.HandleAsync(integrationEvent);
             
             // Assert
-            BookingsApiClientMock.Verify(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, newUsername), Times.Once);
             UserServiceMock.Verify(x => x.AssignUserToGroup(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-            VideoApiServiceMock.Verify(x => x.UpdateParticipantUsernameWithPolling(hearingId, username, contactEmail));
+            VideoApiServiceMock.Verify(x => x.UpdateParticipantUsernameWithPolling(hearingId, newUsername, contactEmail));
         }
         
         private CreateUserIntegrationEvent GetIntegrationEvent()

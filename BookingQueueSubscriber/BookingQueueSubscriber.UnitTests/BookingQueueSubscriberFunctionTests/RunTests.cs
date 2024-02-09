@@ -865,5 +865,33 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
         }
+
+        [Test]
+        public async Task Should_handle_create_user_integration_event()
+        { 
+          const string message = @" {
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': '64d759f7-3b2f-491a-a3b3-17d2b22f3ab8',
+              'timestamp': '2023-11-01T22:13:18.8512123Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.CreateUserIntegrationEvent, BookingsApi.Infrastructure.Services',
+                'participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantUserDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': 'fa9edabe-6d48-48df-b5c4-1a43caad8e6f',
+                  'scheduled_date_time': '2023-11-02T11:45:00Z',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'contact_email': 'Automation_1172867501@hmcts.net',
+                  'user_role': 'Individual',
+                  'username': 'Automation_1125238517@hmcts.net'
+                }
+              }
+            }";
+
+          await _sut.Run(message);
+
+          _userService.Users.Should().HaveCount(1);
+          _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
+        }
     }
 }
