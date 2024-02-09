@@ -27,8 +27,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
-            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
-            { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
+            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId);
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
 
         }

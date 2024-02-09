@@ -188,6 +188,16 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task UpdateBookingStatusAsync(Guid hearingId)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateBookingStatusAsync(Guid hearingId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ICollection<HearingDetailsResponse>> GetHearingsByUsernameAsync(string username)
         {
             throw new NotImplementedException();
@@ -264,6 +274,16 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<HearingDetailsResponse>> CloneHearingAsync(Guid hearingId, CloneHearingRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task FailBookingAsync(Guid hearingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task FailBookingAsync(Guid hearingId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -602,16 +622,6 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<UserWithClosedConferencesResponse> GetPersonByClosedHearingsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateBookingStatusAsync(Guid hearingId, UpdateBookingStatusRequest request)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task UpdateBookingStatusAsync(Guid hearingId, UpdateBookingStatusRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

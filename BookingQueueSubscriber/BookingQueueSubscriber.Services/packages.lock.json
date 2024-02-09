@@ -4,9 +4,9 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.50.8, )",
-        "resolved": "1.50.8",
-        "contentHash": "cP5Ds0y3rQoNZxdZByoTYN1qpPFwnKM9vsZDV24G/jRK5WmONopveereF3qtTYfaKM7slhSRFiN3aZbW58LdhA==",
+        "requested": "[1.51.4, )",
+        "resolved": "1.51.4",
+        "contentHash": "JYnfggUrSTYukcgDwSKf2RA5no62tvDyh9xnC/NP8QAQyo5Ed37XdeWAFNWIB72qWsjwiC7kHXhfAZKQc8NiZg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -1762,7 +1762,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.50.8, )",
+          "BookingsApi.Client": "[1.51.4, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
