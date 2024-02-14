@@ -2282,8 +2282,8 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "1.45.2",
-        "contentHash": "2lLsvcl0ttT5dR+SAF3UMIkFAFmaqOxKnQwQ4AEW2SKX7YfTrT84SBCaHtv+knQ1cLMk77VSw5fxQGdM2qMgQg==",
+        "resolved": "1.49.1-pr-0240-0002",
+        "contentHash": "lB9ohbLZR5oJBTs7seQVbSQLOHNbARyMoBYu8r6kgUDSuSLpLaO+MmoBFP5k7ABzAyTPary8+9lf8r8Dh37gBg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2341,7 +2341,7 @@
           "NotificationApi.Client": "[1.49.2, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[1.45.2, )",
+          "UserApi.Client": "[1.49.1-pr-0240-0002, )",
           "VideoApi.Client": "[1.50.1, )"
         }
       }

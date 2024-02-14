@@ -22,7 +22,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="TimeZoneConverter" Version="3.3.0" />
-      <PackageReference Include="UserApi.Client" Version="1.45.2" />
+      <PackageReference Include="UserApi.Client" Version="1.49.1-pr-0240-0002" />
       <PackageReference Include="VideoApi.Client" Version="1.50.1" />
       <PackageReference Include="NotificationApi.Client" Version="1.49.2" />
 

@@ -27,5 +27,10 @@ namespace BookingQueueSubscriber.Services.UserApi
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
+        
+        public Task UpdateUserContactEmail(string existingContactEmail, string newContactEmail)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
