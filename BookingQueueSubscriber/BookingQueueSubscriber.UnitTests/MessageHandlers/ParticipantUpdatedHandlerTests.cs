@@ -16,7 +16,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
         {
-            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object);
+            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -29,7 +29,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
             var messageHandler =
-                (IMessageHandler) new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object);
+                (IMessageHandler) new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -52,7 +52,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_is_valid_with_linked_participant()
         {
-            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object);
+            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object);
 
             var integrationEvent = GetIntegrationEventWithLinkedParticipant();
             await messageHandler.HandleAsync(integrationEvent);
@@ -65,7 +65,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface_with_linked_participant()
         {
             var messageHandler =
-                (IMessageHandler) new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object);
+                (IMessageHandler) new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object);
             var integrationEvent = GetIntegrationEventWithLinkedParticipant();
             var dtoList = MapToRequestFromDto(integrationEvent.Participant.LinkedParticipants);
 
@@ -88,6 +88,37 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                         request.LinkedParticipants[0].ParticipantRefId == dtoList[0].ParticipantRefId &&
                         request.LinkedParticipants[0].LinkedRefId == dtoList[0].LinkedRefId
                 )), Times.Once);
+        }
+        
+        [Test]
+        public async Task should_call_user_service_when_contact_email_is_changed()
+        {
+            // Arrange
+            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object);
+            var existingContactEmail = ConferenceDetailsResponse.Participants[0].ContactEmail;
+            var newContactEmail = "editedEmail@email.com";
+            var integrationEvent = GetIntegrationEvent();
+            integrationEvent.Participant.ContactEmail = newContactEmail;
+            
+            // Act
+            await messageHandler.HandleAsync(integrationEvent);
+            
+            // Assert
+            UserServiceMock.Verify(x => x.UpdateUserContactEmail(existingContactEmail, newContactEmail), Times.Once);
+        }
+        
+        [Test]
+        public async Task should_not_call_user_service_when_contact_email_is_not_changed()
+        {
+            // Arrange
+            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object); ;
+            var integrationEvent = GetIntegrationEvent();
+            
+            // Act
+            await messageHandler.HandleAsync(integrationEvent);
+            
+            // Assert
+            UserServiceMock.Verify(x => x.UpdateUserContactEmail(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         private ParticipantUpdatedIntegrationEvent GetIntegrationEvent()
