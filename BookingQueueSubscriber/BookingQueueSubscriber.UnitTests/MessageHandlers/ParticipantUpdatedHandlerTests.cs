@@ -107,12 +107,24 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             UserServiceMock.Verify(x => x.UpdateUserContactEmail(existingContactEmail, newContactEmail), Times.Once);
         }
         
-        [Test]
-        public async Task should_not_call_user_service_when_contact_email_is_not_changed()
+        [TestCase(1)]
+        [TestCase(2)]
+        public async Task should_not_call_user_service_when_contact_email_is_not_changed(int testCase)
         {
             // Arrange
-            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object); ;
+            var messageHandler = new ParticipantUpdatedHandler(VideoApiServiceMock.Object, _logger.Object, UserServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
+
+            switch (testCase)
+            {
+                case 1:
+                    // Emails are identical
+                    break;
+                case 2:
+                    // Email contains whitespace
+                    integrationEvent.Participant.ContactEmail += " ";
+                    break;
+            }
             
             // Act
             await messageHandler.HandleAsync(integrationEvent);
