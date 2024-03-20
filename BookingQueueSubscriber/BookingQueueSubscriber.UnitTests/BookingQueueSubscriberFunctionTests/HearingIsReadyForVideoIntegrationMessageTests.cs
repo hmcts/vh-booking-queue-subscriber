@@ -35,7 +35,6 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     {
         _videoApiService.ClearRequests();
         _videoWebService.ClearRequests();
-        _notificationService.EJudFetaureEnabled = false;
     }
 
     [Test]

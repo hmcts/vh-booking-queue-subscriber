@@ -45,7 +45,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         public void TearDown()
         {
           _videoApiService.ClearRequests();
-          _notificationService.EJudFetaureEnabled = false;
             _notificationApiClient.NotificationRequests.Clear();
             _userService.Users.Clear();
         }
@@ -691,7 +690,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }
             }";
 
-            _notificationService.EJudFetaureEnabled = true;
             _featureTogglesClient.EjudFeatureToggleValue = true;
             await _sut.Run(message);
 

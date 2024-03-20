@@ -10,7 +10,6 @@ namespace BookingQueueSubscriber.Common.Configuration
     {
         public bool SsprToggle();
         bool UsePostMay2023Template();
-        bool EjudFeatureToggle();
     }
 
     [ExcludeFromCodeCoverage]
@@ -22,7 +21,6 @@ namespace BookingQueueSubscriber.Common.Configuration
         
         private const string SsprToggleKey = "sspr";
         private const string NewNotifyTemplatesToggleKey = "notify-post-may-2023-templates";
-        private const string EjudFeatureToggleKey = "ejud-feature";
 
         public FeatureToggles(string sdkKey, string environmentName)
         {
@@ -49,16 +47,6 @@ namespace BookingQueueSubscriber.Common.Configuration
             }
 
             return _ldClient.BoolVariation(NewNotifyTemplatesToggleKey, _context);
-        }
-
-        public bool EjudFeatureToggle()
-        {
-            if (!_ldClient.Initialized)
-            {
-                throw new InvalidOperationException("LaunchDarkly client not initialized");
-            }
-
-            return _ldClient.BoolVariation(EjudFeatureToggleKey, _context);
         }
     }
 }

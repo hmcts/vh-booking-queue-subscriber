@@ -75,9 +75,8 @@ namespace BookingQueueSubscriber.Services
         private async Task<User> CreateUserAndSendNotificationAsync(HearingDto hearing, ParticipantDto participant)
         {
             User user = null;
-            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             if (!string.Equals(participant.UserRole, RoleNames.Judge) &&
-                !IsPanelMemberOrWingerWithEJudUsername(participant, ejudFeatureFlag))
+                !IsPanelMemberOrWingerWithEJudUsername(participant))
             {
                 user = await _userService.CreateNewUserForParticipantAsync(participant.FirstName,
                     participant.LastName, participant.ContactEmail, false);
@@ -115,9 +114,9 @@ namespace BookingQueueSubscriber.Services
             return user;
         }
 
-        private static bool IsPanelMemberOrWingerWithEJudUsername(ParticipantDto participant, bool ejudFeatureFlag)
+        private static bool IsPanelMemberOrWingerWithEJudUsername(ParticipantDto participant)
         {
-            if (string.Equals(participant.UserRole, RoleNames.JudicialOfficeHolder) && ejudFeatureFlag)
+            if (string.Equals(participant.UserRole, RoleNames.JudicialOfficeHolder))
             {
                 return participant.HasEjdUsername();
             }
