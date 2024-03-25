@@ -24,7 +24,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             if (judgeResponse != null)
             {
                 var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(eventMessage.Judge);
-                if(judgeResponse.ContactEmail != request.ContactEmail)
+                if(judgeResponse.ContactEmail != request.ContactEmail && eventMessage.SendNotification)
                     await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, new[] {eventMessage.Judge});
                 await _apiService.UpdateParticipantDetails(conferenceResponse.Id, judgeResponse.Id, request);
             }

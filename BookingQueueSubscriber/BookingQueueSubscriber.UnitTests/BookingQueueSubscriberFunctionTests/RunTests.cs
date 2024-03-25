@@ -303,6 +303,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             
             await _sut.Run(message);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
+            _userService.UpdateUserAccountCount.Should().Be(1);
         }
 
         [Test]

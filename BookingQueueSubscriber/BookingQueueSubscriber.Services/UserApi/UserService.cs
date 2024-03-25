@@ -10,6 +10,7 @@ namespace BookingQueueSubscriber.Services.UserApi
     {
         Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser);
         Task AssignUserToGroup(string userId, string userRole);
+        Task UpdateUserContactEmail(string existingContactEmail, string newContactEmail);
     }
 
     public class UserService : IUserService
@@ -109,6 +110,20 @@ namespace BookingQueueSubscriber.Services.UserApi
                     break;
             }
         }
+        
+        public async Task UpdateUserContactEmail(string existingContactEmail, string newContactEmail)
+        {
+            var userProfile = await GetUserByContactEmail(existingContactEmail);
+            var userId = Guid.Parse(userProfile.UserId);
+            var request = new UpdateUserAccountRequest
+            {
+                FirstName = userProfile.FirstName,
+                LastName = userProfile.LastName,
+                ContactEmail = newContactEmail
+            };
+            await _userApiClient.UpdateUserAccountAsync(userId, request);
+        }
+        
         private async Task<NewUserResponse> CreateNewUserInAD(string firstname, string lastname, string contactEmail, bool isTestUser)
         {
             const string BLANK = " ";
