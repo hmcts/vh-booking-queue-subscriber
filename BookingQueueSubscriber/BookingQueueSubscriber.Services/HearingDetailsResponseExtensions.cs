@@ -4,7 +4,7 @@ namespace BookingQueueSubscriber.Services
 {
     public static class HearingExtensions
     {
-        private static readonly Regex EjudRegex = new ("@.*judiciary");
+        private static readonly Regex EjudRegex = new ("@.*judiciary", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
         public static bool IsGenericHearing(this HearingDto hearing)
         {
             return hearing.CaseType.Equals("Generic", StringComparison.InvariantCultureIgnoreCase);
