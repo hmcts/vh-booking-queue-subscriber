@@ -113,7 +113,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
                 hearing, 
                 participant, 
                 4, 
-                false, 
                 true, 
                 "xyz");
 
@@ -160,7 +159,11 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var hearing = GetHearingDto();
             Dictionary<string, string> expectedParameters = GetExpectedParametersForPostMay2023(hearing, participant);
 
-            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, false, true);
+            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(
+                hearing, 
+                participant, 
+                4,
+                true);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
