@@ -4,8 +4,8 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   environment:
     QUEUENAME: booking-will
-    VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-635.platform.hmcts.net/
-    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-844.platform.hmcts.net/
+    VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-635.dev.platform.hmcts.net/
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-844.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
