@@ -12,7 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
-    <PackageReference Include="BookingsApi.Client" Version="1.51.4" />
+    <PackageReference Include="BookingsApi.Client" Version="2.0.5" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.39" />
@@ -23,7 +23,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.3.0" />
-    <PackageReference Include="NotificationApi.Client" Version="1.49.2" />
+    <PackageReference Include="NotificationApi.Client" Version="1.51.1" />
     <PackageReference Include="Rixian.Extensions.ApplicationInsights.WorkerService" Version="2.1.19" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="9.25.0.90414">
       <PrivateAssets>all</PrivateAssets>
