@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
@@ -8,7 +7,6 @@
     <ProjectGuid>0F855588-E955-4A37-8FFF-49369CDFF7FC</ProjectGuid>
     <UserSecretsId>F6705640-D918-4180-B98A-BAB7ADAA4817</UserSecretsId>
     <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
-    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />

@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <ProjectGuid>413B52F2-FBD6-49C6-A638-C74DCA69607E</ProjectGuid>
-    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
