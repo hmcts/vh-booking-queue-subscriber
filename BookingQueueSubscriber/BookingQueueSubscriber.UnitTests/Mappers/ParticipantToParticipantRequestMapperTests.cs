@@ -73,7 +73,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.Representee.Should().Be(participantDto.Representee);
             var linkedParticipant = request.LinkedParticipants.First();
-            linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
+            linkedParticipant.Type.Should().Be((VideoApi.Contract.Enums.LinkedParticipantType)LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
         }
@@ -112,7 +112,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
             request.Representee.Should().Be(participantDto.Representee);
             var linkedParticipant = request.LinkedParticipants.First();
-            linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
+            linkedParticipant.Type.Should().Be((VideoApi.Contract.Enums.LinkedParticipantType)LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
         }

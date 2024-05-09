@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-      <TargetFramework>net6.0</TargetFramework>
+      <TargetFramework>net8.0</TargetFramework>
       <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
       <NoWarn>NU1603</NoWarn>
       <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
@@ -15,18 +15,18 @@
 
     <ItemGroup>
       <PackageReference Include="BookingsApi.Client" Version="1.51.4" />
-      <PackageReference Include="LaunchDarkly.ServerSdk" Version="7.0.3" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
-      <PackageReference Include="SonarAnalyzer.CSharp" Version="9.9.0.77355">
+      <PackageReference Include="LaunchDarkly.ServerSdk" Version="8.4.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="9.25.0.90414">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="TimeZoneConverter" Version="3.3.0" />
+      <PackageReference Include="TimeZoneConverter" Version="6.1.0" />
       <PackageReference Include="UserApi.Client" Version="1.49.1" />
       <PackageReference Include="VideoApi.Client" Version="1.50.1" />
       <PackageReference Include="NotificationApi.Client" Version="1.49.2" />
 
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
     </ItemGroup>
 
 
