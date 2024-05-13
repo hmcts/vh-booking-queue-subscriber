@@ -308,11 +308,6 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task CancelBookingAsync(Guid hearingId, CancelBookingRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<bool> GetFeatureFlagAsync(string featureName)
         {
             return Task.FromResult(EJudFeatureEnabled);
@@ -323,6 +318,11 @@ namespace BookingQueueSubscriber.Services
             return Task.FromResult(EJudFeatureEnabled);
         }
 
+        public Task CancelBookingAsync(Guid hearingId, CancelBookingRequest request)
+        {
+            throw new NotImplementedException();
+        }
+        
         public Task CancelBookingAsync(Guid hearingId, CancelBookingRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
