@@ -52,6 +52,8 @@ stages:
           sonar.coverage.exclusions="**/BookingQueueSubscriber/Swagger/**, **/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.IntegrationTests/**, **/BookingQueueSubscriber.UnitTests/**, **/BookingQueueSubscriber/Helper/**, **/BookingQueueSubscriber/ConfigureServicesExtensions.cs, **/BookingQueueSubscriber/Extensions/**"
           sonar.cpd.exclusions="**/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber/Swagger/**"
 
+    - task: NuGetAuthenticate@1
+
     - template: stages\dotnet-tests\unit-tests.yml@azTemplates
       parameters:
         #vstsFeedId: 'Video Hearings/vh-packages'
