@@ -7,20 +7,26 @@
     <ProjectGuid>0F855588-E955-4A37-8FFF-49369CDFF7FC</ProjectGuid>
     <UserSecretsId>F6705640-D918-4180-B98A-BAB7ADAA4817</UserSecretsId>
     <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
     <PackageReference Include="BookingsApi.Client" Version="2.0.5" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
-    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.39" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.15.1" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.ServiceBus" Version="5.18.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.3.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.22.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" />
     <PackageReference Include="NotificationApi.Client" Version="1.51.1" />
     <PackageReference Include="Rixian.Extensions.ApplicationInsights.WorkerService" Version="2.1.19" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="9.25.0.90414">
@@ -48,5 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BookingQueueSubscriber.Services\BookingQueueSubscriber.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
   </ItemGroup>
 </Project>
