@@ -22,6 +22,7 @@ var host = new HostBuilder()
 
 host.Run();
 
+[ExcludeFromCodeCoverage]
 public static partial class Program
 {
     public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
