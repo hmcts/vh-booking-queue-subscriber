@@ -20,7 +20,7 @@ var host = new HostBuilder()
     })
     .Build();
 
-host.Run();
+await host.RunAsync();
 
 [ExcludeFromCodeCoverage]
 public static partial class Program
@@ -127,10 +127,7 @@ public static partial class Program
     
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
     {
-        if (builder == null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
+        ArgumentNullException.ThrowIfNull(builder);
 
         const string vhInfraCore = "/mnt/secrets/vh-infra-core";
         const string vhBookingQueue = "/mnt/secrets/vh-booking-queue";
