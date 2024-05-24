@@ -914,10 +914,12 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
+        
         public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request)
         {
             throw new NotImplementedException();
         }
+        
         public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
