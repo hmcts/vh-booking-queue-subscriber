@@ -11,8 +11,6 @@ namespace BookingQueueSubscriber.Services
     [ExcludeFromCodeCoverage]
     public class BookingsApiClientFake : IBookingsApiClient
     {
-        public bool EJudFeatureEnabled { get; set; }
-
         public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted)
         {
             throw new NotImplementedException();
@@ -247,6 +245,26 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
+        
+        public Task UpdateHearingsInGroupAsync(Guid groupId, UpdateHearingsInGroupRequest request)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task UpdateHearingsInGroupAsync(Guid groupId, UpdateHearingsInGroupRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<ICollection<HearingNotificationResponse>> GetHearingsForNotificationAsync()
         {
@@ -292,17 +310,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<bool> GetFeatureFlagAsync(string featureName)
-        {
-            return Task.FromResult(EJudFeatureEnabled);
-        }
-
-        public Task<bool> GetFeatureFlagAsync(string featureName, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(EJudFeatureEnabled);
-        }
-
+        
         public Task CancelBookingAsync(Guid hearingId, CancelBookingRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -903,6 +911,14 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<HearingDetailsResponseV2>> GetHearingsByGroupIdV2Async(Guid groupId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
