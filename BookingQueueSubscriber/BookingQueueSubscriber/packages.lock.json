@@ -14,9 +14,9 @@
       },
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[2.0.11, )",
-        "resolved": "2.0.11",
-        "contentHash": "4dJFAlR2hZqpKSKZgRrV6bzGvbXOia45Ej35cEPQhfjGrN66vP2ad184vvFmA9zVdS2jKqw08plKKe8OOraNNw==",
+        "requested": "[2.0.12-pr-0857-0020, )",
+        "resolved": "2.0.12-pr-0857-0020",
+        "contentHash": "oF8q0wZ8MCk2AywAx+DxzGPw40ZGYSocL1M6TjlP00GgkIW0e1kHbrfNcpZ8MRZ3hFhR+TIUwouR18Eu06FsNg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2302,8 +2302,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.51.6",
-        "contentHash": "d1KNPOYF/mXiIfik3xSuAsqJV9XKh+sNqrN23QO4a0+3jcGW7YGS2bF2QEIN7pnPllPEIuIsW8a1B4klEboZAw==",
+        "resolved": "1.51.7-pr-0645-0003",
+        "contentHash": "+p3+dc5sLg0+rVMlmqIBVitU+fDro6cvw894nw4w3NcqkAstfiPyJ6ykyoPLiFZLAR6GjUayKeh/d4Y4gITMNQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.3"
@@ -2321,7 +2321,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[2.0.11, )",
+          "BookingsApi.Client": "[2.0.12-pr-0857-0020, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2336,14 +2336,14 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[2.0.11, )",
+          "BookingsApi.Client": "[2.0.12-pr-0857-0020, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
           "NotificationApi.Client": "[1.52.3, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[1.49.4, )",
-          "VideoApi.Client": "[1.51.6, )"
+          "VideoApi.Client": "[1.51.7-pr-0645-0003, )"
         }
       }
     }

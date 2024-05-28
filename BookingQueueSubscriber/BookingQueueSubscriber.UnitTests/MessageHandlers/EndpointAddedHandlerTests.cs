@@ -23,7 +23,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     Id = Guid.NewGuid(),
                     SipAddress = integrationEvent.Endpoint.Sip,
                     DisplayName = integrationEvent.Endpoint.DisplayName,
-                    DefenceAdvocate = integrationEvent.Endpoint.DefenceAdvocateContactEmail,
                     Pin = integrationEvent.Endpoint.Pin,
                     CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false  }
                 }
@@ -57,7 +56,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             (
                 request =>
                     request.DisplayName == integrationEvent.Endpoint.DisplayName &&
-                    request.DefenceAdvocate == integrationEvent.Endpoint.DefenceAdvocateContactEmail &&
                     request.SipAddress == integrationEvent.Endpoint.Sip &&
                     request.Pin == integrationEvent.Endpoint.Pin
             )), Times.Once);
