@@ -19,19 +19,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         public async Task HandleAsync(EndpointAddedIntegrationEvent eventMessage)
         {
             var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
-            ParticipantDetailsResponse defenceAdvocate = null;
-            if (!string.IsNullOrEmpty(eventMessage.Endpoint.DefenceAdvocateContactEmail))
-            {
-                defenceAdvocate = conference.Participants.Single(x => x.ContactEmail ==
-                    eventMessage.Endpoint.DefenceAdvocateContactEmail);
-            }
 
             await _videoApiService.AddEndpointToConference(conference.Id, new AddEndpointRequest
             {
                 DisplayName = eventMessage.Endpoint.DisplayName,
                 SipAddress = eventMessage.Endpoint.Sip,
-                Pin = eventMessage.Endpoint.Pin,
-                DefenceAdvocate = defenceAdvocate?.Username
+                Pin = eventMessage.Endpoint.Pin
             });
 
             var endpoints = await _videoApiService.GetEndpointsForConference(conference.Id);

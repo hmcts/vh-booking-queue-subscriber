@@ -10,7 +10,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class EndpointUpdatedHandlerTests : MessageHandlerTestBase
     {
-        protected Mock<ILogger<EndpointUpdatedHandler>> logger;
+        private Mock<ILogger<EndpointUpdatedHandler>> _logger;
         private ICollection<EndpointResponse> _mockEndpointDetailsResponse;
 
         [SetUp]
@@ -20,12 +20,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             _mockEndpointDetailsResponse = new List<EndpointResponse>
             {
-                new EndpointResponse
+                new()
                 {
                     Id = Guid.NewGuid(),
                     SipAddress = integrationEvent.Sip,
                     DisplayName = integrationEvent.DisplayName,
-                    DefenceAdvocate = integrationEvent.DefenceAdvocate,
                     Pin = "Pin",
                     CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false  }
                 }
@@ -38,8 +37,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
         {
-            logger = new Mock<ILogger<EndpointUpdatedHandler>>();
-            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
+            _logger = new Mock<ILogger<EndpointUpdatedHandler>>();
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -50,18 +49,14 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
-            logger = new Mock<ILogger<EndpointUpdatedHandler>>();
-            var messageHandler = (IMessageHandler) new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, logger.Object);
+            _logger = new Mock<ILogger<EndpointUpdatedHandler>>();
+            var messageHandler = (IMessageHandler) new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
 
             VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(),
-                It.Is<UpdateEndpointRequest>
-                (
-                    request => request.DisplayName == integrationEvent.DisplayName &&
-                               request.DefenceAdvocate == integrationEvent.DefenceAdvocate
-                )), Times.Once);
+                It.Is<UpdateEndpointRequest>(request => request.DisplayName == integrationEvent.DisplayName)), Times.Once);
 
             VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(), 
                 It.IsAny<UpdateConferenceEndpointsRequest>()), Times.Once);
@@ -73,8 +68,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             {
                 HearingId = HearingId,
                 Sip = Guid.NewGuid().ToString(),
-                DisplayName = "two",
-                DefenceAdvocate = "test@hmcts.net"
+                DisplayName = "two"
             };
         }
     }
