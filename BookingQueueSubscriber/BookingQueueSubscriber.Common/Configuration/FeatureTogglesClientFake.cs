@@ -8,10 +8,6 @@ public class FeatureTogglesClientFake : IFeatureToggles
     public bool PostMayTemplateToggle { get; set; } = false;
     
     public bool EjudFeatureToggleValue { get; set; } = true;
-    public bool SsprToggle()
-    {
-        return false;
-    }
 
     public bool UsePostMay2023Template()
     {
