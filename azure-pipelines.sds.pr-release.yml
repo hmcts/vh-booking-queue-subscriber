@@ -5,7 +5,7 @@ resources:
     - repository: azTemplates
       type: github
       name: hmcts/azure-devops-templates
-      ref: feature_docker_file
+      ref: fix_docker_compose
       endpoint: hmcts
 
 trigger: none
