@@ -24,7 +24,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private UserServiceFake _userService;
         private BookingsApiClientFake _bookingsApi;
         private BookingQueueSubscriberFunction _sut;
-        private FeatureTogglesClientFake _featureTogglesClient;
         private ILogger<BookingQueueSubscriberFunction> _logger;
 
         [OneTimeSetUp]
@@ -37,7 +36,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
             _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
-            _featureTogglesClient = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
         }
 
@@ -550,83 +548,9 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationApiClient.NotificationRequests.Count.Should().Be(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
-
+        
         [Test]
-        public async Task Should_create_user_account_and_send_non_ejud_hearing_notifications_for_eJudUsername_when_eJudfeature_off()
-        {
-            const string message = @" {
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
-            'id': '1e2665c4-a4a0-4076-863d-5a2f1bf7e6dc',
-            'timestamp': '2022-08-23T16:03:53.8526422Z',
-            'integration_event': {
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingIsReadyForVideoIntegrationEvent, BookingsApi.Infrastructure.Services',
-            'hearing': {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
-            'hearing_id': '81d791e9-e3e6-4d54-a0cb-d762579b1409',
-            'group_id': null,
-            'scheduled_date_time': '2022-08-23T17:00:00Z',
-            'scheduled_duration': 45,
-            'case_type': 'Family',
-            'case_number': 'VIH9276--EJUDGE-PM',
-            'case_name': 'VIH9276--EJUDGE-PM',
-            'hearing_venue_name': 'Skipton County Court and Family Court',
-            'record_audio': true,
-            'hearing_type': 'Family Private Law'
-            },
-            'participants': [
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '536dda9f-e0f3-4293-8cb9-1ac0aba8c435',
-            'fullname': ' Manual Judge_06',
-            'username': 'manual.judge_06@hearings.reform.hmcts.net',
-            'first_name': 'Manual',
-            'last_name': 'Judge_06',
-            'contact_email': 'manual.judge_06@hearings.reform.hmcts.net',
-            'contact_telephone': null,
-            'display_name': 'Manual Judge_06',
-            'hearing_role': 'Judge',
-            'user_role': 'Judge',
-            'case_group_type': 'judge',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': '',
-            'contact_phone_for_non_e_jud_judge_user': '',
-            'send_hearing_notification_if_new': true
-            },
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '5e4768d9-e949-4f7b-a512-c257911f6584',
-            'fullname': 'Ms Manual 7 Panel 7',
-            'username': 'manual_panel_7@judiciarystaging.onmicrosoft.com',
-            'first_name': 'Manual 7',
-            'last_name': 'Panel 7',
-            'contact_email': 'manual_panel_7@judiciarystaging.onmicrosoft.com',
-            'contact_telephone': '7654',
-            'display_name': 'PM',
-            'hearing_role': 'Panel Member',
-            'user_role': 'Judicial Office Holder',
-            'case_group_type': 'panelMember',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null,
-            'send_hearing_notification_if_new': true
-            }
-            ],
-            'endpoints': []
-            }
-            }";
-
-            _userService.Users.Clear();
-            _featureTogglesClient.EjudFeatureToggleValue = false;
-            _notificationService.NotificationRequests.Clear();
-            
-            await _sut.Run(message);
-            _videoApiService.BookNewConferenceCount.Should().Be(1);
-        }
-
-        [Test]
-        public async Task Should_create_user_account_and_send_non_ejud_hearing_notifications_for_eJudUsername_when_eJudfeature_on()
+        public async Task Should_create_user_account_and_send_non_ejud_hearing_notifications_for_eJudUsername()
         {
             const string message = @" {
             '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
@@ -691,7 +615,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }
             }";
 
-            _featureTogglesClient.EjudFeatureToggleValue = true;
             await _sut.Run(message);
 
             _userService.Users.Should().HaveCount(0);

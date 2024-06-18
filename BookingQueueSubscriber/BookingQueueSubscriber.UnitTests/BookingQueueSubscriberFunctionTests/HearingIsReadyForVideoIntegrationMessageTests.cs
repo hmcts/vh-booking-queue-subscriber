@@ -17,7 +17,6 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     private NotificationServiceFake _notificationService;
     private BookingQueueSubscriberFunction _sut;
     private ILogger<BookingQueueSubscriberFunction> _logger;
-    private FeatureTogglesClientFake _featureToggles;
     
     [SetUp]
     public void SetUp()
@@ -27,7 +26,6 @@ public class HearingIsReadyForVideoIntegrationMessageTests
         _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
         _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
         _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
-        _featureToggles = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
     }
     
     [TearDown]
@@ -219,7 +217,6 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     [Test]
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_and_participants_feauture_toogle_new_template_on()
     {
-      _featureToggles.PostMayTemplateToggle = true;
       string representativeEmail = "user6@email.com";
       string lipEmail = "user2@email.com";
       string judgeEmail = "manual.judge_06@hearings.reform.hmcts.net";

@@ -101,7 +101,6 @@ namespace BookingQueueSubscriber
                 services.AddScoped<INotificationApiClient, NotificationApiClientFake>();
                 services.AddScoped<IUserService, UserServiceFake>();
                 services.AddScoped<IBookingsApiClient, BookingsApiClientFake>();
-                services.AddScoped<IFeatureToggles, FeatureTogglesClientFake>();
             }
             else
             {
@@ -151,9 +150,6 @@ namespace BookingQueueSubscriber
                     client.ReadResponseAsString = true;
                     return (IBookingsApiClient)client;
                 });
-                 
-                 var envName = configuration["VhServices:BookingsApiUrl"]; // any service url will do here since we only care about the env name
-                 services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"], envName));
             }
 
             services.AddVhHealthChecks();
