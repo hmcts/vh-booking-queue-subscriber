@@ -21,10 +21,8 @@ namespace BookingQueueSubscriber.UnitTests
         private readonly Mock<ILogger<UserCreationAndNotification>> _logger;
         private readonly Mock<ILogger<UserService>> _logger2;
         private readonly Mock<IUserApiClient> _userApi;
-        private readonly Mock<IFeatureToggles> _featureToggles;
         public UserCreationAndNotificationTests()
         {
-            _featureToggles = new Mock<IFeatureToggles>();
             _notificationServiceMock = new Mock<INotificationService>();
             _userServiceMock = new Mock<IUserService>();
             _bookingsApiMock = new Mock<IBookingsApiClient>();
@@ -39,10 +37,10 @@ namespace BookingQueueSubscriber.UnitTests
             var participant = GetJoh();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
-            SetupDependencyCalls(participant, true);
+            SetupDependencyCalls(participant);
 
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
+                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object);
 
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
             {
@@ -60,7 +58,7 @@ namespace BookingQueueSubscriber.UnitTests
             var participant = GetParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
-            SetupDependencyCalls(participant, true);
+            SetupDependencyCalls(participant);
 
             var user = new UserProfile()
             {
@@ -82,7 +80,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userService = new UserService(_userApi.Object, _logger2.Object);
 
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                userService, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
+                userService, _bookingsApiMock.Object, _logger.Object);
 
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
             {
@@ -101,7 +99,7 @@ namespace BookingQueueSubscriber.UnitTests
             var participant = GetParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
-            SetupDependencyCalls(participant, true);
+            SetupDependencyCalls(participant);
 
             _userApi.Reset();
             _bookingsApiMock.Reset();
@@ -119,7 +117,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userService = new UserService(_userApi.Object, _logger2.Object);
 
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                userService, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
+                userService, _bookingsApiMock.Object, _logger.Object);
 
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
             {
@@ -138,7 +136,7 @@ namespace BookingQueueSubscriber.UnitTests
             var participant = GetParticipant();
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
 
-            SetupDependencyCalls(participant, true);
+            SetupDependencyCalls(participant);
 
             _userApi.Reset();
             _bookingsApiMock.Reset();
@@ -156,7 +154,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userService = new UserService(_userApi.Object, _logger2.Object);
 
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                userService, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
+                userService, _bookingsApiMock.Object, _logger.Object);
 
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
             {
@@ -168,28 +166,7 @@ namespace BookingQueueSubscriber.UnitTests
             _bookingsApiMock.Verify(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username), Times.Never);
             _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, It.IsAny<String>()), Times.Never);
         }
-
-        [Test]
-        public async Task should_skip_user_when_matching_participant_not_found()
-        {
-            var participant = GetParticipant();
-            var hearing = new HearingDto { HearingId = Guid.NewGuid() };
-
-            SetupDependencyCalls(participant);
-            _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail,
-                false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = PasswordForNotification, UserName = "part1@hearigns.reform.hmcts.net", ContactEmail = "" });
-
-            var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
-
-            var users = await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
-            {
-                participant
-            });
-
-            Assert.IsEmpty(users);
-        }
-
+        
         [Test]
         public async Task should_send_new_user_welcome_email_when_new_template_toggle_is_on_new_user()
         {
@@ -206,10 +183,10 @@ namespace BookingQueueSubscriber.UnitTests
             List<ParticipantDto> listParticipants = new List<ParticipantDto> { participant };
 
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
-            SetupDependencyCalls(participant, true);
+            SetupDependencyCalls(participant);
 
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
+                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object);
 
             // act
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, listParticipants);
@@ -240,10 +217,10 @@ namespace BookingQueueSubscriber.UnitTests
             List<ParticipantDto> listParticipants = new List<ParticipantDto> { participant };
 
             var hearing = new HearingDto { HearingId = Guid.NewGuid() };
-            SetupDependencyCalls(participant, true, false);
+            SetupDependencyCalls(participant, false);
 
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
+                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object);
 
             // act
             await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, listParticipants);
@@ -255,42 +232,9 @@ namespace BookingQueueSubscriber.UnitTests
             _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification), Times.Never);
 
         }
-
-        [Test]
-        public async Task should_send_old_new_user_welcome_email_when_new_template_toggle_is_off()
+        
+        private void SetupDependencyCalls(ParticipantDto participant, Boolean newUser = true)
         {
-            // arrange
-            var participant = new ParticipantDto
-            {
-                ContactEmail = "part1@ejudiciary.net",
-                Username = "part1@ejudiciary.net",
-                UserRole = "Individual",
-                FirstName = "part1",
-                LastName = "Individual"
-            };
-            var hearing = new HearingDto { HearingId = Guid.NewGuid() };
-            SetupDependencyCalls(participant);
-
-            var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
-                _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object, _featureToggles.Object);
-
-            // act
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
-            {
-                participant
-            });
-
-            // assert
-
-            _notificationServiceMock.Verify(x => x.SendNewUserWelcomeEmail(hearing, participant), Times.Never);
-            _notificationServiceMock.Verify(x => x.SendNewUserSingleDayHearingConfirmationEmail(hearing, participant, PasswordForNotification), Times.Never);
-            _notificationServiceMock.Verify(x => x.SendNewUserAccountNotificationAsync(hearing.HearingId, participant, PasswordForNotification), Times.Once);
-
-        }
-
-        private void SetupDependencyCalls(ParticipantDto participant, bool newTemplatesFlag = false, Boolean newUser = true)
-        {
-            _featureToggles.Setup(x => x.UsePostMay2023Template()).Returns(newTemplatesFlag);
             _bookingsApiMock.Setup(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username));
             _userServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail,
                 false)).ReturnsAsync(new User { UserId = "part1@hearigns.reform.hmcts.net", Password = (newUser) ? PasswordForNotification : null, UserName = "part1@hearigns.reform.hmcts.net", ContactEmail = participant.ContactEmail });
