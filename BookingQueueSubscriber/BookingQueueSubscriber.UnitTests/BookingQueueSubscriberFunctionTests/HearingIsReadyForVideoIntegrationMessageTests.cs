@@ -38,8 +38,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     [Test]
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_only()
     {
-      var judgeEmail = "automation_judge_judge_1@hmcts.net";
-        const string message = @"{
+      const string message = @"{
   '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
   'id': 'e0bbb9ed-ce49-4e69-94e7-3e35e7010206',
   'timestamp': '2023-09-15T09:03:50.889496Z',
@@ -217,10 +216,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     [Test]
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_and_participants_feauture_toogle_new_template_on()
     {
-      string representativeEmail = "user6@email.com";
-      string lipEmail = "user2@email.com";
-      string judgeEmail = "manual.judge_06@hearings.reform.hmcts.net";
-        const string message = @"{
+      const string message = @"{
   '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
   'id': '1f690c34-353b-4d8b-99a3-e9240088faff',
   'timestamp': '2023-10-25T13:13:10.8432746Z',
