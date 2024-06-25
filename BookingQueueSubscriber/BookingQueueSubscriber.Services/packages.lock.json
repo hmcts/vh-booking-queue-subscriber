@@ -72,16 +72,6 @@
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
       },
-      "VideoApi.Client": {
-        "type": "Direct",
-        "requested": "[1.51.6, )",
-        "resolved": "1.51.6",
-        "contentHash": "d1KNPOYF/mXiIfik3xSuAsqJV9XKh+sNqrN23QO4a0+3jcGW7YGS2bF2QEIN7pnPllPEIuIsW8a1B4klEboZAw==",
-        "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "13.0.3"
-        }
-      },
       "LaunchDarkly.Cache": {
         "type": "Transitive",
         "resolved": "1.0.2",
