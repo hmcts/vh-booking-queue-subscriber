@@ -53,7 +53,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
         }
 
-        private async Task<ParticipantDetailsResponse> HandleEndpointDefenceAdvocateUpdate(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
+        private async Task<ParticipantResponse> HandleEndpointDefenceAdvocateUpdate(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
         {
             var newDefenceAdvocate = await FindDefenceAdvocateInConference(conference, endpointEvent);
             var endpoints = await _videoApiService.GetEndpointsForConference(conference.Id);
@@ -72,9 +72,9 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             return newDefenceAdvocate;
         }
 
-        private async Task<ParticipantDetailsResponse> FindDefenceAdvocateInConference(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
+        private async Task<ParticipantResponse> FindDefenceAdvocateInConference(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
         {
-            ParticipantDetailsResponse newDefenceAdvocate = null;
+            ParticipantResponse newDefenceAdvocate = null;
 
             if (!string.IsNullOrEmpty(endpointEvent.DefenceAdvocate))
             {
@@ -99,7 +99,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
 
         private async Task NotifyDefenceAdvocates(ConferenceDetailsResponse conference, 
             EndpointUpdatedIntegrationEvent endpointEvent, 
-            ParticipantDetailsResponse newDefenceAdvocate, 
+            ParticipantResponse newDefenceAdvocate, 
             EndpointResponse endpointBeingUpdated)
         {
             //Has a new rep been linked
@@ -126,13 +126,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }
         }
 
-        private static ParticipantDetailsResponse GetDefenceAdvocate(ConferenceDetailsResponse conference, string defenceAdvocate)
+        private static ParticipantResponse GetDefenceAdvocate(ConferenceDetailsResponse conference, string defenceAdvocate)
         {
             return conference.Participants.SingleOrDefault(x => x.Username == defenceAdvocate) ??
                    conference.Participants.SingleOrDefault(x => x.ContactEmail == defenceAdvocate);
         }
         
-        private static bool IsParticipantIsInPrivateConsultationWithEndpoint(ParticipantDetailsResponse participant, EndpointResponse endpoint)
+        private static bool IsParticipantIsInPrivateConsultationWithEndpoint(ParticipantResponse participant, EndpointResponse endpoint)
         {
             return participant is not null &&
                    participant.CurrentStatus == ParticipantState.InConsultation &&

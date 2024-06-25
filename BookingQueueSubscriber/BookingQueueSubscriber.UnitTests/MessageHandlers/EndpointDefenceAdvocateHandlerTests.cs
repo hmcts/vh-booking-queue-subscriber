@@ -53,9 +53,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 {
                     Id = _conferenceId,
                     HearingId = _hearingId,
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
-                        new ParticipantDetailsResponse()
+                        new ParticipantResponse()
                         {
                             Id = Guid.NewGuid(),
                             Username = DefenceAdvocate1,
@@ -63,7 +63,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                             CurrentRoom = new RoomResponse {Id = 1, Label = "Private Consultation Room", Locked = false},
                             CurrentStatus = ParticipantState.InConsultation
                         },
-                        new ParticipantDetailsResponse()
+                        new ParticipantResponse()
                         {
                             Id = Guid.NewGuid(),
                             Username = DefenceAdvocate2,
@@ -180,16 +180,16 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 {
                     Id = _conferenceId,
                     HearingId = _hearingId,
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
-                        new ParticipantDetailsResponse()
+                        new ParticipantResponse()
                         {
                             Id = Guid.NewGuid(),
                             Username = DefenceAdvocate1,
                             ContactEmail = DefenceAdvocate1,
                             CurrentStatus = ParticipantState.Available
                         },
-                        new ParticipantDetailsResponse()
+                        new ParticipantResponse()
                         {
                             Id = Guid.NewGuid(),
                             Username = DefenceAdvocate2,
@@ -262,16 +262,16 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 {
                     Id = _conferenceId,
                     HearingId = _hearingId,
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
-                        new ParticipantDetailsResponse()
+                        new ParticipantResponse()
                         {
                             Id = Guid.NewGuid(),
                             Username = DefenceAdvocate1,
                             ContactEmail = DefenceAdvocate1,
                             CurrentStatus = ParticipantState.Available
                         },
-                        new ParticipantDetailsResponse()
+                        new ParticipantResponse()
                         {
                             Id = Guid.NewGuid(),
                             Username = "",
