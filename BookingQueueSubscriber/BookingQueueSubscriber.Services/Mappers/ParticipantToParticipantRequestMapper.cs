@@ -1,7 +1,5 @@
 using BookingQueueSubscriber.Services.MessageHandlers.Extensions;
 using VideoApi.Contract.Requests;
-using VideoWebRequests = BookingQueueSubscriber.Services.VideoWeb;
-using VideoApiRequests = VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
