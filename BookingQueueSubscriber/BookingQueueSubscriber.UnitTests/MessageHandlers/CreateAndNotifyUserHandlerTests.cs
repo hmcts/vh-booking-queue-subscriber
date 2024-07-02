@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse()
                 {
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
                         new()
                         {
@@ -49,7 +49,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse()
                 {
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
                         new()
                         {
@@ -76,7 +76,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse()
                 {
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
                         new()
                         {
@@ -101,7 +101,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse()
                 {
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
                         new()
                         {

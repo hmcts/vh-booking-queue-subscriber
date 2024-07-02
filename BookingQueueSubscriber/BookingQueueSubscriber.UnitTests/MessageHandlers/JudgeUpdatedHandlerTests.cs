@@ -15,9 +15,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [SetUp]
         public new void Setup()
         {
-            _mockConferenceDetailsResponse = new ConferenceDetailsResponse{Participants = new List<ParticipantDetailsResponse>
+            _mockConferenceDetailsResponse = new ConferenceDetailsResponse{Participants = new List<ParticipantResponse>
             {
-                new ParticipantDetailsResponse
+                new ParticipantResponse
                 {
                     ContactEmail = "Judge@email.com"
                 }
