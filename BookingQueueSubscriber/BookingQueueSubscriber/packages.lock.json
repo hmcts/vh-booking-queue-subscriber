@@ -212,6 +212,16 @@
         "resolved": "4.5.4",
         "contentHash": "zteT+G8xuGu6mS+mzDzYXbzS7rd3K6Fjb9RiZlYlJPam2/hU7JCBZBVEcywNuR+oZ1ncTvc/cq0faRr3P01OVg=="
       },
+      "VideoApi.Client": {
+        "type": "Direct",
+        "requested": "[2.1.3, )",
+        "resolved": "2.1.3",
+        "contentHash": "eKyRitLFTWV8Mys1H5G8a92lkXGjmCH8SFzXbKE8WrzfeekdbhiqbVteqMHs7ue93YaVETiwdsa+dTjPnD+2OQ==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Newtonsoft.Json": "13.0.3"
+        }
+      },
       "Azure.Core": {
         "type": "Transitive",
         "resolved": "1.25.0",
@@ -2300,15 +2310,6 @@
           "SonarAnalyzer.CSharp": "8.2.0.14119"
         }
       },
-      "VideoApi.Client": {
-        "type": "Transitive",
-        "resolved": "1.51.6",
-        "contentHash": "d1KNPOYF/mXiIfik3xSuAsqJV9XKh+sNqrN23QO4a0+3jcGW7YGS2bF2QEIN7pnPllPEIuIsW8a1B4klEboZAw==",
-        "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "13.0.3"
-        }
-      },
       "WindowsAzure.Storage": {
         "type": "Transitive",
         "resolved": "9.3.1",
@@ -2342,8 +2343,7 @@
           "NotificationApi.Client": "[1.52.3, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[1.49.4, )",
-          "VideoApi.Client": "[1.51.6, )"
+          "UserApi.Client": "[1.49.4, )"
         }
       }
     }
