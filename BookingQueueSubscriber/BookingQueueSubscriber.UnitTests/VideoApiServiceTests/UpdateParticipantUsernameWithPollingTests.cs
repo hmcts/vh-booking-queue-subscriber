@@ -52,7 +52,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
                 .ThrowsAsync(new VideoApiException("Conference not found", (int)HttpStatusCode.NotFound, "Conference not found", null, null))
                 .ReturnsAsync(new ConferenceDetailsResponse()
                 {
-                    Participants = new List<ParticipantDetailsResponse>()
+                    Participants = new List<ParticipantResponse>()
                     {
                         new()
                         {

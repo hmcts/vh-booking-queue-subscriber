@@ -70,9 +70,9 @@ namespace BookingQueueSubscriber.Services.VideoApi
             ConferenceResponse = new ConferenceDetailsResponse
             {
                 Id = Guid.NewGuid(),
-                Participants = new List<ParticipantDetailsResponse>
+                Participants = new List<ParticipantResponse>
                 {
-                    new ParticipantDetailsResponse {Id = Guid.NewGuid(), ContactEmail = "Automation_1316542910@hmcts.net"}
+                    new ParticipantResponse {Id = Guid.NewGuid(), ContactEmail = "Automation_1316542910@hmcts.net"}
                 }
             };
         }
