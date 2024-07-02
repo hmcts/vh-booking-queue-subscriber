@@ -17,7 +17,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             expectedParameters.Remove("judicial office holder");
             expectedParameters.Add("judge", participant.DisplayName);
 
-            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, true);
+            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -38,56 +38,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
 
             var expectedParameters = GetExpectedParameters(hearing, participant);
 
-            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, true);
-
-            result.Should().NotBeNull();
-            result.HearingId.Should().Be(hearing.HearingId);
-            result.ParticipantId.Should().Be(participant.ParticipantId);
-            result.ContactEmail.Should().Be(participant.ContactEmail);
-            result.NotificationType.Should().Be(expectedNotificationType);
-            result.MessageType.Should().Be(MessageType.Email);
-            result.PhoneNumber.Should().Be(participant.ContactTelephone);
-            result.Parameters.Should().BeEquivalentTo(expectedParameters);
-        }
-
-        [Test]
-        public void should_map_to_judge_confirmation_notification()
-        {
-            var expectedNotificationType = NotificationType.HearingConfirmationJudgeMultiDay;
-            var participant = GetParticipantDto("Judge");
-            participant.Username = "user@test.com";
-            participant.ContactEmailForNonEJudJudgeUser = "judge@hmcts.net";
-            participant.ContactPhoneForNonEJudJudgeUser = "123456789";
-            var hearing = GetHearingDto();
-
-            var expectedParameters = GetExpectedParameters(hearing, participant);
-            expectedParameters.Remove("judicial office holder");
-            expectedParameters.Add("judge", participant.DisplayName);
-            expectedParameters.Add("courtroom account username", participant.Username);
-            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, false);
-
-            result.Should().NotBeNull();
-            result.HearingId.Should().Be(hearing.HearingId);
-            result.ParticipantId.Should().Be(participant.ParticipantId);
-            result.ContactEmail.Should().Be(participant.ContactEmailForNonEJudJudgeUser);
-            result.NotificationType.Should().Be(expectedNotificationType);
-            result.MessageType.Should().Be(MessageType.Email);
-            result.PhoneNumber.Should().Be(participant.ContactPhoneForNonEJudJudgeUser);
-            result.Parameters.Should().BeEquivalentTo(expectedParameters);
-        }
-
-        [Test]
-        public void should_map_to_lip_confirmation_notification()
-        {
-            var expectedNotificationType = NotificationType.HearingConfirmationLipMultiDay;
-            var participant = GetParticipantDto("Individual");
-            var hearing = GetHearingDto();
-
-            var expectedParameters = GetExpectedParameters(hearing, participant);
-            expectedParameters.Remove("judicial office holder");
-            expectedParameters.Add("name", $"{participant.FirstName} {participant.LastName}");
-
-            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, false);
+            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);
@@ -113,7 +64,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
                 hearing, 
                 participant, 
                 4, 
-                true, 
                 "xyz");
 
             result.Should().NotBeNull();
@@ -125,30 +75,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             result.PhoneNumber.Should().Be(participant.ContactTelephone);
             result.Parameters.Should().BeEquivalentTo(expectedParameters);
         }
-
-        [Test]
-        public void should_map_to_representative_confirmation_notification()
-        {
-            var expectedNotificationType = NotificationType.HearingConfirmationRepresentativeMultiDay;
-            var participant = GetParticipantDto("Representative", "Jane Doe");
-            var hearing = GetHearingDto();
-
-            var expectedParameters = GetExpectedParameters(hearing, participant);
-            expectedParameters.Remove("judicial office holder");
-            expectedParameters.Add("client name", $"{participant.Representee}");
-            expectedParameters.Add("solicitor name", $"{participant.FirstName} {participant.LastName}");
-            var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, 4, false);
-
-            result.Should().NotBeNull();
-            result.HearingId.Should().Be(hearing.HearingId);
-            result.ParticipantId.Should().Be(participant.ParticipantId);
-            result.ContactEmail.Should().Be(participant.ContactEmail);
-            result.NotificationType.Should().Be(expectedNotificationType);
-            result.MessageType.Should().Be(MessageType.Email);
-            result.PhoneNumber.Should().Be(participant.ContactTelephone);
-            result.Parameters.Should().BeEquivalentTo(expectedParameters);
-        }
-
+        
         [Test]
         public void should_map_to_existing_lip_confirmation_notification_when_new_template_on()
         {
@@ -162,8 +89,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
             var result = AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(
                 hearing, 
                 participant, 
-                4,
-                true);
+                4);
 
             result.Should().NotBeNull();
             result.HearingId.Should().Be(hearing.HearingId);

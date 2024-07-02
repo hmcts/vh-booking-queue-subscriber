@@ -46,7 +46,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var usersNotified = new List<UserDto>()
                 {new UserDto() {Username = integrationEvent.Participants[0].Username}};
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
-            FeatureTogglesMock.Setup(x => x.UsePostMay2023Template()).Returns(true);
             UserCreationAndNotificationMock.Setup(x => x.SendHearingNotificationAsync(integrationEvent.Hearing, 
                 integrationEvent.Participants.Where(dto => usersNotified.All(y=>y.Username != dto.Username))
             ));

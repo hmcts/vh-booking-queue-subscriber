@@ -7,7 +7,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 {
     public static class AddNotificationRequestMapper
     {
-        public static AddNotificationRequest MapToNewUserNotification(Guid hearingId, ParticipantDto participant, string password)
+        public static AddNotificationRequest MapToNewUserNotification(Guid hearingId, ParticipantDto participant,
+            string password)
         {
             var parameters = new Dictionary<string, string>
             {
@@ -16,10 +17,11 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.RandomPassword, $"{password}"}
             };
 
-            var notificationType = participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
+            var notificationType =
+                participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
                     ? NotificationType.CreateIndividual
                     : NotificationType.CreateRepresentative;
-        
+
             var addNotificationRequest = new AddNotificationRequest
             {
                 HearingId = hearingId,
@@ -32,8 +34,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
             return addNotificationRequest;
         }
-        
-        
+
+
         public static AddNotificationRequest MapToNewUserWelcomeEmail(HearingDto hearing, ParticipantDto participant)
         {
             var parameters = new Dictionary<string, string>
@@ -42,11 +44,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.CaseName, hearing.CaseName},
                 {NotifyParams.CaseNumber, hearing.CaseNumber}
             };
-            
-            var notificationType = participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
-                ? NotificationType.NewUserLipWelcome
-                : throw new NotSupportedException($"Only {RoleNames.Individual} is supported for {nameof(MapToNewUserWelcomeEmail)}. Current participant is {participant.UserRole}");
-            
+
+            var notificationType =
+                participant.UserRole.Contains(RoleNames.Individual, StringComparison.InvariantCultureIgnoreCase)
+                    ? NotificationType.NewUserLipWelcome
+                    : throw new NotSupportedException(
+                        $"Only {RoleNames.Individual} is supported for {nameof(MapToNewUserWelcomeEmail)}. Current participant is {participant.UserRole}");
+
             var addNotificationRequest = new AddNotificationRequest
             {
                 HearingId = hearing.HearingId,
@@ -68,7 +72,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
             NotificationType notificationType;
             var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
-            
+
             if (isJudge && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingConfirmationEJudJudge;
@@ -82,12 +86,16 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 contactEmail = GetContactEmailForNonEJudJudgeUser(participant) ?? participant.ContactEmail;
                 contactTelephone = GetContactPhoneForNonEJudJudgeUser(participant) ?? participant.ContactTelephone;
             }
-            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder,
+                         StringComparison.InvariantCultureIgnoreCase))
             {
-                notificationType = participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJoh : NotificationType.HearingConfirmationJoh;
+                notificationType = participant.HasEjdUsername()
+                    ? NotificationType.HearingConfirmationEJudJoh
+                    : NotificationType.HearingConfirmationJoh;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
-            else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.UserRole.Contains(RoleNames.Representative,
+                         StringComparison.InvariantCultureIgnoreCase))
             {
                 notificationType = NotificationType.HearingConfirmationRepresentative;
                 parameters.Add(NotifyParams.ClientName, participant.Representee);
@@ -111,14 +119,15 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
         }
 
-        public static AddNotificationRequest MapToHearingAmendmentNotification(HearingDto hearing, ParticipantDto participant, DateTime originalDateTime, DateTime newDateTime)
+        public static AddNotificationRequest MapToHearingAmendmentNotification(HearingDto hearing,
+            ParticipantDto participant, DateTime originalDateTime, DateTime newDateTime)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
             var parameters = new Dictionary<string, string>
             {
                 {NotifyParams.CaseName, hearing.CaseName},
-                {NotifyParams.CaseNumber,hearing.CaseNumber},
+                {NotifyParams.CaseNumber, hearing.CaseNumber},
                 {NotifyParams.OldTime, originalDateTime.ToEmailTimeGbLocale()},
                 {NotifyParams.NewTime, newDateTime.ToEmailTimeGbLocale()},
                 {NotifyParams.OldDayMonthYear, originalDateTime.ToEmailDateGbLocale()},
@@ -126,7 +135,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             };
 
             NotificationType notificationType;
-            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) && participant.HasEjdUsername())
+            if (participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase) &&
+                participant.HasEjdUsername())
             {
                 notificationType = NotificationType.HearingAmendmentEJudJudge;
                 parameters.Add(NotifyParams.Judge, participant.DisplayName);
@@ -139,13 +149,16 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 contactEmail = GetContactEmailForNonEJudJudgeUser(participant) ?? participant.ContactEmail;
                 contactTelephone = GetContactPhoneForNonEJudJudgeUser(participant) ?? participant.ContactTelephone;
             }
-            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder,
+                         StringComparison.InvariantCultureIgnoreCase))
             {
-                notificationType = participant.HasEjdUsername() ? NotificationType.HearingAmendmentEJudJoh : NotificationType.HearingAmendmentJoh;
+                notificationType = participant.HasEjdUsername()
+                    ? NotificationType.HearingAmendmentEJudJoh
+                    : NotificationType.HearingAmendmentJoh;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
-
             }
-            else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.UserRole.Contains(RoleNames.Representative,
+                         StringComparison.InvariantCultureIgnoreCase))
             {
                 notificationType = NotificationType.HearingAmendmentRepresentative;
                 parameters.Add(NotifyParams.ClientName, participant.Representee);
@@ -170,7 +183,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         public static AddNotificationRequest MapToMultiDayHearingConfirmationNotification(
-            HearingDto hearing, ParticipantDto participant, int days, bool usePostMay2023Template = false, string userPassword = null)
+            HearingDto hearing, ParticipantDto participant, int days, string userPassword = null)
         {
             var contactEmail = participant.ContactEmail;
             var contactTelephone = participant.ContactTelephone;
@@ -183,9 +196,9 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {NotifyParams.StartDayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale()},
                 {NotifyParams.NumberOfDays, days.ToString()},
             };
-            
+
             NotificationType notificationType;
-            
+
             var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
 
             if (isJudge && participant.HasEjdUsername())
@@ -201,12 +214,16 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 contactEmail = GetContactEmailForNonEJudJudgeUser(participant) ?? participant.ContactEmail;
                 contactTelephone = GetContactPhoneForNonEJudJudgeUser(participant) ?? participant.ContactTelephone;
             }
-            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.UserRole.Contains(RoleNames.JudicialOfficeHolder,
+                         StringComparison.InvariantCultureIgnoreCase))
             {
-                notificationType = participant.HasEjdUsername() ? NotificationType.HearingConfirmationEJudJohMultiDay : NotificationType.HearingConfirmationJohMultiDay;
+                notificationType = participant.HasEjdUsername()
+                    ? NotificationType.HearingConfirmationEJudJohMultiDay
+                    : NotificationType.HearingConfirmationJohMultiDay;
                 parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
             }
-            else if (participant.UserRole.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
+            else if (participant.UserRole.Contains(RoleNames.Representative,
+                         StringComparison.InvariantCultureIgnoreCase))
             {
                 notificationType = NotificationType.HearingConfirmationRepresentativeMultiDay;
                 parameters.Add(NotifyParams.ClientName, participant.Representee);
@@ -214,7 +231,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else
             {
-                parameters = MapRequestForLipPostMay2023(participant, hearing, parameters, usePostMay2023Template, userPassword, out notificationType);
+                parameters = MapRequestForLipPostMay2023(participant, hearing, parameters, userPassword,
+                    out notificationType);
             }
 
             return new AddNotificationRequest
@@ -230,48 +248,45 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         private static Dictionary<string, string> MapRequestForLipPostMay2023(
-            ParticipantDto participant, HearingDto hearing, Dictionary<string, string> parameters, bool usePostMay2023Template, string userPassword, out NotificationType notificationType)
+            ParticipantDto participant, HearingDto hearing, Dictionary<string, string> parameters, string userPassword,
+            out NotificationType notificationType)
         {
-            if (usePostMay2023Template)
+            notificationType = NotificationType.NewUserLipConfirmationMultiDay;
+            parameters.Add(NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale());
+            parameters.Add(NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale());
+            parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+            parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+            if (!string.IsNullOrEmpty(userPassword))
             {
-                notificationType = NotificationType.NewUserLipConfirmationMultiDay;
-                parameters.Add(NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale());
-                parameters.Add(NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale());
-                parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
-                parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
-                if (!string.IsNullOrEmpty(userPassword))
-                {
-                    parameters.Add(NotifyParams.RandomPassword, userPassword);
-                }
-                else
-                {
-                    notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
-                }
+                parameters.Add(NotifyParams.RandomPassword, userPassword);
             }
             else
             {
-                notificationType = NotificationType.HearingConfirmationLipMultiDay;
+                notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
             }
+
             parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
             return parameters;
         }
 
-        public static AddNotificationRequest MapToDemoOrTestNotification(HearingDto hearing, ParticipantDto participant, string testType)
+        public static AddNotificationRequest MapToDemoOrTestNotification(HearingDto hearing, ParticipantDto participant,
+            string testType)
         {
             var contactEmail = participant.ContactEmail;
             var parameters = new Dictionary<string, string>()
             {
                 {NotifyParams.CaseNumber, hearing.CaseNumber},
-                {NotifyParams.TestType,testType},
-                {NotifyParams.Date,hearing.ScheduledDateTime.ToEmailDateGbLocale() },
-                {NotifyParams.Time,hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
-                {NotifyParams.UserName,participant.Username.ToLower()}
+                {NotifyParams.TestType, testType},
+                {NotifyParams.Date, hearing.ScheduledDateTime.ToEmailDateGbLocale()},
+                {NotifyParams.Time, hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
+                {NotifyParams.UserName, participant.Username.ToLower()}
             };
 
             NotificationType notificationType;
             var isJudge = participant.UserRole.Contains(RoleNames.Judge, StringComparison.InvariantCultureIgnoreCase);
-            var isJudicialOfficeHolder = participant.UserRole.Contains(RoleNames.JudicialOfficeHolder, StringComparison.InvariantCultureIgnoreCase);
-            
+            var isJudicialOfficeHolder = participant.UserRole.Contains(RoleNames.JudicialOfficeHolder,
+                StringComparison.InvariantCultureIgnoreCase);
+
             if (isJudicialOfficeHolder && participant.HasEjdUsername())
             {
                 notificationType = NotificationType.EJudJohDemoOrTest;
@@ -285,6 +300,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 {
                     return null;
                 }
+
                 if (isEmailEjud)
                 {
                     notificationType = NotificationType.EJudJudgeDemoOrTest;
@@ -316,21 +332,22 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 Parameters = parameters
             };
         }
-        
-        public static AddNotificationRequest MapToNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword = null)
+
+        public static AddNotificationRequest MapToNewUserAccountDetailsEmail(HearingDto hearing,
+            ParticipantDto participant, string userPassword = null)
         {
             var contactEmail = participant.ContactEmail;
             var parameters = new Dictionary<string, string>()
             {
-                {NotifyParams.Name, $"{participant.FirstName} {participant.LastName}" },
-                {NotifyParams.CaseName, hearing.CaseName },
-                {NotifyParams.CaseNumber, hearing.CaseNumber },
-                
-                {NotifyParams.DayMonthYear,hearing.ScheduledDateTime.ToEmailDateGbLocale() },
-                {NotifyParams.DayMonthYearCy,hearing.ScheduledDateTime.ToEmailDateCyLocale() },
-                
-                {NotifyParams.StartTime,hearing.ScheduledDateTime.ToEmailTimeGbLocale() },
-                {NotifyParams.UserName,participant.Username.ToLower() }
+                {NotifyParams.Name, $"{participant.FirstName} {participant.LastName}"},
+                {NotifyParams.CaseName, hearing.CaseName},
+                {NotifyParams.CaseNumber, hearing.CaseNumber},
+
+                {NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale()},
+                {NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale()},
+
+                {NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
+                {NotifyParams.UserName, participant.Username.ToLower()}
             };
 
             var notificationType = NotificationType.NewUserLipConfirmation;
@@ -343,9 +360,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             {
                 notificationType = NotificationType.ExistingUserLipConfirmation;
             }
-            
-            
-        
+
+
             var addNotificationRequest = new AddNotificationRequest
             {
                 HearingId = hearing.HearingId,
@@ -360,7 +376,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         }
 
         private static Dictionary<string, string> InitHearingNotificationParams(HearingDto hearing)
-        {   
+        {
             return new Dictionary<string, string>
             {
                 {NotifyParams.CaseName, hearing.CaseName},
@@ -372,16 +388,18 @@ namespace BookingQueueSubscriber.Services.NotificationApi
 
         private static string GetContactEmailForNonEJudJudgeUser(ParticipantDto participant)
         {
-            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
-                && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser)
+            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) &&
+                   !participant.HasEjdUsername()
+                   && !string.IsNullOrEmpty(participant.ContactEmailForNonEJudJudgeUser)
                 ? participant.ContactEmailForNonEJudJudgeUser
                 : null;
         }
-  
+
         private static string GetContactPhoneForNonEJudJudgeUser(ParticipantDto participant)
         {
-            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) && !participant.HasEjdUsername()
-                && !string.IsNullOrEmpty(participant.ContactPhoneForNonEJudJudgeUser)
+            return participant.UserRole.Equals(RoleNames.Judge, StringComparison.CurrentCultureIgnoreCase) &&
+                   !participant.HasEjdUsername()
+                   && !string.IsNullOrEmpty(participant.ContactPhoneForNonEJudJudgeUser)
                 ? participant.ContactPhoneForNonEJudJudgeUser
                 : null;
         }
