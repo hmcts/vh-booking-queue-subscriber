@@ -92,7 +92,7 @@ namespace BookingQueueSubscriber.Services
             if (user != null)
             {
                 var userPassword = user.Password;
-                if (_featureToggles.UsePostMay2023Template() && participant.IsIndividual())
+                if (participant.IsIndividual())
                 {
                     if (!string.IsNullOrEmpty(userPassword))
                     {

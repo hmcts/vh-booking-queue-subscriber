@@ -8,8 +8,6 @@ namespace BookingQueueSubscriber.Common.Configuration
 {
     public interface IFeatureToggles
     {
-        public bool SsprToggle();
-        bool UsePostMay2023Template();
     }
 
     [ExcludeFromCodeCoverage]
@@ -18,9 +16,6 @@ namespace BookingQueueSubscriber.Common.Configuration
         private readonly ILdClient _ldClient;
         private readonly Context _context;
         private const string LdUser = "vh-booking-queue-subscriber";
-        
-        private const string SsprToggleKey = "sspr";
-        private const string NewNotifyTemplatesToggleKey = "notify-post-may-2023-templates";
 
         public FeatureToggles(string sdkKey, string environmentName)
         {
@@ -28,25 +23,6 @@ namespace BookingQueueSubscriber.Common.Configuration
                 .Logging(Components.Logging(Logs.ToWriter(Console.Out)).Level(LogLevel.Warn)).Build();
             _context = Context.Builder(LdUser).Name(environmentName).Build();
             _ldClient = new LdClient(config);
-        }
-
-        public bool SsprToggle()
-        {
-            if (!_ldClient.Initialized)
-            {
-                throw new InvalidOperationException("LaunchDarkly client not initialized");
-            }
-            return _ldClient.BoolVariation(SsprToggleKey, _context);
-        }
-
-        public bool UsePostMay2023Template()
-        {
-            if (!_ldClient.Initialized)
-            {
-                throw new InvalidOperationException("LaunchDarkly client not initialized");
-            }
-
-            return _ldClient.BoolVariation(NewNotifyTemplatesToggleKey, _context);
         }
     }
 }

@@ -186,9 +186,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         private async Task<List<AddNotificationRequest>> CreateUserRequest(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             List<AddNotificationRequest> list = new List<AddNotificationRequest>();
-
-            var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
-
+            
             foreach (var participant in participants)
             {
                 User user = null;
@@ -199,13 +197,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 }
                 else
                 {
-                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, usePostMay2023Template));
+                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days));
                 }
 
                 if (user != null)
                 {
                     var userPassword = user.Password;
-                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, usePostMay2023Template, userPassword));
+                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, userPassword));
                     if (!string.IsNullOrEmpty(userPassword))
                     {
                         await SendNewUserWelcomeEmail(hearing, participant);
