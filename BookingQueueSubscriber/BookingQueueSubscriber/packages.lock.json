@@ -2343,7 +2343,8 @@
           "NotificationApi.Client": "[1.52.3, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[1.49.4, )"
+          "UserApi.Client": "[1.49.4, )",
+          "VideoApi.Client": "[2.1.3, )"
         }
       }
     }

@@ -86,12 +86,14 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     {
         private readonly INotificationApiClient _notificationApiClient;
         private readonly ILogger<NotificationService> _logger;
+        private readonly IFeatureToggles _featureToggles;
         private readonly IUserService _userService;
 
-        public NotificationService(INotificationApiClient notificationApiClient, ILogger<NotificationService> logger, IUserService userService)
+        public NotificationService(INotificationApiClient notificationApiClient, ILogger<NotificationService> logger, IFeatureToggles featureToggles, IUserService userService)
         {
             _notificationApiClient = notificationApiClient;
             _logger = logger;
+            _featureToggles = featureToggles;
             _userService = userService;
         }
 

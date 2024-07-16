@@ -24,6 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private UserServiceFake _userService;
         private BookingsApiClientFake _bookingsApi;
         private BookingQueueSubscriberFunction _sut;
+        private FeatureTogglesClientFake _featureTogglesClient;
         private ILogger<BookingQueueSubscriberFunction> _logger;
 
         [OneTimeSetUp]
@@ -36,6 +37,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
             _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
+            _featureTogglesClient = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
         }
 
@@ -548,7 +550,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationApiClient.NotificationRequests.Count.Should().Be(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
-        
+
         [Test]
         public async Task Should_create_user_account_and_send_non_ejud_hearing_notifications_for_eJudUsername()
         {

@@ -231,8 +231,21 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             }
             else
             {
-                parameters = MapRequestForLipPostMay2023(participant, hearing, parameters, userPassword,
-                    out notificationType);
+                notificationType = NotificationType.NewUserLipConfirmationMultiDay;
+                parameters.Add(NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale());
+                parameters.Add(NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale());
+                parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+                parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
+                if (!string.IsNullOrEmpty(userPassword))
+                {
+                    parameters.Add(NotifyParams.RandomPassword, userPassword);
+                }
+                else
+                {
+                    notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
+                }
+
+                parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
             }
 
             return new AddNotificationRequest
@@ -245,28 +258,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 PhoneNumber = contactTelephone,
                 Parameters = parameters
             };
-        }
-
-        private static Dictionary<string, string> MapRequestForLipPostMay2023(
-            ParticipantDto participant, HearingDto hearing, Dictionary<string, string> parameters, string userPassword,
-            out NotificationType notificationType)
-        {
-            notificationType = NotificationType.NewUserLipConfirmationMultiDay;
-            parameters.Add(NotifyParams.DayMonthYear, hearing.ScheduledDateTime.ToEmailDateGbLocale());
-            parameters.Add(NotifyParams.DayMonthYearCy, hearing.ScheduledDateTime.ToEmailDateCyLocale());
-            parameters.Add(NotifyParams.StartTime, hearing.ScheduledDateTime.ToEmailTimeGbLocale());
-            parameters.Add(NotifyParams.UserName, participant.Username.ToLower());
-            if (!string.IsNullOrEmpty(userPassword))
-            {
-                parameters.Add(NotifyParams.RandomPassword, userPassword);
-            }
-            else
-            {
-                notificationType = NotificationType.ExistingUserLipConfirmationMultiDay;
-            }
-
-            parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
-            return parameters;
         }
 
         public static AddNotificationRequest MapToDemoOrTestNotification(HearingDto hearing, ParticipantDto participant,

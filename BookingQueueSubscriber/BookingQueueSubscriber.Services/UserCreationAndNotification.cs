@@ -15,17 +15,19 @@ namespace BookingQueueSubscriber.Services
     public class UserCreationAndNotification : IUserCreationAndNotification
     {
         private readonly INotificationService _notificationService;
+        private readonly IFeatureToggles _featureToggles;
         private readonly IUserService _userService;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<UserCreationAndNotification> _logger;
 
         public UserCreationAndNotification(INotificationService notificationService, IUserService userService, IBookingsApiClient bookingsApiClient,
-             ILogger<UserCreationAndNotification> logger)
+             ILogger<UserCreationAndNotification> logger, IFeatureToggles featureToggles)
         {
             _notificationService = notificationService;
             _userService = userService;
             _bookingsApiClient = bookingsApiClient;
             _logger = logger;
+            _featureToggles = featureToggles;
         }
 
         public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)

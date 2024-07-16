@@ -38,7 +38,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
         
         [Test]
-        public async Task should_call_send_hearing_notification_without_participant_already_notified_new_template_on()
+        public async Task should_call_send_hearing_notification_without_participant_already_notified()
         {
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
                 VideoWebServiceMock.Object, BookingsApiClientMock.Object);
