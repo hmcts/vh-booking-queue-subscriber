@@ -396,6 +396,16 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<InterpreterLanguagesResponse>> GetAvailableInterpreterLanguagesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<InterpreterLanguagesResponse>> GetAvailableInterpreterLanguagesAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task UpdateJobHistoryAsync(string jobName, bool isSuccessful)
         {
             throw new NotImplementedException();
