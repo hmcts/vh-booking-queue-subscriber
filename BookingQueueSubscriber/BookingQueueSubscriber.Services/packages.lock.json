@@ -4,9 +4,9 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[2.2.6-pr-0880-0006, )",
-        "resolved": "2.2.6-pr-0880-0006",
-        "contentHash": "gW9GcaZCLWeWGVssJDLC14mIQ/OJ6A1Bb+Sih7uxaCR3OurTZuTFDFhjSh+ZpT5u7sl6+wA37XRygGJguYA8rA==",
+        "requested": "[2.2.6, )",
+        "resolved": "2.2.6",
+        "contentHash": "Xb9lRlLo13cBqekpIekQfeiSRlAk5Fl9JqS5Rp5WKcGFBcHG7YV5S1HMSCw63L/EDHmlpfqpZCYv2osxCdHi1Q==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -74,9 +74,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[2.2.3-pr-0662-0006, )",
-        "resolved": "2.2.3-pr-0662-0006",
-        "contentHash": "B/TWjKMka28Kh0zB4WpfDvIXoN+LR5yHvQNz8okiHpoulwaDlFooPJsYRmIdTKoR81RI5M+mMgYONJZDjN91ZA==",
+        "requested": "[2.2.3, )",
+        "resolved": "2.2.3",
+        "contentHash": "c2iPHXag1QXGumuftWvmQGSTeXrQJf3t8irkoNnjC8uL8mG485vlni26jPQjABqhtuDefc9DROLwjzymwP3+/A==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.3"
@@ -1763,7 +1763,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[2.2.6-pr-0880-0006, )",
+          "BookingsApi.Client": "[2.2.6, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",

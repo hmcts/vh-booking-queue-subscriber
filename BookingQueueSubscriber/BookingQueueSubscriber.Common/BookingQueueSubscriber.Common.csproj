@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BookingsApi.Client" Version="2.2.6-pr-0880-0006" />
+        <PackageReference Include="BookingsApi.Client" Version="2.2.6" />
         <PackageReference Include="LaunchDarkly.ServerSdk" Version="7.0.3" />
         <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
