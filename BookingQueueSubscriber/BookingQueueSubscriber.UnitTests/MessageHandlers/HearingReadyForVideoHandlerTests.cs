@@ -100,7 +100,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 ScheduledDateTime = DateTime.UtcNow,
                 HearingVenueName = "MyVenue",
                 RecordAudio = true,
-                GroupId = (isMultiHearing) ? Guid.NewGuid() : null
+                GroupId = (isMultiHearing) ? Guid.NewGuid() : null,
+                VideoSupplier = VideoSupplier.Kinly
             };
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();

@@ -1,3 +1,4 @@
+using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
@@ -24,7 +25,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 HearingVenueName = hearingDto.HearingVenueName,
                 AudioRecordingRequired = hearingDto.RecordAudio,
                 Endpoints = PopulateAddEndpointRequests(endpointDtos, participantDtos).ToList(),
-                CaseTypeServiceId = hearingDto.CaseTypeServiceId
+                CaseTypeServiceId = hearingDto.CaseTypeServiceId,
+                Supplier = (Supplier)hearingDto.VideoSupplier
             };
             
             return request;

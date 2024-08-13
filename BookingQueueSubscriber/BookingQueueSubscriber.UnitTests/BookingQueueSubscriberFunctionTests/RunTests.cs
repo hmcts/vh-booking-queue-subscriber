@@ -74,7 +74,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
          'case_number':'01234567890',
          'case_name':'Test Add',
          'hearing_venue_name':'Birmingham Civil and Family Justice Centre',
-         'record_audio':true
+         'record_audio':true,
+         'video_supplier':'Vodafone',
       },
       'participants':[
          {
