@@ -247,6 +247,22 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
+        public Task UpdateHearingsInGroupAsync(Guid groupId, UpdateHearingsInGroupRequest request)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateHearingsInGroupAsync(Guid groupId, UpdateHearingsInGroupRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request)
+        {
+            throw new NotImplementedException();
+        }
+        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<ICollection<HearingNotificationResponse>> GetHearingsForNotificationAsync()
         {
@@ -903,6 +919,14 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<HearingDetailsResponseV2>> GetHearingsByGroupIdV2Async(Guid groupId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
