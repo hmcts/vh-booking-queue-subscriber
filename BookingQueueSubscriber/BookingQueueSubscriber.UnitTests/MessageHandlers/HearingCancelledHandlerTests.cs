@@ -1,6 +1,7 @@
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
+using BookingQueueSubscriber.Services.VideoWeb;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -9,7 +10,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_request_is_valid()
         {
-            var messageHandler = new HearingCancelledHandler(VideoApiServiceMock.Object);
+            var messageHandler = new HearingCancelledHandler(VideoApiServiceMock.Object, new VideoWebServiceFake());
 
             var integrationEvent = new HearingCancelledIntegrationEvent {HearingId = HearingId};
             await messageHandler.HandleAsync(integrationEvent);
@@ -19,7 +20,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new HearingCancelledHandler(VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler)new HearingCancelledHandler(VideoApiServiceMock.Object, new VideoWebServiceFake());
 
             var integrationEvent = new HearingCancelledIntegrationEvent { HearingId = HearingId };
             await messageHandler.HandleAsync(integrationEvent);
