@@ -9,23 +9,25 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
     public class HearingDetailsUpdatedHandlerTests : MessageHandlerTestBase
     {
         [Test]
-        public async Task should_call_video_api_when_request_is_valid()
+        public async Task should_call_services_when_request_is_valid()
         {
-            var messageHandler = new HearingDetailsUpdatedHandler(VideoApiServiceMock.Object);
+            var messageHandler = new HearingDetailsUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.UpdateConferenceAsync(It.IsAny<UpdateConferenceRequest>()), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushHearingDetailsUpdatedMessage(integrationEvent.Hearing.HearingId));
         }
 
         [Test]
-        public async Task should_call_video_api_when_handle_is_called_with_explicit_interface()
+        public async Task should_call_services_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new HearingDetailsUpdatedHandler(VideoApiServiceMock.Object);
+            var messageHandler = (IMessageHandler)new HearingDetailsUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.UpdateConferenceAsync(It.IsAny<UpdateConferenceRequest>()), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushHearingDetailsUpdatedMessage(integrationEvent.Hearing.HearingId));
         }
 
         private static HearingDetailsUpdatedIntegrationEvent GetIntegrationEvent()

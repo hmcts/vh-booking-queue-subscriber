@@ -60,6 +60,11 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
+        
+        public Task PushHearingDetailsUpdatedMessage(Guid hearingId)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
 
         public void ClearRequests()
         {

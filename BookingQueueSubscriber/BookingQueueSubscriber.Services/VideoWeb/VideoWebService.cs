@@ -139,5 +139,15 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             var result = await _httpClient.PostAsync(path, null);
             result.EnsureSuccessStatusCode();
         }
+        
+        public async Task PushHearingDetailsUpdatedMessage(Guid hearingId)
+        {
+            var path = $"internalevent/HearingDetailsUpdated?hearingId={hearingId}";
+
+            _logger.LogDebug("PushHearingDetailsUpdated HearingId: {HearingId}", hearingId);
+
+            var result = await _httpClient.PostAsync(path, null);
+            result.EnsureSuccessStatusCode();
+        }
     }
 }
