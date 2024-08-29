@@ -2,7 +2,6 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingQueueSubscriber.Services.VideoWeb;
 using VideoApi.Contract.Enums;
 using BookingsApi.Contract.V1.Enums;
 
@@ -11,19 +10,20 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
     public class HearingDateTimeChangedHandlerTests : MessageHandlerTestBase
     {
         [Test]
-        public async Task should_call_SendHearingAmendmentNotificationAsync_when_request_is_valid()
+        public async Task should_call_services_when_request_is_valid()
         {
-            var messageHandler = new HearingDateTimeChangedHandler(NotificationServiceMock.Object, new VideoWebServiceFake());
+            var messageHandler = new HearingDateTimeChangedHandler(NotificationServiceMock.Object, VideoWebServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             NotificationServiceMock.Verify(x => x.SendHearingAmendmentNotificationAsync(It.IsAny<HearingDto>(),It.IsAny<DateTime>(),
                 It.IsAny<IList<ParticipantDto>>()), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushHearingDateTimeChangedMessage(integrationEvent.Hearing.HearingId));
         }
 
         [Test]
-        public async Task should_call_SendHearingAmendmentNotificationAsync_when_handle_is_called_with_explicit_interface()
+        public async Task should_call_services_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler) new HearingDateTimeChangedHandler(NotificationServiceMock.Object, new VideoWebServiceFake());
+            var messageHandler = (IMessageHandler) new HearingDateTimeChangedHandler(NotificationServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
@@ -45,6 +45,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
                     request[0].Representee == integrationEvent.Participants[0].Representee
             )), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushHearingDateTimeChangedMessage(integrationEvent.Hearing.HearingId));
         }
 
         private HearingDateTimeChangedIntegrationEvent GetIntegrationEvent()
