@@ -1,11 +1,9 @@
 using System.Net;
-using BookingQueueSubscriber.Services.VideoWeb;
-using Microsoft.Extensions.Logging;
 using RichardSzalay.MockHttp;
 
 namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
 {
-    public class PushHearingCancelledMessageTests
+    public class PushHearingCancelledMessageTests : VideoWebServiceTests
     {
         [Test]
         public async Task should_push_message()
@@ -17,9 +15,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
             var request = mockHttp.When($"http://video-web/internalevent/HearingCancelled")
                 .WithQueryString("hearingId", hearingId.ToString())
                 .Respond(HttpStatusCode.NoContent);
-            var httpClient = mockHttp.ToHttpClient();
-            httpClient.BaseAddress = new Uri("http://video-web");
-            var service = new VideoWebService(httpClient, new Mock<ILogger<VideoWebService>>().Object);
+            var service = CreateVideoWebService(mockHttp);
 
             // Act
             await service.PushHearingCancelledMessage(hearingId);
