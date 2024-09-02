@@ -120,31 +120,31 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             _logger.LogDebug("PushEndpointsUpdatedMessage result: {Result}", result);
         }
         
-        public async Task PushHearingCancelledMessage(Guid hearingId)
+        public async Task PushHearingCancelledMessage(Guid conferenceId)
         {
-            var path = $"internalevent/HearingCancelled?hearingId={hearingId}";
+            var path = $"internalevent/HearingCancelled?conferenceId={conferenceId}";
 
-            _logger.LogDebug("PushHearingCancelled HearingId: {HearingId}", hearingId);
+            _logger.LogDebug("PushHearingCancelled ConferenceId: {ConferenceId}", conferenceId);
 
             var result = await _httpClient.PostAsync(path, null);
             result.EnsureSuccessStatusCode();
         }
         
-        public async Task PushHearingDateTimeChangedMessage(Guid hearingId)
+        public async Task PushHearingDateTimeChangedMessage(Guid conferenceId)
         {
-            var path = $"internalevent/HearingDateTimeChanged?hearingId={hearingId}";
+            var path = $"internalevent/HearingDateTimeChanged?conferenceId={conferenceId}";
 
-            _logger.LogDebug("PushHearingDateTimeChanged HearingId: {HearingId}", hearingId);
+            _logger.LogDebug("PushHearingDateTimeChanged ConferenceId: {ConferenceId}", conferenceId);
 
             var result = await _httpClient.PostAsync(path, null);
             result.EnsureSuccessStatusCode();
         }
         
-        public async Task PushHearingDetailsUpdatedMessage(Guid hearingId)
+        public async Task PushHearingDetailsUpdatedMessage(Guid conferenceId)
         {
-            var path = $"internalevent/HearingDetailsUpdated?hearingId={hearingId}";
+            var path = $"internalevent/HearingDetailsUpdated?conferenceId={conferenceId}";
 
-            _logger.LogDebug("PushHearingDetailsUpdated HearingId: {HearingId}", hearingId);
+            _logger.LogDebug("PushHearingDetailsUpdated ConferenceId: {ConferenceId}", conferenceId);
 
             var result = await _httpClient.PostAsync(path, null);
             result.EnsureSuccessStatusCode();

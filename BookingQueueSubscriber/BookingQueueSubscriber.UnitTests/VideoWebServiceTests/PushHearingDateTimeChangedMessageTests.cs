@@ -9,16 +9,16 @@ namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
         public async Task should_push_message()
         {
             // Arrange
-            var hearingId = Guid.NewGuid();
+            var conferenceId = Guid.NewGuid();
 
             var mockHttp = new MockHttpMessageHandler();
             var request = mockHttp.When($"http://video-web/internalevent/HearingDateTimeChanged")
-                .WithQueryString("hearingId", hearingId.ToString())
+                .WithQueryString("conferenceId", conferenceId.ToString())
                 .Respond(HttpStatusCode.NoContent);
             var service = CreateVideoWebService(mockHttp);
 
             // Act
-            await service.PushHearingDateTimeChangedMessage(hearingId);
+            await service.PushHearingDateTimeChangedMessage(conferenceId);
             
             // Assert
             mockHttp.GetMatchCount(request).Should().Be(1);

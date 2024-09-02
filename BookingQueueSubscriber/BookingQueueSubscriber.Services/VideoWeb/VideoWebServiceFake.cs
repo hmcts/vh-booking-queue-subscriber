@@ -51,17 +51,17 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             return Task.FromResult(HttpStatusCode.OK);
         }
         
-        public Task PushHearingCancelledMessage(Guid hearingId)
+        public Task PushHearingCancelledMessage(Guid conferenceId)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
         
-        public Task PushHearingDateTimeChangedMessage(Guid hearingId)
+        public Task PushHearingDateTimeChangedMessage(Guid conferenceId)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }
         
-        public Task PushHearingDetailsUpdatedMessage(Guid hearingId)
+        public Task PushHearingDetailsUpdatedMessage(Guid conferenceId)
         {
             return Task.FromResult(HttpStatusCode.OK);
         }

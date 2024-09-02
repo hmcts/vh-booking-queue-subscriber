@@ -21,7 +21,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var request = HearingToUpdateConferenceMapper.MapToUpdateConferenceRequest(eventMessage.Hearing);
 
             await _videoApiService.UpdateConferenceAsync(request);
-            await _videoWebService.PushHearingDetailsUpdatedMessage(eventMessage.Hearing.HearingId);
+            var conference = await _videoApiService.GetConferenceByHearingRefId(eventMessage.Hearing.HearingId);
+            await _videoWebService.PushHearingDetailsUpdatedMessage(conference.Id);
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

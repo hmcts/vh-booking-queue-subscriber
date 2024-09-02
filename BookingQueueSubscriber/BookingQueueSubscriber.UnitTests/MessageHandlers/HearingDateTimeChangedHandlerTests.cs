@@ -4,6 +4,7 @@ using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Enums;
 using BookingsApi.Contract.V1.Enums;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -12,20 +13,30 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_services_when_request_is_valid()
         {
-            var messageHandler = new HearingDateTimeChangedHandler(NotificationServiceMock.Object, VideoWebServiceMock.Object);
+            var messageHandler = new HearingDateTimeChangedHandler(NotificationServiceMock.Object, VideoApiServiceMock.Object, VideoWebServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
+            var conference = GetConference();
+            VideoApiServiceMock
+                .Setup(x => x.GetConferenceByHearingRefId(integrationEvent.Hearing.HearingId, It.IsAny<bool>()))
+                .ReturnsAsync(conference);
+            
             await messageHandler.HandleAsync(integrationEvent);
+            
             NotificationServiceMock.Verify(x => x.SendHearingAmendmentNotificationAsync(It.IsAny<HearingDto>(),It.IsAny<DateTime>(),
                 It.IsAny<IList<ParticipantDto>>()), Times.Once);
-            VideoWebServiceMock.Verify(x => x.PushHearingDateTimeChangedMessage(integrationEvent.Hearing.HearingId));
+            VideoWebServiceMock.Verify(x => x.PushHearingDateTimeChangedMessage(conference.Id));
         }
 
         [Test]
         public async Task should_call_services_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler) new HearingDateTimeChangedHandler(NotificationServiceMock.Object, VideoWebServiceMock.Object);
-
+            var messageHandler = (IMessageHandler) new HearingDateTimeChangedHandler(NotificationServiceMock.Object, VideoApiServiceMock.Object, VideoWebServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
+            var conference = GetConference();
+            VideoApiServiceMock
+                .Setup(x => x.GetConferenceByHearingRefId(integrationEvent.Hearing.HearingId, It.IsAny<bool>()))
+                .ReturnsAsync(conference);
+            
             await messageHandler.HandleAsync(integrationEvent);
 
             NotificationServiceMock.Verify(x => x.SendHearingAmendmentNotificationAsync(It.Is<HearingDto>(
@@ -45,7 +56,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
                     request[0].Representee == integrationEvent.Participants[0].Representee
             )), Times.Once);
-            VideoWebServiceMock.Verify(x => x.PushHearingDateTimeChangedMessage(integrationEvent.Hearing.HearingId));
+            VideoWebServiceMock.Verify(x => x.PushHearingDateTimeChangedMessage(conference.Id));
         }
 
         private HearingDateTimeChangedIntegrationEvent GetIntegrationEvent()
@@ -91,5 +102,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 RecordAudio = true
             };
         }
+        
+        private static ConferenceDetailsResponse GetConference() => 
+            new()
+            {
+                Id = Guid.NewGuid()
+            };
     }
 }
