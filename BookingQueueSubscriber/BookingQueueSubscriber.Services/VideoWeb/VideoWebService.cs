@@ -130,16 +130,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             result.EnsureSuccessStatusCode();
         }
         
-        public async Task PushHearingDateTimeChangedMessage(Guid conferenceId)
-        {
-            var path = $"internalevent/HearingDateTimeChanged?conferenceId={conferenceId}";
-
-            _logger.LogDebug("PushHearingDateTimeChanged ConferenceId: {ConferenceId}", conferenceId);
-
-            var result = await _httpClient.PostAsync(path, null);
-            result.EnsureSuccessStatusCode();
-        }
-        
         public async Task PushHearingDetailsUpdatedMessage(Guid conferenceId)
         {
             var path = $"internalevent/HearingDetailsUpdated?conferenceId={conferenceId}";

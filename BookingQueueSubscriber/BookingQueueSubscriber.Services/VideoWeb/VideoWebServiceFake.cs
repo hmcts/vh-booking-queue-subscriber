@@ -56,11 +56,6 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             return Task.FromResult(HttpStatusCode.OK);
         }
         
-        public Task PushHearingDateTimeChangedMessage(Guid conferenceId)
-        {
-            return Task.FromResult(HttpStatusCode.OK);
-        }
-        
         public Task PushHearingDetailsUpdatedMessage(Guid conferenceId)
         {
             return Task.FromResult(HttpStatusCode.OK);
