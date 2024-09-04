@@ -37,7 +37,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         public async Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId, bool includeClosed = false)
         {
             _logger.LogInformation("Getting conference by hearing ref id {HearingId}", hearingRefId);
-            var request = new GetConferencesByHearingIdsRequest { HearingRefIds = [hearingRefId], IncludeClosed = includeClosed };
+            var request = new GetConferencesByHearingIdsRequest { HearingRefIds =  new Guid[]{hearingRefId}, IncludeClosed = includeClosed };
             var conferences = await _apiClient.GetConferenceDetailsByHearingRefIdsAsync(request);
             return conferences.FirstOrDefault();
         }
