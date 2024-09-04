@@ -34,10 +34,12 @@ namespace BookingQueueSubscriber.Services.VideoApi
             return _apiClient.RemoveConferenceAsync(conferenceId);
         }
 
-        public Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId, bool includeClosed = false)
+        public async Task<ConferenceDetailsResponse> GetConferenceByHearingRefId(Guid hearingRefId, bool includeClosed = false)
         {
             _logger.LogInformation("Getting conference by hearing ref id {HearingId}", hearingRefId);
-            return _apiClient.GetConferenceByHearingRefIdAsync(hearingRefId, includeClosed);
+            var request = new GetConferencesByHearingIdsRequest { HearingRefIds = [hearingRefId], IncludeClosed = includeClosed };
+            var conferences = await _apiClient.GetConferenceDetailsByHearingRefIdsAsync(request);
+            return conferences.FirstOrDefault();
         }
 
         public Task<ICollection<EndpointResponse>> GetEndpointsForConference(Guid conferenceId)
