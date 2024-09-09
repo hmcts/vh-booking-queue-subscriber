@@ -934,5 +934,35 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayV2Async()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayV2Async(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByVenueV2Async(IEnumerable<string> venueNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByVenueV2Async(IEnumerable<string> venueNames, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ConfirmedHearingsTodayResponseV2>> GetConfirmedHearingsByUsernameForTodayV2Async(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ConfirmedHearingsTodayResponseV2>> GetConfirmedHearingsByUsernameForTodayV2Async(string username, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
