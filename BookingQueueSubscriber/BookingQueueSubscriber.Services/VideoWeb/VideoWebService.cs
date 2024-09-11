@@ -119,5 +119,25 @@ namespace BookingQueueSubscriber.Services.VideoWeb
 
             _logger.LogDebug("PushEndpointsUpdatedMessage result: {Result}", result);
         }
+        
+        public async Task PushHearingCancelledMessage(Guid conferenceId)
+        {
+            var path = $"internalevent/HearingCancelled?conferenceId={conferenceId}";
+
+            _logger.LogDebug("PushHearingCancelled ConferenceId: {ConferenceId}", conferenceId);
+
+            var result = await _httpClient.PostAsync(path, null);
+            result.EnsureSuccessStatusCode();
+        }
+        
+        public async Task PushHearingDetailsUpdatedMessage(Guid conferenceId)
+        {
+            var path = $"internalevent/HearingDetailsUpdated?conferenceId={conferenceId}";
+
+            _logger.LogDebug("PushHearingDetailsUpdated ConferenceId: {ConferenceId}", conferenceId);
+
+            var result = await _httpClient.PostAsync(path, null);
+            result.EnsureSuccessStatusCode();
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         Task PushUnlinkedParticipantFromEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName);
         Task PushLinkedNewParticipantToEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName);
         Task PushCloseConsultationBetweenEndpointAndParticipant(Guid conferenceId, string participantUserName, string jvsEndpointName);
+        Task PushHearingCancelledMessage(Guid conferenceId);
+        Task PushHearingDetailsUpdatedMessage(Guid conferenceId);
     }
 }
