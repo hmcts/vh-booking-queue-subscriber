@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoWeb
@@ -53,6 +51,16 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             return Task.FromResult(HttpStatusCode.OK);
         }
         
+        public Task PushHearingCancelledMessage(Guid conferenceId)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+        
+        public Task PushHearingDetailsUpdatedMessage(Guid conferenceId)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
         public void ClearRequests()
         {
             PushParticipantsUpdatedMessageCount = PushNewConferenceAddedMessageCount =
