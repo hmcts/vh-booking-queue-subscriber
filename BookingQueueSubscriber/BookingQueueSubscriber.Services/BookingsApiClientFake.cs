@@ -852,6 +852,17 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByCsosV2Async(HearingsForTodayByAllocationRequestV2 request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByCsosV2Async(HearingsForTodayByAllocationRequestV2 request,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ICollection<ParticipantResponseV2>> AddParticipantsToHearing2Async(Guid hearingId, AddParticipantsToHearingRequestV2 request)
         {
             throw new NotImplementedException();
