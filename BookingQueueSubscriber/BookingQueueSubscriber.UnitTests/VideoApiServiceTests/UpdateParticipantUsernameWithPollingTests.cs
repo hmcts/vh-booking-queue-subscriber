@@ -3,6 +3,7 @@ using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using Microsoft.Extensions.Logging;
 using VideoApi.Client;
+using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
@@ -34,7 +35,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
                 .ReturnsAsync(new User() { UserName = "username"});
             
             //video mock should throw not found exception
-            _videoApiClientMock.Setup(x => x.GetConferenceByHearingRefIdAsync(It.IsAny<Guid>(), It.IsAny<bool>()))
+            _videoApiClientMock.Setup(x => x.GetConferenceDetailsByHearingRefIdsAsync(It.IsAny<GetConferencesByHearingIdsRequest>()))
                 .ThrowsAsync(new VideoApiException("Conference not found", (int)HttpStatusCode.NotFound, "Conference not found", null, null));
             
             //assert that message handler throws exception
@@ -48,16 +49,20 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
                 .ReturnsAsync(new User() { UserName = "username"});
             
             //video mock should throw not found exception, then return conference on second iteration
-            _videoApiClientMock.SetupSequence(x => x.GetConferenceByHearingRefIdAsync(It.IsAny<Guid>(), It.IsAny<bool>()))
+            _videoApiClientMock.SetupSequence(x => x.GetConferenceDetailsByHearingRefIdsAsync(It.IsAny<GetConferencesByHearingIdsRequest>()))
                 .ThrowsAsync(new VideoApiException("Conference not found", (int)HttpStatusCode.NotFound, "Conference not found", null, null))
-                .ReturnsAsync(new ConferenceDetailsResponse()
+                .ReturnsAsync(new List<ConferenceDetailsResponse>()
                 {
-                    Participants = new List<ParticipantDetailsResponse>()
+                    new ()
                     {
-                        new()
+                        Id = Guid.NewGuid(),
+                        Participants = new List<ParticipantResponse>()
                         {
-                            Id = _participantId,
-                            ContactEmail = "email@email.com"
+                            new()
+                            {
+                                Id = _participantId,
+                                ContactEmail = "email@email.com"
+                            }
                         }
                     }
                 });

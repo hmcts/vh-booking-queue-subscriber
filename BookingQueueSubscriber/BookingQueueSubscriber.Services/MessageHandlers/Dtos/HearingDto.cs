@@ -13,6 +13,7 @@
         public Guid? GroupId { get; set; }
         public string HearingType { get; set; }
         public string CaseTypeServiceId { get; set; }
+        public VideoSupplier VideoSupplier { get; set; }
         
         public bool IsMultiDayHearing() => GroupId.HasValue && GroupId.GetValueOrDefault() != Guid.Empty;
     }

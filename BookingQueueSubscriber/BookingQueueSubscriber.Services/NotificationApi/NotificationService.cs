@@ -115,11 +115,10 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 await ProcessGenericEmail(hearing, participants);
                 return;
             }
-
-            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
+            
             var requests = participants
                 .Select(participant =>
-                    AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, ejudFeatureFlag))
+                    AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant))
                 .ToList();
             await CreateNotifications(requests);
             _logger.LogInformation("Created hearing notification for the users in the hearing {hearingid}",
@@ -133,11 +132,9 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
 
-            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             var requests = participants
                 .Select(participant =>
-                    AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant,
-                        originalDateTime, hearing.ScheduledDateTime, ejudFeatureFlag))
+                    AddNotificationRequestMapper.MapToHearingAmendmentNotification(hearing, participant, originalDateTime, hearing.ScheduledDateTime))
                 .ToList();
 
             await CreateNotifications(requests);
@@ -189,10 +186,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         private async Task<List<AddNotificationRequest>> CreateUserRequest(HearingDto hearing, IList<ParticipantDto> participants, int days)
         {
             List<AddNotificationRequest> list = new List<AddNotificationRequest>();
-
-            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
-            var usePostMay2023Template = _featureToggles.UsePostMay2023Template();
-
+            
             foreach (var participant in participants)
             {
                 User user = null;
@@ -203,13 +197,13 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 }
                 else
                 {
-                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template));
+                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days));
                 }
 
                 if (user != null)
                 {
                     var userPassword = user.Password;
-                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, ejudFeatureFlag, usePostMay2023Template, userPassword));
+                    list.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, userPassword));
                     if (!string.IsNullOrEmpty(userPassword))
                     {
                         await SendNewUserWelcomeEmail(hearing, participant);
@@ -227,10 +221,8 @@ namespace BookingQueueSubscriber.Services.NotificationApi
                 return;
             }
 
-            var ejudFeatureFlag = _featureToggles.EjudFeatureToggle();
             var notificationRequests = participants
-                .Select(participant => AddNotificationRequestMapper.MapToDemoOrTestNotification(
-                    hearing, participant, hearing.HearingType, ejudFeatureFlag))
+                .Select(participant => AddNotificationRequestMapper.MapToDemoOrTestNotification(hearing, participant, hearing.HearingType))
                 .Where(x => x != null)
                 .ToList();
 

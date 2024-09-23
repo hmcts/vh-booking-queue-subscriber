@@ -10,6 +10,8 @@ namespace BookingQueueSubscriber.Services.UserApi
     public class UserServiceFake : IUserService
     {
         public List<User> Users { get; set; } = new List<User>();
+        public int UpdateUserAccountCount { get; private set; }
+        
         public  Task<User> CreateNewUserForParticipantAsync(string firstname, string lastname, string contactEmail, bool isTestUser)
         {
             var user = new User
@@ -25,6 +27,12 @@ namespace BookingQueueSubscriber.Services.UserApi
 
         public Task AssignUserToGroup(string userId, string userRole)
         {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+        
+        public Task UpdateUserContactEmail(string existingContactEmail, string newContactEmail)
+        {
+            UpdateUserAccountCount++;
             return Task.FromResult(HttpStatusCode.OK);
         }
     }

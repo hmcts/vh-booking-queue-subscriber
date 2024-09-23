@@ -2,8 +2,6 @@ using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingsApi.Client;
-using BookingsApi.Contract.V1.Requests;
-using BookingsApi.Contract.V1.Requests.Enums;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -27,8 +25,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var request = HearingToBookConferenceMapper.MapToBookNewConferenceRequest(eventMessage.Hearing,
                 eventMessage.Participants, eventMessage.Endpoints);
             var conferenceDetailsResponse = await _videoApiService.BookNewConferenceAsync(request);
-            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId, new UpdateBookingStatusRequest
-            { Status = UpdateBookingStatus.Created, UpdatedBy = "System" });
+            await _bookingsApiClient.UpdateBookingStatusAsync(eventMessage.Hearing.HearingId);
             await _videoWebService.PushNewConferenceAdded(conferenceDetailsResponse.Id);
 
         }

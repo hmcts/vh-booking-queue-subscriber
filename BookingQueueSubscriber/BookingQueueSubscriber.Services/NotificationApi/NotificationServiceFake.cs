@@ -8,7 +8,6 @@ namespace BookingQueueSubscriber.Services.NotificationApi
     public class NotificationServiceFake : INotificationService
     {
         public List<AddNotificationRequest> NotificationRequests { get; set; }
-        public bool EJudFetaureEnabled { get; set; }
 
         public NotificationServiceFake()
         {
@@ -23,7 +22,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             foreach (var participant in participants)
             {
-                NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant, EJudFetaureEnabled));
+                NotificationRequests.Add(AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant));
             }
             return Task.FromResult(HttpStatusCode.OK);
         }
@@ -61,7 +60,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         {
             foreach (var participant in participants)
             {
-                NotificationRequests.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days, EJudFetaureEnabled));
+                NotificationRequests.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days));
             }
             return Task.FromResult(HttpStatusCode.OK);
         }

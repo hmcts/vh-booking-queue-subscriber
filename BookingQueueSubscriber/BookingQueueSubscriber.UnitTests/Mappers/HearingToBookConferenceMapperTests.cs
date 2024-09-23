@@ -44,7 +44,8 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 ScheduledDateTime = DateTime.UtcNow,
                 HearingVenueName = "MyVenue",
                 RecordAudio = true,
-                CaseTypeServiceId = "ZZY1"
+                CaseTypeServiceId = "ZZY1",
+                VideoSupplier = VideoSupplier.Kinly
             };
             return dto;
         }

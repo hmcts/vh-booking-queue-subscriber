@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Test]
@@ -34,11 +34,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = CreateEvent();
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
         
         [Test]
-        public async Task should_call_send_hearing_notification_without_participant_already_notified_new_template_on()
+        public async Task should_call_send_hearing_notification_without_participant_already_notified()
         {
             var messageHandler = (IMessageHandler) new HearingReadyForVideoHandler(VideoApiServiceMock.Object,
                 VideoWebServiceMock.Object, BookingsApiClientMock.Object);
@@ -46,7 +46,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var usersNotified = new List<UserDto>()
                 {new UserDto() {Username = integrationEvent.Participants[0].Username}};
             VideoApiServiceMock.Setup(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>())).ReturnsAsync(new ConferenceDetailsResponse());
-            FeatureTogglesMock.Setup(x => x.UsePostMay2023Template()).Returns(true);
             UserCreationAndNotificationMock.Setup(x => x.SendHearingNotificationAsync(integrationEvent.Hearing, 
                 integrationEvent.Participants.Where(dto => usersNotified.All(y=>y.Username != dto.Username))
             ));
@@ -58,7 +57,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             
             await messageHandler.HandleAsync(integrationEvent);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
         
         [Test]
@@ -72,7 +71,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             await messageHandler.HandleAsync(integrationEvent);
             UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<IEnumerable<ParticipantDto>>()), Times.Never);
             VideoApiServiceMock.Verify(x => x.BookNewConferenceAsync(It.IsAny<BookNewConferenceRequest>()), Times.Once);
-            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>(), It.IsAny<UpdateBookingStatusRequest>()), Times.Once);
+            BookingsApiClientMock.Verify(x => x.UpdateBookingStatusAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Test]
@@ -101,7 +100,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 ScheduledDateTime = DateTime.UtcNow,
                 HearingVenueName = "MyVenue",
                 RecordAudio = true,
-                GroupId = (isMultiHearing) ? Guid.NewGuid() : null
+                GroupId = (isMultiHearing) ? Guid.NewGuid() : null,
+                VideoSupplier = VideoSupplier.Kinly
             };
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();

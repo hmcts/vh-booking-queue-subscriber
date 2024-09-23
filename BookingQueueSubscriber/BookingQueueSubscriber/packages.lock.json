@@ -14,9 +14,9 @@
       },
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.50.8, )",
-        "resolved": "1.50.8",
-        "contentHash": "cP5Ds0y3rQoNZxdZByoTYN1qpPFwnKM9vsZDV24G/jRK5WmONopveereF3qtTYfaKM7slhSRFiN3aZbW58LdhA==",
+        "requested": "[2.3.1, )",
+        "resolved": "2.3.1",
+        "contentHash": "fELMrU9fK/QaLJo9rw1BKPKDWiNIypCXicOC61lkXkdAraQfeEIOuyQtVsopIl+PpUkHmkdbeXBITP+zS55y5w==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -172,12 +172,12 @@
       },
       "NotificationApi.Client": {
         "type": "Direct",
-        "requested": "[1.49.2, )",
-        "resolved": "1.49.2",
-        "contentHash": "R68J5+28nu5NZ/CUiImXuTAaxgy/ZzVYptNXH+z5trDJpFWCkek8JLANnQmuYqegm+WTq5VjHBcpIe0sC6taJg==",
+        "requested": "[2.1.3, )",
+        "resolved": "2.1.3",
+        "contentHash": "+7BiDpsJLK82OCoch76ighk8fQuq6wlO7i7leV3SsZtMmxWq1vQ9yjJkwsXwNVG6wH0T/lj2V8kywVcvG1pKSQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "13.0.1"
+          "Newtonsoft.Json": "13.0.3"
         }
       },
       "Rixian.Extensions.ApplicationInsights.WorkerService": {
@@ -211,6 +211,16 @@
         "requested": "[4.5.4, )",
         "resolved": "4.5.4",
         "contentHash": "zteT+G8xuGu6mS+mzDzYXbzS7rd3K6Fjb9RiZlYlJPam2/hU7JCBZBVEcywNuR+oZ1ncTvc/cq0faRr3P01OVg=="
+      },
+      "VideoApi.Client": {
+        "type": "Direct",
+        "requested": "[2.2.11, )",
+        "resolved": "2.2.11",
+        "contentHash": "ciMnAm7RGQ+yFX+/YUHlzwcPwIVKfyv3kGmNlvBS9ewItIqOEhVXMXjmDVwMPixYFx+Yept0gmdivo8woo044w==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Newtonsoft.Json": "13.0.3"
+        }
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -1079,8 +1089,8 @@
       },
       "Newtonsoft.Json": {
         "type": "Transitive",
-        "resolved": "13.0.1",
-        "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
+        "resolved": "13.0.3",
+        "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
       },
       "Newtonsoft.Json.Bson": {
         "type": "Transitive",
@@ -2282,8 +2292,8 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "1.45.2",
-        "contentHash": "2lLsvcl0ttT5dR+SAF3UMIkFAFmaqOxKnQwQ4AEW2SKX7YfTrT84SBCaHtv+knQ1cLMk77VSw5fxQGdM2qMgQg==",
+        "resolved": "2.1.1",
+        "contentHash": "HLnaoli0hCvSU2/zCFvSZwsiP3lLkPo0ZH/l9d1d64vxdBe/Gccg1J/VaZMvbsOAMl3A9m3i2fDYE8JaZZS9ag==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2300,14 +2310,6 @@
           "SonarAnalyzer.CSharp": "8.2.0.14119"
         }
       },
-      "VideoApi.Client": {
-        "type": "Transitive",
-        "resolved": "1.50.1",
-        "contentHash": "OJqOqsRFAdxGyHVfrj6zo7GdGl/aVXAoLl0EpiWnwbU+2wAIwzicI8u5TwxahmeG8Gjtji7SHx3x/A4n0WWOPQ==",
-        "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
-        }
-      },
       "WindowsAzure.Storage": {
         "type": "Transitive",
         "resolved": "9.3.1",
@@ -2320,7 +2322,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[1.50.8, )",
+          "BookingsApi.Client": "[2.3.1, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2335,14 +2337,14 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[1.50.8, )",
+          "BookingsApi.Client": "[2.3.1, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[1.49.2, )",
+          "NotificationApi.Client": "[2.1.3, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[1.45.2, )",
-          "VideoApi.Client": "[1.50.1, )"
+          "UserApi.Client": "[2.1.1, )",
+          "VideoApi.Client": "[2.2.11, )"
         }
       }
     }
