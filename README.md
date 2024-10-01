@@ -19,8 +19,3 @@ Finally, run the following command into a terminal in the same directory as the 
 cd BookingQueueSubscriber/BookingQueueSubscriber
 func azure functionapp fetch-app-settings vh-booking-queue-subscriber-dev
 ```
-
-## Running the app as a container
-
-Visit the VH-Setup repository for
-[Instructions to run as a container locally.](https://github.com/hmcts/vh-setup/tree/main/docs/local-container-setup).
