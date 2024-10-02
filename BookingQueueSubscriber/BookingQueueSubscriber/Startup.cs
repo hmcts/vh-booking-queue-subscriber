@@ -23,14 +23,14 @@ namespace BookingQueueSubscriber
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            const string vhInfraCore = "/mnt/secrets/vh-infra-core";
-            const string vhBookingQueue = "/mnt/secrets/vh-booking-queue";
-            const string vhAdminWeb = "/mnt/secrets/vh-admin-web";
-            const string vhBookingsApi = "/mnt/secrets/vh-bookings-api";
-            const string vhVideoApi = "/mnt/secrets/vh-video-api";
-            const string vhNotificationApi = "/mnt/secrets/vh-notification-api";
-            const string vhUserApi = "/mnt/secrets/vh-user-api";
-            const string vhVideoWeb = "/mnt/secrets/vh-video-web";
+            const string vhInfraCore = "vh-infra-core";
+            const string vhBookingQueue = "vh-booking-queue";
+            const string vhAdminWeb = "vh-admin-web";
+            const string vhBookingsApi = "vh-bookings-api";
+            const string vhVideoApi = "vh-video-api";
+            const string vhNotificationApi = "vh-notification-api";
+            const string vhUserApi = "vh-user-api";
+            const string vhVideoWeb = "vh-video-web";
 
             var context = builder.GetContext();
             var configBuilder = builder.ConfigurationBuilder
