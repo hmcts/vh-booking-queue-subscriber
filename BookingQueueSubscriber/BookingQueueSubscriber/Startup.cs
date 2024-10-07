@@ -7,6 +7,8 @@ using NotificationApi.Client;
 using UserApi.Client;
 using VideoApi.Client;
 using BookingsApi.Client;
+using Microsoft.Extensions.Configuration.KeyPerFile;
+using Microsoft.Extensions.FileProviders;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
@@ -21,27 +23,36 @@ namespace BookingQueueSubscriber
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            const string vhInfraCore = "/mnt/secrets/vh-infra-core";
-            const string vhBookingQueue = "/mnt/secrets/vh-booking-queue";
-            const string vhAdminWeb = "/mnt/secrets/vh-admin-web";
-            const string vhBookingsApi = "/mnt/secrets/vh-bookings-api";
-            const string vhVideoApi= "/mnt/secrets/vh-video-api";
-            const string vhNotificationApi = "/mnt/secrets/vh-notification-api";
-            const string vhUserApi= "/mnt/secrets/vh-user-api";
-            const string vhVideoWeb = "/mnt/secrets/vh-video-web";
+            const string vhInfraCore = "vh-infra-core";
+            const string vhBookingQueue = "vh-booking-queue";
+            const string vhAdminWeb = "vh-admin-web";
+            const string vhBookingsApi = "vh-bookings-api";
+            const string vhVideoApi = "vh-video-api";
+            const string vhNotificationApi = "vh-notification-api";
+            const string vhUserApi = "vh-user-api";
+            const string vhVideoWeb = "vh-video-web";
 
             var context = builder.GetContext();
-            builder.ConfigurationBuilder
+            var configBuilder = builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
-                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
-                .AddAksKeyVaultSecretProvider(vhInfraCore)
-                .AddAksKeyVaultSecretProvider(vhBookingQueue)
-                .AddAksKeyVaultSecretProvider(vhAdminWeb)
-                .AddAksKeyVaultSecretProvider(vhBookingsApi)
-                .AddAksKeyVaultSecretProvider(vhVideoApi)
-                .AddAksKeyVaultSecretProvider(vhNotificationApi)
-                .AddAksKeyVaultSecretProvider(vhUserApi)
-                .AddAksKeyVaultSecretProvider(vhVideoWeb)
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"),
+                    true);
+
+            var keyVaults = new[]
+            {
+                vhInfraCore, vhBookingQueue, vhAdminWeb, vhBookingsApi, vhVideoApi, vhNotificationApi, vhUserApi,
+                vhVideoWeb
+            };
+            foreach (var keyVault in keyVaults)
+            {
+                var filePath = $"/mnt/secrets/{keyVault}";
+                if (Directory.Exists(filePath))
+                {
+                    configBuilder.Add(GetKeyPerFileSource(filePath));
+                }
+            }
+
+            configBuilder
                 .AddUserSecrets("F6705640-D918-4180-B98A-BAB7ADAA4817")
                 .AddEnvironmentVariables();
 
@@ -175,6 +186,17 @@ namespace BookingQueueSubscriber
                 t.GetInterfaces().ToList().Exists(x =>
                     x.IsGenericType &&
                     x.GetGenericTypeDefinition() == i));
+        }
+        
+        private static KeyPerFileConfigurationSource GetKeyPerFileSource(string filePath)
+        {
+            return new KeyPerFileConfigurationSource
+            {
+                FileProvider = new PhysicalFileProvider(filePath),
+                Optional = true,
+                ReloadOnChange = true,
+                SectionDelimiter = "--" // Set your custom delimiter here
+            };
         }
     }
 }
