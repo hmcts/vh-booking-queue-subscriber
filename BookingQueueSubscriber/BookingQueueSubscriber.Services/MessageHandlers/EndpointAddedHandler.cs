@@ -2,6 +2,8 @@ using BookingQueueSubscriber.Services.VideoApi;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
 using BookingQueueSubscriber.Services.VideoWeb;
+using VideoApi.Contract.Enums;
+using ConferenceRole = VideoApi.Contract.Enums.ConferenceRole;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -31,7 +33,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 DisplayName = eventMessage.Endpoint.DisplayName,
                 SipAddress = eventMessage.Endpoint.Sip,
                 Pin = eventMessage.Endpoint.Pin,
-                DefenceAdvocate = defenceAdvocate?.Username
+                DefenceAdvocate = defenceAdvocate?.Username,
+                ConferenceRole = Enum.Parse<ConferenceRole>(eventMessage.Endpoint.Role.ToString())
             });
 
             var endpoints = await _videoApiService.GetEndpointsForConference(conference.Id);

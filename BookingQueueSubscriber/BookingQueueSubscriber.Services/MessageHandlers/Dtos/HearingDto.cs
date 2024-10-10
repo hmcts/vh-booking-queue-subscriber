@@ -14,6 +14,7 @@
         public string HearingType { get; set; }
         public string CaseTypeServiceId { get; set; }
         public VideoSupplier VideoSupplier { get; set; }
+        public ConferenceRoomType ConferenceRoomType { get; set; }
         
         public bool IsMultiDayHearing() => GroupId.HasValue && GroupId.GetValueOrDefault() != Guid.Empty;
     }

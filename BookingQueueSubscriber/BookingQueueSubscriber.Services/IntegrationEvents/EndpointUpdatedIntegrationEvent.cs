@@ -6,5 +6,6 @@ namespace BookingQueueSubscriber.Services.IntegrationEvents
         public string Sip { get; set; }
         public string DisplayName { get; set; }
         public string DefenceAdvocate { get; set; }
+        public ConferenceRole Role { get; }
     }
 }

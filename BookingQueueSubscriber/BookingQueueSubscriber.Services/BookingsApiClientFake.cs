@@ -852,12 +852,45 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<EndpointResponseV2> AddEndPointToHearingV2Async(Guid hearingId, EndpointRequestV2 addEndpointRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<EndpointResponseV2> AddEndPointToHearingV2Async(Guid hearingId, EndpointRequestV2 addEndpointRequest,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateEndpointV2Async(Guid hearingId, Guid endpointId, UpdateEndpointRequestV2 updateEndpointRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateEndpointV2Async(Guid hearingId, Guid endpointId, UpdateEndpointRequestV2 updateEndpointRequest,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByCsosV2Async(HearingsForTodayByAllocationRequestV2 request)
         {
             throw new NotImplementedException();
         }
 
         public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByCsosV2Async(HearingsForTodayByAllocationRequestV2 request,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ParticipantResponseV2>> AddParticipantsToHearingV2Async(Guid hearingId, AddParticipantsToHearingRequestV2 request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ParticipantResponseV2>> AddParticipantsToHearingV2Async(Guid hearingId, AddParticipantsToHearingRequestV2 request,
             CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -880,6 +913,17 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ParticipantResponseV2> UpdateParticipantDetailsV2Async(Guid hearingId, Guid participantId, UpdateParticipantRequestV2 request,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ParticipantResponseV2>> UpdateHearingParticipantsV2Async(Guid hearingId, UpdateHearingParticipantsRequestV2 request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ParticipantResponseV2>> UpdateHearingParticipantsV2Async(Guid hearingId, UpdateHearingParticipantsRequestV2 request,
             CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -912,6 +956,16 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<HearingDetailsResponseV2> GetHearingDetailsByIdV2Async(Guid hearingId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HearingDetailsResponseV2> UpdateHearingDetailsV2Async(Guid hearingId, UpdateHearingRequestV2 request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HearingDetailsResponseV2> UpdateHearingDetailsV2Async(Guid hearingId, UpdateHearingRequestV2 request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

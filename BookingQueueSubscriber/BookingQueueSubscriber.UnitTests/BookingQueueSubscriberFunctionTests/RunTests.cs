@@ -76,6 +76,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
          'hearing_venue_name':'Birmingham Civil and Family Justice Centre',
          'record_audio':true,
          'video_supplier':'Vodafone',
+         'conference_room_type': 'VMR'
       },
       'participants':[
          {
@@ -131,14 +132,16 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             'display_name':'display 1',
             'sip':'b5d8c1f5-ef19-4726-b722-3ef86bdfda95',
             'pin':'1234',
-            'defence_advocate_username':null
+            'defence_advocate_username':null,
+            'role':'host'
          },
          {
             '$type':'BookingsApi.Infrastructure.Services.Dtos.EndpointDto, BookingsApi.Infrastructure.Services',
             'display_name':'display 2',
             'sip':'72677f04-65d0-41d3-bfe8-845f666c2198',
             'pin':'5678',
-            'defence_advocate_username':null
+            'defence_advocate_username':null,
+            'role':'host'
          }
       ]
    }

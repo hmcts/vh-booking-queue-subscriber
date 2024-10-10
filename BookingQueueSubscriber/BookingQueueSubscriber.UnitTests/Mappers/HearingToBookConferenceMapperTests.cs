@@ -1,6 +1,7 @@
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Enums;
+using ConferenceRole = VideoApi.Contract.Enums.ConferenceRole;
 
 namespace BookingQueueSubscriber.UnitTests.Mappers
 {
@@ -29,7 +30,13 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.HearingRefId.Should().Be(hearingDto.HearingId);
             request.Participants.Count.Should().Be(participants.Count);
             request.Endpoints.Count.Should().Be(endpoints.Count);
-            request.Endpoints.First(x => x.DisplayName == "one").DefenceAdvocate.Should().NotBeEmpty();
+
+            var firstEndpoint = request.Endpoints.First(x => x.DisplayName == "one");
+            firstEndpoint.DefenceAdvocate.Should().NotBeEmpty();
+            firstEndpoint.ConferenceRole.Should().Be(ConferenceRole.Host);
+            
+            var thirdEndpoint = request.Endpoints.First(x => x.DisplayName == "three");
+            thirdEndpoint.ConferenceRole.Should().Be(ConferenceRole.Guest);
         }
 
         private static HearingDto CreateHearingDto()
@@ -58,10 +65,11 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             {
                 new EndpointDto
                 {
-                    DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234", DefenceAdvocateContactEmail = rep.ContactEmail
+                    DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234", DefenceAdvocateContactEmail = rep.ContactEmail,
+                    Role = Services.MessageHandlers.Dtos.ConferenceRole.Host
                 },
-                new EndpointDto {DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678"},
-                new EndpointDto {DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012"}
+                new EndpointDto {DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678", Role = Services.MessageHandlers.Dtos.ConferenceRole.Host},
+                new EndpointDto {DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012", Role = Services.MessageHandlers.Dtos.ConferenceRole.Guest}
             };
         }
     }

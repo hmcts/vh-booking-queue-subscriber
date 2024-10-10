@@ -4,11 +4,13 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[2.3.1, )",
-        "resolved": "2.3.1",
-        "contentHash": "fELMrU9fK/QaLJo9rw1BKPKDWiNIypCXicOC61lkXkdAraQfeEIOuyQtVsopIl+PpUkHmkdbeXBITP+zS55y5w==",
+        "requested": "[2.3.10, )",
+        "resolved": "2.3.10",
+        "contentHash": "VJTd1w16Kp1ipAjMqFOxjGaQHfOyoX+Y6J3cOAvypHCUAkT0vN6RJ3GHpyUT3jbixo7qC/VFa+CVRPNV2dq/uw==",
         "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
+          "BookingsApi.Common.DotNet6": "2.3.10",
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "System.Text.Json": "8.0.0"
         }
       },
       "LaunchDarkly.ServerSdk": {
@@ -99,6 +101,14 @@
         "requested": "[9.9.0.77355, )",
         "resolved": "9.9.0.77355",
         "contentHash": "zuF3evXam55/+6En2//ggUeI+MWApgYi0K7Z5nMJkuQoRso0NYMVISGZnR+u1LilwSHPP/ZWDrhpVYNEH4v2Xw=="
+      },
+      "BookingsApi.Common.DotNet6": {
+        "type": "Transitive",
+        "resolved": "2.3.10",
+        "contentHash": "3IOexrZzkYq+JbaWYs0vXsiFDwIPHttSy1mjxyGHYGoeLk0cndoBZDjJLxP+jnYQfsmEbDM9zAjIGCrB0UKyLA==",
+        "dependencies": {
+          "System.Text.Json": "8.0.0"
+        }
       },
       "LaunchDarkly.Cache": {
         "type": "Transitive",
@@ -1549,19 +1559,19 @@
       },
       "System.Text.Encodings.Web": {
         "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "Vg8eB5Tawm1IFqj4TVK1czJX89rhFxJo9ELqc/Eiq0eXy13RK00eubyU6TJE6y+GQXjyV5gSfiewDUZjQgSE0w==",
+        "resolved": "8.0.0",
+        "contentHash": "yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ==",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "zaJsHfESQvJ11vbXnNlkrR46IaMULk/gHxYsJphzSF+07kTjPHv+Oc14w6QEOfo3Q4hqLJgStUaYB9DBl0TmWg==",
+        "resolved": "8.0.0",
+        "contentHash": "OdrZO2WjkiEG6ajEFRABTRCi/wuXQPxeV6g8xvUJqdxMvvuCCEk86zPla8UiIQJz3durtUEbNyY/3lIhS0yZvQ==",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
-          "System.Text.Encodings.Web": "6.0.0"
+          "System.Text.Encodings.Web": "8.0.0"
         }
       },
       "System.Text.RegularExpressions": {
