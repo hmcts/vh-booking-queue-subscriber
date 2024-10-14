@@ -1,5 +1,7 @@
 using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
+using ConferenceRole = VideoApi.Contract.Enums.ConferenceRole;
+using ConferenceRoomType = VideoApi.Contract.Enums.ConferenceRoomType;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
@@ -26,7 +28,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 AudioRecordingRequired = hearingDto.RecordAudio,
                 Endpoints = PopulateAddEndpointRequests(endpointDtos, participantDtos).ToList(),
                 CaseTypeServiceId = hearingDto.CaseTypeServiceId,
-                Supplier = (Supplier)hearingDto.VideoSupplier
+                Supplier = (Supplier)hearingDto.VideoSupplier,
+                ConferenceRoomType = (ConferenceRoomType)hearingDto.ConferenceRoomType
             };
             
             return request;
@@ -42,7 +45,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                     DefenceAdvocate = participantDtos.SingleOrDefault(x => x.ContactEmail == endpointDto.DefenceAdvocateContactEmail)?.Username,
                     DisplayName = endpointDto.DisplayName,
                     Pin = endpointDto.Pin,
-                    SipAddress = endpointDto.Sip
+                    SipAddress = endpointDto.Sip,
+                    ConferenceRole = Enum.Parse<ConferenceRole>(endpointDto.Role.ToString())
                 });
             }
             return addEndpointRequests;

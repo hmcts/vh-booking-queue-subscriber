@@ -6,5 +6,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         public string Sip { get; set; }
         public string Pin { get; set; }
         public string DefenceAdvocateContactEmail { get; set; }
+        public ConferenceRole Role { get; set; }
     }
 }

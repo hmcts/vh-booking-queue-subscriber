@@ -2,8 +2,10 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
+using ConferenceRole = VideoApi.Contract.Enums.ConferenceRole;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -59,7 +61,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request.DisplayName == integrationEvent.Endpoint.DisplayName &&
                     request.DefenceAdvocate == integrationEvent.Endpoint.DefenceAdvocateContactEmail &&
                     request.SipAddress == integrationEvent.Endpoint.Sip &&
-                    request.Pin == integrationEvent.Endpoint.Pin
+                    request.Pin == integrationEvent.Endpoint.Pin &&
+                    request.ConferenceRole == ConferenceRole.Host
             )), Times.Once);
 
             VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(),
@@ -71,7 +74,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             return new EndpointAddedIntegrationEvent
             {
                 HearingId = HearingId,
-                Endpoint = new EndpointDto{DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234"}
+                Endpoint = new EndpointDto{DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234", Role = Services.MessageHandlers.Dtos.ConferenceRole.Host}
             };
         }
     }
