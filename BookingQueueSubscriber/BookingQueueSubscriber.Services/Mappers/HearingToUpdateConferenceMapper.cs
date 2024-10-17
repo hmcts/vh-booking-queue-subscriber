@@ -1,4 +1,5 @@
 using VideoApi.Contract.Requests;
+using ConferenceRoomType = VideoApi.Contract.Enums.ConferenceRoomType;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
@@ -15,7 +16,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 ScheduledDateTime = hearing.ScheduledDateTime,
                 ScheduledDuration = hearing.ScheduledDuration,
                 HearingVenueName = hearing.HearingVenueName,
-                AudioRecordingRequired = hearing.RecordAudio
+                AudioRecordingRequired = hearing.RecordAudio,
+                RoomType = (ConferenceRoomType)hearing.ConferenceRoomType
             };
         }
     }
