@@ -797,21 +797,21 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         [Test]
         public async Task should_handle_EndpointUpdatedIntegrationEvent()
         {
-          const string message = """
+          const string message = @"
                                  {
-                                   "$type": "BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services",
-                                   "id": "20579099-f03b-4ace-adf5-fb6d4ce5760f",
-                                   "timestamp": "2024-10-18T13:38:05.886327Z",
-                                   "integration_event": {
-                                     "$type": "BookingsApi.Infrastructure.Services.IntegrationEvents.Events.EndpointUpdatedIntegrationEvent, BookingsApi.Infrastructure.Services",
-                                     "hearing_id": "fb1ab55d-80ce-4700-91a3-8136e3a844d6",
-                                     "sip": "5622555833@dev.vh-hmcts.co.uk",
-                                     "display_name": "Endpoint 1",
-                                     "defence_advocate": null,
-                                     "role": "host"
-                                   }
+                                   '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+                                    'id': '20579099-f03b-4ace-adf5-fb6d4ce5760f',
+                                    'timestamp': '2024-10-18T13:38:05.886327Z',
+                                    'integration_event': {
+                                       '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.EndpointUpdatedIntegrationEvent, BookingsApi.Infrastructure.Services',
+                                       'hearing_id': 'fb1ab55d-80ce-4700-91a3-8136e3a844d6',
+                                       'sip': '5622555833@dev.vh-hmcts.co.uk',
+                                       'display_name': 'Endpoint 1',
+                                       'defence_advocate': null,
+                                       'role': 'host'
+                                    }
                                  }
-                                 """;
+                                 ";
           
           await _sut.Run(message);
           _videoApiService.UpdateEndpointInConferenceCount.Should().Be(1);
