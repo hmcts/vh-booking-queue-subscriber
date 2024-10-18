@@ -5,6 +5,7 @@ using VideoApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Responses;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
+using ConferenceRole = VideoApi.Contract.Enums.ConferenceRole;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -27,7 +28,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     DisplayName = integrationEvent.DisplayName,
                     DefenceAdvocate = integrationEvent.DefenceAdvocate,
                     Pin = "Pin",
-                    CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false  }
+                    CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false  },
+                    ConferenceRole = ConferenceRole.Host
                 }
             };
 
