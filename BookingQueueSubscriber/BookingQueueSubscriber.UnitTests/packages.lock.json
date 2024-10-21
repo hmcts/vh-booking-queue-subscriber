@@ -136,6 +136,25 @@
           "System.Memory.Data": "1.0.2"
         }
       },
+      "Azure.Storage.Common": {
+        "type": "Transitive",
+        "resolved": "12.11.0",
+        "contentHash": "BPZ1JwYvehHGoTSXhXfAmwtFYejJghE6dkKvpZtPIL0DulzSIJdll9OZI+h5W+3wLYK0yn5hc1r6mvId0q4npA==",
+        "dependencies": {
+          "Azure.Core": "1.24.0",
+          "System.IO.Hashing": "6.0.0"
+        }
+      },
+      "Azure.Storage.Queues": {
+        "type": "Transitive",
+        "resolved": "12.10.0",
+        "contentHash": "RD+rDy2O763jJXpvaOd03I3NSIrGpjq5YPzVkPydXnhMIzvjrv3X6ogDl+QgZs1ssuRcqjCh0RBvaaW6tt2EYw==",
+        "dependencies": {
+          "Azure.Storage.Common": "12.11.0",
+          "System.Memory.Data": "1.0.2",
+          "System.Text.Json": "4.7.2"
+        }
+      },
       "BookingsApi.Client": {
         "type": "Transitive",
         "resolved": "3.0.3",
@@ -613,6 +632,16 @@
           "Azure.Messaging.ServiceBus": "7.11.0",
           "Microsoft.Azure.WebJobs": "3.0.33",
           "Microsoft.Extensions.Azure": "1.2.0"
+        }
+      },
+      "Microsoft.Azure.WebJobs.Extensions.Storage.Queues": {
+        "type": "Transitive",
+        "resolved": "5.0.1",
+        "contentHash": "NCNMBtMOdKreEriYYLhnL1BpYwn8x1bhYAMbB7qadEvyobFyQ4j0z877TDq6S03l0aZRi3WL9XhkeiubRxneZA==",
+        "dependencies": {
+          "Azure.Storage.Queues": "12.10.0",
+          "Microsoft.Azure.WebJobs": "3.0.32",
+          "Microsoft.Extensions.Azure": "1.1.1"
         }
       },
       "Microsoft.Azure.WebJobs.Host.Storage": {
@@ -1550,6 +1579,11 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "System.IO.Hashing": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "Rfm2jYCaUeGysFEZjDe7j1R4x6Z6BzumS/vUT5a1AA/AWJuGX71PoGB0RmpyX3VmrGqVnAwtfMn39OHR8Y/5+g=="
+      },
       "System.Linq": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -2287,6 +2321,7 @@
           "Microsoft.AspNetCore.Hosting": "[2.2.7, )",
           "Microsoft.Azure.WebJobs": "[3.0.33, )",
           "Microsoft.Azure.WebJobs.Extensions.ServiceBus": "[5.8.0, )",
+          "Microsoft.Azure.WebJobs.Extensions.Storage.Queues": "[5.0.1, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
           "Microsoft.Extensions.Configuration.KeyPerFile": "[6.0.1, )",
           "Microsoft.Extensions.Configuration.UserSecrets": "[6.0.1, )",
