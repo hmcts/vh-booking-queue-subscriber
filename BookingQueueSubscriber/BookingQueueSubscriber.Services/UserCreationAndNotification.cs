@@ -1,5 +1,4 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services.NotificationApi;
+﻿using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingsApi.Client;
 
@@ -8,26 +7,23 @@ namespace BookingQueueSubscriber.Services
     public interface IUserCreationAndNotification
     {
         Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants);
-        Task HandleAssignUserToGroup(IList<UserDto> users);
         Task SendHearingNotificationAsync(HearingDto hearing, IEnumerable<ParticipantDto> participants);
     }
 
     public class UserCreationAndNotification : IUserCreationAndNotification
     {
         private readonly INotificationService _notificationService;
-        private readonly IFeatureToggles _featureToggles;
         private readonly IUserService _userService;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<UserCreationAndNotification> _logger;
 
         public UserCreationAndNotification(INotificationService notificationService, IUserService userService, IBookingsApiClient bookingsApiClient,
-             ILogger<UserCreationAndNotification> logger, IFeatureToggles featureToggles)
+             ILogger<UserCreationAndNotification> logger)
         {
             _notificationService = notificationService;
             _userService = userService;
             _bookingsApiClient = bookingsApiClient;
             _logger = logger;
-            _featureToggles = featureToggles;
         }
 
         public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)

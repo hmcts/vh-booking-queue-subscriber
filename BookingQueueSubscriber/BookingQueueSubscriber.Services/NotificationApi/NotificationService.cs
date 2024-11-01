@@ -1,5 +1,4 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services.UserApi;
+﻿using BookingQueueSubscriber.Services.UserApi;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
 using RoleNames = BookingQueueSubscriber.Services.UserApi.RoleNames;
@@ -17,7 +16,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// </summary>
         /// <param name="hearingId"></param>
         /// <param name="participant"></param>
-        /// <param name="password"></param>
+        /// <param name="userPassword"></param>
         /// <returns></returns>
         Task SendNewUserAccountNotificationAsync(Guid hearingId, ParticipantDto participant, string userPassword);
 
@@ -60,6 +59,7 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="hearing"></param>
         /// <param name="participant"></param>
         /// <param name="password"></param>
+        /// <param name="userPassword"></param>
         /// <returns></returns>
         Task SendNewUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant, string userPassword);
 
@@ -70,30 +70,18 @@ namespace BookingQueueSubscriber.Services.NotificationApi
         /// <param name="participant"></param>
         /// <returns></returns>
         Task SendExistingUserSingleDayHearingConfirmationEmail(HearingDto hearing, ParticipantDto participant);
-
-        /// <summary>
-        /// Send a multi-day hearing confirmation to new and existing users. Part of the 2nd of 3 new template
-        /// </summary>
-        /// <param name="hearing"></param>
-        /// <param name="participant"></param>
-        /// <param name="days"></param>
-        /// <returns></returns>
-        Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days);
-
     }
 
     public class NotificationService : INotificationService
     {
         private readonly INotificationApiClient _notificationApiClient;
         private readonly ILogger<NotificationService> _logger;
-        private readonly IFeatureToggles _featureToggles;
         private readonly IUserService _userService;
 
-        public NotificationService(INotificationApiClient notificationApiClient, ILogger<NotificationService> logger, IFeatureToggles featureToggles, IUserService userService)
+        public NotificationService(INotificationApiClient notificationApiClient, ILogger<NotificationService> logger, IUserService userService)
         {
             _notificationApiClient = notificationApiClient;
             _logger = logger;
-            _featureToggles = featureToggles;
             _userService = userService;
         }
 

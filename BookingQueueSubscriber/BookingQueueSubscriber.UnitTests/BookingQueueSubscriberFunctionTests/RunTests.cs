@@ -1,12 +1,9 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
+﻿using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
-using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NotificationApi.Client;
@@ -20,11 +17,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private VideoApiServiceFake _videoApiService;
         private VideoWebServiceFake _videoWebService;
         private NotificationApiClientFake _notificationApiClient;
-        private NotificationServiceFake _notificationService;
         private UserServiceFake _userService;
-        private BookingsApiClientFake _bookingsApi;
         private BookingQueueSubscriberFunction _sut;
-        private FeatureTogglesClientFake _featureTogglesClient;
         private ILogger<BookingQueueSubscriberFunction> _logger;
 
         [OneTimeSetUp]
@@ -34,10 +28,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
             _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
             _notificationApiClient = (NotificationApiClientFake)_serviceProvider.GetService<INotificationApiClient>();
-            _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
-            _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
-            _featureTogglesClient = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
         }
 

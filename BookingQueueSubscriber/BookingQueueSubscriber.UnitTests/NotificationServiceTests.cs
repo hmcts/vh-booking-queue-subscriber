@@ -1,5 +1,4 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services.NotificationApi;
+﻿using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using Microsoft.Extensions.Logging;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
@@ -13,7 +12,6 @@ namespace BookingQueueSubscriber.UnitTests
     {
         private Mock<INotificationApiClient> _notificationApiMock;
         private Mock<ILogger<NotificationService>> _logger;
-        private Mock<IFeatureToggles> _featureToggles;
         private Mock<IUserService> _userService;
 
         private NotificationService _notificationService;
@@ -23,10 +21,9 @@ namespace BookingQueueSubscriber.UnitTests
         {
             _notificationApiMock = new Mock<INotificationApiClient>();
             _logger = new Mock<ILogger<NotificationService>>();
-            _featureToggles = new Mock<IFeatureToggles>();
             _userService = new Mock<IUserService>();
             
-            _notificationService = new NotificationService(_notificationApiMock.Object, _logger.Object, _featureToggles.Object, _userService.Object);
+            _notificationService = new NotificationService(_notificationApiMock.Object, _logger.Object, _userService.Object);
         }
 
         [Test]
