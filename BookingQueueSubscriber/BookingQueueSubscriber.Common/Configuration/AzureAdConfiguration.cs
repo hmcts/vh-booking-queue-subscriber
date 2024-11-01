@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace BookingQueueSubscriber.Common.Configuration
 {
+    [ExcludeFromCodeCoverage]
     public class AzureAdConfiguration
     {
         public string ClientId { get; set; }
