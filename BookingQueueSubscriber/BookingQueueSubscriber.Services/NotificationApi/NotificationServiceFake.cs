@@ -49,25 +49,5 @@ namespace BookingQueueSubscriber.Services.NotificationApi
             NotificationRequests.Add(AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant));
             return Task.FromResult(HttpStatusCode.OK);
         }
-
-        public Task SendNewUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant, string userPassword)
-        {
-            NotificationRequests.Add(AddNotificationRequestMapper.MapToNewUserAccountDetailsEmail(hearing, participant));
-            return Task.FromResult(HttpStatusCode.OK);
-        }
-
-        public Task SendMultiDayHearingNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants, int days)
-        {
-            foreach (var participant in participants)
-            {
-                NotificationRequests.Add(AddNotificationRequestMapper.MapToMultiDayHearingConfirmationNotification(hearing, participant, days));
-            }
-            return Task.FromResult(HttpStatusCode.OK);
-        }
-
-        public Task SendExistingUserAccountDetailsEmail(HearingDto hearing, ParticipantDto participant)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -26,7 +26,7 @@ public class HealthCheckTests
         {
             {"test", new HealthReportEntry(HealthStatus.Healthy, "test", TimeSpan.Zero, null, null)}
         }, TimeSpan.Zero);
-        _healthCheckServiceMock.Setup(x=> x.CheckHealthAsync(It.IsAny<Func<HealthCheckRegistration,bool>?>(), It.IsAny<CancellationToken>()))
+        _healthCheckServiceMock.Setup(x=> x.CheckHealthAsync(It.IsAny<Func<HealthCheckRegistration,bool>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(healthReport);
         
         // Act
@@ -46,7 +46,7 @@ public class HealthCheckTests
         {
             {"test", new HealthReportEntry(HealthStatus.Unhealthy, "test", TimeSpan.Zero, new Exception("Not Working Right Now"), null)}
         }, TimeSpan.Zero);
-        _healthCheckServiceMock.Setup(x=> x.CheckHealthAsync(It.IsAny<Func<HealthCheckRegistration,bool>?>(), It.IsAny<CancellationToken>()))
+        _healthCheckServiceMock.Setup(x=> x.CheckHealthAsync(It.IsAny<Func<HealthCheckRegistration,bool>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(healthReport);
         
         // Act

@@ -6,7 +6,7 @@ namespace BookingQueueSubscriber.Services
 {
     public interface IUserCreationAndNotification
     {
-        Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants);
+        Task<IList<UserDto>> CreateUserAndNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants);
         Task SendHearingNotificationAsync(HearingDto hearing, IEnumerable<ParticipantDto> participants);
     }
 
@@ -26,7 +26,7 @@ namespace BookingQueueSubscriber.Services
             _logger = logger;
         }
 
-        public async Task<IList<UserDto>> CreateUserAndNotifcationAsync(HearingDto hearing, IList<ParticipantDto> participants)
+        public async Task<IList<UserDto>> CreateUserAndNotificationAsync(HearingDto hearing, IList<ParticipantDto> participants)
         {
             var createUserTasks = new List<Task<User>>();
             foreach (var participant in participants)
@@ -63,7 +63,7 @@ namespace BookingQueueSubscriber.Services
         {
             foreach (var user in users)
             {
-                _logger.LogInformation("Asign user {Username} with role {UserRole} to group", user.Username, user.UserRole);
+                _logger.LogInformation("Assign user {Username} with role {UserRole} to group", user.Username, user.UserRole);
                 await _userService.AssignUserToGroup(user.UserId, user.UserRole);
             }
         }

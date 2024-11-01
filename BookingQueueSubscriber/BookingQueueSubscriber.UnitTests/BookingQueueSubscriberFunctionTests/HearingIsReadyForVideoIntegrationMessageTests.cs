@@ -33,8 +33,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     [Test]
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_only()
     {
-      var judgeEmail = "automation_judge_judge_1@hmcts.net";
-        const string message = @"{
+      const string message = @"{
   '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
   'id': 'e0bbb9ed-ce49-4e69-94e7-3e35e7010206',
   'timestamp': '2023-09-15T09:03:50.889496Z',

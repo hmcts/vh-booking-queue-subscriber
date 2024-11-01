@@ -11,7 +11,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
     public class CreateAndNotifyUserHandlerTests : MessageHandlerTestBase
     {
         [Test]
-        public async Task should_call_usercreation_and_notification_when_request_is_valid()
+        public async Task should_call_user_creation_and_notification_when_request_is_valid()
         {
             var messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
@@ -19,9 +19,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
                 new User { UserName = "test.com" });
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
-                .ReturnsAsync(new ConferenceDetailsResponse()
+                .ReturnsAsync(new ConferenceDetailsResponse
                 {
-                    Participants = new List<ParticipantResponse>()
+                    Participants = new List<ParticipantResponse>
                     {
                         new()
                         {
@@ -38,18 +38,18 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
 
         [Test]
-        public async Task should_call_CreateUserAndNotifcationAsync_when_handle_is_called_with_explicit_interface()
+        public async Task should_call_CreateUserAndNotificationAsync_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler) new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
                 new User { UserName = "test.com", UserId = "123" });
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
-                .ReturnsAsync(new ConferenceDetailsResponse()
+                .ReturnsAsync(new ConferenceDetailsResponse
                 {
-                    Participants = new List<ParticipantResponse>()
+                    Participants = new List<ParticipantResponse>
                     {
                         new()
                         {
@@ -66,17 +66,17 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         }
         
          [Test]
-        public async Task should_call_HandleAssignUserToGroup_when_request_has_created_useraccounts()
+        public async Task should_call_HandleAssignUserToGroup_when_request_has_created_user_accounts()
         {
-            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
                 new User { UserName = "test.com", UserId = "123" });
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
-                .ReturnsAsync(new ConferenceDetailsResponse()
+                .ReturnsAsync(new ConferenceDetailsResponse
                 {
-                    Participants = new List<ParticipantResponse>()
+                    Participants = new List<ParticipantResponse>
                     {
                         new()
                         {
@@ -99,9 +99,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             UserServiceMock.Setup(us => us.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false))
                     .ReturnsAsync(new Func<User>(() => user));
             VideoApiServiceMock.Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
-                .ReturnsAsync(new ConferenceDetailsResponse()
+                .ReturnsAsync(new ConferenceDetailsResponse
                 {
-                    Participants = new List<ParticipantResponse>()
+                    Participants = new List<ParticipantResponse>
                     {
                         new()
                         {
@@ -111,16 +111,15 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     }
                 });
 
-            var messageHandler = (IMessageHandler)new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
 
             await messageHandler.HandleAsync(integrationEvent);
 
             UserServiceMock.Verify(x => x.AssignUserToGroup(user.UserId, participant.UserRole));
         } 
 
-        private CreateAndNotifyUserIntegrationEvent GetIntegrationEvent()
+        private static CreateAndNotifyUserIntegrationEvent GetIntegrationEvent()
         {
-
             return new CreateAndNotifyUserIntegrationEvent
             {
                 HearingConfirmationForParticipant = new HearingConfirmationForParticipantDto

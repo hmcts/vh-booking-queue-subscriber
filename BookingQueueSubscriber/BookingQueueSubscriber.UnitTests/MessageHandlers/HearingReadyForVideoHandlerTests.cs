@@ -50,7 +50,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 integrationEvent.Participants.Where(dto => usersNotified.All(y=>y.Username != dto.Username))
             ));
             UserCreationAndNotificationMock.Setup(x => 
-                    x.CreateUserAndNotifcationAsync(integrationEvent.Hearing, It.IsAny<IList<ParticipantDto>>()))
+                    x.CreateUserAndNotificationAsync(integrationEvent.Hearing, It.IsAny<IList<ParticipantDto>>()))
                 .ReturnsAsync(new Func<IList<UserDto>>(() => usersNotified));
             
             

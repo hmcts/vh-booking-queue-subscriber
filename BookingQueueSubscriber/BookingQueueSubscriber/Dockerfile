@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-RUN mkdir -p /home/site/wwwroot
-COPY BookingQueueSubscriber .
-RUN dotnet restore --configfile nuget.config BookingQueueSubscriber
-RUN dotnet build BookingQueueSubscriber -c Release
+RUN mkdir -p /home/site/wwwroot && \
+    COPY BookingQueueSubscriber . && \
+    dotnet restore --configfile nuget.config BookingQueueSubscriber && \
+    dotnet build BookingQueueSubscriber -c Release
 
 FROM build AS publish
 RUN dotnet publish BookingQueueSubscriber -c Release -o /home/site/wwwroot

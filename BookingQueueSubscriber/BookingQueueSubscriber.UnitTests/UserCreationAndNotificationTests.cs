@@ -42,7 +42,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -82,7 +82,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsApiMock.Object, _logger.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -119,7 +119,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsApiMock.Object, _logger.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -156,7 +156,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 userService, _bookingsApiMock.Object, _logger.Object);
 
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            await userCreationAndNotification.CreateUserAndNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -180,7 +180,7 @@ namespace BookingQueueSubscriber.UnitTests
             var userCreationAndNotification = new UserCreationAndNotification(_notificationServiceMock.Object,
                 _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object);
 
-            var users = await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, new List<ParticipantDto>
+            var users = await userCreationAndNotification.CreateUserAndNotificationAsync(hearing, new List<ParticipantDto>
             {
                 participant
             });
@@ -210,7 +210,7 @@ namespace BookingQueueSubscriber.UnitTests
                 _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object);
 
             // act
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, listParticipants);
+            await userCreationAndNotification.CreateUserAndNotificationAsync(hearing, listParticipants);
 
             // assert
 
@@ -244,7 +244,7 @@ namespace BookingQueueSubscriber.UnitTests
                 _userServiceMock.Object, _bookingsApiMock.Object, _logger.Object);
 
             // act
-            await userCreationAndNotification.CreateUserAndNotifcationAsync(hearing, listParticipants);
+            await userCreationAndNotification.CreateUserAndNotificationAsync(hearing, listParticipants);
 
             // assert
             _notificationServiceMock.Verify(x => x.SendNewUserWelcomeEmail(hearing, participant), Times.Never);

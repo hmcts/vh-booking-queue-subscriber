@@ -1,43 +1,43 @@
 ﻿using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace BookingQueueSubscriber.Services.UserApi
 {
     [Serializable]
     public class UserServiceException : Exception
     {
-        private const string REASON = "Reason";
-        private const string INFO = "info";
-
         public string Reason { get; set; }
         public UserServiceException(string message, string reason) : base($"{message}: {reason}")
         {
             Reason = reason;
         }
-
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        
         protected UserServiceException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Reason = info.GetString(REASON);
+            Reason = info.GetString(ExceptionReason.Reason);
         }
 
         public UserServiceException()
         {
         }
-
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
             {
-                throw new ArgumentNullException(INFO);
+                throw new ArgumentNullException(ExceptionReason.Info);
             }
 
-            info.AddValue(REASON, this.Reason);
+            info.AddValue(ExceptionReason.Reason, Reason);
 
             // MUST call through to the base class to let it save its own state
             base.GetObjectData(info, context);
+        }
+        
+        private static class ExceptionReason
+        {
+            public const string Reason = "Reason";
+            public const string Info = "info";
         }
     }
 }
