@@ -60,7 +60,7 @@ stages:
       parameters:
         ExtraProperties: |
           sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/Coverage/coverage.opencover.xml
-          sonar.coverage.exclusions="**/BookingQueueSubscriber/Swagger/**, **/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.IntegrationTests/**, **/BookingQueueSubscriber.UnitTests/**, **/BookingQueueSubscriber/Helper/**, **/BookingQueueSubscriber/ConfigureServicesExtensions.cs, **/BookingQueueSubscriber/Extensions/**"
+          sonar.coverage.exclusions="**/BookingQueueSubscriber/Swagger/**, **/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber.IntegrationTests/**, **/BookingQueueSubscriber.UnitTests/**, **/BookingQueueSubscriber/Helper/**, **/BookingQueueSubscriber/ConfigureServicesExtensions.cs, **/BookingQueueSubscriber/Extensions/**"
           sonar.cpd.exclusions="**/Program.cs, **/Startup.cs, **/BookingQueueSubscriber.Common/**, **/BookingQueueSubscriber/Swagger/**"
 
     - template: stages\dotnet-tests\unit-tests.yml@azTemplates
