@@ -1114,8 +1114,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "3.0.1-pr-0166-0002",
-        "contentHash": "2iTamNBXH27rsgwWOejr8/gmmZ/c8VSQqYnGkUo3/069n8XsSZPhrwXeEbtN0sQdGKcSMxdjt7j2be5blvNJYQ==",
+        "resolved": "3.0.1",
+        "contentHash": "L6h6zm+daH241BdN0hfLABh7q743aoCOs7sPE2wfiooyGN0KzLtK0aEPIJGeibURMZIgHDT/CV8d7wQwj6XeaQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.3"
@@ -2294,7 +2294,7 @@
           "Microsoft.Extensions.Http": "[6.0.0, )",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
           "Microsoft.NET.Sdk.Functions": "[4.1.3, )",
-          "NotificationApi.Client": "[3.0.1-pr-0166-0002, )",
+          "NotificationApi.Client": "[3.0.1, )",
           "Rixian.Extensions.ApplicationInsights.WorkerService": "[2.1.19, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "System.Threading.Tasks.Extensions": "[4.5.4, )",
@@ -2321,7 +2321,7 @@
           "BookingsApi.Client": "[3.0.5, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[3.0.1-pr-0166-0002, )",
+          "NotificationApi.Client": "[3.0.1, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[2.1.1, )",
