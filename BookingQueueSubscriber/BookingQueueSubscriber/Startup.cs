@@ -94,7 +94,6 @@ namespace BookingQueueSubscriber
             services.AddTransient<VideoWebTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
             services.AddApplicationInsightsTelemetryWorkerService();
@@ -107,7 +106,6 @@ namespace BookingQueueSubscriber
             {
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
                 services.AddScoped<IVideoWebService, VideoWebServiceFake>();
-                services.AddScoped<INotificationService, NotificationServiceFake>();
                 services.AddScoped<INotificationApiClient, NotificationApiClientFake>();
                 services.AddScoped<IUserService, UserServiceFake>();
                 services.AddScoped<IBookingsApiClient, BookingsApiClientFake>();
