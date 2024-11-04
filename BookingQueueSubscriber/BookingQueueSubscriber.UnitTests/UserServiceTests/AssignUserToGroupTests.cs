@@ -24,11 +24,8 @@ public class AssignUserToGroupTests
     [Test]
     public async Task Should_assign_representative_user_to_group()
     {
-        // Arrange
-        const string userRole = "Representative";
-
-        // Act
-        await _userService.AssignUserToGroup(UserId, userRole);
+        // Arrange & Act
+        await _userService.AssignUserToGroup(UserId, "Representative");
 
         // Assert
         VerifyUserAddedToGroup(UserGroup.External);
@@ -38,11 +35,8 @@ public class AssignUserToGroupTests
     [Test]
     public async Task Should_assign_joh_user_to_group()
     {
-        // Arrange
-        const string userRole = "Judicial Office Holder";
-
-        // Act
-        await _userService.AssignUserToGroup(UserId, userRole);
+        // Arrange & Act
+        await _userService.AssignUserToGroup(UserId, "Judicial Office Holder");
 
         // Assert
         VerifyUserAddedToGroup(UserGroup.External);
@@ -52,11 +46,8 @@ public class AssignUserToGroupTests
     [Test]
     public async Task Should_assign_staff_member_user_to_group()
     {
-        // Arrange
-        const string userRole = "StaffMember";
-
-        // Act
-        await _userService.AssignUserToGroup(UserId, userRole);
+        // Arrange & Act
+        await _userService.AssignUserToGroup(UserId, "StaffMember");
 
         // Assert
         VerifyUserAddedToGroup(UserGroup.Internal);
@@ -66,11 +57,8 @@ public class AssignUserToGroupTests
     [Test]
     public async Task Should_assign_other_user_to_group()
     {
-        // Arrange
-        const string userRole = "Interpreter";
-
-        // Act
-        await _userService.AssignUserToGroup(UserId, userRole);
+        // Arrange & Act
+        await _userService.AssignUserToGroup(UserId, "Interpreter");
 
         // Assert
         VerifyUserAddedToGroup(UserGroup.External);
