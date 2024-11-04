@@ -17,12 +17,6 @@ namespace BookingQueueSubscriber.Services.UserApi
         private readonly IUserApiClient _userApiClient;
         private readonly ILogger<UserService> _logger;
 
-        private const string External = "External";
-        private const string Internal = "Internal";
-        private const string VirtualRoomProfessionalUser = "VirtualRoomProfessionalUser";
-        private const string JudicialOfficeHolder = "JudicialOfficeHolder";
-        private const string StaffMember = "Staff Member";
-
         public UserService(IUserApiClient userApiClient, ILogger<UserService> logger)
         {
             _userApiClient = userApiClient;
@@ -90,19 +84,19 @@ namespace BookingQueueSubscriber.Services.UserApi
             switch (userRole)
             {
                 case "Representative":
-                    await AddGroup(userId, External);
-                    await AddGroup(userId, VirtualRoomProfessionalUser);
+                    await AddGroup(userId, UserGroup.External);
+                    await AddGroup(userId, UserGroup.VirtualRoomProfessionalUser);
                     break;
                 case "Judicial Office Holder":
-                    await AddGroup(userId, External);
-                    await AddGroup(userId, JudicialOfficeHolder);
+                    await AddGroup(userId, UserGroup.External);
+                    await AddGroup(userId, UserGroup.JudicialOfficeHolder);
                     break;
                 case "StaffMember":
-                    await AddGroup(userId, Internal);
-                    await AddGroup(userId, StaffMember);
+                    await AddGroup(userId, UserGroup.Internal);
+                    await AddGroup(userId, UserGroup.StaffMember);
                     break;
                 default:
-                    await AddGroup(userId, External);
+                    await AddGroup(userId, UserGroup.External);
                     break;
             }
         }
