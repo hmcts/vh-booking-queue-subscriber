@@ -98,5 +98,5 @@ function:
   triggerAuth:
     create: true
     enabled: true
-    triggerPodIdentityProvider: azure
+    triggerPodIdentityProvider: azure-workload
   triggers: []
