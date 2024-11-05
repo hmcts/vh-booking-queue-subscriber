@@ -23,6 +23,24 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             };
         }
 
+        public static ExistingUserSingleDayHearingConfirmationRequest BuildExistingUserSingleDayHearingConfirmationRequest(
+            HearingDto hearingDto, ParticipantDto participantDto)
+        {
+            return new ExistingUserSingleDayHearingConfirmationRequest
+            {
+                HearingId = hearingDto.HearingId,
+                ContactEmail = participantDto.ContactEmail,
+                ParticipantId = participantDto.ParticipantId,
+                CaseName = hearingDto.CaseName,
+                CaseNumber = hearingDto.CaseNumber,
+                DisplayName = participantDto.DisplayName,
+                Name = $"{participantDto.FirstName} {participantDto.LastName}",
+                Username = participantDto.Username,
+                RoleName = participantDto.UserRole,
+                ScheduledDateTime = hearingDto.ScheduledDateTime
+            };
+        }
+
         public static ExistingUserMultiDayHearingConfirmationRequest BuildExistingUserMultiDayHearingConfirmationRequest(
             HearingConfirmationForParticipantDto dto, int totalDays)
         {

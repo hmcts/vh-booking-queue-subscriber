@@ -138,18 +138,18 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "3.0.3",
-        "contentHash": "LhYCQo4ot4cepjL8y659VAi/UD1R6ujIUjpklutyoCwGGPx9kLp3IEyiZXYywojUGUJl6EHx8o/he2IbZKbsBQ==",
+        "resolved": "3.0.5",
+        "contentHash": "2H8DS11nNgreD6RdChNUxDUzMG6nSvXmm14w1TPZCXb0hUbPxg6Cc9iVZZmxdvP7aH62A0RGDoWNE5Wz0ClJwQ==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.0.3",
+          "BookingsApi.Common.DotNet6": "3.0.5",
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "System.Text.Json": "8.0.0"
         }
       },
       "BookingsApi.Common.DotNet6": {
         "type": "Transitive",
-        "resolved": "3.0.3",
-        "contentHash": "gkiALOAs+FD6Zn6vsgKqI6R+Ko+qGY6vm+WyIPsuXpaZQ4jqGJ6Z56rNmfNXD87KrKwtwk7uE/B63HIS1ZKX/w==",
+        "resolved": "3.0.5",
+        "contentHash": "31drJq2GLeosigbFD7xXywZRCCGAEYF0JdiqI1hvu3dNDN6Cacr+xwvIoA5UmpdgAo8J1CX1ba6LfGNnPhHNiw==",
         "dependencies": {
           "System.Text.Json": "8.0.0"
         }
@@ -1114,8 +1114,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "2.3.4",
-        "contentHash": "BwxsCI+DORSasyvqktvdWt2jUJIrxwTgLDVx/3sOBDJkqMKJsn+glINBsQ7/kgyldaZningYYuasa3+JIFSVKA==",
+        "resolved": "3.0.1",
+        "contentHash": "L6h6zm+daH241BdN0hfLABh7q743aoCOs7sPE2wfiooyGN0KzLtK0aEPIJGeibURMZIgHDT/CV8d7wQwj6XeaQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.3"
@@ -2261,8 +2261,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "3.0.1",
-        "contentHash": "CZg1mB21pKJyG+x3rFaSD+h0iunmF067eTCHjjYCjh1VYmeJ/dAWnbSLewEnloqlL36ZnKFQcBj1tDDQzVZ/TQ==",
+        "resolved": "3.0.3",
+        "contentHash": "VVlCmvcbyiMo5lP/KLNqi4T+VFe0CIfbhYr8YPm8WzKoXu97Cqp5hWDL2rLW/9PYn95UKvrDSC42BAPD8CjItQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "System.Text.Json": "8.0.4"
@@ -2282,7 +2282,7 @@
         "dependencies": {
           "AspNetCore.HealthChecks.Uris": "[6.0.3, )",
           "BookingQueueSubscriber.Services": "[1.0.0, )",
-          "BookingsApi.Client": "[3.0.3, )",
+          "BookingsApi.Client": "[3.0.5, )",
           "Microsoft.ApplicationInsights.AspNetCore": "[2.21.0, )",
           "Microsoft.AspNetCore.Hosting": "[2.2.7, )",
           "Microsoft.Azure.WebJobs": "[3.0.33, )",
@@ -2294,17 +2294,17 @@
           "Microsoft.Extensions.Http": "[6.0.0, )",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
           "Microsoft.NET.Sdk.Functions": "[4.1.3, )",
-          "NotificationApi.Client": "[2.3.4, )",
+          "NotificationApi.Client": "[3.0.1, )",
           "Rixian.Extensions.ApplicationInsights.WorkerService": "[2.1.19, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "System.Threading.Tasks.Extensions": "[4.5.4, )",
-          "VideoApi.Client": "[3.0.1, )"
+          "VideoApi.Client": "[3.0.3, )"
         }
       },
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[3.0.3, )",
+          "BookingsApi.Client": "[3.0.5, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2318,14 +2318,14 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[3.0.3, )",
+          "BookingsApi.Client": "[3.0.5, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[2.3.4, )",
+          "NotificationApi.Client": "[3.0.1, )",
           "System.IdentityModel.Tokens.Jwt": "[6.25.0, )",
           "TimeZoneConverter": "[3.3.0, )",
           "UserApi.Client": "[2.1.1, )",
-          "VideoApi.Client": "[3.0.1, )"
+          "VideoApi.Client": "[3.0.3, )"
         }
       }
     }

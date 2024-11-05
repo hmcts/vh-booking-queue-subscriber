@@ -94,8 +94,6 @@ namespace BookingQueueSubscriber
             services.AddTransient<VideoWebTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<IUserCreationAndNotification, UserCreationAndNotification>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
             services.AddApplicationInsightsTelemetryWorkerService();
@@ -108,11 +106,9 @@ namespace BookingQueueSubscriber
             {
                 services.AddScoped<IVideoApiService, VideoApiServiceFake>();
                 services.AddScoped<IVideoWebService, VideoWebServiceFake>();
-                services.AddScoped<INotificationService, NotificationServiceFake>();
                 services.AddScoped<INotificationApiClient, NotificationApiClientFake>();
                 services.AddScoped<IUserService, UserServiceFake>();
                 services.AddScoped<IBookingsApiClient, BookingsApiClientFake>();
-                services.AddScoped<IFeatureToggles, FeatureTogglesClientFake>();
             }
             else
             {
@@ -162,9 +158,6 @@ namespace BookingQueueSubscriber
                     client.ReadResponseAsString = true;
                     return (IBookingsApiClient)client;
                 });
-                 
-                 var envName = configuration["VhServices:BookingsApiUrl"]; // any service url will do here since we only care about the env name
-                 services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration["FeatureToggle:SdkKey"], envName));
             }
 
             services.AddVhHealthChecks();

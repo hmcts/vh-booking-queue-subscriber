@@ -4,7 +4,7 @@ namespace BookingQueueSubscriber.Common.Configuration
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
-        public string Authority => "https://login.microsoftonline.com/";
+        public static string Authority => "https://login.microsoftonline.com/";
         public string TenantId { get; set; }
     }
 }
