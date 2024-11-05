@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using BookingQueueSubscriber.Common.Configuration;
 using UserApi.Client;
 using UserApi.Contract.Requests;
 using UserApi.Contract.Responses;
@@ -18,15 +17,6 @@ namespace BookingQueueSubscriber.Services.UserApi
         private readonly IUserApiClient _userApiClient;
         private readonly ILogger<UserService> _logger;
 
-        public const string Representative = "Representative";
-        public const string Joh = "Judicial Office Holder";
-        public const string External = "External";
-        public const string Internal = "Internal";
-        public const string VirtualRoomProfessionalUser = "VirtualRoomProfessionalUser";
-        public const string JudicialOfficeHolder = "JudicialOfficeHolder";
-        public const string StaffMember = "Staff Member";
-        public const string SsprEnabled = "SSPR Enabled";
-        
         public UserService(IUserApiClient userApiClient, ILogger<UserService> logger)
         {
             _userApiClient = userApiClient;
@@ -45,7 +35,7 @@ namespace BookingQueueSubscriber.Services.UserApi
                 try
                 {
                     // create the user in AD.
-                    var newUser = await CreateNewUserInAD(firstname, lastname, contactEmail, isTestUser);
+                    var newUser = await CreateNewUserInAd(firstname, lastname, contactEmail, isTestUser);
                     
                     return new User
                     {
@@ -94,19 +84,19 @@ namespace BookingQueueSubscriber.Services.UserApi
             switch (userRole)
             {
                 case "Representative":
-                    await AddGroup(userId, External);
-                    await AddGroup(userId, VirtualRoomProfessionalUser);
+                    await AddGroup(userId, UserGroup.External);
+                    await AddGroup(userId, UserGroup.VirtualRoomProfessionalUser);
                     break;
                 case "Judicial Office Holder":
-                    await AddGroup(userId, External);
-                    await AddGroup(userId, JudicialOfficeHolder);
+                    await AddGroup(userId, UserGroup.External);
+                    await AddGroup(userId, UserGroup.JudicialOfficeHolder);
                     break;
                 case "StaffMember":
-                    await AddGroup(userId, Internal);
-                    await AddGroup(userId, StaffMember);
+                    await AddGroup(userId, UserGroup.Internal);
+                    await AddGroup(userId, UserGroup.StaffMember);
                     break;
                 default:
-                    await AddGroup(userId, External);
+                    await AddGroup(userId, UserGroup.External);
                     break;
             }
         }
@@ -124,14 +114,14 @@ namespace BookingQueueSubscriber.Services.UserApi
             await _userApiClient.UpdateUserAccountAsync(userId, request);
         }
         
-        private async Task<NewUserResponse> CreateNewUserInAD(string firstname, string lastname, string contactEmail, bool isTestUser)
+        private async Task<NewUserResponse> CreateNewUserInAd(string firstname, string lastname, string contactEmail, bool isTestUser)
         {
-            const string BLANK = " ";
+            const string blank = " ";
             _logger.LogInformation("Attempting to create an AD user with contact email {contactEmail}.", contactEmail);
             var createUserRequest = new CreateUserRequest
             {
-                FirstName = firstname?.Replace(BLANK, string.Empty),
-                LastName = lastname?.Replace(BLANK, string.Empty),
+                FirstName = firstname?.Replace(blank, string.Empty),
+                LastName = lastname?.Replace(blank, string.Empty),
                 RecoveryEmail = contactEmail,
                 IsTestUser = isTestUser
             };
@@ -154,33 +144,22 @@ namespace BookingQueueSubscriber.Services.UserApi
             {
                 if (e.StatusCode == (int)HttpStatusCode.NotFound)
                 {
-                    _logger.LogWarning("User with contact email {contactEmail} not found.", emailAddress);
+                    _logger.LogWarning(e, "User with contact email {contactEmail} not found.", emailAddress);
                     return null;
                 }
-
-                _logger.LogError(e, "Unhandled error getting a user with contact email {contactEmail}.", emailAddress);
+                
                 throw;
             }
         }
         private async Task AddGroup(string userId, string groupName)
         {
-            try
+            var addUserToGroupRequest = new AddUserToGroupRequest
             {
-                var addUserToGroupRequest = new AddUserToGroupRequest
-                {
-                    UserId = userId,
-                    GroupName = groupName
-                };
-                await _userApiClient.AddUserToGroupAsync(addUserToGroupRequest);
-                _logger.LogDebug("{username} to group {group}.", userId, addUserToGroupRequest.GroupName);
-            }
-            catch (UserApiException e)
-            {
-                _logger.LogError(e,
-                    $"Failed to add user {userId} to {groupName} in User API. " +
-                    $"Status Code {e.StatusCode} - Message {e.Message}");
-                throw;
-            }
+                UserId = userId,
+                GroupName = groupName
+            };
+            await _userApiClient.AddUserToGroupAsync(addUserToGroupRequest);
+            _logger.LogDebug("{username} to group {group}.", userId, addUserToGroupRequest.GroupName);
         }
     }
 }

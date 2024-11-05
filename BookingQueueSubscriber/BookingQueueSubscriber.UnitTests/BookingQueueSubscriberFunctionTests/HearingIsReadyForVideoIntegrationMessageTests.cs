@@ -1,11 +1,8 @@
-using BookingQueueSubscriber.Common.Configuration;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
-using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
 using Microsoft.Extensions.Logging;
-using NotificationApi.Contract;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests;
 
@@ -14,10 +11,8 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     private readonly IServiceProvider _serviceProvider = ServiceProviderFactory.ServiceProvider;
     private VideoApiServiceFake _videoApiService;
     private VideoWebServiceFake _videoWebService;
-    private NotificationServiceFake _notificationService;
     private BookingQueueSubscriberFunction _sut;
     private ILogger<BookingQueueSubscriberFunction> _logger;
-    private FeatureTogglesClientFake _featureToggles;
     
     [SetUp]
     public void SetUp()
@@ -25,9 +20,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
         _logger = new Mock<ILogger<BookingQueueSubscriberFunction>>().Object;
         _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
         _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
-        _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
         _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
-        _featureToggles = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
     }
     
     [TearDown]
@@ -40,8 +33,7 @@ public class HearingIsReadyForVideoIntegrationMessageTests
     [Test]
     public async Task should_process_a_single_day_hearing_ready_event_with_a_judge_only()
     {
-      var judgeEmail = "automation_judge_judge_1@hmcts.net";
-        const string message = @"{
+      const string message = @"{
   '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
   'id': 'e0bbb9ed-ce49-4e69-94e7-3e35e7010206',
   'timestamp': '2023-09-15T09:03:50.889496Z',

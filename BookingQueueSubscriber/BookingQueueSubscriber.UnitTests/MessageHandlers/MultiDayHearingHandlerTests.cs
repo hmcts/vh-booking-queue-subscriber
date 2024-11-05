@@ -2,9 +2,7 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using VideoApi.Contract.Requests;
 using VideoApi.Contract.Enums;
-using BookingsApi.Contract.V1.Enums;
 using NotificationApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -23,7 +21,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_SendHearingAmendmentNotificationAsync_when_handle_is_called_with_explicit_interface()
         {
-            var messageHandler = (IMessageHandler)new MultiDayHearingHandler(NotificationApiClientMock.Object);
+            IMessageHandler messageHandler = new MultiDayHearingHandler(NotificationApiClientMock.Object);
             var integrationEvent = GetIntegrationEvent();
             await messageHandler.HandleAsync(integrationEvent);
             var participant = integrationEvent.HearingConfirmationForParticipant;
@@ -39,9 +37,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                                 request.Representee == participant.Representee
                         )), Times.Once);
         }
-        private MultiDayHearingIntegrationEvent GetIntegrationEvent()
+        private static MultiDayHearingIntegrationEvent GetIntegrationEvent()
         {
-
             return new MultiDayHearingIntegrationEvent
             {
                 HearingConfirmationForParticipant = new HearingConfirmationForParticipantDto

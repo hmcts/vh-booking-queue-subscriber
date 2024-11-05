@@ -77,21 +77,21 @@ namespace BookingQueueSubscriber.Services.VideoWeb
         public async Task PushUnlinkedParticipantFromEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName)
         {
             var path = $"internalevent/UnlinkedParticipantFromEndpoint?conferenceId={conferenceId}&participant={participantUserName}&endpoint={jvsEndpointName}";
-            _logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
+            _logger.LogDebug("PushUnlinkedParticipantFromEndpoint ConferenceId: {ConferenceId}", conferenceId);
             await _httpClient.PostAsync(path, null);
         }
 
         public async Task PushLinkedNewParticipantToEndpoint(Guid conferenceId, string participantUserName, string jvsEndpointName)
         {
             var path = $"internalevent/LinkedNewParticipantToEndpoint?conferenceId={conferenceId}&participant={participantUserName}&endpoint={jvsEndpointName}";
-            _logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
+            _logger.LogDebug("PushLinkedNewParticipantToEndpoint ConferenceId: {ConferenceId}", conferenceId);
             await _httpClient.PostAsync(path, null);
         }
 
         public async Task PushCloseConsultationBetweenEndpointAndParticipant(Guid conferenceId, string participantUserName, string jvsEndpointName)
         {
             var path = $"internalevent/CloseConsultationBetweenEndpointAndParticipant?conferenceId={conferenceId}&participant={participantUserName}&endpoint={jvsEndpointName}";
-            _logger.LogDebug("PushNewConferenceAdded ConferenceId: {ConferenceId}", conferenceId);
+            _logger.LogDebug("PushCloseConsultationBetweenEndpointAndParticipant ConferenceId: {ConferenceId}", conferenceId);
             await _httpClient.PostAsync(path, null);
         }
 

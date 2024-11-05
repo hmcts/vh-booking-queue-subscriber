@@ -4,11 +4,11 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[3.0.3, )",
-        "resolved": "3.0.3",
-        "contentHash": "LhYCQo4ot4cepjL8y659VAi/UD1R6ujIUjpklutyoCwGGPx9kLp3IEyiZXYywojUGUJl6EHx8o/he2IbZKbsBQ==",
+        "requested": "[3.0.5, )",
+        "resolved": "3.0.5",
+        "contentHash": "2H8DS11nNgreD6RdChNUxDUzMG6nSvXmm14w1TPZCXb0hUbPxg6Cc9iVZZmxdvP7aH62A0RGDoWNE5Wz0ClJwQ==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.0.3",
+          "BookingsApi.Common.DotNet6": "3.0.5",
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "System.Text.Json": "8.0.0"
         }
@@ -35,9 +35,9 @@
       },
       "NotificationApi.Client": {
         "type": "Direct",
-        "requested": "[2.3.4, )",
-        "resolved": "2.3.4",
-        "contentHash": "BwxsCI+DORSasyvqktvdWt2jUJIrxwTgLDVx/3sOBDJkqMKJsn+glINBsQ7/kgyldaZningYYuasa3+JIFSVKA==",
+        "requested": "[3.0.1, )",
+        "resolved": "3.0.1",
+        "contentHash": "L6h6zm+daH241BdN0hfLABh7q743aoCOs7sPE2wfiooyGN0KzLtK0aEPIJGeibURMZIgHDT/CV8d7wQwj6XeaQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.3"
@@ -76,9 +76,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[3.0.1, )",
-        "resolved": "3.0.1",
-        "contentHash": "CZg1mB21pKJyG+x3rFaSD+h0iunmF067eTCHjjYCjh1VYmeJ/dAWnbSLewEnloqlL36ZnKFQcBj1tDDQzVZ/TQ==",
+        "requested": "[3.0.3, )",
+        "resolved": "3.0.3",
+        "contentHash": "VVlCmvcbyiMo5lP/KLNqi4T+VFe0CIfbhYr8YPm8WzKoXu97Cqp5hWDL2rLW/9PYn95UKvrDSC42BAPD8CjItQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "System.Text.Json": "8.0.4"
@@ -86,8 +86,8 @@
       },
       "BookingsApi.Common.DotNet6": {
         "type": "Transitive",
-        "resolved": "3.0.3",
-        "contentHash": "gkiALOAs+FD6Zn6vsgKqI6R+Ko+qGY6vm+WyIPsuXpaZQ4jqGJ6Z56rNmfNXD87KrKwtwk7uE/B63HIS1ZKX/w==",
+        "resolved": "3.0.5",
+        "contentHash": "31drJq2GLeosigbFD7xXywZRCCGAEYF0JdiqI1hvu3dNDN6Cacr+xwvIoA5UmpdgAo8J1CX1ba6LfGNnPhHNiw==",
         "dependencies": {
           "System.Text.Json": "8.0.0"
         }
@@ -1748,7 +1748,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[3.0.3, )",
+          "BookingsApi.Client": "[3.0.5, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",

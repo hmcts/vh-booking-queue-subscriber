@@ -2,6 +2,7 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using Microsoft.Extensions.Logging;
+using NotificationApi.Contract.Requests;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
 
@@ -9,7 +10,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
     public class JudgeUpdatedHandlerTests : MessageHandlerTestBase
     {
-        private readonly Mock<ILogger<JudgeUpdatedHandler>> _logger = new Mock<ILogger<JudgeUpdatedHandler>>();
+        private readonly Mock<ILogger<JudgeUpdatedHandler>> _logger = new();
         private ConferenceDetailsResponse _mockConferenceDetailsResponse;
 
         [SetUp]
@@ -17,7 +18,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             _mockConferenceDetailsResponse = new ConferenceDetailsResponse{Participants = new List<ParticipantResponse>
             {
-                new ParticipantResponse
+                new()
                 {
                     ContactEmail = "Judge@email.com"
                 }
@@ -29,8 +30,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_send_notification_and_update_participant_details()
         {
-            var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, UserCreationAndNotificationMock.Object, _logger.Object);
-
             var integrationEvent = new JudgeUpdatedIntegrationEvent()
             {
                 Hearing = new HearingDto(), 
@@ -42,16 +41,31 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 },
                 SendNotification = true
             };
+            NotificationApiClientMock
+                .Setup(c => c.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(
+                        It.IsAny<ExistingUserSingleDayHearingConfirmationRequest>()))
+                .Returns(Task.CompletedTask);
+            var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, NotificationApiClientMock.Object, _logger.Object);
+            
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), Times.Once);
-            UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<ParticipantDto[]>()), Times.Once);
+            
+            VideoApiServiceMock.Verify(
+                x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()),
+                Times.Once
+            );
+            NotificationApiClientMock.Verify(
+                x => x.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(
+                    It.Is<ExistingUserSingleDayHearingConfirmationRequest>(r =>
+                        r.HearingId == integrationEvent.Hearing.HearingId &&
+                        r.ContactEmail == integrationEvent.Judge.ContactEmail)
+                ),
+                Times.Once
+            );
         }
         
         [Test]
         public async Task should_not_send_notification_and_update_participant_details()
         {
-            var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, UserCreationAndNotificationMock.Object, _logger.Object);
-
             var integrationEvent = new JudgeUpdatedIntegrationEvent()
             {
                 Hearing = new HearingDto(), 
@@ -63,20 +77,48 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 },
                 SendNotification = false
             };
+            NotificationApiClientMock
+                .Setup(c => c.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(
+                    It.IsAny<ExistingUserSingleDayHearingConfirmationRequest>()))
+                .Returns(Task.CompletedTask);
+            var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, NotificationApiClientMock.Object, _logger.Object);
+            
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), Times.Once);
-            UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<ParticipantDto[]>()), Times.Never);
+            
+            VideoApiServiceMock.Verify(
+                x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), 
+                Times.Once
+            );
+            NotificationApiClientMock.Verify(
+                x => x.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(
+                    It.IsAny<ExistingUserSingleDayHearingConfirmationRequest>()
+                ), 
+                Times.Never
+            );
         }
 
         [Test]
         public async Task should_not_send_notification_but_still_update_participant_details()
         {
-            var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, UserCreationAndNotificationMock.Object, _logger.Object);
-
+            NotificationApiClientMock
+                .Setup(c => c.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(
+                    It.IsAny<ExistingUserSingleDayHearingConfirmationRequest>()))
+                .Returns(Task.CompletedTask);
+            var messageHandler = new JudgeUpdatedHandler(VideoApiServiceMock.Object, NotificationApiClientMock.Object, _logger.Object);
             var integrationEvent = new JudgeUpdatedIntegrationEvent() { Hearing = new HearingDto(), Judge = new ParticipantDto{ContactEmail = "Judge@email.com", UserRole = "Judge", HearingRole = "Judge"}};
+            
             await messageHandler.HandleAsync(integrationEvent);
-            VideoApiServiceMock.Verify(x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), Times.Once);
-            UserCreationAndNotificationMock.Verify(x => x.SendHearingNotificationAsync(It.IsAny<HearingDto>(), It.IsAny<ParticipantDto[]>()), Times.Never);
+            
+            VideoApiServiceMock.Verify(
+                x => x.UpdateParticipantDetails(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<UpdateParticipantRequest>()), 
+                Times.Once
+            );
+            NotificationApiClientMock.Verify(
+                x => x.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(
+                    It.IsAny<ExistingUserSingleDayHearingConfirmationRequest>()
+                ), 
+                Times.Never
+            );
         }
     }
 }

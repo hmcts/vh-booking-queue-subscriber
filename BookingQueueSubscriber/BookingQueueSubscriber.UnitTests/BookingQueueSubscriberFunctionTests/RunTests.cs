@@ -1,12 +1,9 @@
-﻿using BookingQueueSubscriber.Common.Configuration;
-using BookingQueueSubscriber.Services;
-using BookingQueueSubscriber.Services.MessageHandlers.Core;
+﻿using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
-using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NotificationApi.Client;
@@ -20,11 +17,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         private VideoApiServiceFake _videoApiService;
         private VideoWebServiceFake _videoWebService;
         private NotificationApiClientFake _notificationApiClient;
-        private NotificationServiceFake _notificationService;
         private UserServiceFake _userService;
-        private BookingsApiClientFake _bookingsApi;
         private BookingQueueSubscriberFunction _sut;
-        private FeatureTogglesClientFake _featureTogglesClient;
         private ILogger<BookingQueueSubscriberFunction> _logger;
 
         [OneTimeSetUp]
@@ -34,10 +28,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _videoApiService = (VideoApiServiceFake) _serviceProvider.GetService<IVideoApiService>();
             _videoWebService = (VideoWebServiceFake) _serviceProvider.GetService<IVideoWebService>();
             _notificationApiClient = (NotificationApiClientFake)_serviceProvider.GetService<INotificationApiClient>();
-            _notificationService = (NotificationServiceFake) _serviceProvider.GetService<INotificationService>();
             _userService = (UserServiceFake)_serviceProvider.GetService<IUserService>();
-            _bookingsApi = (BookingsApiClientFake)_serviceProvider.GetService<IBookingsApiClient>();
-            _featureTogglesClient = (FeatureTogglesClientFake)_serviceProvider.GetService<IFeatureToggles>();
             _sut = new BookingQueueSubscriberFunction(new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider), _logger);
         }
 
@@ -417,109 +408,6 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             notificationRequest.Representee.Should().Be("");
             notificationRequest.Username.Should().Be("Automation_338564597@hmcts.net");
                    
-        }
-
-        [Test]
-        public async Task Should_handle_hearing_datetime_changed_integration_event()
-        {
-            const string message = @"{
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
-            'id': '71d5c03b-6f19-430b-805d-ce5778a96240',
-            'timestamp': '2022-06-21T09:41:55.2323374Z',
-            'integration_event': {
-            '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingDateTimeChangedIntegrationEvent, BookingsApi.Infrastructure.Services',
-            'hearing': {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
-            'hearing_id': '2018cdcd-880a-418b-b6eb-0237e2f828a8',
-            'group_id': null,
-            'scheduled_date_time': '2022-06-25T11:00:26.507Z',
-            'scheduled_duration': 50,
-            'case_type': 'Civil',
-            'case_number': 'SingleDayWithJudge-API',
-            'case_name': 'SingleDayWithJudge-API',
-            'hearing_venue_name': 'Aberdeen Tribunal Hearing Centre',
-            'record_audio': true
-            },
-            'old_scheduled_date_time': '2022-06-24T14:00:26.507Z',
-            'participants': [
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '347035a0-cf21-431c-bdde-23328da2afdb',
-            'fullname': 'Mrs Manual_VW Individual_68',
-            'username': 'manual_vw.individual_68@hearings.reform.hmcts.net',
-            'first_name': 'Manual_VW',
-            'last_name': 'Individual_68',
-            'contact_email': 'manual_vw.individual_68@hmcts.net',
-            'contact_telephone': '+44(0)06713491637',
-            'display_name': 'CLIP',
-            'hearing_role': 'Litigant in person',
-            'user_role': 'Individual',
-            'case_group_type': 'claimant',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null
-            },
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '4a42aa0b-9df2-4178-945b-73261a552e78',
-            'fullname': ' Manual_VW PanelMember_08',
-            'username': 'manual_vw.panelmember_08@hearings.reform.hmcts.net',
-            'first_name': 'Manual_VW',
-            'last_name': 'PanelMember_08',
-            'contact_email': 'manual_vw.panelmember_08@hmcts.net',
-            'contact_telephone': '+44(0)06713491637',
-            'display_name': 'AAD PM',
-            'hearing_role': 'Panel Member',
-            'user_role': 'Judicial Office Holder',
-            'case_group_type': 'panelMember',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null
-            },
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '5e61893f-d25f-4e50-8eee-75277f7d3226',
-            'fullname': ' Manual_VW Representative_31',
-            'username': 'manual_vw.representative_31@hearings.reform.hmcts.net',
-            'first_name': 'Manual_VW',
-            'last_name': 'Representative_31',
-            'contact_email': 'manual_vw.representative_31@hmcts.net',
-            'contact_telephone': '+44(0)06713491637',
-            'display_name': 'representative_31',
-            'hearing_role': 'Representative',
-            'user_role': 'Representative',
-            'case_group_type': 'defendant',
-            'representee': 'DEF',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': null,
-            'contact_phone_for_non_e_jud_judge_user': null
-            },
-            {
-            '$type': 'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
-            'participant_id': '74a5b6a3-2430-4080-8ed2-aa17806d42ad',
-            'fullname': ' Manchester CFJC Courtroom10',
-            'username': 'ManchesterCFJCcourt10@hearings.reform.hmcts.net',
-            'first_name': 'Manchester CFJC',
-            'last_name': 'Courtroom10',
-            'contact_email': 'ManchesterCFJCcourt10@hearings.reform.hmcts.net',
-            'contact_telephone': '+44(0)06713491637',
-            'display_name': 'Judge James',
-            'hearing_role': 'Judge',
-            'user_role': 'Judge',
-            'case_group_type': 'judge',
-            'representee': '',
-            'linked_participants': [],
-            'contact_email_for_non_e_jud_judge_user': '',
-            'contact_phone_for_non_e_jud_judge_user': ''
-            }
-            ]
-            }
-            }";
-            await _sut.Run(message);
-
-            _videoApiService.BookNewConferenceCount.Should().Be(0);
         }
 
         [Test]

@@ -27,9 +27,12 @@ namespace BookingQueueSubscriber.Services
 
         public Type BindToType(string assemblyName, string typeName)
         {
-            var typeShortName = typeName.Trim().Split('.').Last();
-            var bindToType = _typesBySimpleName.ContainsKey(typeShortName) ? _typesBySimpleName[typeShortName] : null;
-            return bindToType;
+            var typeShortName = typeName.Trim().Split('.')[^1];
+            if (_typesBySimpleName.TryGetValue(typeShortName, out var bindToType))
+            {
+                return bindToType;
+            }
+            throw new InvalidOperationException($"Type '{typeShortName}' not found in the provided assembly.");
         }
 
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)

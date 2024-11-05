@@ -1,19 +1,20 @@
 using BookingQueueSubscriber.Services.Mappers;
 using BookingQueueSubscriber.Services.VideoApi;
+using NotificationApi.Client;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
     public class JudgeUpdatedHandler : IMessageHandler<JudgeUpdatedIntegrationEvent>
     {
         private readonly IVideoApiService _apiService;
-        private readonly IUserCreationAndNotification _userCreationAndNotification;
+        private readonly INotificationApiClient _notificationApiClient;
         private readonly ILogger _logger;
 
-        public JudgeUpdatedHandler(IVideoApiService apiService, IUserCreationAndNotification userCreationAndNotification, ILogger logger)
+        public JudgeUpdatedHandler(IVideoApiService apiService, INotificationApiClient notificationApiClient, ILogger logger)
         {
             _logger = logger;
             _apiService = apiService;
-            _userCreationAndNotification = userCreationAndNotification;
+            _notificationApiClient = notificationApiClient;
         }
 
         public async Task HandleAsync(JudgeUpdatedIntegrationEvent eventMessage)
@@ -25,13 +26,18 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(eventMessage.Judge);
                 if(judgeResponse.ContactEmail != request.ContactEmail && eventMessage.SendNotification)
-                    await _userCreationAndNotification.SendHearingNotificationAsync(eventMessage.Hearing, new[] {eventMessage.Judge});
+                    await SendNotification(eventMessage);
                 await _apiService.UpdateParticipantDetails(conferenceResponse.Id, judgeResponse.Id, request);
             }
             else
                 _logger.LogError("Unable to find judge participant by ref id {ParticipantRefId} in {ConferenceId}", eventMessage.Judge.ParticipantId, conferenceResponse.Id);
-        } 
-        
+        }
+
+        private async Task SendNotification(JudgeUpdatedIntegrationEvent eventMessage)
+        {
+            var request = NotificationRequestHelper.BuildExistingUserSingleDayHearingConfirmationRequest(eventMessage.Hearing, eventMessage.Judge);
+            await _notificationApiClient.SendParticipantSingleDayHearingConfirmationForExistingUserEmailAsync(request);
+        }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent) => await HandleAsync((JudgeUpdatedIntegrationEvent)integrationEvent);
         
