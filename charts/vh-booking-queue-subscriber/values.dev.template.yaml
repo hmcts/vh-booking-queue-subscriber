@@ -3,7 +3,9 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   environment:
-    QUEUENAME: booking
+    QUEUENAME: oliver-booking
+    VHSERVICES__VIDEOWEBURL : https://vh-video-web-pr-2294.dev.platform.hmcts.net/
+    VHSERVICES__VIDEOAPIURL : https://vh-video-api-pr-693.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
