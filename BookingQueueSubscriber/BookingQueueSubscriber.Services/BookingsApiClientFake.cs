@@ -74,12 +74,12 @@ namespace BookingQueueSubscriber.Services
 
         public Task UpdateBookingStatusAsync(Guid hearingId)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task UpdateBookingStatusAsync(Guid hearingId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task FailBookingAsync(Guid hearingId)
@@ -344,12 +344,12 @@ namespace BookingQueueSubscriber.Services
 
         public Task UpdatePersonUsernameAsync(string contactEmail, string username)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task UpdatePersonUsernameAsync(string contactEmail, string username, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<JusticeUserResponse> AllocateHearingAutomaticallyAsync(Guid hearingId)
