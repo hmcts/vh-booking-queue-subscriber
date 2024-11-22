@@ -4,7 +4,6 @@ using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Requests;
-using BookingsApi.Contract.V1.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 {
@@ -140,7 +139,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 HearingId = HearingId, Participant = new ParticipantDto
                 {
                     ParticipantId = ParticipantId,
-                    CaseGroupType = CaseRoleGroup.Applicant,
                     DisplayName = "displayName",
                     Fullname = "fullname",
                     FirstName = "firstName",
@@ -164,7 +162,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 {
                     ParticipantId = ParticipantId,
                     LinkedId = Guid.NewGuid(),
-                    Type = Services.MessageHandlers.Dtos.LinkedParticipantType.Interpreter
+                    Type = LinkedParticipantType.Interpreter
                 }
             };
             return integrationEvent;

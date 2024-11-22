@@ -11,95 +11,12 @@ namespace BookingQueueSubscriber.Services
     [ExcludeFromCodeCoverage]
     public class BookingsApiClientFake : IBookingsApiClient
     {
-        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<CaseTypeResponse>> GetCaseTypesAsync(bool? includeDeleted, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeParam)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<CaseRoleResponse>> GetCaseRolesForCaseTypeAsync(string caseTypeParam, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponse>> GetHearingRolesForCaseRoleAsync(string caseTypeName, string caseRoleName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponse>> GetHearingRolesForCaseRoleAsync(string caseTypeName, string caseRoleName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<EndpointResponse> AddEndPointToHearingAsync(Guid hearingId, AddEndpointRequest addEndpointRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<EndpointResponse> AddEndPointToHearingAsync(Guid hearingId, AddEndpointRequest addEndpointRequest,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task RemoveEndPointFromHearingAsync(Guid hearingId, Guid endpointId)
         {
             throw new NotImplementedException();
         }
 
         public Task RemoveEndPointFromHearingAsync(Guid hearingId, Guid endpointId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateDisplayNameForEndpointAsync(Guid hearingId, Guid endpointId, UpdateEndpointRequest updateEndpointRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateDisplayNameForEndpointAsync(Guid hearingId, Guid endpointId, UpdateEndpointRequest updateEndpointRequest,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ParticipantResponse>> GetAllParticipantsInHearingAsync(Guid hearingId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ParticipantResponse>> GetAllParticipantsInHearingAsync(Guid hearingId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ParticipantResponse>> AddParticipantsToHearingAsync(Guid hearingId, AddParticipantsToHearingRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ParticipantResponse>> AddParticipantsToHearingAsync(Guid hearingId, AddParticipantsToHearingRequest request,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ParticipantResponse> GetParticipantInHearingAsync(Guid hearingId, Guid participantId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ParticipantResponse> GetParticipantInHearingAsync(Guid hearingId, Guid participantId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -114,64 +31,33 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ParticipantResponse> UpdateParticipantDetailsAsync(Guid hearingId, Guid participantId, UpdateParticipantRequest request)
+        public Task AnonymiseParticipantAndCaseByHearingIdAsync(IEnumerable<Guid> hearingIds)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ParticipantResponse> UpdateParticipantDetailsAsync(Guid hearingId, Guid participantId, UpdateParticipantRequest request,
+        public Task AnonymiseParticipantAndCaseByHearingIdAsync(IEnumerable<Guid> hearingIds, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request,
             CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateHearingParticipantsAsync(Guid hearingId, UpdateHearingParticipantsRequest request)
+        public Task RebookHearingAsync(Guid hearingId)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateHearingParticipantsAsync(Guid hearingId, UpdateHearingParticipantsRequest request,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponseV2>> GetHearingRolesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponseV2>> GetHearingRolesAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponseV2>> GetHearingRoles2Async()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponseV2>> GetHearingRoles2Async(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HearingDetailsResponse> GetHearingDetailsByIdAsync(Guid hearingId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HearingDetailsResponse> GetHearingDetailsByIdAsync(Guid hearingId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HearingDetailsResponse> UpdateHearingDetailsAsync(Guid hearingId, UpdateHearingRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HearingDetailsResponse> UpdateHearingDetailsAsync(Guid hearingId, UpdateHearingRequest request, CancellationToken cancellationToken)
+        public Task RebookHearingAsync(Guid hearingId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -188,110 +74,10 @@ namespace BookingQueueSubscriber.Services
 
         public Task UpdateBookingStatusAsync(Guid hearingId)
         {
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         public Task UpdateBookingStatusAsync(Guid hearingId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsByUsernameAsync(string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsByUsernameAsync(string username, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HearingDetailsResponse> BookNewHearingAsync(BookNewHearingRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<HearingDetailsResponse> BookNewHearingAsync(BookNewHearingRequest request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ConfirmedHearingsTodayResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ConfirmedHearingsTodayResponse>> GetConfirmedHearingsByUsernameForTodayAsync(string username, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AnonymiseParticipantAndCaseByHearingIdAsync(IEnumerable<Guid> hearingIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AnonymiseParticipantAndCaseByHearingIdAsync(IEnumerable<Guid> hearingIds, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsByGroupIdAsync(Guid groupId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsByGroupIdAsync(Guid groupId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public Task UpdateHearingsInGroupAsync(Guid groupId, UpdateHearingsInGroupRequest request)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public Task UpdateHearingsInGroupAsync(Guid groupId, UpdateHearingsInGroupRequest request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public Task CancelHearingsInGroupAsync(Guid groupId, CancelHearingsInGroupRequest request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingNotificationResponse>> GetHearingsForNotificationAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingNotificationResponse>> GetHearingsForNotificationAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RebookHearingAsync(Guid hearingId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RebookHearingAsync(Guid hearingId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> CloneHearingAsync(Guid hearingId, CloneHearingRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> CloneHearingAsync(Guid hearingId, CloneHearingRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -310,7 +96,7 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task CancelBookingAsync(Guid hearingId, CancelBookingRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -346,26 +132,6 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsForTodayAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsForTodayAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsForTodayByVenueAsync(IEnumerable<string> venueNames)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetHearingsForTodayByVenueAsync(IEnumerable<string> venueNames, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<ICollection<HearingVenueResponse>> GetHearingVenuesAsync(bool? excludeExpiredVenue)
         {
             throw new NotImplementedException();
@@ -396,16 +162,6 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<InterpreterLanguagesResponse>> GetAvailableInterpreterLanguagesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<InterpreterLanguagesResponse>> GetAvailableInterpreterLanguagesAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task UpdateJobHistoryAsync(string jobName, bool isSuccessful)
         {
             throw new NotImplementedException();
@@ -422,49 +178,6 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<ICollection<JobHistoryResponse>> GetJobHistoryAsync(string jobName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<JudiciaryParticipantResponse>> AddJudiciaryParticipantsToHearingAsync(Guid hearingId, IEnumerable<JudiciaryParticipantRequest> request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<JudiciaryParticipantResponse>> AddJudiciaryParticipantsToHearingAsync(Guid hearingId, IEnumerable<JudiciaryParticipantRequest> request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveJudiciaryParticipantFromHearingAsync(Guid hearingId, string personalCode)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveJudiciaryParticipantFromHearingAsync(Guid hearingId, string personalCode,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<JudiciaryParticipantResponse> UpdateJudiciaryParticipantAsync(Guid hearingId, string personalCode, UpdateJudiciaryParticipantRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<JudiciaryParticipantResponse> UpdateJudiciaryParticipantAsync(Guid hearingId, string personalCode, UpdateJudiciaryParticipantRequest request,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<JudiciaryParticipantResponse> ReassignJudiciaryJudgeAsync(Guid hearingId, ReassignJudiciaryJudgeRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<JudiciaryParticipantResponse> ReassignJudiciaryJudgeAsync(Guid hearingId, ReassignJudiciaryJudgeRequest request,
-            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -579,62 +292,12 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<ParticipantResponse>> GetParticipantsByUsernameAsync(string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ParticipantResponse>> GetParticipantsByUsernameAsync(string username, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PersonResponse> GetPersonByUsernameAsync(string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PersonResponse> GetPersonByUsernameAsync(string username, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<ICollection<HearingsByUsernameForDeletionResponse>> GetHearingsByUsernameForDeletionAsync(string username)
         {
             throw new NotImplementedException();
         }
 
         public Task<ICollection<HearingsByUsernameForDeletionResponse>> GetHearingsByUsernameForDeletionAsync(string username, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PersonResponse> GetPersonByContactEmailAsync(string contactEmail)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PersonResponse> GetPersonByContactEmailAsync(string contactEmail, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<PersonResponse>> PostPersonBySearchTermAsync(SearchTermRequest term)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<PersonResponse>> PostPersonBySearchTermAsync(SearchTermRequest term, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PersonResponse> SearchForNonJudgePersonsByContactEmailAsync(string contactEmail)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PersonResponse> SearchForNonJudgePersonsByContactEmailAsync(string contactEmail, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -679,19 +342,9 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task UpdatePersonDetailsAsync(Guid personId, UpdatePersonDetailsRequest payload)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdatePersonDetailsAsync(Guid personId, UpdatePersonDetailsRequest payload, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task UpdatePersonUsernameAsync(string contactEmail, string username)
         {
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         public Task UpdatePersonUsernameAsync(string contactEmail, string username, CancellationToken cancellationToken)
@@ -705,26 +358,6 @@ namespace BookingQueueSubscriber.Services
         }
 
         public Task<JusticeUserResponse> AllocateHearingAutomaticallyAsync(Guid hearingId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetUnallocatedHearingsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponse>> GetUnallocatedHearingsAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<AllocatedCsoResponse>> GetAllocationsForHearingsAsync(IEnumerable<Guid> hearingIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<AllocatedCsoResponse>> GetAllocationsForHearingsAsync(IEnumerable<Guid> hearingIds, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -822,22 +455,12 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<CaseRoleResponseV2>> GetCaseRolesForCaseServiceAsync(string serviceId)
+        public Task<ICollection<CaseTypeResponseV2>> GetCaseTypesV2Async(bool? includeDeleted)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<CaseRoleResponseV2>> GetCaseRolesForCaseServiceAsync(string serviceId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponseV2>> GetHearingRolesForCaseRoleV2Async(string serviceId, string caseRoleName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingRoleResponseV2>> GetHearingRolesForCaseRoleV2Async(string serviceId, string caseRoleName, CancellationToken cancellationToken)
+        public Task<ICollection<CaseTypeResponseV2>> GetCaseTypesV2Async(bool? includeDeleted, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -864,6 +487,36 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayV2Async()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayV2Async(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByVenueV2Async(IEnumerable<string> venueNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByVenueV2Async(IEnumerable<string> venueNames, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ConfirmedHearingsTodayResponseV2>> GetConfirmedHearingsByUsernameForTodayV2Async(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<ConfirmedHearingsTodayResponseV2>> GetConfirmedHearingsByUsernameForTodayV2Async(string username, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByCsosV2Async(HearingsForTodayByAllocationRequestV2 request)
         {
             throw new NotImplementedException();
@@ -871,6 +524,16 @@ namespace BookingQueueSubscriber.Services
 
         public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByCsosV2Async(HearingsForTodayByAllocationRequestV2 request,
             CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingNotificationResponseV2>> GetHearingsForNotificationAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingNotificationResponseV2>> GetHearingsForNotificationAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -904,6 +567,16 @@ namespace BookingQueueSubscriber.Services
 
         public Task<ICollection<ParticipantResponseV2>> UpdateHearingParticipantsV2Async(Guid hearingId, UpdateHearingParticipantsRequestV2 request,
             CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingRoleResponseV2>> GetHearingRolesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingRoleResponseV2>> GetHearingRolesAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -947,43 +620,128 @@ namespace BookingQueueSubscriber.Services
         {
             throw new NotImplementedException();
         }
-        
+
         public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request)
         {
             throw new NotImplementedException();
         }
-        
-        public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request, CancellationToken cancellationToken)
+
+        public Task UpdateHearingsInGroupV2Async(Guid groupId, UpdateHearingsInGroupRequestV2 request,
+            CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayV2Async()
+        public Task<ICollection<HearingDetailsResponseV2>> CloneHearingAsync(Guid hearingId, CloneHearingRequestV2 request)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayV2Async(CancellationToken cancellationToken)
+        public Task<ICollection<HearingDetailsResponseV2>> CloneHearingAsync(Guid hearingId, CloneHearingRequestV2 request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByVenueV2Async(IEnumerable<string> venueNames)
+        public Task<ICollection<InterpreterLanguagesResponse>> GetAvailableInterpreterLanguagesAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponseV2>> GetHearingsForTodayByVenueV2Async(IEnumerable<string> venueNames, CancellationToken cancellationToken)
+        public Task<ICollection<InterpreterLanguagesResponse>> GetAvailableInterpreterLanguagesAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<ConfirmedHearingsTodayResponseV2>> GetConfirmedHearingsByUsernameForTodayV2Async(string username)
+        public Task<ICollection<JudiciaryParticipantResponse>> AddJudiciaryParticipantsToHearingAsync(Guid hearingId, IEnumerable<JudiciaryParticipantRequest> request)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<ConfirmedHearingsTodayResponseV2>> GetConfirmedHearingsByUsernameForTodayV2Async(string username, CancellationToken cancellationToken)
+        public Task<ICollection<JudiciaryParticipantResponse>> AddJudiciaryParticipantsToHearingAsync(Guid hearingId, IEnumerable<JudiciaryParticipantRequest> request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveJudiciaryParticipantFromHearingAsync(Guid hearingId, string personalCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveJudiciaryParticipantFromHearingAsync(Guid hearingId, string personalCode,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JudiciaryParticipantResponse> UpdateJudiciaryParticipantAsync(Guid hearingId, string personalCode, UpdateJudiciaryParticipantRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JudiciaryParticipantResponse> UpdateJudiciaryParticipantAsync(Guid hearingId, string personalCode, UpdateJudiciaryParticipantRequest request,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JudiciaryParticipantResponse> ReassignJudiciaryJudgeAsync(Guid hearingId, ReassignJudiciaryJudgeRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<JudiciaryParticipantResponse> ReassignJudiciaryJudgeAsync(Guid hearingId, ReassignJudiciaryJudgeRequest request,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<PersonResponseV2>> SearchForPersonV2Async(SearchTermRequestV2 term)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<PersonResponseV2>> SearchForPersonV2Async(SearchTermRequestV2 term, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PersonResponseV2> SearchForNonJudgePersonsByContactEmailV2Async(string contactEmail)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PersonResponseV2> SearchForNonJudgePersonsByContactEmailV2Async(string contactEmail, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdatePersonDetailsV2Async(Guid personId, UpdatePersonDetailsRequestV2 payload)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdatePersonDetailsV2Async(Guid personId, UpdatePersonDetailsRequestV2 payload,
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearingsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearingsAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearings2Async()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearings2Async(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

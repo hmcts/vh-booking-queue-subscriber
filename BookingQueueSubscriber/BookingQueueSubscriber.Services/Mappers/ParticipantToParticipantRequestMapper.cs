@@ -1,7 +1,5 @@
 using BookingQueueSubscriber.Services.MessageHandlers.Extensions;
 using VideoApi.Contract.Requests;
-using VideoWebRequests = BookingQueueSubscriber.Services.VideoWeb;
-using VideoApiRequests = VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.Mappers
 {
@@ -21,7 +19,7 @@ namespace BookingQueueSubscriber.Services.Mappers
                 DisplayName = participant.DisplayName,
                 UserRole = participant.MapUserRoleToContractEnum(),
                 HearingRole = participant.HearingRole,
-                CaseTypeGroup = participant.CaseGroupType.ToString(),
+                CaseTypeGroup = "Obsolete",
                 ParticipantRefId = participant.ParticipantId,
                 Representee = participant.Representee,
                 LinkedParticipants = LinkedParticipantToRequestMapper.MapToLinkedParticipantRequestList(participant.LinkedParticipants)

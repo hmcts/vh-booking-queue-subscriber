@@ -1,7 +1,6 @@
 using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingsApi.Contract.V1.Enums;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -45,7 +44,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     && r.ExistingParticipants[0].Representee == _integrationEvent.ExistingParticipants[0].Representee
                     && r.ExistingParticipants[0].Username == _integrationEvent.ExistingParticipants[0].Username
 
-                    && r.NewParticipants[0].CaseTypeGroup == _integrationEvent.NewParticipants[0].CaseGroupType.ToString()
                     && r.NewParticipants[0].ContactEmail == _integrationEvent.NewParticipants[0].ContactEmail
                     && r.NewParticipants[0].ContactTelephone == _integrationEvent.NewParticipants[0].ContactTelephone
                     && r.NewParticipants[0].DisplayName == _integrationEvent.NewParticipants[0].DisplayName
@@ -87,7 +85,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     new()
                     {
                         ParticipantId = ParticipantId,
-                        CaseGroupType = CaseRoleGroup.Applicant,
                         DisplayName = "displayName",
                         Fullname = "fullname",
                         FirstName = "firstName",
@@ -105,7 +102,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     new()
                     {
                         ParticipantId = ParticipantId,
-                        CaseGroupType = CaseRoleGroup.Applicant,
                         DisplayName = "displayName",
                         Fullname = "fullname",
                         FirstName = "firstName",
@@ -125,7 +121,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         LinkedId = Guid.NewGuid(),
                         ParticipantId = Guid.NewGuid(),
-                        Type = Services.MessageHandlers.Dtos.LinkedParticipantType.Interpreter
+                        Type = LinkedParticipantType.Interpreter
                     }
                 },
             };
