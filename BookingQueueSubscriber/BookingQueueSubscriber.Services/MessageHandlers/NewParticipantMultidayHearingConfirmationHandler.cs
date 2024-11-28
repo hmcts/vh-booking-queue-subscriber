@@ -1,8 +1,10 @@
 ﻿using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
 using BookingsApi.Client;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -12,16 +14,19 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly INotificationApiClient _notificationApiClient;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly IVideoApiService _videoApiService;
+        private readonly IVideoWebService _videoWebService;
 
         public NewParticipantMultidayHearingConfirmationHandler(IUserService userService,
             INotificationApiClient notificationApiClient,
             IBookingsApiClient bookingsApiClient,
-            IVideoApiService videoApiService)
+            IVideoApiService videoApiService,
+            IVideoWebService videoWebService)
         {
             _userService = userService;
             _notificationApiClient = notificationApiClient;
             _bookingsApiClient = bookingsApiClient;
             _videoApiService = videoApiService;
+            _videoWebService = videoWebService;
         }
 
         public async Task HandleAsync(NewParticipantMultidayHearingConfirmationEvent eventMessage)
@@ -51,6 +56,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             await _videoApiService.UpdateParticipantUsernameWithPolling(message.HearingId, newUser.UserName, message.ContactEmail);
             await _userService.AssignUserToGroup(newUser.UserId, message.UserRole);
             await _notificationApiClient.SendParticipantMultiDayHearingConfirmationForNewUserEmailAsync(request);
+            var conference = await _videoApiService.GetConferenceByHearingRefId(message.HearingId);
+            await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, new UpdateConferenceParticipantsRequest());
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)
