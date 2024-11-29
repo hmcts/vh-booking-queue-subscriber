@@ -4,6 +4,7 @@ using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using BookingQueueSubscriber.Services.UserApi;
 using VideoApi.Contract.Enums;
+using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -13,7 +14,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         [Test]
         public async Task should_call_user_creation_and_notification_when_request_is_valid()
         {
-            var messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            var messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object, VideoWebServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
@@ -35,12 +36,13 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             BookingsApiClientMock.Verify(x => x.UpdatePersonUsernameAsync(participant.ContactEmail, participant.Username), Times.Once);
             UserServiceMock.Verify(x => x.AssignUserToGroup(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            VerifyParticipantsUpdateMessagePushedToVideoWeb();
         }
 
         [Test]
         public async Task should_call_CreateUserAndNotificationAsync_when_handle_is_called_with_explicit_interface()
         {
-            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
@@ -63,12 +65,13 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             UserServiceMock.Verify(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false), Times.Once);
             NotificationApiClientMock.Verify(x => x.SendParticipantCreatedAccountEmailAsync(It.IsAny<NotificationApi.Contract.Requests.SignInDetailsEmailRequest>()));
+            VerifyParticipantsUpdateMessagePushedToVideoWeb();
         }
         
          [Test]
         public async Task should_call_HandleAssignUserToGroup_when_request_has_created_user_accounts()
         {
-            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object, VideoWebServiceMock.Object);
             var integrationEvent = GetIntegrationEvent();
             var participant = integrationEvent.HearingConfirmationForParticipant;
             UserServiceMock.Setup(x => x.CreateNewUserForParticipantAsync(participant.FirstName, participant.LastName, participant.ContactEmail, false)).ReturnsAsync(
@@ -88,6 +91,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             await messageHandler.HandleAsync(integrationEvent);
             UserServiceMock.Verify(x => x.AssignUserToGroup(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            VerifyParticipantsUpdateMessagePushedToVideoWeb();
         }
 
         [Test]
@@ -111,11 +115,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     }
                 });
 
-            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object);
+            IMessageHandler messageHandler = new CreateAndNotifyUserHandler(UserServiceMock.Object, NotificationApiClientMock.Object, BookingsApiClientMock.Object, VideoApiServiceMock.Object, VideoWebServiceMock.Object);
 
             await messageHandler.HandleAsync(integrationEvent);
 
             UserServiceMock.Verify(x => x.AssignUserToGroup(user.UserId, participant.UserRole));
+            VerifyParticipantsUpdateMessagePushedToVideoWeb();
         } 
 
         private static CreateAndNotifyUserIntegrationEvent GetIntegrationEvent()
@@ -139,6 +144,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     UserRole = UserRole.Individual.ToString()
                 }
             };
+        }
+
+        private void VerifyParticipantsUpdateMessagePushedToVideoWeb()
+        {
+            VideoWebServiceMock.Verify(x => x.PushParticipantsUpdatedMessage(It.IsAny<Guid>(), It.IsAny<UpdateConferenceParticipantsRequest>()));
         }
     }
 }

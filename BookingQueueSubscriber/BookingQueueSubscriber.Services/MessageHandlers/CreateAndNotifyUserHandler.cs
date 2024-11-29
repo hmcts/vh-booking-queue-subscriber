@@ -1,8 +1,10 @@
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
+using BookingQueueSubscriber.Services.VideoWeb;
 using BookingsApi.Client;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
+using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
 {
@@ -12,16 +14,19 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
         private readonly IUserService _userService;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly IVideoApiService _videoApiService;
+        private readonly IVideoWebService _videoWebService;
 
         public CreateAndNotifyUserHandler(IUserService userService,
             INotificationApiClient notificationApiClient,
             IBookingsApiClient bookingsApiClient,
-            IVideoApiService videoApiService)
+            IVideoApiService videoApiService,
+            IVideoWebService videoWebService)
         {
             _userService = userService;
             _notificationApiClient = notificationApiClient;
             _bookingsApiClient = bookingsApiClient;
             _videoApiService = videoApiService;
+            _videoWebService = videoWebService;
         }
 
         public async Task HandleAsync(CreateAndNotifyUserIntegrationEvent eventMessage)
@@ -43,6 +48,8 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 Username = message.Username,
                 Password = newUser.Password,
             });
+            var conference = await _videoApiService.GetConferenceByHearingRefId(message.HearingId);
+            await _videoWebService.PushParticipantsUpdatedMessage(conference.Id, new UpdateConferenceParticipantsRequest());
         }
 
         async Task IMessageHandler.HandleAsync(object integrationEvent)

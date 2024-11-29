@@ -331,6 +331,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         [Test]
         public async Task Should_handle_hearing_create_and_notify_user_integration_event()
         {
+          _videoWebService.PushParticipantsUpdatedMessageCount = 0;
+          
             const string message = @"{
               '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
               'id': 'c4286e6a-d4e8-45f9-a992-068813990f8c',
@@ -359,6 +361,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
+            _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
 
         [Test]
@@ -547,6 +550,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         [Test]
         public async Task Should_create_user_send_confirmation_notifications_for_new_participant()
         {
+            _videoWebService.PushParticipantsUpdatedMessageCount = 0;
+          
             const string message = @" {
               '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
               'id': '004ad2e6-e643-4696-9c4a-34ad7c74cb85',
@@ -579,6 +584,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _userService.Users.Should().HaveCount(1);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
 
         [Test]
@@ -616,6 +622,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
         [Test]
         public async Task Should_send_multiday_confirmation_notifications_for_new_participant()
         {
+            _videoWebService.PushParticipantsUpdatedMessageCount = 0;
+          
             const string message = @" {
               '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
               'id': 'eedf8d6d-901d-44f3-ba41-544ebf43c610',
@@ -646,6 +654,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _userService.Users.Should().HaveCount(1);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
 
         [Test]
