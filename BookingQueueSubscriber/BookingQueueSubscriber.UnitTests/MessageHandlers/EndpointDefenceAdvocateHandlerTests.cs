@@ -311,7 +311,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             // Act
             await messageHandler.HandleAsync(integrationEvent);
             
-            // Arrange
+            // Assert
             AssertNoNotificationsSent();
         }
 
