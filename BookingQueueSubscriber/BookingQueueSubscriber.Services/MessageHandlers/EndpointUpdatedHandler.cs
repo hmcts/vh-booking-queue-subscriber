@@ -63,8 +63,13 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             try
             {
                 //Has the defence advocate changed?
-                if (endpointBeingUpdated is not null &&!ReferenceEquals(endpointBeingUpdated.DefenceAdvocate, endpointEvent.DefenceAdvocate))
-                    await NotifyDefenceAdvocates(conference, endpointEvent, newDefenceAdvocate, endpointBeingUpdated);
+                if (endpointBeingUpdated is not null)
+                {
+                    var currentDefenceAdvocate =  GetDefenceAdvocate(conference, endpointBeingUpdated.DefenceAdvocate);
+                    var newDefenceAdvocateContactEmail = endpointEvent.DefenceAdvocate;
+                    if (currentDefenceAdvocate?.ContactEmail != newDefenceAdvocateContactEmail)
+                        await NotifyDefenceAdvocates(conference, endpointEvent, newDefenceAdvocate, endpointBeingUpdated);
+                }
             }
             catch (Exception e)
             {
