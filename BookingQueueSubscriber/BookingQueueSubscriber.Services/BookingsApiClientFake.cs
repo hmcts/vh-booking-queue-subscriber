@@ -726,22 +726,12 @@ namespace BookingQueueSubscriber.Services
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearingsAsync()
+        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearingsV2Async()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearingsAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearings2Async()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearings2Async(CancellationToken cancellationToken)
+        public Task<ICollection<HearingDetailsResponseV2>> GetUnallocatedHearingsV2Async(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
