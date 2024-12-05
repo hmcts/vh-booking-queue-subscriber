@@ -22,7 +22,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                     .Excluding(o => o.ParticipantId)
                     .Excluding(o => o.Fullname)
                     .Excluding(o => o.UserRole)
-                    .Excluding(o => o.CaseGroupType)
                     .Excluding(o => o.Representee)
                     .Excluding(o => o.LinkedParticipants)
                     .Excluding(o => o.ContactEmailForNonEJudJudgeUser)
@@ -37,7 +36,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
             request.UserRole.Should().Be(participantDto.MapUserRoleToContractEnum());
             request.HearingRole.Should().Be(participantDto.HearingRole);
-            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
+            request.CaseTypeGroup.Should().Be("Obsolete");
             request.Representee.Should().Be(participantDto.Representee);
             request.LinkedParticipants.Should().BeEquivalentTo(new List<LinkedParticipantRequest>());
         }
@@ -55,7 +54,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                     .Excluding(o => o.ParticipantId)
                     .Excluding(o => o.Fullname)
                     .Excluding(o => o.UserRole)
-                    .Excluding(o => o.CaseGroupType)
                     .Excluding(o => o.Representee)
                     .Excluding(o => o.LinkedParticipants)
                     .Excluding(o => o.ContactEmailForNonEJudJudgeUser)
@@ -70,9 +68,9 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
             request.UserRole.ToString().Should().Be(participantDto.UserRole);
             request.HearingRole.Should().Be(participantDto.HearingRole);
-            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
+            request.CaseTypeGroup.Should().Be("Obsolete");
             request.Representee.Should().Be(participantDto.Representee);
-            var linkedParticipant = request.LinkedParticipants.First();
+            var linkedParticipant = request.LinkedParticipants[0];
             linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
@@ -93,7 +91,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                     .Excluding(o => o.ParticipantId)
                     .Excluding(o => o.Fullname)
                     .Excluding(o => o.UserRole)
-                    .Excluding(o => o.CaseGroupType)
                     .Excluding(o => o.Representee)
                     .Excluding(o => o.LinkedParticipants)
                     .Excluding(o => o.ContactEmailForNonEJudJudgeUser)
@@ -109,9 +106,9 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
             request.UserRole.ToString().Should().Be(participantDto.UserRole);
             request.HearingRole.Should().Be(participantDto.HearingRole);
-            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
+            request.CaseTypeGroup.Should().Be("Obsolete");
             request.Representee.Should().Be(participantDto.Representee);
-            var linkedParticipant = request.LinkedParticipants.First();
+            var linkedParticipant = request.LinkedParticipants[0];
             linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);

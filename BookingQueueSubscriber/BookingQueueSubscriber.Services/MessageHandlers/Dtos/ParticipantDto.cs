@@ -1,5 +1,4 @@
-﻿using BookingsApi.Contract.V1.Enums;
-using BookingQueueSubscriber.Services.UserApi;
+﻿using BookingQueueSubscriber.Services.UserApi;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {
@@ -15,7 +14,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
         public string DisplayName { get; set; }
         public string HearingRole { get; set; }
         public string UserRole { get; set; }
-        public CaseRoleGroup CaseGroupType { get; set; }
         public string Representee { get; set; }
 
         public IList<LinkedParticipantDto> LinkedParticipants { get; set; }

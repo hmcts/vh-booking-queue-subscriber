@@ -22,7 +22,7 @@ namespace BookingQueueSubscriber.Services.Mappers
                     .MapToLinkedParticipantRequestList(participant.LinkedParticipants),
                 UserRole = participant.MapUserRoleToContractEnum(),
                 HearingRole = participant.HearingRole,
-                CaseTypeGroup = participant.CaseGroupType.ToString()
+                CaseTypeGroup = "Obsolete"
             };
         }
     }

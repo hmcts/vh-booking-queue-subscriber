@@ -5,7 +5,6 @@ using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Enums;
 using LinkedParticipantType = BookingQueueSubscriber.Services.MessageHandlers.Dtos.LinkedParticipantType;
-using BookingsApi.Contract.V1.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -34,7 +33,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     r.NewParticipants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     r.NewParticipants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
                     r.NewParticipants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
-                    r.NewParticipants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
                     r.NewParticipants[0].ParticipantRefId == ConferenceDetailsResponse.Participants[0].RefId &&
                     r.NewParticipants[0].Representee == integrationEvent.Participants[0].Representee &&
                     r.NewParticipants[0].LinkedParticipants.Count.Equals(0)
@@ -63,7 +61,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
                     request.Participants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
-                    request.Participants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
                     request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
                     request.Participants[0].Representee == integrationEvent.Participants[0].Representee
             )), Times.Once);
@@ -103,7 +100,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
                     request.Participants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
-                    request.Participants[0].CaseTypeGroup == integrationEvent.Participants[0].CaseGroupType.ToString() &&
                     request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
                     request.Participants[0].Representee == integrationEvent.Participants[0].Representee &&
                     request.Participants[0].LinkedParticipants.Count.Equals(1) &&
@@ -123,7 +119,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 {
                     new ParticipantDto
                     {
-                        CaseGroupType = CaseRoleGroup.Applicant,
                         DisplayName = "displayName",
                         Fullname = "fullname",
                         FirstName = "firstName",
@@ -151,7 +146,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     new ParticipantDto
                     {
                         ParticipantId = ParticipantId,
-                        CaseGroupType = CaseRoleGroup.Applicant,
                         DisplayName = "displayName",
                         Fullname = "fullname",
                         FirstName = "firstName",

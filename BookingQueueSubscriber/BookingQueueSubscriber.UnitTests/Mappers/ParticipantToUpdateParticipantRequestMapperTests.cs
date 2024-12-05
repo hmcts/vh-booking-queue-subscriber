@@ -32,7 +32,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Username.Should().Be(participantDto.Username);
             request.UserRole.Should().Be(participantDto.MapUserRoleToContractEnum());
             request.HearingRole.Should().Be(participantDto.HearingRole);
-            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
+            request.CaseTypeGroup.Should().Be("Obsolete");
             request.LinkedParticipants.Should().BeEquivalentTo(new List<LinkedParticipantRequest>());
         }
 
@@ -55,7 +55,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Username.Should().Be(participantDto.Username);
             request.UserRole.Should().Be(UserRole.Individual);
             request.HearingRole.Should().Be(participantDto.HearingRole);
-            request.CaseTypeGroup.Should().Be(participantDto.CaseGroupType.ToString());
+            request.CaseTypeGroup.Should().Be("Obsolete");
             var linkedParticipant = request.LinkedParticipants[0];
             linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
