@@ -89,7 +89,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 HearingVenueName = "MyVenue",
                 RecordAudio = true,
                 GroupId = isMultiHearing ? Guid.NewGuid() : null,
-                VideoSupplier = VideoSupplier.Kinly
+                VideoSupplier = VideoSupplier.Vodafone
             };
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
                 .All().With(x => x.UserRole = UserRole.Individual.ToString()).Build().ToList();

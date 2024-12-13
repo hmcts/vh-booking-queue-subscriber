@@ -27,6 +27,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                     .Excluding(o => o.HearingId).ExcludingMissingMembers()
                 );
             request.AudioRecordingRequired.Should().Be(hearingDto.RecordAudio);
+            request.AudioPlaybackLanguage.Should().Be(AudioPlaybackLanguage.English);
             request.HearingRefId.Should().Be(hearingDto.HearingId);
             request.Participants.Count.Should().Be(participants.Count);
             request.Endpoints.Count.Should().Be(endpoints.Count);
@@ -37,6 +38,18 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             
             var thirdEndpoint = request.Endpoints.First(x => x.DisplayName == "three");
             thirdEndpoint.ConferenceRole.Should().Be(ConferenceRole.Guest);
+        }
+
+        [Test]
+        public void should_map_iswelsh_to_english_and_welsh_playback_language()
+        {
+            var hearingDto = CreateHearingDto();
+            hearingDto.IsVenueWelsh = true;
+            
+            var request = HearingToBookConferenceMapper
+                .MapToBookNewConferenceRequest(hearingDto, new List<ParticipantDto>(), new List<EndpointDto>());
+            
+            request.AudioPlaybackLanguage.Should().Be(AudioPlaybackLanguage.EnglishAndWelsh);
         }
 
         private static HearingDto CreateHearingDto()
@@ -51,8 +64,9 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 ScheduledDateTime = DateTime.UtcNow,
                 HearingVenueName = "MyVenue",
                 RecordAudio = true,
-                CaseTypeServiceId = "ZZY1",
-                VideoSupplier = VideoSupplier.Kinly
+                CaseTypeServiceId ="ZZY1",
+                VideoSupplier = VideoSupplier.Vodafone,
+                IsVenueWelsh = false
             };
             return dto;
         }
