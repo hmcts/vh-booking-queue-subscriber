@@ -29,7 +29,8 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Endpoints = PopulateAddEndpointRequests(endpointDtos, participantDtos).ToList(),
                 CaseTypeServiceId = hearingDto.CaseTypeServiceId,
                 Supplier = (Supplier)hearingDto.VideoSupplier,
-                ConferenceRoomType = (ConferenceRoomType)hearingDto.ConferenceRoomType
+                ConferenceRoomType = (ConferenceRoomType)hearingDto.ConferenceRoomType,
+                AudioPlaybackLanguage = hearingDto.IsVenueWelsh ? AudioPlaybackLanguage.EnglishAndWelsh : AudioPlaybackLanguage.English
             };
             
             return request;
