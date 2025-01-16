@@ -1,5 +1,6 @@
 namespace BookingQueueSubscriber
 {
+    [ExcludeFromCodeCoverage(Justification = "Class is a wrapper for external library, and unit tests would not provide value")]
     public class VideoWebTokenHandler : DelegatingHandler
     {
         private readonly IMemoryCache memoryCache;

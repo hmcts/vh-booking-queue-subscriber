@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using BookingQueueSubscriber.Common.Configuration;
 using Microsoft.Extensions.Options;
@@ -11,6 +12,7 @@ namespace BookingQueueSubscriber.Common.Security
         Task<AuthenticationResult> GetAuthorisationResult(string clientId, string clientSecret, string clientResource);
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Class is a wrapper for external library, and unit tests would not provide value")]
     public class AzureTokenProvider : IAzureTokenProvider
     {
         private readonly AzureAdConfiguration _azureAdConfiguration;
