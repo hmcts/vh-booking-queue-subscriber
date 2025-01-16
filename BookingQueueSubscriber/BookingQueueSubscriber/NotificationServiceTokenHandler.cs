@@ -26,7 +26,7 @@
             var token = _memoryCache.Get<string>(TokenCacheKey);
             if (string.IsNullOrEmpty(token))
             {
-                var authenticationResult = _azureTokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
+                var authenticationResult = await _azureTokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
                     _azureAdConfiguration.ClientSecret, _servicesConfiguration.NotificationApiResourceId);
                 token = authenticationResult.AccessToken;
                 var tokenExpireDateTime = authenticationResult.ExpiresOn.DateTime.AddMinutes(-1);

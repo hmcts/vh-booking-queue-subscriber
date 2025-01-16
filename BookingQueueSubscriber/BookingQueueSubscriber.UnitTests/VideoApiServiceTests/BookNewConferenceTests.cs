@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
 
             var result = await videoApiService.BookNewConferenceAsync(bookNewConferenceRequest);
 
-            Assert.AreEqual(conferenceDetailsResponse, result);
+            Assert.That(conferenceDetailsResponse,Is.EqualTo(result));
         }
     }
 }

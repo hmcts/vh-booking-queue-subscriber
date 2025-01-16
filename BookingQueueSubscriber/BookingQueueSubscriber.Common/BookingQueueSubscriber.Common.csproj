@@ -10,15 +10,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BookingsApi.Client" Version="3.1.9" />
-        <PackageReference Include="LaunchDarkly.ServerSdk" Version="7.0.3" />
-        <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
+        <PackageReference Include="BookingsApi.Client" Version="3.1.17-pr-0938-0005" />
+        <PackageReference Include="LaunchDarkly.ServerSdk" Version="8.6.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights" Version="2.22.0" />
         <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-        <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="9.9.0.77355">
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Identity.Client" Version="4.66.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.5.0.109200">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
