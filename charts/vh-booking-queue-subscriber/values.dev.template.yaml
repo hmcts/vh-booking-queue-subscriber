@@ -4,6 +4,11 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   environment:
     QUEUENAME: shaed-dev
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-938.dev.platform.hmcts.net/
+    VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-711.dev.platform.hmcts.net/
+    VHSERVICES__USERAPIURL: https://vh-user-api-pr-259.dev.platform.hmcts.net/
+    VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api-pr-173.dev.platform.hmcts.net/
+    VHSERVICES__VIDEOWEBURL: https://vh-video-web-pr-2354.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
