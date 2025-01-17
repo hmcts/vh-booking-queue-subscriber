@@ -12,7 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="6.0.3" />
-    <PackageReference Include="BookingsApi.Client" Version="3.1.9" />
+    <PackageReference Include="BookingsApi.Client" Version="3.1.17-pr-0938-0006" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.33" />
@@ -24,7 +24,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.3" />
-    <PackageReference Include="NotificationApi.Client" Version="3.0.5" />
+    <PackageReference Include="NotificationApi.Client" Version="3.0.8-pr-0173-0006" />
     <PackageReference Include="Rixian.Extensions.ApplicationInsights.WorkerService" Version="2.1.19" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="9.9.0.77355">
       <PrivateAssets>all</PrivateAssets>
@@ -32,7 +32,7 @@
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.34.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="VideoApi.Client" Version="3.1.7" />
+    <PackageReference Include="VideoApi.Client" Version="3.1.18-pr-0711-0002" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="appsettings.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
