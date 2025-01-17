@@ -9,7 +9,7 @@ maintainers:
 
 dependencies:
   - name: function
-    version: 2.3.7
+    version: 2.5.3
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
 
   - name: java
