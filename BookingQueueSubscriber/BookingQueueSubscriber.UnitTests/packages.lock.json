@@ -138,17 +138,17 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "3.1.17-pr-0938-0006",
-        "contentHash": "VBGKQWwTdCi8/jtLU9wBcDa/EgWYlCqhyBC4CBrzatl3i2JUHVb2GPs6dtLINrxVEoB0RSMpFwBHFaWE+tpRDw==",
+        "resolved": "3.1.18",
+        "contentHash": "yZHztvLtbAKmrL6dzk2G69sQnJhnt+mUkvDOUMqf+zvvZchGyJP8wmL0zYBvSlqjfURiRBsC+oKA1ktv5DMbTg==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.1.17-pr-0938-0006",
+          "BookingsApi.Common.DotNet6": "3.1.18",
           "System.Text.Json": "8.0.5"
         }
       },
       "BookingsApi.Common.DotNet6": {
         "type": "Transitive",
-        "resolved": "3.1.17-pr-0938-0006",
-        "contentHash": "G3arKe6CxTXxOytn1Xltz3f61s9TBzO4Ro931EMrrmYOScRN2r5t5DQ7w/Xc2bnU2txXgXL65XHrdEJgoCpCLg==",
+        "resolved": "3.1.18",
+        "contentHash": "d/JHB4vc3QLOuEXukJqOAmo3iYU3A+4HK3u/BP2xqqNP57GbkcPm7eJcDEylYtJHkIV/QUuyWWNKUAKdrsN02g==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -1114,8 +1114,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "3.0.8-pr-0173-0006",
-        "contentHash": "70nQjL91w1tF7pBwKUMeF727FsMUvY79KSRI3JsFRSzktnErR3Sn/iVRqWO0vo0hT6Da71Q9U93LWCWAzpSFdw==",
+        "resolved": "3.0.8",
+        "contentHash": "L90NspHtLhtJeK8upMGIZ92yzQ1YyarCb6zKnPXq5Y0YArzOw2azvnZl4dxwDINNDa3KVAhRCAyIzA8uzCbQRQ==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -2252,8 +2252,8 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "3.1.6-pr-0259-0002",
-        "contentHash": "4yrH8zzN/SgM3BCW835/CTC1xslRTJpZgaOUMg1wCekL7QxCTp1+C7yQaxluOhwUq2lY7TQglZplfAaY6Wvvvw==",
+        "resolved": "3.1.8",
+        "contentHash": "8w452n+iR4pTsF8krmEXpIF+UKx0gMQThIghlwQZR4OU3MCZyB+EZqQVs+QqKkuoRQnKpCtuHrikRZyKE9gTLA==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -2280,7 +2280,7 @@
         "dependencies": {
           "AspNetCore.HealthChecks.Uris": "[6.0.3, )",
           "BookingQueueSubscriber.Services": "[1.0.0, )",
-          "BookingsApi.Client": "[3.1.17-pr-0938-0006, )",
+          "BookingsApi.Client": "[3.1.18, )",
           "Microsoft.ApplicationInsights.AspNetCore": "[2.21.0, )",
           "Microsoft.AspNetCore.Hosting": "[2.2.7, )",
           "Microsoft.Azure.WebJobs": "[3.0.33, )",
@@ -2292,7 +2292,7 @@
           "Microsoft.Extensions.Http": "[6.0.0, )",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
           "Microsoft.NET.Sdk.Functions": "[4.1.3, )",
-          "NotificationApi.Client": "[3.0.8-pr-0173-0006, )",
+          "NotificationApi.Client": "[3.0.8, )",
           "Rixian.Extensions.ApplicationInsights.WorkerService": "[2.1.19, )",
           "System.IdentityModel.Tokens.Jwt": "[6.34.0, )",
           "System.Threading.Tasks.Extensions": "[4.5.4, )",
@@ -2302,7 +2302,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[3.1.17-pr-0938-0006, )",
+          "BookingsApi.Client": "[3.1.18, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
@@ -2316,13 +2316,13 @@
         "type": "Project",
         "dependencies": {
           "BookingQueueSubscriber.Common": "[1.0.0, )",
-          "BookingsApi.Client": "[3.1.17-pr-0938-0006, )",
+          "BookingsApi.Client": "[3.1.18, )",
           "LaunchDarkly.ServerSdk": "[7.0.3, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
-          "NotificationApi.Client": "[3.0.8-pr-0173-0006, )",
+          "NotificationApi.Client": "[3.0.8, )",
           "System.IdentityModel.Tokens.Jwt": "[6.34.0, )",
           "TimeZoneConverter": "[3.3.0, )",
-          "UserApi.Client": "[3.1.6-pr-0259-0002, )",
+          "UserApi.Client": "[3.1.8, )",
           "VideoApi.Client": "[3.1.18-pr-0711-0002, )"
         }
       }
