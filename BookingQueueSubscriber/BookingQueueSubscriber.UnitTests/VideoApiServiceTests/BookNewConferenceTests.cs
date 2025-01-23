@@ -1,6 +1,5 @@
 ﻿using BookingQueueSubscriber.Services.VideoApi;
 using Microsoft.Extensions.Logging;
-using System.Text;
 using VideoApi.Client;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
@@ -21,7 +20,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoApiServiceTests
 
             var result = await videoApiService.BookNewConferenceAsync(bookNewConferenceRequest);
 
-            Assert.AreEqual(conferenceDetailsResponse, result);
+            Assert.That(conferenceDetailsResponse, Is.EqualTo(result));
         }
     }
 }

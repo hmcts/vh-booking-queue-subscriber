@@ -34,8 +34,8 @@ public class HealthCheckTests
         
         // Assert
         var okResult = result as ObjectResult;
-        Assert.NotNull(okResult);
-        Assert.AreEqual((int) HttpStatusCode.OK, okResult.StatusCode);
+        Assert.That(okResult, Is.Not.Null);
+        Assert.That((int) HttpStatusCode.OK, Is.EqualTo(okResult.StatusCode));
     }
     
     [Test]
@@ -54,7 +54,7 @@ public class HealthCheckTests
         
         // Assert
         var serviceUnavailableResult = result as ObjectResult;
-        Assert.NotNull(serviceUnavailableResult);
-        Assert.AreEqual((int) HttpStatusCode.ServiceUnavailable, serviceUnavailableResult.StatusCode);
+        Assert.That(serviceUnavailableResult, Is.Not.Null);
+        Assert.That((int)HttpStatusCode.ServiceUnavailable, Is.EqualTo(serviceUnavailableResult.StatusCode));
     }
 }

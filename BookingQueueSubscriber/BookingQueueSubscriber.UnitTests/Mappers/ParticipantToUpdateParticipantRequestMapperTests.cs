@@ -57,7 +57,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.HearingRole.Should().Be(participantDto.HearingRole);
             request.CaseTypeGroup.Should().Be("Obsolete");
             var linkedParticipant = request.LinkedParticipants[0];
-            linkedParticipant.Type.Should().Be(LinkedParticipantType.Interpreter);
+            linkedParticipant.Type.Should().Be((VideoApi.Contract.Enums.LinkedParticipantType)LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);
             linkedParticipant.ParticipantRefId.Should().Be(participantDto.LinkedParticipants[0].ParticipantId);
         }

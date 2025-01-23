@@ -101,7 +101,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
 
         private Task UpdateParticipantUsername(Guid participantId, string username)
         {
-            _logger.LogInformation("Updating username for participant {participantId}", participantId);
+            _logger.LogInformation("Updating username for participant {ParticipantId}", participantId);
             return _apiClient.UpdateParticipantUsernameAsync(participantId, new UpdateParticipantUsernameRequest { Username = username });
         }
 

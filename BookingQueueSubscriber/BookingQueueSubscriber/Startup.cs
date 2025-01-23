@@ -1,4 +1,5 @@
 using BookingQueueSubscriber.Health;
+using BookingQueueSubscriber.Security;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
