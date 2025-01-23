@@ -63,6 +63,7 @@ stages:
           - "[${{ variables.app_path }}]Startup"
           - "[*]${{ variables.app_path }}.Common.*"
           - "[Testing.Common]*"
+          - "[BookingQueueSubscriber.Security]*"
 
     - template: templates/sonarCloud/runAnalysis.yml@azTemplates
 
