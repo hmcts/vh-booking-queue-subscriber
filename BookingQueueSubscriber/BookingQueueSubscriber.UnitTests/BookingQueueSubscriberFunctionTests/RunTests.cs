@@ -1,4 +1,5 @@
-﻿using BookingQueueSubscriber.Services.MessageHandlers.Core;
+﻿using System.Globalization;
+using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
@@ -402,8 +403,8 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             notificationRequest.ContactEmail.Should().Be("Automation_226153990@hmcts.net");
             notificationRequest.ParticipantId.Should().Be(new Guid("73f2053e-74f1-4d6c-b817-246f4b22e665"));
             notificationRequest.CaseName.Should().Be("Case name");
-            notificationRequest.PreviousScheduledDateTime.Should().Be(DateTime.Parse($"2023-11-19T11:45:00Z"));
-            notificationRequest.NewScheduledDateTime.Should().Be(DateTime.Parse($"2023-11-20T00:00:00Z"));
+            notificationRequest.PreviousScheduledDateTime.Should().Be(DateTime.Parse($"2023-11-19T11:45:00Z", CultureInfo.InvariantCulture));
+            notificationRequest.NewScheduledDateTime.Should().Be(DateTime.Parse($"2023-11-20T00:00:00Z", CultureInfo.InvariantCulture));
             notificationRequest.RoleName.Should().Be("Individual");     
             notificationRequest.CaseNumber.Should().Be("Original Hearing");
             notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");

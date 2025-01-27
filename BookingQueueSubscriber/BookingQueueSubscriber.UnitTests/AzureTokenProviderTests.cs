@@ -10,7 +10,7 @@ namespace BookingQueueSubscriber.UnitTests
         {
             var azureAdConfigurationOptions = Options.Create(new AzureAdConfiguration { TenantId = "teanantid" });
             var azureTokenProvider = new AzureTokenProvider(azureAdConfigurationOptions);
-            Assert.Throws<AggregateException>(() => azureTokenProvider.GetClientAccessToken("1234", "1234", "1234"));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(() => azureTokenProvider.GetClientAccessToken("1234", "1234", "1234"));
         }
     }
 }
