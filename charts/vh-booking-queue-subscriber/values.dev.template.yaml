@@ -3,13 +3,14 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   environment:
-    QUEUENAME: booking
+    QUEUENAME: shaed-dev
+    VHSERVICES__BOOKINGSAPIURL : https://vh-bookings-api-pr-945.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: booking
+    queueName: shaed-dev
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'

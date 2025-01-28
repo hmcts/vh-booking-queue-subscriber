@@ -4,11 +4,11 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[3.1.19, )",
-        "resolved": "3.1.19",
-        "contentHash": "Gsk9cP1Jwc8e/RMcU2YBPzKDpSrNcP2JSwsxo6490NOY5U4Pfe/mp27OPCDOQwZVndmG5TSo+2h/vBuFSFWR2Q==",
+        "requested": "[3.1.21-pr-0945-0002, )",
+        "resolved": "3.1.21-pr-0945-0002",
+        "contentHash": "yNMiSxwoUp4gKtccwHcIYoVkEhULjBwNS41PO8/1uTIOzwoYksuFJ7MCQZizNHn9BcRShpnGCUN/wPJLDQZfoQ==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.1.19",
+          "BookingsApi.Common.DotNet6": "3.1.21-pr-0945-0002",
           "System.Text.Json": "8.0.5"
         }
       },
@@ -92,8 +92,8 @@
       },
       "BookingsApi.Common.DotNet6": {
         "type": "Transitive",
-        "resolved": "3.1.19",
-        "contentHash": "YYah9kxy5BWGF7rbBs2dHUuD0+EXlQiATizhq6MZksHQ5/TAS1+7+CH4u34sJE+gmXQbD0y5qO4qoGwyxl42/A==",
+        "resolved": "3.1.21-pr-0945-0002",
+        "contentHash": "dWj6X6rCbomCRtX5abPXLQZTgnOWonbV1PqkMKosrWpyOqxKPsXpcYM8d4romjhiQuXBtdel4StJKC5yUV6ujw==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }

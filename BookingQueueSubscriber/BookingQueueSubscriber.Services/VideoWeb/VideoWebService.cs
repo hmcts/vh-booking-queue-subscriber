@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Net.Http;
+using BookingQueueSubscriber.Services.VideoWeb.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using VideoApi.Contract.Requests;
@@ -51,7 +52,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             _logger.LogDebug("PushParticipantsUpdatedMessage result: {Result}", result);
         }
         
-        public async Task PushAllocationToCsoUpdatedMessage(AllocationHearingsToCsoRequest request)
+        public async Task PushAllocationToCsoUpdatedMessage(HearingAllocationNotificationRequest request)
         {
             var path = $"internalevent/AllocationHearings";
             
