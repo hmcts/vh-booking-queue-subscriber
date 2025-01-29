@@ -139,5 +139,11 @@ namespace BookingQueueSubscriber.Services.VideoApi
                 }
             }
         }
+
+        public Task<ICollection<ConferenceDetailsResponse>> GetConferencesByHearingRefIdsAsync(
+            GetConferencesByHearingIdsRequest request)
+        {
+            return _apiClient.GetConferenceDetailsByHearingRefIdsAsync(request);
+        }
     }
 }

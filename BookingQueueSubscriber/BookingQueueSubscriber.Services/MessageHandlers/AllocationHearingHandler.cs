@@ -1,6 +1,6 @@
+using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.Services.VideoWeb.Models;
-using VideoApi.Client;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.MessageHandlers
@@ -8,12 +8,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
     public class AllocationHearingHandler : IMessageHandler<HearingsAllocatedIntegrationEvent>
     {
         private readonly IVideoWebService _videoWebService;
-        private readonly IVideoApiClient _videoApiClient;
+        private readonly IVideoApiService _videoApiService;
 
-        public AllocationHearingHandler(IVideoWebService videoWebService, IVideoApiClient videoApiClient)
+        public AllocationHearingHandler(IVideoWebService videoWebService, IVideoApiService videoApiService)
         {
             _videoWebService = videoWebService;
-            _videoApiClient = videoApiClient;
+            _videoApiService = videoApiService;
         }
 
         public async Task HandleAsync(HearingsAllocatedIntegrationEvent eventMessage)
@@ -21,7 +21,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             DateTime todayDate = DateTime.Now;
 
             var todayHearings = eventMessage.Hearings.Where(h => h.ScheduledDateTime.Date == todayDate.Date);
-            var conferences = await _videoApiClient.GetConferencesByHearingRefIdsAsync(new GetConferencesByHearingIdsRequest()
+            var conferences = await _videoApiService.GetConferencesByHearingRefIdsAsync(new GetConferencesByHearingIdsRequest()
             {
                 IncludeClosed = false,
                 HearingRefIds = todayHearings.Select(h => h.HearingId).ToArray()
