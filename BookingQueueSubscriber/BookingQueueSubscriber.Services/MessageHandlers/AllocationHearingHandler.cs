@@ -29,6 +29,7 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             var updateAllocationHearingsRequest = new HearingAllocationNotificationRequest
             {
                 AllocatedCsoUserName = eventMessage.AllocatedCso.Username,
+                AllocatedCsoUserId = eventMessage.AllocatedCso.UserId,
                 ConferenceIds = conferences.Select(c => c.Id).ToList()
             };
             await _videoWebService.PushAllocationToCsoUpdatedMessage(updateAllocationHearingsRequest);

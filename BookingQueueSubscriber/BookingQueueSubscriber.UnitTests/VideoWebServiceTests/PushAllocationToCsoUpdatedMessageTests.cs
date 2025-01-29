@@ -24,7 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
             var videoWebService = new VideoWebService(client, logger.Object);
 
             await videoWebService.PushAllocationToCsoUpdatedMessage(new HearingAllocationNotificationRequest()
-                { AllocatedCsoUserName = "username@mail.com", ConferenceIds = new List<Guid>() { Guid.NewGuid() } });
+                { AllocatedCsoUserName = "username@mail.com", AllocatedCsoUserId = Guid.NewGuid(), ConferenceIds = new List<Guid>() { Guid.NewGuid() } });
 
             handler.Protected().Verify("SendAsync", Times.Exactly(1),
                 ItExpr.Is<HttpRequestMessage>(

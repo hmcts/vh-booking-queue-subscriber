@@ -716,6 +716,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
           
         }
 
+        [Test]
         public async Task should_handle_HearingsAllocatedIntegrationEvent()
         {
           const string message = @"{
