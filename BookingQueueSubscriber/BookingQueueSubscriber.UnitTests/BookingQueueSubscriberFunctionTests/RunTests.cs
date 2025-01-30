@@ -715,5 +715,45 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
           _videoApiService.UpdateEndpointInConferenceCount.Should().Be(1);
           
         }
+
+        [Test]
+        public async Task should_handle_HearingsAllocatedIntegrationEvent()
+        {
+          const string message = @"{
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': '4b37338c-0507-4ee7-b5f5-d56172d5078b',
+              'timestamp': '2025-01-29T09:05:47.070304Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingsAllocatedIntegrationEvent, BookingsApi.Infrastructure.Services',
+                'hearings': [
+                  {
+                    '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
+                    'hearing_id': '8c89895d-bc71-47a3-9777-0d26270b07a2',
+                    'group_id': null,
+                    'scheduled_date_time': '2025-01-29T10:30:00Z',
+                    'scheduled_duration': 45,
+                    'case_type': 'Financial Remedy',
+                    'case_number': 'TestSearchQueryInt',
+                    'case_name': 'Integration',
+                    'hearing_venue_name': 'Birmingham Civil and Family Justice Centre',
+                    'record_audio': false,
+                    'case_type_service_id': 'ABA2',
+                    'video_supplier': 'vodafone',
+                    'conference_room_type': 'vmr',
+                    'is_venue_welsh': false
+                  }
+                ],
+                'allocated_cso': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.JusticeUserDto, BookingsApi.Infrastructure.Services',
+                  'user_id': '74c3a02c-672b-4b89-81fa-2b9c7c39d13a',
+                  'username': '924abca9a76147c599da348c14bda780@test.com',
+                  'user_roles': []
+                }
+              }
+            }";
+
+          await _sut.Run(message);
+          _videoWebService.PushAllocationToCsoUpdatedMessageCount.Should().Be(1);
+        }
     }
 }
