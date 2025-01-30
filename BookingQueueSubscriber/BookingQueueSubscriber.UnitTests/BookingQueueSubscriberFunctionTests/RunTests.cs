@@ -753,7 +753,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             }";
 
           await _sut.Run(message);
-          
+          _videoWebService.PushAllocationToCsoUpdatedMessageCount.Should().Be(1);
         }
     }
 }

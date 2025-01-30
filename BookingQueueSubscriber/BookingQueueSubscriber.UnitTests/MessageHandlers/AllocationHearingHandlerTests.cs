@@ -51,12 +51,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             };
         }
 
-        private JusticeUserDto BuildCsoUser()
+        private static JusticeUserDto BuildCsoUser()
         {
             return new JusticeUserDto() {Username = "user.name@mail.com"};
         }
 
-        private IList<HearingDto> BuildHearings()
+        private static IList<HearingDto> BuildHearings()
         {
             IList<HearingDto> list = new List<HearingDto>();
 
@@ -73,7 +73,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             return list;
         }
 
-        private IList<ConferenceDetailsResponse> BuilderConferences(IList<HearingDto> hearings)
+        private static IList<ConferenceDetailsResponse> BuilderConferences(IList<HearingDto> hearings)
         {
             return hearings.Select(h => new ConferenceDetailsResponse()
             {
