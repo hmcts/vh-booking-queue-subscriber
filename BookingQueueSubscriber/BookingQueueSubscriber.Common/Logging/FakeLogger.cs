@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace BookingQueueSubscriber.Common.Logging;
 
+[ExcludeFromCodeCoverage]
 public class FakeLogger : ILogger
 {
     public IDisposable BeginScope<TState>(TState state)
