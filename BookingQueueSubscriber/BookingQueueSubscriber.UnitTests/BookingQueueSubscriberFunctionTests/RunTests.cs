@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
+using VideoApi.Contract.Responses;
 
 namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 {
@@ -363,6 +364,14 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _videoApiService.BookNewConferenceCount.Should().Be(0);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
             _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
+            
+            var notificationRequest = (SignInDetailsEmailRequest)_notificationApiClient.NotificationRequests[0];
+
+            notificationRequest.ContactEmail.Should().Be("Automation_1486595270@hmcts.net");
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.RoleName.Should().Be("Individual");
+            notificationRequest.Username.Should().Be("Automation_FirstName.Automation_LastName");
+            notificationRequest.Password.Should().NotBeNullOrEmpty();
         }
 
         [Test]
@@ -429,7 +438,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'scheduled_date_time': '2023-11-19T11:45:00Z',
                   'case_name': 'Test',
                   'case_number': 'AutoTest',
-                  'participnat_id': '314cfdcc-af6a-443f-a89a-4dbdc652aa1b',
+                  'participant_id': '314cfdcc-af6a-443f-a89a-4dbdc652aa1b',
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
@@ -438,13 +447,74 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'user_role': 'Individual',
                   'username': 'Automation_840074883@hmcts.net',
                   'representee': ''
-                }
+                },
+                'total_days': 2
               }
             }";
 
             await _sut.Run(message);
             _notificationApiClient.NotificationRequests.Count.Should().Be(1);
             _videoApiService.BookNewConferenceCount.Should().Be(0);
+            
+            var notificationRequest = (ExistingUserMultiDayHearingConfirmationRequest)_notificationApiClient.NotificationRequests[0];
+            
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.CaseName.Should().Be("Test");
+            notificationRequest.CaseNumber.Should().Be("AutoTest");
+            notificationRequest.ContactEmail.Should().Be("Automation_556303923@hmcts.net");
+            notificationRequest.DisplayName.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.HearingId.Should().Be(new Guid("1a77b12f-becc-43fa-891c-15e882d2f37b"));
+            notificationRequest.ParticipantId.Should().Be(new Guid("314cfdcc-af6a-443f-a89a-4dbdc652aa1b"));
+            notificationRequest.Representee.Should().Be(string.Empty);
+            notificationRequest.RoleName.Should().Be("Individual");
+            notificationRequest.ScheduledDateTime.Should().Be(DateTime.Parse("2023-11-19T11:45:00Z", CultureInfo.InvariantCulture));
+            notificationRequest.TotalDays.Should().Be(2);
+            notificationRequest.Username.Should().Be("Automation_840074883@hmcts.net");
+        }
+
+        [Test]
+        public async Task Should_handle_hearing_notification_integration_event()
+        {
+          const string message = @"{
+              '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+              'id': 'aaf7f048-faf5-4d40-b5b2-8afce08fbe9a',
+              'timestamp': '2023-11-18T23:37:04.670075Z',
+              'integration_event': {
+                '$type': 'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.HearingNotificationIntegrationEvent, BookingsApi.Infrastructure.Services',
+                'hearing_confirmation_for_participant': {
+                  '$type': 'BookingsApi.Infrastructure.Services.Dtos.HearingConfirmationForParticipantDto, BookingsApi.Infrastructure.Services',
+                  'hearing_id': '91c592d8-5ff8-4774-b456-87d7b4e319f3',
+                  'scheduled_date_time': '2023-11-19T11:45:00Z',
+                  'case_name': 'Case name',
+                  'case_number': 'Original Hearing',
+                  'participant_id': '73f2053e-74f1-4d6c-b817-246f4b22e665',
+                  'first_name': 'Automation_FirstName',
+                  'last_name': 'Automation_LastName',
+                  'display_name': 'Automation_FirstName Automation_LastName',
+                  'contact_email': 'Automation_226153990@hmcts.net',
+                  'contact_telephone': '01234567890',
+                  'user_role': 'Individual',
+                  'username': 'Automation_338564597@hmcts.net',
+                  'representee': ''
+                }
+              }
+            }";
+
+          await _sut.Run(message);
+          _notificationApiClient.NotificationRequests.Count.Should().Be(1);
+
+          var notificationRequest = (ExistingUserSingleDayHearingConfirmationRequest)_notificationApiClient.NotificationRequests[0];
+          
+          notificationRequest.HearingId.Should().Be("91c592d8-5ff8-4774-b456-87d7b4e319f3");
+          notificationRequest.ContactEmail.Should().Be("Automation_226153990@hmcts.net");
+          notificationRequest.ParticipantId.Should().Be("73f2053e-74f1-4d6c-b817-246f4b22e665");
+          notificationRequest.CaseName.Should().Be("Case name");
+          notificationRequest.DisplayName.Should().Be("Automation_FirstName Automation_LastName");
+          notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+          notificationRequest.Representee.Should().Be(string.Empty);
+          notificationRequest.Username.Should().Be("Automation_338564597@hmcts.net");
+          notificationRequest.RoleName.Should().Be("Individual");
+          notificationRequest.ScheduledDateTime.Should().Be(DateTime.Parse("2023-11-19T11:45:00Z", CultureInfo.InvariantCulture));
         }
 
         [Test]
@@ -546,6 +616,16 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             await _sut.Run(message);
 
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+
+            var notificationRequest = (NewUserWelcomeEmailRequest)_notificationApiClient.NotificationRequests[0];
+            
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.CaseName.Should().Be("Test");
+            notificationRequest.CaseNumber.Should().Be("AutoTest");
+            notificationRequest.ContactEmail.Should().Be("Automation_129055124@hmcts.net");
+            notificationRequest.HearingId.Should().Be(new Guid("faf75f2e-8e40-424a-8b30-767b57e9477e"));
+            notificationRequest.ParticipantId.Should().Be(new Guid("6b4f565c-2eb2-404c-86e3-a00389657845"));
+            notificationRequest.RoleName.Should().Be("Representative");
         }
 
         [Test]
@@ -565,7 +645,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'scheduled_date_time': '2023-11-02T11:45:00Z',
                   'case_name': 'Test',
                   'case_number': 'AutoTest',
-                  'participnat_id': '702dd1c2-c8f4-40b4-a096-5b77796c2dcd',
+                  'participant_id': '702dd1c2-c8f4-40b4-a096-5b77796c2dcd',
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
@@ -585,6 +665,20 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _userService.Users.Should().HaveCount(1);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+
+            var notificationRequest = (NewUserSingleDayHearingConfirmationRequest)_notificationApiClient.NotificationRequests[0];
+
+            notificationRequest.HearingId.Should().Be(new Guid("faf75f2e-8e40-424a-8b30-767b57e9477e"));
+            notificationRequest.ContactEmail.Should().Be("Automation_1316542910@hmcts.net");
+            notificationRequest.ParticipantId.Should().Be(new Guid("702dd1c2-c8f4-40b4-a096-5b77796c2dcd"));
+            notificationRequest.CaseName.Should().Be("Test");
+            notificationRequest.ScheduledDateTime.Should().Be(DateTime.Parse("2023-11-02T11:45:00Z", CultureInfo.InvariantCulture));
+            notificationRequest.Username.Should().NotBeNullOrEmpty();
+            notificationRequest.RoleName.Should().Be("Individual");
+            notificationRequest.CaseNumber.Should().Be("AutoTest");
+            notificationRequest.RandomPassword.Should().NotBeNullOrEmpty();
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            
             _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
 
@@ -603,7 +697,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'scheduled_date_time': '2023-11-02T11:45:00Z',
                   'case_name': 'Test',
                   'case_number': 'AutoTest',
-                  'participnat_id': '246ab9d2-993b-4c7d-9e4c-ec6246d5a9a5',
+                  'participant_id': '246ab9d2-993b-4c7d-9e4c-ec6246d5a9a5',
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
@@ -618,6 +712,19 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
             await _sut.Run(message);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+
+            var notificationRequest = (ExistingUserSingleDayHearingConfirmationRequest)_notificationApiClient.NotificationRequests[0];
+
+            notificationRequest.HearingId.Should().Be("faf75f2e-8e40-424a-8b30-767b57e9477e");
+            notificationRequest.ContactEmail.Should().Be("Automation_54514578@hmcts.net");
+            notificationRequest.ParticipantId.Should().Be("246ab9d2-993b-4c7d-9e4c-ec6246d5a9a5");
+            notificationRequest.CaseName.Should().Be("Test");
+            notificationRequest.DisplayName.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.Representee.Should().Be(string.Empty);
+            notificationRequest.Username.Should().Be("Automation_311869852@hmcts.net");
+            notificationRequest.RoleName.Should().Be("Individual");
+            notificationRequest.ScheduledDateTime.Should().Be(DateTime.Parse("2023-11-02T11:45:00Z", CultureInfo.InvariantCulture));
         }
 
         [Test]
@@ -637,7 +744,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'scheduled_date_time': '2023-11-02T11:45:00Z',
                   'case_name': 'Test',
                   'case_number': 'AutoTest',
-                  'participnat_id': '43065898-c18f-4f42-b39f-dc56b4906445',
+                  'participant_id': '43065898-c18f-4f42-b39f-dc56b4906445',
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
@@ -655,6 +762,21 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             _userService.Users.Should().HaveCount(1);
             _videoApiService.UpdateParticipantDetailsCount.Should().Be(1);
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+            
+            var notificationRequest = (NewUserMultiDayHearingConfirmationRequest)_notificationApiClient.NotificationRequests[0];
+
+            notificationRequest.HearingId.Should().Be(Guid.Parse("fa9edabe-6d48-48df-b5c4-1a43caad8e6f"));
+            notificationRequest.ContactEmail.Should().Be("Automation_1007248621@hmcts.net");
+            notificationRequest.ParticipantId.Should().Be(new Guid("43065898-c18f-4f42-b39f-dc56b4906445"));
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.CaseName.Should().Be("Test");
+            notificationRequest.CaseNumber.Should().Be("AutoTest");
+            notificationRequest.RandomPassword.Should().NotBeNullOrEmpty();
+            notificationRequest.RoleName.Should().Be("Representative");
+            notificationRequest.ScheduledDateTime.Should().Be(DateTime.Parse("2023-11-02T11:45:00Z", CultureInfo.InvariantCulture));
+            notificationRequest.TotalDays.Should().Be(2);
+            notificationRequest.Username.Should().NotBeNullOrEmpty();
+            
             _videoWebService.PushParticipantsUpdatedMessageCount.Should().Be(1);
         }
 
@@ -673,7 +795,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   'scheduled_date_time': '2023-11-02T11:45:00Z',
                   'case_name': 'Test',
                   'case_number': 'AutoTest',
-                  'participnat_id': '79cef9a1-c040-45da-8f9b-891583be1b59',
+                  'participant_id': '79cef9a1-c040-45da-8f9b-891583be1b59',
                   'first_name': 'Automation_FirstName',
                   'last_name': 'Automation_LastName',
                   'display_name': 'Automation_FirstName Automation_LastName',
@@ -690,6 +812,21 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
             await _sut.Run(message);
 
             _notificationApiClient.NotificationRequests.Should().HaveCount(1);
+
+            var notificationRequest = (ExistingUserMultiDayHearingConfirmationRequest)_notificationApiClient.NotificationRequests[0];
+
+            notificationRequest.Name.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.CaseName.Should().Be("Test");
+            notificationRequest.CaseNumber.Should().Be("AutoTest");
+            notificationRequest.ContactEmail.Should().Be("Automation_1172867501@hmcts.net");
+            notificationRequest.DisplayName.Should().Be("Automation_FirstName Automation_LastName");
+            notificationRequest.HearingId.Should().Be(new Guid("fa9edabe-6d48-48df-b5c4-1a43caad8e6f"));
+            notificationRequest.ParticipantId.Should().Be(new Guid("79cef9a1-c040-45da-8f9b-891583be1b59"));
+            notificationRequest.Representee.Should().Be(string.Empty);
+            notificationRequest.RoleName.Should().Be("Individual");
+            notificationRequest.ScheduledDateTime.Should().Be(DateTime.Parse("2023-11-02T11:45:00Z", CultureInfo.InvariantCulture));
+            notificationRequest.TotalDays.Should().Be(2);
+            notificationRequest.Username.Should().Be("Automation_1125238517@hmcts.net");
         }
 
         [Test]
@@ -754,6 +891,77 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
 
           await _sut.Run(message);
           _videoWebService.PushAllocationToCsoUpdatedMessageCount.Should().Be(1);
+        }
+
+        [Test]
+        public async Task Should_handle_JudgeUpdatedIntegrationEvent()
+        {
+          const string message = @"{
+             '$type':'BookingsApi.Infrastructure.Services.IntegrationEvents.EventMessage, BookingsApi.Infrastructure.Services',
+             'id':'5d94f88d-68a7-46d4-84d0-b026a452d3c4',
+             'timestamp':'2021-02-19T14:50:58.159692Z',
+             'integration_event':{
+                '$type':'BookingsApi.Infrastructure.Services.IntegrationEvents.Events.JudgeUpdatedIntegrationEvent, BookingsApi.Infrastructure.Services',
+                'hearing':{
+                   '$type':'BookingsApi.Infrastructure.Services.Dtos.HearingDto, BookingsApi.Infrastructure.Services',
+                   'hearing_id':'a0391117-92e5-41e1-9799-c2cbfc4e9310',
+                   'scheduled_date_time':'2021-02-19T10:30:00Z',
+                   'scheduled_duration':45,
+                   'case_type':'Civil Money Claims',
+                   'case_number':'01234567890',
+                   'case_name':'Test Add',
+                   'hearing_venue_name':'Birmingham Civil and Family Justice Centre',
+                   'record_audio':true,
+                   'video_supplier':'Vodafone',
+                   'conference_room_type': 'VMR'
+                },
+                'judge':{
+                    '$type':'BookingsApi.Infrastructure.Services.Dtos.ParticipantDto, BookingsApi.Infrastructure.Services',
+                    'participant_id':'1100ddd1-8cef-48f1-a8ce-5283faff8791',
+                    'fullname':'Mrs. Automation_Johan Automation_Koch',
+                    'username':'Automation_eulah.conroy@pagachirthe.info',
+                    'first_name':'Automation_Johan',
+                    'last_name':'Automation_Koch',
+                    'contact_email':'contact-email@email.com',
+                    'contact_telephone':'TelephoneNumber1',
+                    'display_name':'Automation_Johan Automation_Koch',
+                    'hearing_role':'Judge',
+                    'user_role':'Judge',
+                    'representee':'',
+                    'linked_participants':[]
+                },
+                'send_notification': true
+             }
+          }";
+
+          _videoApiService.ConferenceResponse = new ConferenceDetailsResponse
+          {
+            Id = Guid.NewGuid(),
+            HearingId = new Guid("a0391117-92e5-41e1-9799-c2cbfc4e9310"),
+            Participants = new List<ParticipantResponse>
+            {
+              new()
+              {
+                RefId = new Guid("1100ddd1-8cef-48f1-a8ce-5283faff8791"),
+                ContactEmail = "Automation_dale@senger.info"
+              }
+            }
+          };
+          
+          await _sut.Run(message);
+          
+          var notificationRequest = (ExistingUserSingleDayHearingConfirmationRequest)_notificationApiClient.NotificationRequests[0];
+
+          notificationRequest.HearingId.Should().Be("a0391117-92e5-41e1-9799-c2cbfc4e9310");
+          notificationRequest.ContactEmail.Should().Be("contact-email@email.com");
+          notificationRequest.ParticipantId.Should().Be("1100ddd1-8cef-48f1-a8ce-5283faff8791");
+          notificationRequest.CaseName.Should().Be("Test Add");
+          notificationRequest.DisplayName.Should().Be("Automation_Johan Automation_Koch");
+          notificationRequest.Name.Should().Be("Automation_Johan Automation_Koch");
+          notificationRequest.Representee.Should().BeNull();
+          notificationRequest.Username.Should().Be("Automation_eulah.conroy@pagachirthe.info");
+          notificationRequest.RoleName.Should().Be("Judge");
+          notificationRequest.ScheduledDateTime.Should().Be(DateTime.Parse("2021-02-19T10:30:00Z", CultureInfo.InvariantCulture));
         }
     }
 }

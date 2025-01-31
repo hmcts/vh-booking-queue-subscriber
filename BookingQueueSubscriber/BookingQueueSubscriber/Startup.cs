@@ -110,6 +110,7 @@ namespace BookingQueueSubscriber
                 services.AddScoped<INotificationApiClient, NotificationApiClientFake>();
                 services.AddScoped<IUserService, UserServiceFake>();
                 services.AddScoped<IBookingsApiClient, BookingsApiClientFake>();
+                services.AddScoped<ILogger, FakeLogger>();
             }
             else
             {
