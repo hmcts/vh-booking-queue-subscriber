@@ -1,0 +1,15 @@
+services:
+
+  vh-bqs-tests:
+    image: vh-bqs-tests
+    build:
+      context: ./
+      dockerfile: tests/Dockerfile
+    entrypoint: "/run-tests.sh"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - VHSERVICES__ENABLEVIDEOAPISTUB=false
+    volumes:
+      - ./TestResults:/TestResults:rw
+      - ./Coverage:/Coverage:rw
+      - ./:/app:rw
