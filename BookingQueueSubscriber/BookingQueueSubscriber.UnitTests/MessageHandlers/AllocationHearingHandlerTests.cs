@@ -53,7 +53,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
         private static JusticeUserDto BuildCsoUser()
         {
-            return new JusticeUserDto() {Username = "user.name@mail.com"};
+            return new JusticeUserDto() {Username = "user.name@mail.com", FullName = "CSO Name", UserId = Guid.NewGuid()};
         }
 
         private static IList<HearingDto> BuildHearings()
