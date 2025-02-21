@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using BookingQueueSubscriber.Common.Extensions;
 using UserApi.Client;
 using UserApi.Contract.Requests;
 using UserApi.Contract.Responses;
@@ -134,17 +135,21 @@ namespace BookingQueueSubscriber.Services.UserApi
         private async Task<UserProfile> GetUserByContactEmail(string emailAddress)
         {
             _logger.LogInformation("Attempt to get username by contact email {ContactEmail}.", emailAddress);
+            
+            // Remove diacritic characters from the email address
+            // We have to do this here rather than in user api as diacritic characters do not get url-encoded by the user api client
+            var sanitisedEmailAddress = emailAddress.RemoveDiacriticCharacters();
             try
             {
-                var user = await _userApiClient.GetUserByEmailAsync(emailAddress);
-                _logger.LogInformation("User with contact email {ContactEmail} found.", emailAddress);
+                var user = await _userApiClient.GetUserByEmailAsync(sanitisedEmailAddress);
+                _logger.LogInformation("User with contact email {ContactEmail} found.", sanitisedEmailAddress);
                 return user;
             }
             catch (UserApiException e)
             {
                 if (e.StatusCode == (int)HttpStatusCode.NotFound)
                 {
-                    _logger.LogWarning(e, "User with contact email {ContactEmail} not found.", emailAddress);
+                    _logger.LogWarning(e, "User with contact email {ContactEmail} not found.", sanitisedEmailAddress);
                     return null;
                 }
                 

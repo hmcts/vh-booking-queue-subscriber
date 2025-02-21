@@ -160,6 +160,11 @@
           "System.Diagnostics.EventLog": "6.0.0"
         }
       },
+      "Diacritics": {
+        "type": "Transitive",
+        "resolved": "3.3.29",
+        "contentHash": "yrbxg/3T2af17np2XIjRbRXWM1OdtwJof9xg3qRj7D3s9AYkuEpD4UMCsNvnj//GHvzN9hw79ceh4z8Fhlvvhw=="
+      },
       "Google.Protobuf": {
         "type": "Transitive",
         "resolved": "3.24.3",
@@ -2293,6 +2298,7 @@
         "type": "Project",
         "dependencies": {
           "BookingsApi.Client": "[3.1.21, )",
+          "Diacritics": "[3.3.29, )",
           "LaunchDarkly.ServerSdk": "[8.6.0, )",
           "Microsoft.ApplicationInsights": "[2.22.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",

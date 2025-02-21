@@ -1,3 +1,4 @@
+using BookingQueueSubscriber.Common.Extensions;
 using BookingQueueSubscriber.Services.UserApi;
 using Microsoft.Extensions.Logging;
 using UserApi.Client;
@@ -38,6 +39,44 @@ namespace BookingQueueSubscriber.UnitTests.UserServiceTests
             await _userService.UpdateUserContactEmail(existingContactEmail, newContactEmail);
 
             // Assert
+            _userApiClientMock.Verify(x => x.GetUserByEmailAsync(
+                It.Is<string>(e => e == existingContactEmail)
+            ), Times.Once);
+            
+            _userApiClientMock.Verify(x => x.UpdateUserAccountAsync(
+                It.IsAny<Guid>(), 
+                It.Is<UpdateUserAccountRequest>(r => 
+                    r.FirstName == user.FirstName &&
+                    r.LastName == user.LastName &&
+                    r.ContactEmail == newContactEmail
+                )
+            ), Times.Once);
+        }
+
+        [Test]
+        public async Task Should_update_user_contact_email_containing_diacritic_characters()
+        {
+            // Arrange
+            const string existingContactEmail = "Áá@créâtïvéàççénts.com";
+            const string newContactEmail = "çÁá@créâtïvéàççénts.com";
+            var existingContactEmailWithoutDiacritics = existingContactEmail.RemoveDiacriticCharacters();
+            var user = new UserProfile
+            {
+                UserId = Guid.NewGuid().ToString(),
+                FirstName = "FirstName",
+                LastName = "LastName",
+                Email = existingContactEmailWithoutDiacritics
+            };
+            _userApiClientMock.Setup(x => x.GetUserByEmailAsync(existingContactEmailWithoutDiacritics)).ReturnsAsync(user);
+            
+            // Act
+            await _userService.UpdateUserContactEmail(existingContactEmail, newContactEmail);
+
+            // Assert
+            _userApiClientMock.Verify(x => x.GetUserByEmailAsync(
+                It.Is<string>(e => e == existingContactEmailWithoutDiacritics)
+            ), Times.Once);
+                
             _userApiClientMock.Verify(x => x.UpdateUserAccountAsync(
                 It.IsAny<Guid>(), 
                 It.Is<UpdateUserAccountRequest>(r => 
