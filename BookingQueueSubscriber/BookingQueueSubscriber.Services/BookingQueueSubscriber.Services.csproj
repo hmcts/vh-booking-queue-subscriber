@@ -22,7 +22,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="TimeZoneConverter" Version="7.0.0" />
-      <PackageReference Include="UserApi.Client" Version="3.1.10" />
+      <PackageReference Include="UserApi.Client" Version="3.2.2-pr-0264-0008" />
       <PackageReference Include="NotificationApi.Client" Version="3.0.9" />
 
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.36.0" />

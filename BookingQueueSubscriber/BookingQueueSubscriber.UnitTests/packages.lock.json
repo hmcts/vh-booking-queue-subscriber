@@ -2244,8 +2244,8 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "3.1.10",
-        "contentHash": "wZOra3f8bhqdD9PAXXFN5OkBp+JZbkV+pFTgYS1lypmMtnPcn7WeaNH8K6Zbf75I4CvGOGLHjdExw7nGGoN2IQ==",
+        "resolved": "3.2.2-pr-0264-0008",
+        "contentHash": "cRS6l67Iusr5iQMGgmhKJtMAGVuftE7Rl1qcfiVRonQ4JMBhAGl5mOlxcibIT/ja9bb74CFcz+Lz66ThQ0DlCw==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -2312,7 +2312,7 @@
           "NotificationApi.Client": "[3.0.9, )",
           "System.IdentityModel.Tokens.Jwt": "[6.36.0, )",
           "TimeZoneConverter": "[7.0.0, )",
-          "UserApi.Client": "[3.1.10, )",
+          "UserApi.Client": "[3.2.2-pr-0264-0008, )",
           "VideoApi.Client": "[3.1.20, )"
         }
       }
