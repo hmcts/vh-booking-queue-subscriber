@@ -1,9 +1,10 @@
 ﻿namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos
 {
-    public class UserDto
+    public class JusticeUserDto
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public string Username { get; set; }
+        public string FullName { get; set; }
         public string UserRole { get; set; }
     }
 }

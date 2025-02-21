@@ -19,5 +19,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         Task UpdateEndpointInConference(Guid conferenceId, string sip, UpdateEndpointRequest request);
         Task CloseConsultation(Guid conferenceId, Guid participantId);
         Task UpdateParticipantUsernameWithPolling(Guid hearingId, string username, string contactEmail);
+        Task<ICollection<ConferenceDetailsResponse>> GetConferencesByHearingRefIdsAsync(
+            GetConferencesByHearingIdsRequest request);
     }
 }

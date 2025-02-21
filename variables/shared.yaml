@@ -7,6 +7,9 @@ parameters:
     default: ""
 
 variables:
+  - name: appName
+    value: BookingQueueSubscriber
+
   - name: git_version_config_path
     value: $(Build.SourcesDirectory)/sds-git-version-config.yml
 
@@ -63,3 +66,6 @@ variables:
 
   - name: app_path
     value: BookingQueueSubscriber
+  
+  - name: dotnetVersion
+    value: '6.x'

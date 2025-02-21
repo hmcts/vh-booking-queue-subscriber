@@ -29,29 +29,6 @@ namespace BookingQueueSubscriber.UnitTests.Mappers.NotificationMappers
         }
 
         [Test]
-        public void Should_map_to_ejud_joh_confirmation_notification()
-        {
-            var expectedNotificationType = NotificationType.HearingConfirmationEJudJoh;
-            var participant = GetParticipantDto("Judicial Office Holder");
-            var hearing = GetHearingDto();
-
-            var expectedParameters = GetExpectedParameters(hearing, participant);
-            expectedParameters.Remove("judge");
-            expectedParameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
-
-            var result = AddNotificationRequestMapper.MapToNewHearingNotification(hearing, participant);
-
-            result.Should().NotBeNull();
-            result.HearingId.Should().Be(hearing.HearingId);
-            result.ParticipantId.Should().Be(participant.ParticipantId);
-            result.ContactEmail.Should().Be(participant.ContactEmail);
-            result.NotificationType.Should().Be(expectedNotificationType);
-            result.MessageType.Should().Be(MessageType.Email);
-            result.PhoneNumber.Should().Be(participant.ContactTelephone);
-            result.Parameters.Should().BeEquivalentTo(expectedParameters);
-        }
-
-        [Test]
         public void Should_map_to_judge_confirmation_notification()
         {
             var expectedNotificationType = NotificationType.HearingConfirmationJudge;

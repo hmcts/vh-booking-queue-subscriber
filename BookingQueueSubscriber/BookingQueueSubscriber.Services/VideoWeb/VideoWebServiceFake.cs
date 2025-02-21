@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using BookingQueueSubscriber.Services.VideoWeb.Models;
 using VideoApi.Contract.Requests;
 
 namespace BookingQueueSubscriber.Services.VideoWeb
@@ -30,7 +31,7 @@ namespace BookingQueueSubscriber.Services.VideoWeb
             return Task.FromResult(HttpStatusCode.OK);
         }
         
-        public Task PushAllocationToCsoUpdatedMessage(AllocationHearingsToCsoRequest request)
+        public Task PushAllocationToCsoUpdatedMessage(HearingAllocationNotificationRequest request)
         {
             PushAllocationToCsoUpdatedMessageCount++;
             return Task.FromResult(HttpStatusCode.OK);

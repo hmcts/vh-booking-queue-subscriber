@@ -10,6 +10,9 @@ namespace BookingQueueSubscriber.Services.VideoApi
     {
         public ConferenceDetailsResponse ConferenceResponse { get; set; }
         public ICollection<EndpointResponse> EndpointResponses { get; set; }
+
+        public ICollection<ConferenceDetailsResponse> ConferenceCoreResponses { get; set; } =
+            new List<ConferenceDetailsResponse>();
         public int BookNewConferenceCount { get; private set; }
         public int UpdateConferenceCount { get; private set; }
         public int DeleteConferenceCount { get; private set; }
@@ -22,6 +25,7 @@ namespace BookingQueueSubscriber.Services.VideoApi
         public int RemoveEndpointFromConferenceCount { get; set; }
         public int UpdateEndpointInConferenceCount { get; set; }
         public int UpdateConferenceParticipantsAsyncCount { get; set; }
+        public int UpdateGetConferencesByHearingRefIdsCount { get; private set; }
 
         public Task<ConferenceDetailsResponse> BookNewConferenceAsync(BookNewConferenceRequest request)
         {
@@ -130,7 +134,8 @@ namespace BookingQueueSubscriber.Services.VideoApi
         {
             BookNewConferenceCount = UpdateConferenceCount = DeleteConferenceCount = GetConferenceByHearingRefIdCount =
                 AddParticipantsToConferenceCount =
-                    RemoveParticipantFromConferenceCount = UpdateParticipantDetailsCount = 0;
+                    RemoveParticipantFromConferenceCount =
+                        UpdateParticipantDetailsCount = UpdateGetConferencesByHearingRefIdsCount = 0;
         }
 
         public Task UpdateConferenceParticipantsAsync(Guid conferenceId, UpdateConferenceParticipantsRequest request)
@@ -143,6 +148,13 @@ namespace BookingQueueSubscriber.Services.VideoApi
         {
             UpdateParticipantDetailsCount++;
             return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task<ICollection<ConferenceDetailsResponse>> GetConferencesByHearingRefIdsAsync(
+            GetConferencesByHearingIdsRequest request)
+        {
+            UpdateGetConferencesByHearingRefIdsCount++;
+            return Task.FromResult(ConferenceCoreResponses);
         }
     }
 }
