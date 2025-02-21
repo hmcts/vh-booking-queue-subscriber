@@ -9,7 +9,7 @@ public static class StringExtensions
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public static string RemoveDiacriticCharacters(this string input)
+    public static string ReplaceDiacriticCharacters(this string input)
     {
         return input.RemoveDiacritics();
     }

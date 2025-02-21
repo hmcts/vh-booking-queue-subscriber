@@ -136,9 +136,9 @@ namespace BookingQueueSubscriber.Services.UserApi
         {
             _logger.LogInformation("Attempt to get username by contact email {ContactEmail}.", emailAddress);
             
-            // Remove diacritic characters from the email address
+            // Remove diacritics from the email address
             // We have to do this here rather than in user api as diacritic characters do not get url-encoded by the user api client
-            var sanitisedEmailAddress = emailAddress.RemoveDiacriticCharacters();
+            var sanitisedEmailAddress = emailAddress.ReplaceDiacriticCharacters();
             try
             {
                 var user = await _userApiClient.GetUserByEmailAsync(sanitisedEmailAddress);

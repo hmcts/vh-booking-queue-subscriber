@@ -59,7 +59,7 @@ namespace BookingQueueSubscriber.UnitTests.UserServiceTests
             // Arrange
             const string existingContactEmail = "Áá@créâtïvéàççénts.com";
             const string newContactEmail = "çÁá@créâtïvéàççénts.com";
-            var existingContactEmailWithoutDiacritics = existingContactEmail.RemoveDiacriticCharacters();
+            var existingContactEmailWithoutDiacritics = existingContactEmail.ReplaceDiacriticCharacters();
             var user = new UserProfile
             {
                 UserId = Guid.NewGuid().ToString(),
