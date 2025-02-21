@@ -884,6 +884,7 @@ namespace BookingQueueSubscriber.UnitTests.BookingQueueSubscriberFunctionTests
                   '$type': 'BookingsApi.Infrastructure.Services.Dtos.JusticeUserDto, BookingsApi.Infrastructure.Services',
                   'user_id': '74c3a02c-672b-4b89-81fa-2b9c7c39d13a',
                   'username': '924abca9a76147c599da348c14bda780@test.com',
+                  'full_name': 'CSO Name',
                   'user_roles': []
                 }
               }
