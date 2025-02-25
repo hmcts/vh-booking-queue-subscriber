@@ -12,6 +12,12 @@
           "System.Text.Json": "8.0.5"
         }
       },
+      "Diacritics": {
+        "type": "Direct",
+        "requested": "[3.3.29, )",
+        "resolved": "3.3.29",
+        "contentHash": "yrbxg/3T2af17np2XIjRbRXWM1OdtwJof9xg3qRj7D3s9AYkuEpD4UMCsNvnj//GHvzN9hw79ceh4z8Fhlvvhw=="
+      },
       "LaunchDarkly.ServerSdk": {
         "type": "Direct",
         "requested": "[8.6.0, )",
