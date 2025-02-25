@@ -6,6 +6,7 @@ java:
     QUEUENAME: oliver-booking
     VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-950.dev.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api-pr-264.dev.platform.hmcts.net/
+    VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api-pr-178.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
