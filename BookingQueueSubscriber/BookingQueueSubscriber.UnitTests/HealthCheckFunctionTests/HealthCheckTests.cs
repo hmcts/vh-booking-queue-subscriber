@@ -30,7 +30,7 @@ public class HealthCheckTests
             .ReturnsAsync(healthReport);
         
         // Act
-        var result = await _sut.HealthCheck(null, Mock.Of<ILogger>());
+        var result = await _sut.HealthCheck(null);
         
         // Assert
         var okResult = result as ObjectResult;
@@ -50,7 +50,7 @@ public class HealthCheckTests
             .ReturnsAsync(healthReport);
         
         // Act
-        var result = await _sut.HealthCheck(null, Mock.Of<ILogger>());
+        var result = await _sut.HealthCheck(null);
         
         // Assert
         var serviceUnavailableResult = result as ObjectResult;
