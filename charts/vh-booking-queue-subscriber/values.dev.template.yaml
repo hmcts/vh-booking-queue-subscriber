@@ -3,13 +3,13 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   environment:
-    QUEUENAME: booking
+    QUEUENAME: oliver-booking
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: oliver-booking-2
+    queueName: oliver-booking
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
