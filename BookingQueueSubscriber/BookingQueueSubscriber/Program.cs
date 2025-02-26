@@ -13,7 +13,7 @@ using UserApi.Client;
 using VideoApi.Client;
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
+    // .ConfigureFunctionsWebApplication()
     .ConfigureAppConfiguration(ConfigureAppConfiguration)
     .ConfigureServices((hostContext, services) =>
     {
@@ -33,6 +33,7 @@ public static partial class Program
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         services.AddSingleton<IMemoryCache>(memoryCache);
         services.AddHttpContextAccessor();
+        services.AddHostedService<ServiceBusListener>();
         services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
         services.Configure<AzureAdConfiguration>(options =>
         {
