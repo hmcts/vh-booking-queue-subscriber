@@ -223,6 +223,17 @@
         "resolved": "4.6.0",
         "contentHash": "I5G6Y8jb0xRtGUC9Lahy7FUvlYlnGMMkbuKAQBy8Jb7Y6Yn8OlBEiUOY0PqZ0hy6Ua8poVA1ui1tAIiXNxGdsg=="
       },
+      "TinyHealthCheck": {
+        "type": "Direct",
+        "requested": "[1.1.1, )",
+        "resolved": "1.1.1",
+        "contentHash": "i6SJZIC6cmqFG0Ap46OGR6n73qxGzvZqk29ywNnzkv3pZYfLSvYijGh02SZCjttsXhzOwpYSdwnpQGY1XAHLow==",
+        "dependencies": {
+          "Microsoft.Extensions.Hosting.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.1",
+          "System.Text.Json": "7.0.3"
+        }
+      },
       "VideoApi.Client": {
         "type": "Direct",
         "requested": "[3.1.20, )",

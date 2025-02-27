@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration.KeyPerFile;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using NotificationApi.Client;
+using TinyHealthCheck;
 using UserApi.Client;
 using VideoApi.Client;
 
@@ -131,6 +132,12 @@ public static partial class Program
         }
 
         services.AddVhHealthChecks();
+        services.AddBasicTinyHealthCheck(config =>
+        {
+            config.Port = 8080;
+            config.UrlPath = "/health/liveness";
+            return config;
+        });
         services.AddSingleton<IHostedService, HealthCheckHostedService>();
     }
 
