@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
 namespace BookingQueueSubscriber;
@@ -27,7 +28,7 @@ public class HealthCheckHostedService : IHostedService
             options.ListenAnyIP(8080);
         });
 
-        builder.Services.AddHealthChecks();
+        builder.Services.AddSingleton(_serviceProvider.GetRequiredService<HealthCheckService>());
 
         _app = builder.Build();
 
