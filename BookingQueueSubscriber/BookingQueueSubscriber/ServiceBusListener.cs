@@ -4,40 +4,34 @@ using Microsoft.Extensions.Hosting;
 namespace BookingQueueSubscriber;
 
 [ExcludeFromCodeCoverage] // for now
-public class ServiceBusListener : BackgroundService
+public class ServiceBusListener(
+    IMessageHandlerFactory messageHandlerFactory,
+    ServiceBusProcessor serviceBusProcessor,
+    ILogger<ServiceBusListener> logger)
+    : BackgroundService
 {
-    private readonly ServiceBusProcessor _processor;
-    private readonly IMessageHandlerFactory _messageHandlerFactory;
-    private readonly ILogger<ServiceBusListener> _logger;
-
-    public ServiceBusListener(IMessageHandlerFactory messageHandlerFactory, ILogger<ServiceBusListener> logger)
-    {
-        _messageHandlerFactory = messageHandlerFactory;
-        _logger = logger;
-        var client = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnection"));
-        _processor = client.CreateProcessor(Environment.GetEnvironmentVariable("queueName"), new ServiceBusProcessorOptions());
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _processor.ProcessMessageAsync += MessageHandler;
-        _processor.ProcessErrorAsync += ErrorHandler;
-        await _processor.StartProcessingAsync(stoppingToken);
+        serviceBusProcessor.ProcessMessageAsync += MessageHandler;
+        serviceBusProcessor.ProcessErrorAsync += ErrorHandler;
+        
+        logger.LogInformation("Starting service bus processor");
+        await serviceBusProcessor.StartProcessingAsync(stoppingToken);
     }
 
     private async Task MessageHandler(ProcessMessageEventArgs args)
     {
         var bookingQueueItem = args.Message.Body.ToString();
         
-        _logger.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
+        logger.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
         // get handler
         var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
 
-        var handler = _messageHandlerFactory.Get(eventMessage.IntegrationEvent);
-        _logger.LogDebug("using handler {Handler}", handler.GetType());
+        var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
+        logger.LogDebug("using handler {Handler}", handler.GetType());
 
         await handler.HandleAsync(eventMessage.IntegrationEvent);
-        _logger.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
+        logger.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
             eventMessage.IntegrationEvent);
         
         await args.CompleteMessageAsync(args.Message);
@@ -45,13 +39,14 @@ public class ServiceBusListener : BackgroundService
 
     private Task ErrorHandler(ProcessErrorEventArgs args)
     {
-        _logger.LogError(args.Exception, "Error processing message");
+        logger.LogError(args.Exception, "Error processing message");
         return Task.CompletedTask;
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        await _processor.StopProcessingAsync(cancellationToken);
-        await _processor.DisposeAsync();
+        logger.LogInformation("Stopping service bus processor");
+        await serviceBusProcessor.StopProcessingAsync(cancellationToken);
+        await serviceBusProcessor.DisposeAsync();
     }
 }

@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus;
 using BookingQueueSubscriber.Health;
 using BookingQueueSubscriber.Security;
 using BookingQueueSubscriber.Services.NotificationApi;
@@ -33,7 +34,17 @@ public static partial class Program
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         services.AddSingleton<IMemoryCache>(memoryCache);
         services.AddHttpContextAccessor();
+        
+        var serviceBusConnectionString = configuration["ServiceBusConnection"];
+        var queueName = configuration["queueName"];
+        services.AddSingleton(new ServiceBusClient(serviceBusConnectionString));
+        services.AddSingleton(sp =>
+        {
+            var client = sp.GetRequiredService<ServiceBusClient>();
+            return client.CreateProcessor(queueName, new ServiceBusProcessorOptions());
+        });
         services.AddHostedService<ServiceBusListener>();
+        
         services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
         services.Configure<AzureAdConfiguration>(options =>
         {
