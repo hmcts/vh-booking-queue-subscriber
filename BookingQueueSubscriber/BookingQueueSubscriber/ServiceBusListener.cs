@@ -24,7 +24,6 @@ public class ServiceBusListener(
         var bookingQueueItem = args.Message.Body.ToString();
         
         logger.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
-        // get handler
         var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
 
         var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
