@@ -131,6 +131,7 @@ public static partial class Program
         }
 
         services.AddVhHealthChecks();
+        services.AddSingleton<IHostedService, HealthCheckHostedService>();
     }
 
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
