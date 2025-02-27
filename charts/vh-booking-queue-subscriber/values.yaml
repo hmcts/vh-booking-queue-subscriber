@@ -3,6 +3,9 @@ java:
   image: "sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest"
   releaseNameOverride: vh-booking-queue-subscriber
   aadIdentityName: vh-aad-identity
+  readinessPath: /health/liveness
+  livenessPath: /health/liveness
+  startupPath: /health/liveness
   applicationPort: 8080
   keyVaults:
     vh-infra-core:
