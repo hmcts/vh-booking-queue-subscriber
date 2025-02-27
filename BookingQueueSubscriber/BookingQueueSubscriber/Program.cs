@@ -34,17 +34,6 @@ public static partial class Program
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         services.AddSingleton<IMemoryCache>(memoryCache);
         services.AddHttpContextAccessor();
-        
-        var serviceBusConnectionString = configuration["ServiceBusConnection"];
-        var queueName = configuration["queueName"];
-        services.AddSingleton(new ServiceBusClient(serviceBusConnectionString));
-        services.AddSingleton(sp =>
-        {
-            var client = sp.GetRequiredService<ServiceBusClient>();
-            return client.CreateProcessor(queueName, new ServiceBusProcessorOptions());
-        });
-        services.AddHostedService<ServiceBusListener>();
-        
         services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
         services.Configure<AzureAdConfiguration>(options =>
         {
@@ -129,6 +118,16 @@ public static partial class Program
                     client.ReadResponseAsString = true;
                     return (IBookingsApiClient)client;
                 });
+             
+             var serviceBusConnectionString = configuration["ServiceBusConnection"];
+             var queueName = configuration["queueName"];
+             services.AddSingleton(new ServiceBusClient(serviceBusConnectionString));
+             services.AddSingleton(sp =>
+             {
+                 var client = sp.GetRequiredService<ServiceBusClient>();
+                 return client.CreateProcessor(queueName, new ServiceBusProcessorOptions());
+             });
+             services.AddHostedService<ServiceBusListener>();
         }
 
         services.AddVhHealthChecks();
