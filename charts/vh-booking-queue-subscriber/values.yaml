@@ -83,6 +83,11 @@ java:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+  livenessProbe:
+      httpGet:
+        path: /health/liveness
+        port: 5000  # Match the port used by the kestrel server in the .NET health check
+        scheme: HTTP
 function:
   releaseNameOverride: vh-booking-queue-subscriber
   scaleType: Object
