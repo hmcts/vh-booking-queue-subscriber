@@ -68,4 +68,4 @@ variables:
     value: BookingQueueSubscriber
   
   - name: dotnetVersion
-    value: '6.x'
+    value: '8.x'

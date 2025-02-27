@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <ProjectGuid>413B52F2-FBD6-49C6-A638-C74DCA69607E</ProjectGuid>
-    <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +16,7 @@
     <PackageReference Include="NUnit" Version="4.3.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageReference Include="FluentAssertions" Version="7.1.0" />
-    <PackageReference Include="Microsoft.TestPlatform" Version="16.7.1" />
+    <PackageReference Include="Microsoft.TestPlatform" Version="17.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="NBuilder" Version="6.1.0" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
