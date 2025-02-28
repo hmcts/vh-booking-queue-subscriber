@@ -2,22 +2,14 @@
 
 namespace BookingQueueSubscriber
 {
-    public class HealthCheckFunction
+    public class HealthCheckFunction(HealthCheckService healthCheck)
     {
-        
-        private readonly HealthCheckService _healthCheck;
-
-        public HealthCheckFunction(HealthCheckService healthCheck)
-        {
-            _healthCheck = healthCheck;
-        }
-
-        [FunctionName("HealthCheck")]
+        [Function("HealthCheck")]
         public async Task<IActionResult> HealthCheck(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")]
-            HttpRequest req, ILogger log)
+            HttpRequest req)
         {
-            var report = await _healthCheck.CheckHealthAsync();
+            var report = await healthCheck.CheckHealthAsync();
             var healthCheckResponse = new
             {
                 status = report.Status.ToString(),
