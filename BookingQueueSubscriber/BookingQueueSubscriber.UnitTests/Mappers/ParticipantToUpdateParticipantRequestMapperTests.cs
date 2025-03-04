@@ -22,17 +22,11 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             
             request.Should().NotBeNull();
             request.ParticipantRefId.Should().Be(participantDto.ParticipantId);
-            request.Fullname.Should().Be(participantDto.Fullname);
-            request.FirstName.Should().Be(participantDto.FirstName);
-            request.LastName.Should().Be(participantDto.LastName);
             request.ContactEmail.Should().Be(participantDto.ContactEmail);
-            request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
-            request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
             request.Username.Should().Be(participantDto.Username);
             request.UserRole.Should().Be(participantDto.MapUserRoleToContractEnum());
             request.HearingRole.Should().Be(participantDto.HearingRole);
-            request.CaseTypeGroup.Should().Be("Obsolete");
             request.LinkedParticipants.Should().BeEquivalentTo(new List<LinkedParticipantRequest>());
         }
 
@@ -45,17 +39,11 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             var request = ParticipantToUpdateParticipantMapper.MapToParticipantRequest(participantDto);
             
             request.Should().NotBeNull();
-            request.Fullname.Should().Be(participantDto.Fullname);
-            request.FirstName.Should().Be(participantDto.FirstName);
-            request.LastName.Should().Be(participantDto.LastName);
             request.ContactEmail.Should().Be(participantDto.ContactEmail);
-            request.ContactTelephone.Should().Be(participantDto.ContactTelephone);
-            request.Representee.Should().Be(participantDto.Representee);
             request.DisplayName.Should().Be(participantDto.DisplayName);
             request.Username.Should().Be(participantDto.Username);
             request.UserRole.Should().Be(UserRole.Individual);
             request.HearingRole.Should().Be(participantDto.HearingRole);
-            request.CaseTypeGroup.Should().Be("Obsolete");
             var linkedParticipant = request.LinkedParticipants[0];
             linkedParticipant.Type.Should().Be((VideoApi.Contract.Enums.LinkedParticipantType)LinkedParticipantType.Interpreter);
             linkedParticipant.LinkedRefId.Should().Be(participantDto.LinkedParticipants[0].LinkedId);

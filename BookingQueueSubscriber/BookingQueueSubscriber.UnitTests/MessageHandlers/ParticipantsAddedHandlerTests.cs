@@ -24,17 +24,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 ConferenceDetailsResponse.Id, 
                 It.Is<UpdateConferenceParticipantsRequest>(r => 
                     r.NewParticipants[0].Id == ConferenceDetailsResponse.Participants[0].Id && 
-                    r.NewParticipants[0].Name == integrationEvent.Participants[0].Fullname &&
                     r.NewParticipants[0].Username == integrationEvent.Participants[0].Username &&
-                    r.NewParticipants[0].FirstName == integrationEvent.Participants[0].FirstName &&
-                    r.NewParticipants[0].LastName == integrationEvent.Participants[0].LastName &&
                     r.NewParticipants[0].ContactEmail == integrationEvent.Participants[0].ContactEmail &&
-                    r.NewParticipants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
                     r.NewParticipants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     r.NewParticipants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
                     r.NewParticipants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
                     r.NewParticipants[0].ParticipantRefId == ConferenceDetailsResponse.Participants[0].RefId &&
-                    r.NewParticipants[0].Representee == integrationEvent.Participants[0].Representee &&
                     r.NewParticipants[0].LinkedParticipants.Count.Equals(0)
             )), Times.Once());
         }
@@ -52,17 +47,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             (
                 request => 
                     request.Participants.Count == 1 &&
-                    request.Participants[0].Name == integrationEvent.Participants[0].Fullname &&
                     request.Participants[0].Username == integrationEvent.Participants[0].Username &&
-                    request.Participants[0].FirstName == integrationEvent.Participants[0].FirstName &&
-                    request.Participants[0].LastName == integrationEvent.Participants[0].LastName &&
                     request.Participants[0].ContactEmail == integrationEvent.Participants[0].ContactEmail &&
-                    request.Participants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
                     request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
                     request.Participants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
-                    request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
-                    request.Participants[0].Representee == integrationEvent.Participants[0].Representee
+                    request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId
             )), Times.Once);
         }
         
@@ -91,17 +81,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             (
                 request => 
                     request.Participants.Count == 1 &&
-                    request.Participants[0].Name == integrationEvent.Participants[0].Fullname &&
                     request.Participants[0].Username == integrationEvent.Participants[0].Username &&
-                    request.Participants[0].FirstName == integrationEvent.Participants[0].FirstName &&
-                    request.Participants[0].LastName == integrationEvent.Participants[0].LastName &&
                     request.Participants[0].ContactEmail == integrationEvent.Participants[0].ContactEmail &&
-                    request.Participants[0].ContactTelephone == integrationEvent.Participants[0].ContactTelephone &&
                     request.Participants[0].DisplayName == integrationEvent.Participants[0].DisplayName &&
                     request.Participants[0].UserRole.ToString() == integrationEvent.Participants[0].UserRole &&
                     request.Participants[0].HearingRole == integrationEvent.Participants[0].HearingRole &&
                     request.Participants[0].ParticipantRefId == integrationEvent.Participants[0].ParticipantId &&
-                    request.Participants[0].Representee == integrationEvent.Participants[0].Representee &&
                     request.Participants[0].LinkedParticipants.Count.Equals(1) &&
                     request.Participants[0].LinkedParticipants[0].Type == dtoList[0].Type &&
                     request.Participants[0].LinkedParticipants[0].ParticipantRefId == dtoList[0].ParticipantRefId &&
