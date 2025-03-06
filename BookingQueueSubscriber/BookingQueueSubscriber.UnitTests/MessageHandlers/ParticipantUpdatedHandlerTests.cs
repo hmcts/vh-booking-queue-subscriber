@@ -38,12 +38,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 (
                     request =>
                         request.DisplayName == integrationEvent.Participant.DisplayName &&
-                        request.FirstName == integrationEvent.Participant.FirstName &&
-                        request.LastName == integrationEvent.Participant.LastName &&
-                        request.Representee == integrationEvent.Participant.Representee &&
                         request.ContactEmail == integrationEvent.Participant.ContactEmail &&
-                        request.ContactTelephone == integrationEvent.Participant.ContactTelephone &&
-                        request.Fullname == integrationEvent.Participant.Fullname &&
                         request.Username == integrationEvent.Participant.Username
                 )), Times.Once);
         }
@@ -75,12 +70,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 (
                     request =>
                         request.DisplayName == integrationEvent.Participant.DisplayName &&
-                        request.FirstName == integrationEvent.Participant.FirstName &&
-                        request.LastName == integrationEvent.Participant.LastName &&
-                        request.Representee == integrationEvent.Participant.Representee &&
                         request.ContactEmail == integrationEvent.Participant.ContactEmail &&
-                        request.ContactTelephone == integrationEvent.Participant.ContactTelephone &&
-                        request.Fullname == integrationEvent.Participant.Fullname &&
                         request.Username == integrationEvent.Participant.Username &&
                         request.LinkedParticipants.Count.Equals(1) &&
                         request.LinkedParticipants[0].Type == dtoList[0].Type &&
