@@ -27,7 +27,7 @@
 
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.36.0" />
 
-      <PackageReference Include="VideoApi.Client" Version="3.2.8-pr-0724-0004" />
+      <PackageReference Include="VideoApi.Client" Version="3.2.8" />
     </ItemGroup>
 
 
