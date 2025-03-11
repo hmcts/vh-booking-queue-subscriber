@@ -99,7 +99,7 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            var instrumentationKey = configuration["ApplicationInsights:InstrumentationKey"];
+            var instrumentationKey = configuration["ApplicationInsights:ConnectionString"];
             if(String.IsNullOrWhiteSpace(instrumentationKey))
                 Console.WriteLine("Application Insights Instrumentation Key not found");
             else
