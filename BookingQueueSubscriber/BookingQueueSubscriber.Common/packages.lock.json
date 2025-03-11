@@ -26,15 +26,6 @@
           "System.Collections.Immutable": "1.7.1"
         }
       },
-      "Microsoft.ApplicationInsights": {
-        "type": "Direct",
-        "requested": "[2.22.0, )",
-        "resolved": "2.22.0",
-        "contentHash": "3AOM9bZtku7RQwHyMEY3tQMrHIgjcfRDa6YQpd/QG2LDGvMydSlL9Di+8LLMt7J2RDdfJ7/2jdYv6yHcMJAnNw==",
-        "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "5.0.0"
-        }
-      },
       "Microsoft.Azure.Functions.Extensions": {
         "type": "Direct",
         "requested": "[1.1.0, )",

@@ -1,3 +1,4 @@
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using BookingQueueSubscriber.Health;
 using BookingQueueSubscriber.Security;
 using BookingQueueSubscriber.Services.NotificationApi;
@@ -10,6 +11,8 @@ using VideoApi.Client;
 using BookingsApi.Client;
 using Microsoft.Extensions.Configuration.KeyPerFile;
 using Microsoft.Extensions.FileProviders;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
@@ -17,21 +20,21 @@ namespace BookingQueueSubscriber
     [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
+        const string VhInfraCore = "vh-infra-core";
+        const string VhBookingQueue = "vh-booking-queue";
+        const string VhAdminWeb = "vh-admin-web";
+        const string VhBookingsApi = "vh-bookings-api";
+        const string VhVideoApi = "vh-video-api";
+        const string VhNotificationApi = "vh-notification-api";
+        const string VhUserApi = "vh-user-api";
+        const string VhVideoWeb = "vh-video-web";
+        
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-
-            const string vhInfraCore = "vh-infra-core";
-            const string vhBookingQueue = "vh-booking-queue";
-            const string vhAdminWeb = "vh-admin-web";
-            const string vhBookingsApi = "vh-bookings-api";
-            const string vhVideoApi = "vh-video-api";
-            const string vhNotificationApi = "vh-notification-api";
-            const string vhUserApi = "vh-user-api";
-            const string vhVideoWeb = "vh-video-web";
 
             var context = builder.GetContext();
             var configBuilder = builder.ConfigurationBuilder
@@ -41,8 +44,8 @@ namespace BookingQueueSubscriber
 
             var keyVaults = new[]
             {
-                vhInfraCore, vhBookingQueue, vhAdminWeb, vhBookingsApi, vhVideoApi, vhNotificationApi, vhUserApi,
-                vhVideoWeb
+                VhInfraCore, VhBookingQueue, VhAdminWeb, VhBookingsApi, VhVideoApi, VhNotificationApi, VhUserApi,
+                VhVideoWeb
             };
             foreach (var keyVault in keyVaults)
             {
@@ -76,7 +79,6 @@ namespace BookingQueueSubscriber
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
             services.AddHttpContextAccessor();
-            services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);
@@ -97,7 +99,26 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            services.AddApplicationInsightsTelemetryWorkerService();
+            var instrumentationKey = configuration["ApplicationInsights:InstrumentationKey"];
+            if(String.IsNullOrWhiteSpace(instrumentationKey))
+                Console.WriteLine("Application Insights Instrumentation Key not found");
+            else
+                services.AddOpenTelemetry()
+                    .ConfigureResource(r =>
+                    {
+                        r.AddService(VhBookingQueue)
+                            .AddTelemetrySdk()
+                            .AddAttributes(new Dictionary<string, object>
+                                { ["service.instance.id"] = Environment.MachineName });
+                    })
+                    .UseAzureMonitor(options => options.ConnectionString = instrumentationKey) 
+                    .WithMetrics()
+                    .WithTracing(tracerProvider =>
+                    {
+                        tracerProvider
+                            .AddAspNetCoreInstrumentation(options => options.RecordException = true)
+                            .AddHttpClientInstrumentation(options => options.RecordException = true);
+                    });
             
             RegisterMessageHandlers(services);
 
