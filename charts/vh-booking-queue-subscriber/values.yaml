@@ -2,7 +2,6 @@
 java:
   image: "sdshmctspublic.azurecr.io/vh/booking-queue-subscriber:latest"
   releaseNameOverride: vh-booking-queue-subscriber
-  aadIdentityName: vh-aad-identity
   readinessPath: /health/liveness
   livenessPath: /health/liveness
   startupPath: /health/liveness
@@ -11,7 +10,6 @@ java:
     vh-infra-core:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - azuread--tenantid
         - name: connectionstrings--applicationinsights
@@ -21,7 +19,6 @@ java:
     vh-booking-queue:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - azuread--clientid
         - azuread--clientsecret
@@ -29,14 +26,12 @@ java:
     vh-bookings-api:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - name: azuread--identifieruri
           alias: vhservices--bookingsapiresourceid
     vh-video-api:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - name: azuread--identifieruri
           alias: vhservices--videoapiresourceid
@@ -45,28 +40,24 @@ java:
     vh-video-web:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - name: azuread--identifieruri
           alias: vhservices--videowebresourceid
     vh-notification-api:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - name: azuread--identifieruri
           alias: vhservices--notificationapiresourceid
     vh-user-api:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - name: azuread--identifieruri
           alias: vhservices--userapiresourceid
     vh-admin-web:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-      usePodIdentity: true
       secrets:
         - name: FeatureToggles--SDK-Key
           alias: FeatureToggle--SdkKey
