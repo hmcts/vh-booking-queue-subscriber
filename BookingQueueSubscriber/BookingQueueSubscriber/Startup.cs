@@ -1,3 +1,4 @@
+using Azure.Monitor.OpenTelemetry.Exporter;
 using BookingQueueSubscriber.Health;
 using BookingQueueSubscriber.Security;
 using BookingQueueSubscriber.Services.NotificationApi;
@@ -10,6 +11,8 @@ using VideoApi.Client;
 using BookingsApi.Client;
 using Microsoft.Extensions.Configuration.KeyPerFile;
 using Microsoft.Extensions.FileProviders;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BookingQueueSubscriber
@@ -23,7 +26,6 @@ namespace BookingQueueSubscriber
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-
             const string vhInfraCore = "vh-infra-core";
             const string vhBookingQueue = "vh-booking-queue";
             const string vhAdminWeb = "vh-admin-web";
@@ -32,7 +34,6 @@ namespace BookingQueueSubscriber
             const string vhNotificationApi = "vh-notification-api";
             const string vhUserApi = "vh-user-api";
             const string vhVideoWeb = "vh-video-web";
-
             var context = builder.GetContext();
             var configBuilder = builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
@@ -76,7 +77,6 @@ namespace BookingQueueSubscriber
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
             services.AddHttpContextAccessor();
-            services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);
@@ -97,7 +97,33 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            services.AddApplicationInsightsTelemetryWorkerService();
+            
+            var instrumentationKey = configuration["ApplicationInsights:ConnectionString"];
+            
+            if(String.IsNullOrWhiteSpace(instrumentationKey))
+                Console.WriteLine("Application Insights Instrumentation Key not found");
+            else
+            {
+                var serviceName = "vh-booking-queue";
+                services.AddLogging(logging =>
+                {
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddOpenTelemetry(options =>
+                    {
+                        options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName));
+                        options.AddAzureMonitorLogExporter(o => o.ConnectionString = instrumentationKey);
+                    });
+                });
+                services.AddOpenTelemetry().WithTracing(tracerProvider =>
+                {
+                    tracerProvider
+                        .AddSource("BookingQueueSubscriberFunction")
+                        .AddHttpClientInstrumentation(options => options.RecordException = true )
+                        .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
+                });
+            }
+
             
             RegisterMessageHandlers(services);
 

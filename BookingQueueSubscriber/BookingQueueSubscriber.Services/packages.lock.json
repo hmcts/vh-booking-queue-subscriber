@@ -26,12 +26,6 @@
           "System.Collections.Immutable": "1.7.1"
         }
       },
-      "Microsoft.Extensions.Logging.Abstractions": {
-        "type": "Direct",
-        "requested": "[6.0.4, )",
-        "resolved": "6.0.4",
-        "contentHash": "K14wYgwOfKVELrUh5eBqlC8Wvo9vvhS3ZhIvcswV2uS/ubkTRPSQsN557EZiYUSSoZNxizG+alN4wjtdyLdcyw=="
-      },
       "NotificationApi.Client": {
         "type": "Direct",
         "requested": "[3.0.9, )",
@@ -127,14 +121,6 @@
         "contentHash": "lsLKNqAZ7HIlkdTIrf4FetfRA1SUDE3WlaZQn79aSVkLjYWEhUhkDDK7hORGh4JoA3V2gXN+cIvJQax2uR/ijA==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "6.0.0"
-        }
-      },
-      "Microsoft.ApplicationInsights": {
-        "type": "Transitive",
-        "resolved": "2.22.0",
-        "contentHash": "3AOM9bZtku7RQwHyMEY3tQMrHIgjcfRDa6YQpd/QG2LDGvMydSlL9Di+8LLMt7J2RDdfJ7/2jdYv6yHcMJAnNw==",
-        "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "5.0.0"
         }
       },
       "Microsoft.Azure.Functions.Extensions": {
@@ -305,6 +291,11 @@
           "Microsoft.Extensions.Logging.Abstractions": "2.1.0",
           "Microsoft.Extensions.Options": "2.1.0"
         }
+      },
+      "Microsoft.Extensions.Logging.Abstractions": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "/HggWBbTwy8TgebGSX5DBZ24ndhzi93sHUBDvP1IxbZD7FDokYzdAr6+vbWGjw2XAfR2EJ1sfKUotpjHnFWPxA=="
       },
       "Microsoft.Extensions.Logging.Configuration": {
         "type": "Transitive",
@@ -599,7 +590,6 @@
         "dependencies": {
           "BookingsApi.Client": "[3.1.21, )",
           "LaunchDarkly.ServerSdk": "[8.6.0, )",
-          "Microsoft.ApplicationInsights": "[2.22.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
           "Microsoft.Extensions.Configuration.Json": "[6.0.1, )",
