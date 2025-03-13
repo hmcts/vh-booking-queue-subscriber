@@ -20,22 +20,22 @@ namespace BookingQueueSubscriber
     [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
-        const string VhInfraCore = "vh-infra-core";
-        const string VhBookingQueue = "vh-booking-queue";
-        const string VhAdminWeb = "vh-admin-web";
-        const string VhBookingsApi = "vh-bookings-api";
-        const string VhVideoApi = "vh-video-api";
-        const string VhNotificationApi = "vh-notification-api";
-        const string VhUserApi = "vh-user-api";
-        const string VhVideoWeb = "vh-video-web";
-        
-        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
+     public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-
+            
+            const string vhInfraCore = "vh-infra-core";
+            const string vhBookingQueue = "vh-booking-queue";
+            const string vhAdminWeb = "vh-admin-web";
+            const string vhBookingsApi = "vh-bookings-api";
+            const string vhVideoApi = "vh-video-api";
+            const string vhNotificationApi = "vh-notification-api";
+            const string vhUserApi = "vh-user-api";
+            const string vhVideoWeb = "vh-video-web";
+            
             var context = builder.GetContext();
             var configBuilder = builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
@@ -44,8 +44,8 @@ namespace BookingQueueSubscriber
 
             var keyVaults = new[]
             {
-                VhInfraCore, VhBookingQueue, VhAdminWeb, VhBookingsApi, VhVideoApi, VhNotificationApi, VhUserApi,
-                VhVideoWeb
+                vhInfraCore, vhBookingQueue, vhAdminWeb, vhBookingsApi, vhVideoApi, vhNotificationApi, vhUserApi,
+                vhVideoWeb
             };
             foreach (var keyVault in keyVaults)
             {
@@ -99,14 +99,16 @@ namespace BookingQueueSubscriber
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<NotificationServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
+            
             var instrumentationKey = configuration["ApplicationInsights:ConnectionString"];
+            
             if(String.IsNullOrWhiteSpace(instrumentationKey))
                 Console.WriteLine("Application Insights Instrumentation Key not found");
             else
                 services.AddOpenTelemetry()
                     .ConfigureResource(r =>
                     {
-                        r.AddService(VhBookingQueue)
+                        r.AddService("vh-booking-queue-subscriber")
                             .AddTelemetrySdk()
                             .AddAttributes(new Dictionary<string, object>
                                 { ["service.instance.id"] = Environment.MachineName });
