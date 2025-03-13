@@ -105,14 +105,23 @@ namespace BookingQueueSubscriber
             else
             {
                 var serviceName = "vh-booking-queue";
-                services.AddOpenTelemetry().WithTracing(tracerProvider =>
+                services.AddLogging(logging =>
+                {
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddOpenTelemetry(options =>
                     {
-                        tracerProvider
-                            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
-                            .AddSource("BookingQueueSubscriberFunction")
-                            .AddHttpClientInstrumentation(options => options.RecordException = true )
-                            .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
+                        options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName));
+                        options.AddAzureMonitorLogExporter(o => o.ConnectionString = instrumentationKey);
                     });
+                    services.AddOpenTelemetry().WithTracing(tracerProvider =>
+                        {
+                            tracerProvider
+                                .AddSource("BookingQueueSubscriberFunction")
+                                .AddHttpClientInstrumentation(options => options.RecordException = true )
+                                .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
+                        });
+                });
             }
 
             
