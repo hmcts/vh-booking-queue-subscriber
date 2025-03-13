@@ -114,13 +114,13 @@ namespace BookingQueueSubscriber
                         options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName));
                         options.AddAzureMonitorLogExporter(o => o.ConnectionString = instrumentationKey);
                     });
-                    services.AddOpenTelemetry().WithTracing(tracerProvider =>
-                        {
-                            tracerProvider
-                                .AddSource("BookingQueueSubscriberFunction")
-                                .AddHttpClientInstrumentation(options => options.RecordException = true )
-                                .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
-                        });
+                });
+                services.AddOpenTelemetry().WithTracing(tracerProvider =>
+                {
+                    tracerProvider
+                        .AddSource("BookingQueueSubscriberFunction")
+                        .AddHttpClientInstrumentation(options => options.RecordException = true )
+                        .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
                 });
             }
 
