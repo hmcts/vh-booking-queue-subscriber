@@ -4,13 +4,15 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   disableTraefikTls: false
   environment:
-    QUEUENAME: booking
+    QUEUENAME: shaed-dev
+    VHSERVICES__VIDEOWEBURL: https://vh-video-web-pr-2379.dev.platform.hmcts.net/
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-952.dev.platform.hmcts.net/
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:
   - type: azure-servicebus 
     serviceBusName: "vh-infra-core-dev"
-    queueName: booking
+    queueName: shaed-dev
     messageCount: 1
   object:
     name: '${RELEASE_NAME}'
