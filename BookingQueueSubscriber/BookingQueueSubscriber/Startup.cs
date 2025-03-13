@@ -109,9 +109,7 @@ namespace BookingQueueSubscriber
                     .ConfigureResource(r =>
                     {
                         r.AddService("vh-booking-queue-subscriber")
-                            .AddTelemetrySdk()
-                            .AddAttributes(new Dictionary<string, object>
-                                { ["service.instance.id"] = Environment.MachineName });
+                            .AddTelemetrySdk();
                     })
                     .UseAzureMonitor(options => options.ConnectionString = instrumentationKey) 
                     .WithMetrics()
