@@ -20,13 +20,12 @@ namespace BookingQueueSubscriber
     [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
-     public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
+        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-            
             const string vhInfraCore = "vh-infra-core";
             const string vhBookingQueue = "vh-booking-queue";
             const string vhAdminWeb = "vh-admin-web";
@@ -35,7 +34,6 @@ namespace BookingQueueSubscriber
             const string vhNotificationApi = "vh-notification-api";
             const string vhUserApi = "vh-user-api";
             const string vhVideoWeb = "vh-video-web";
-            
             var context = builder.GetContext();
             var configBuilder = builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
@@ -107,28 +105,14 @@ namespace BookingQueueSubscriber
             else
             {
                 var serviceName = "vh-booking-queue";
-                services.AddLogging(logging =>
-                {
-                    logging.ClearProviders(); 
-                    logging.AddOpenTelemetry(options =>
+                services.AddOpenTelemetry().WithTracing(tracerProvider =>
                     {
-                        options.IncludeFormattedMessage = true; 
-                        options.IncludeScopes = true;
-                        options.ParseStateValues = true; 
-                        options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName));
-                        options.AddAzureMonitorLogExporter(o =>
-                        {
-                            o.ConnectionString = instrumentationKey;
-                        });
+                        tracerProvider
+                            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
+                            .AddSource("BookingQueueSubscriberFunction")
+                            .AddHttpClientInstrumentation(options => options.RecordException = true )
+                            .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
                     });
-                    services.AddOpenTelemetry().WithTracing(tracerProvider =>
-                        {
-                            tracerProvider.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
-                                .AddSource("BookingQueueSubscriberFunction")
-                                .AddHttpClientInstrumentation(options => options.RecordException = true )
-                                .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
-                        });
-                });
             }
 
             

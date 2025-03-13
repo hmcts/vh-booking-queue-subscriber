@@ -26,12 +26,6 @@
           "System.Collections.Immutable": "1.7.1"
         }
       },
-      "Microsoft.Extensions.Logging.Abstractions": {
-        "type": "Direct",
-        "requested": "[6.0.4, )",
-        "resolved": "6.0.4",
-        "contentHash": "K14wYgwOfKVELrUh5eBqlC8Wvo9vvhS3ZhIvcswV2uS/ubkTRPSQsN557EZiYUSSoZNxizG+alN4wjtdyLdcyw=="
-      },
       "NotificationApi.Client": {
         "type": "Direct",
         "requested": "[3.0.9, )",
@@ -297,6 +291,11 @@
           "Microsoft.Extensions.Logging.Abstractions": "2.1.0",
           "Microsoft.Extensions.Options": "2.1.0"
         }
+      },
+      "Microsoft.Extensions.Logging.Abstractions": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "/HggWBbTwy8TgebGSX5DBZ24ndhzi93sHUBDvP1IxbZD7FDokYzdAr6+vbWGjw2XAfR2EJ1sfKUotpjHnFWPxA=="
       },
       "Microsoft.Extensions.Logging.Configuration": {
         "type": "Transitive",
