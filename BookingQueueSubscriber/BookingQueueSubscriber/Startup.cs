@@ -1,4 +1,4 @@
-using Azure.Monitor.OpenTelemetry.AspNetCore;
+using Azure.Monitor.OpenTelemetry.Exporter;
 using BookingQueueSubscriber.Health;
 using BookingQueueSubscriber.Security;
 using BookingQueueSubscriber.Services.NotificationApi;
@@ -105,20 +105,32 @@ namespace BookingQueueSubscriber
             if(String.IsNullOrWhiteSpace(instrumentationKey))
                 Console.WriteLine("Application Insights Instrumentation Key not found");
             else
-                services.AddOpenTelemetry()
-                    .ConfigureResource(r =>
+            {
+                var serviceName = "vh-booking-queue";
+                services.AddLogging(logging =>
+                {
+                    logging.ClearProviders(); 
+                    logging.AddOpenTelemetry(options =>
                     {
-                        r.AddService("vh-booking-queue-subscriber")
-                            .AddTelemetrySdk();
-                    })
-                    .UseAzureMonitor(options => options.ConnectionString = instrumentationKey) 
-                    .WithMetrics()
-                    .WithTracing(tracerProvider =>
-                    {
-                        tracerProvider
-                            .AddAspNetCoreInstrumentation(options => options.RecordException = true)
-                            .AddHttpClientInstrumentation(options => options.RecordException = true);
+                        options.IncludeFormattedMessage = true; 
+                        options.IncludeScopes = true;
+                        options.ParseStateValues = true; 
+                        options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName));
+                        options.AddAzureMonitorLogExporter(o =>
+                        {
+                            o.ConnectionString = instrumentationKey;
+                        });
                     });
+                    services.AddOpenTelemetry().WithTracing(tracerProvider =>
+                        {
+                            tracerProvider.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
+                                .AddSource("BookingQueueSubscriberFunction")
+                                .AddHttpClientInstrumentation(options => options.RecordException = true )
+                                .AddAzureMonitorTraceExporter(options => options.ConnectionString = instrumentationKey);
+                        });
+                });
+            }
+
             
             RegisterMessageHandlers(services);
 
