@@ -10,18 +10,12 @@ namespace BookingQueueSubscriber.Services.Mappers
             var request = new ParticipantRequest
             {
                 Id = participant.ParticipantId,
-                Name = participant.Fullname,
                 Username = participant.Username,
-                FirstName = participant.FirstName,
-                LastName = participant.LastName,
                 ContactEmail = participant.ContactEmail,
-                ContactTelephone = participant.ContactTelephone,
                 DisplayName = participant.DisplayName,
                 UserRole = participant.MapUserRoleToContractEnum(),
                 HearingRole = participant.HearingRole,
-                CaseTypeGroup = "Obsolete",
                 ParticipantRefId = participant.ParticipantId,
-                Representee = participant.Representee,
                 LinkedParticipants = LinkedParticipantToRequestMapper.MapToLinkedParticipantRequestList(participant.LinkedParticipants)
             };
             
