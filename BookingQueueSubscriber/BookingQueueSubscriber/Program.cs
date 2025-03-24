@@ -16,7 +16,6 @@ using UserApi.Client;
 using VideoApi.Client;
 
 var host = new HostBuilder()
-    // .ConfigureFunctionsWebApplication()
     .ConfigureAppConfiguration(ConfigureAppConfiguration)
     .ConfigureServices((hostContext, services) =>
     {
