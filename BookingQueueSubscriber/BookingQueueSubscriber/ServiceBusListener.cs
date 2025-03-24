@@ -3,23 +3,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace BookingQueueSubscriber;
 
-[ExcludeFromCodeCoverage] // for now
 public class ServiceBusListener(
     IMessageHandlerFactory messageHandlerFactory,
     ServiceBusProcessor serviceBusProcessor,
     ILogger<ServiceBusListener> logger)
     : BackgroundService
 {
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        serviceBusProcessor.ProcessMessageAsync += MessageHandler;
-        serviceBusProcessor.ProcessErrorAsync += ErrorHandler;
-        
-        logger.LogInformation("Starting service bus processor");
-        await serviceBusProcessor.StartProcessingAsync(stoppingToken);
-    }
-
-    private async Task MessageHandler(ProcessMessageEventArgs args)
+    public async Task HandleMessage(ProcessMessageEventArgs args)
     {
         var bookingQueueItem = args.Message.Body.ToString();
         
@@ -35,17 +25,26 @@ public class ServiceBusListener(
         
         await args.CompleteMessageAsync(args.Message);
     }
-
-    private Task ErrorHandler(ProcessErrorEventArgs args)
-    {
-        logger.LogError(args.Exception, "Error processing message");
-        return Task.CompletedTask;
-    }
-
+    
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
         logger.LogInformation("Stopping service bus processor");
         await serviceBusProcessor.StopProcessingAsync(cancellationToken);
         await serviceBusProcessor.DisposeAsync();
+    }
+    
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        serviceBusProcessor.ProcessMessageAsync += HandleMessage;
+        serviceBusProcessor.ProcessErrorAsync += HandleError;
+        
+        logger.LogInformation("Starting service bus processor");
+        await serviceBusProcessor.StartProcessingAsync(stoppingToken);
+    }
+
+    private Task HandleError(ProcessErrorEventArgs args)
+    {
+        logger.LogError(args.Exception, "Error processing message");
+        return Task.CompletedTask;
     }
 }
