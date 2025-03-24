@@ -1,5 +1,6 @@
 using Azure.Messaging.ServiceBus;
 using BookingQueueSubscriber.Health;
+using BookingQueueSubscriber.HostedServices;
 using BookingQueueSubscriber.Security;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -138,7 +139,7 @@ public static partial class Program
             config.UrlPath = "/health/liveness";
             return config;
         });
-        services.AddSingleton<IHostedService, HealthCheckHostedService>();
+        services.AddSingleton<IHostedService, HealthCheckService>();
     }
 
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)

@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Azure.Messaging.ServiceBus;
+using BookingQueueSubscriber.HostedServices;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.NotificationApi;
 using BookingQueueSubscriber.Services.UserApi;
@@ -12,7 +13,7 @@ using NotificationApi.Client;
 using NotificationApi.Contract.Requests;
 using VideoApi.Contract.Responses;
 
-namespace BookingQueueSubscriber.UnitTests.ServiceBusListenerTests
+namespace BookingQueueSubscriber.UnitTests.HostedServices.ServiceBusListenerTests
 {
   public class HandleMessageTests
   {

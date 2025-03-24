@@ -1,7 +1,7 @@
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Hosting;
 
-namespace BookingQueueSubscriber;
+namespace BookingQueueSubscriber.HostedServices;
 
 public class ServiceBusListener(
     IMessageHandlerFactory messageHandlerFactory,

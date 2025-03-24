@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
-namespace BookingQueueSubscriber;
+namespace BookingQueueSubscriber.HostedServices;
 
 // 📌 Health Check Hosted Service to expose HTTP endpoint
-public class HealthCheckHostedService : IHostedService
+public class HealthCheckService : IHostedService
 {
     private readonly IHostApplicationLifetime _appLifetime;
     private readonly IServiceProvider _serviceProvider;
     private WebApplication? _app;
 
-    public HealthCheckHostedService(IHostApplicationLifetime appLifetime, IServiceProvider serviceProvider)
+    public HealthCheckService(IHostApplicationLifetime appLifetime, IServiceProvider serviceProvider)
     {
         _appLifetime = appLifetime;
         _serviceProvider = serviceProvider;
@@ -28,7 +28,7 @@ public class HealthCheckHostedService : IHostedService
             options.ListenAnyIP(8080);
         });
 
-        builder.Services.AddSingleton(_serviceProvider.GetRequiredService<HealthCheckService>());
+        builder.Services.AddSingleton(_serviceProvider.GetRequiredService<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckService>());
 
         _app = builder.Build();
 
