@@ -21,8 +21,6 @@ public class ServiceBusListener(
 
         await handler.HandleAsync(eventMessage.IntegrationEvent);
         logger.LogInformation("Process message {MessageId} - {IntegrationEvent}", eventMessage.Id, eventMessage.IntegrationEvent);
-        
-        await args.CompleteMessageAsync(args.Message);
     }
     
     public override async Task StopAsync(CancellationToken cancellationToken)

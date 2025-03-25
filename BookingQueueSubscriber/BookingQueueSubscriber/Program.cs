@@ -125,7 +125,13 @@ public static partial class Program
              services.AddSingleton(sp =>
              {
                  var client = sp.GetRequiredService<ServiceBusClient>();
-                 return client.CreateProcessor(queueName, new ServiceBusProcessorOptions());
+                 return client.CreateProcessor(queueName, new ServiceBusProcessorOptions
+                 {
+                     PrefetchCount = 12,
+                     AutoCompleteMessages = true,
+                     MaxConcurrentCalls = 32,
+                     MaxAutoLockRenewalDuration = TimeSpan.FromMinutes(5)
+                 });
              });
              services.AddHostedService<ServiceBusListener>();
         }
