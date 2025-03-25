@@ -1,4 +1,5 @@
 using Azure.Messaging.ServiceBus;
+using BookingQueueSubscriber.Wrappers;
 using Microsoft.Extensions.Hosting;
 
 namespace BookingQueueSubscriber.HostedServices;
@@ -11,7 +12,8 @@ public class ServiceBusListener(
 {
     public async Task HandleMessage(ProcessMessageEventArgs args)
     {
-        var bookingQueueItem = args.Message.Body.ToString();
+        var messageWrapper = new ServiceBusReceivedMessageWrapper(args.Message);
+        var bookingQueueItem = messageWrapper.Body.ToString();
         
         logger.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
         var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
@@ -22,11 +24,11 @@ public class ServiceBusListener(
         await handler.HandleAsync(eventMessage.IntegrationEvent);
         logger.LogInformation("Process message {MessageId} - {IntegrationEvent}", eventMessage.Id, eventMessage.IntegrationEvent);
     }
-    
+
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        serviceBusProcessor.RemoveMessageHandler(HandleMessage);
-        serviceBusProcessor.RemoveErrorHandler(HandleError);
+        serviceBusProcessor.ProcessMessageAsync -= HandleMessage;
+        serviceBusProcessor.ProcessErrorAsync -= HandleError;
         
         logger.LogInformation("Stopping service bus processor");
         await serviceBusProcessor.StopProcessingAsync(cancellationToken);
@@ -35,13 +37,13 @@ public class ServiceBusListener(
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        serviceBusProcessor.AddMessageHandler(HandleMessage);
-        serviceBusProcessor.AddErrorHandler(HandleError);
+        serviceBusProcessor.ProcessMessageAsync += HandleMessage;
+        serviceBusProcessor.ProcessErrorAsync += HandleError;
         
         logger.LogInformation("Starting service bus processor");
         await serviceBusProcessor.StartProcessingAsync(stoppingToken);
     }
-
+    
     private Task HandleError(ProcessErrorEventArgs args)
     {
         logger.LogError(args.Exception, "Error processing message");

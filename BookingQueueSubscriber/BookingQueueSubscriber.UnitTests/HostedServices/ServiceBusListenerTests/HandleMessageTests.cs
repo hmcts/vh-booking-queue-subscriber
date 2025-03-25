@@ -7,6 +7,7 @@ using BookingQueueSubscriber.Services.UserApi;
 using BookingQueueSubscriber.Services.VideoApi;
 using BookingQueueSubscriber.Services.VideoWeb;
 using BookingQueueSubscriber.UnitTests.MessageHandlers;
+using BookingQueueSubscriber.Wrappers;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NotificationApi.Client;
