@@ -5,7 +5,7 @@ namespace BookingQueueSubscriber.HostedServices;
 
 public class ServiceBusListener(
     IMessageHandlerFactory messageHandlerFactory,
-    ServiceBusProcessor serviceBusProcessor,
+    IServiceBusProcessorWrapper serviceBusProcessor,
     ILogger<ServiceBusListener> logger)
     : BackgroundService
 {
@@ -25,8 +25,8 @@ public class ServiceBusListener(
     
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        serviceBusProcessor.ProcessMessageAsync -= HandleMessage;
-        serviceBusProcessor.ProcessErrorAsync -= HandleError;
+        serviceBusProcessor.RemoveMessageHandler(HandleMessage);
+        serviceBusProcessor.RemoveErrorHandler(HandleError);
         
         logger.LogInformation("Stopping service bus processor");
         await serviceBusProcessor.StopProcessingAsync(cancellationToken);
@@ -35,8 +35,8 @@ public class ServiceBusListener(
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        serviceBusProcessor.ProcessMessageAsync += HandleMessage;
-        serviceBusProcessor.ProcessErrorAsync += HandleError;
+        serviceBusProcessor.AddMessageHandler(HandleMessage);
+        serviceBusProcessor.AddErrorHandler(HandleError);
         
         logger.LogInformation("Starting service bus processor");
         await serviceBusProcessor.StartProcessingAsync(stoppingToken);

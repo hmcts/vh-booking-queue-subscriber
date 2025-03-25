@@ -14,21 +14,32 @@ using NotificationApi.Client;
 using UserApi.Client;
 using VideoApi.Client;
 
-var host = new HostBuilder()
-    .ConfigureAppConfiguration(ConfigureAppConfiguration)
-    .ConfigureServices((hostContext, services) =>
-    {
-        var configuration = hostContext.Configuration;
-
-        RegisterServices(services, configuration);
-    })
-    .Build();
-
-await host.RunAsync();
+namespace BookingQueueSubscriber;
 
 [ExcludeFromCodeCoverage]
-public static partial class Program
+public class Program
 {
+    protected Program()
+    {
+    }
+    
+    public static void Main()
+    {
+        CreateHostBuilder().Build().Run();
+    }
+
+    private static IHostBuilder CreateHostBuilder()
+    {
+        return new HostBuilder()
+            .ConfigureAppConfiguration(ConfigureAppConfiguration)
+            .ConfigureServices((hostContext, services) =>
+            {
+                var configuration = hostContext.Configuration;
+
+                RegisterServices(services, configuration);
+            });
+    }
+    
     public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
@@ -138,6 +149,7 @@ public static partial class Program
 
         services.AddVhHealthChecks();
         services.AddSingleton<IHostedService, HealthCheckService>();
+        services.AddSingleton<IServiceBusProcessorWrapper, ServiceBusProcessorWrapper>();
     }
 
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)

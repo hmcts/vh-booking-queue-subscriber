@@ -35,7 +35,7 @@ namespace BookingQueueSubscriber.UnitTests.HostedServices.ServiceBusListenerTest
       var logger = new Mock<ILogger<ServiceBusListener>>().Object;
       _serviceBusListener = new ServiceBusListener(
         new MessageHandlerFactory(ServiceProviderFactory.ServiceProvider),
-        new Mock<ServiceBusProcessor>().Object,
+        new Mock<IServiceBusProcessorWrapper>().Object,
         logger);
     }
 
