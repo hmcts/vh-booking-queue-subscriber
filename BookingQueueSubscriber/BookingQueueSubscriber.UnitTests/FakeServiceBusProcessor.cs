@@ -23,16 +23,4 @@ public class FakeServiceBusProcessor : IServiceBusProcessorWrapper
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
-    
-    public async Task TriggerMessageAsync(ProcessMessageEventArgs args)
-    {
-        if (ProcessMessageAsync != null)
-            await ProcessMessageAsync.Invoke(args);
-    }
-
-    public async Task TriggerErrorAsync(ProcessErrorEventArgs args)
-    {
-        if (ProcessErrorAsync != null)
-            await ProcessErrorAsync.Invoke(args);
-    }
 }

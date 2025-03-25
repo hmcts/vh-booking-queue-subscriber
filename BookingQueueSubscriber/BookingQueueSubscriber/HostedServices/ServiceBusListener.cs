@@ -12,8 +12,7 @@ public class ServiceBusListener(
 {
     public async Task HandleMessage(ProcessMessageEventArgs args)
     {
-        var messageWrapper = new ServiceBusReceivedMessageWrapper(args.Message);
-        var bookingQueueItem = messageWrapper.Body.ToString();
+        var bookingQueueItem = args.Message.Body.ToString();
         
         logger.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
         var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
