@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Azure.Messaging.ServiceBus;
 using BookingQueueSubscriber.Wrappers;
 
 namespace BookingQueueSubscriber.UnitTests;
 
-[SuppressMessage("Usage", "CS0067", Justification = "Events are used only by unit tests")]
 public class FakeServiceBusProcessor : IServiceBusProcessorWrapper
 {
     #pragma warning disable CS0067
