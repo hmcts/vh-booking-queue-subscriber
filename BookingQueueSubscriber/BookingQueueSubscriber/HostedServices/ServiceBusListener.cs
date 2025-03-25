@@ -20,14 +20,16 @@ public class ServiceBusListener(
         logger.LogDebug("using handler {Handler}", handler.GetType());
 
         await handler.HandleAsync(eventMessage.IntegrationEvent);
-        logger.LogInformation("Process message {EventMessageId} - {EventMessageIntegrationEvent}", eventMessage.Id,
-            eventMessage.IntegrationEvent);
+        logger.LogInformation("Process message {MessageId} - {IntegrationEvent}", eventMessage.Id, eventMessage.IntegrationEvent);
         
         await args.CompleteMessageAsync(args.Message);
     }
     
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
+        serviceBusProcessor.ProcessMessageAsync -= HandleMessage;
+        serviceBusProcessor.ProcessErrorAsync -= HandleError;
+        
         logger.LogInformation("Stopping service bus processor");
         await serviceBusProcessor.StopProcessingAsync(cancellationToken);
         await serviceBusProcessor.DisposeAsync();
