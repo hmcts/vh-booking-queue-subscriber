@@ -25,7 +25,7 @@ public class HealthCheckService : IHostedService
         // Configure Kestrel
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(8080);
+            options.ListenAnyIP(8090);
         });
 
         builder.Services.AddSingleton(_serviceProvider.GetRequiredService<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckService>());

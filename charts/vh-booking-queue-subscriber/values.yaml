@@ -5,7 +5,7 @@ java:
   readinessPath: /health/liveness
   livenessPath: /health/liveness
   startupPath: /health/liveness
-  applicationPort: 8080
+  applicationPort: 8090
   replicas: 1
   keyVaults:
     vh-infra-core:
