@@ -12,7 +12,8 @@ public interface IServiceBusProcessorWrapper
     Task DisposeAsync();
 }
 
-public class ServiceBusProcessorWrapper(IServiceBusProcessor processor) : IServiceBusProcessorWrapper
+[ExcludeFromCodeCoverage]
+public class ServiceBusProcessorWrapper(ServiceBusProcessor processor) : IServiceBusProcessorWrapper
 {
     public event Func<ProcessMessageEventArgs, Task>? ProcessMessageAsync
     {

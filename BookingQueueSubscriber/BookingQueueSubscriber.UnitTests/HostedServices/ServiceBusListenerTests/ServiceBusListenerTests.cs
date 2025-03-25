@@ -10,7 +10,7 @@ namespace BookingQueueSubscriber.UnitTests.HostedServices.ServiceBusListenerTest
 public class ServiceBusListenerTests
 {
     private Mock<IMessageHandlerFactory> _mockHandlerFactory;
-    private Mock<IServiceBusProcessorWrapper> _mockProcessor;
+    private FakeServiceBusProcessor _processor;
     private Mock<ILogger<ServiceBusListener>> _mockLogger;
     private ServiceBusListener _serviceBusListener;
     private bool _stopProcessor = true;
@@ -19,10 +19,10 @@ public class ServiceBusListenerTests
     public void SetUp()
     {
         _mockHandlerFactory = new Mock<IMessageHandlerFactory>();
-        _mockProcessor = new Mock<IServiceBusProcessorWrapper>();
+        _processor = new FakeServiceBusProcessor();
         _mockLogger = new Mock<ILogger<ServiceBusListener>>();
 
-        _serviceBusListener = new ServiceBusListener(_mockHandlerFactory.Object, _mockProcessor.Object, _mockLogger.Object);
+        _serviceBusListener = new ServiceBusListener(_mockHandlerFactory.Object, _processor, _mockLogger.Object);
     }
 
     [TearDown]
@@ -37,11 +37,6 @@ public class ServiceBusListenerTests
     public async Task StopAsync_StopsProcessor()
     {
         // Arrange
-        _mockProcessor
-            .Setup(m => m.StopProcessingAsync(It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask)
-            .Verifiable();
-
         using var cts = new CancellationTokenSource();
         
         await _serviceBusListener.StartAsync(cts.Token);
@@ -50,7 +45,7 @@ public class ServiceBusListenerTests
         await _serviceBusListener.StopAsync(cts.Token);
 
         // Assert
-        _mockProcessor.Verify(m => m.StopProcessingAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _processor.IsRunning.Should().BeFalse();
 
         _stopProcessor = false; // To avoid stopping it again as part of the tear down
     }
@@ -59,17 +54,13 @@ public class ServiceBusListenerTests
     public async Task ExecuteAsync_StartsProcessor()
     {
         // Arrange
-        _mockProcessor
-            .Setup(p => p.StartProcessingAsync(It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-
         using var cts = new CancellationTokenSource();
 
         // Act
         await _serviceBusListener.StartAsync(cts.Token);
 
         // Assert
-        _mockProcessor.Verify(p => p.StartProcessingAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _processor.IsRunning.Should().BeTrue();
     }
 
     [Test]

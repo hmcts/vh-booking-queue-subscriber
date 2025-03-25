@@ -134,23 +134,23 @@ public class Program
              var serviceBusConnectionString = configuration["ServiceBusConnection"];
              var queueName = configuration["queueName"];
              services.AddSingleton(new ServiceBusClient(serviceBusConnectionString));
-             services.AddSingleton(sp =>
+             services.AddSingleton<IServiceBusProcessorWrapper>(sp =>
              {
                  var client = sp.GetRequiredService<ServiceBusClient>();
-                 return client.CreateProcessor(queueName, new ServiceBusProcessorOptions
+                 var processor = client.CreateProcessor(queueName, new ServiceBusProcessorOptions
                  {
                      PrefetchCount = 12,
                      AutoCompleteMessages = true,
                      MaxConcurrentCalls = 32,
                      MaxAutoLockRenewalDuration = TimeSpan.FromMinutes(5)
                  });
+                 return new ServiceBusProcessorWrapper(processor); 
              });
              services.AddHostedService<ServiceBusListener>();
         }
 
         services.AddVhHealthChecks();
         services.AddSingleton<IHostedService, HealthCheckService>();
-        services.AddSingleton<IServiceBusProcessorWrapper, ServiceBusProcessorWrapper>();
     }
 
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
