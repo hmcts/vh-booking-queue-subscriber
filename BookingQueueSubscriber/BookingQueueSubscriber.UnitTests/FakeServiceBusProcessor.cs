@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Azure.Messaging.ServiceBus;
 using BookingQueueSubscriber.Wrappers;
 
 namespace BookingQueueSubscriber.UnitTests;
 
+[SuppressMessage("Usage", "CS0067", Justification = "Events are used only by unit tests")]
 public class FakeServiceBusProcessor : IServiceBusProcessorWrapper
 {
     public event Func<ProcessMessageEventArgs, Task> ProcessMessageAsync;
