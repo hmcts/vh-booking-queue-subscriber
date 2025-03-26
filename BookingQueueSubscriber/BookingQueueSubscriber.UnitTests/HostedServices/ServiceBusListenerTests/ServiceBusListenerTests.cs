@@ -23,6 +23,8 @@ public class ServiceBusListenerTests
         _mockLogger = new Mock<ILogger<ServiceBusListener>>();
 
         _serviceBusListener = new ServiceBusListener(_mockHandlerFactory.Object, _processor, _mockLogger.Object);
+        
+        _stopProcessor = true;
     }
 
     [TearDown]
@@ -30,7 +32,6 @@ public class ServiceBusListenerTests
     {
         if (_stopProcessor)
             _serviceBusListener.StopAsync(CancellationToken.None).Wait();
-        _stopProcessor = true;
     }
     
     [Test]
