@@ -23,7 +23,13 @@ public class HealthCheckService(IHostApplicationLifetime appLifetime, IServicePr
         App = builder.Build();
         App.MapHealthChecks("/health/liveness");
 
-        appLifetime.ApplicationStopping.Register(() => App?.DisposeAsync());
+        appLifetime.ApplicationStopping.Register(() =>
+        {
+            if (App != null)
+            {
+                _ = Task.Run(async () => await App.DisposeAsync(), cancellationToken);
+            }
+        });
         
         await App.StartAsync(cancellationToken);
     }

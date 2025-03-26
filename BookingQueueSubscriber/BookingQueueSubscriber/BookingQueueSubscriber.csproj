@@ -6,6 +6,7 @@
     <ProjectGuid>0F855588-E955-4A37-8FFF-49369CDFF7FC</ProjectGuid>
     <UserSecretsId>F6705640-D918-4180-B98A-BAB7ADAA4817</UserSecretsId>
     <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
