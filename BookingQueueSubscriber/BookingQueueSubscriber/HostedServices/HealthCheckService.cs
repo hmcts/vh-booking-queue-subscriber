@@ -7,7 +7,7 @@ namespace BookingQueueSubscriber.HostedServices;
 public class HealthCheckService(IHostApplicationLifetime appLifetime, IServiceProvider serviceProvider)
     : IHostedService
 {
-    public WebApplication? App { get; private set; }
+    public WebApplication App { get; private set; }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -25,10 +25,7 @@ public class HealthCheckService(IHostApplicationLifetime appLifetime, IServicePr
 
         appLifetime.ApplicationStopping.Register(() =>
         {
-            if (App != null)
-            {
-                _ = Task.Run(async () => await App.DisposeAsync(), cancellationToken);
-            }
+            _ = Task.Run(async () => await App.DisposeAsync(), cancellationToken);
         });
         
         await App.StartAsync(cancellationToken);
