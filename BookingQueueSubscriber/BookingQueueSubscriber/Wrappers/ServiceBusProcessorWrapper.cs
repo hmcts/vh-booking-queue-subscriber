@@ -15,13 +15,13 @@ public interface IServiceBusProcessorWrapper
 [ExcludeFromCodeCoverage]
 public class ServiceBusProcessorWrapper(ServiceBusProcessor processor) : IServiceBusProcessorWrapper
 {
-    public event Func<ProcessMessageEventArgs, Task>? ProcessMessageAsync
+    public event Func<ProcessMessageEventArgs, Task> ProcessMessageAsync
     {
         add => processor.ProcessMessageAsync += value;
         remove => processor.ProcessMessageAsync -= value;
     }
 
-    public event Func<ProcessErrorEventArgs, Task>? ProcessErrorAsync
+    public event Func<ProcessErrorEventArgs, Task> ProcessErrorAsync
     {
         add => processor.ProcessErrorAsync += value;
         remove => processor.ProcessErrorAsync -= value;

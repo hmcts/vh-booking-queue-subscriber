@@ -71,7 +71,7 @@ public class ServiceBusListenerTests
         var mockProcessor = new Mock<IServiceBusProcessorWrapper>();
         _serviceBusListener = new ServiceBusListener(_mockHandlerFactory.Object, mockProcessor.Object, _mockLogger.Object);
 
-        Func<ProcessErrorEventArgs, Task>? errorHandler = null;
+        Func<ProcessErrorEventArgs, Task> errorHandler = _ => Task.CompletedTask;
         mockProcessor
             .SetupAdd(p => p.ProcessErrorAsync += It.IsAny<Func<ProcessErrorEventArgs, Task>>())
             .Callback<Func<ProcessErrorEventArgs, Task>>(h => errorHandler = h);
@@ -96,7 +96,7 @@ public class ServiceBusListenerTests
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((o, t) => o.ToString().Contains("Error processing message")),
                 exception,
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()
             ),
             Times.Once
         );
