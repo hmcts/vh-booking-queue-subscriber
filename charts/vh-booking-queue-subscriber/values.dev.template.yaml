@@ -4,4 +4,4 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   disableTraefikTls: false
   environment:
-    QUEUENAME: oliver-booking-2
+    QUEUENAME: oliver-booking
