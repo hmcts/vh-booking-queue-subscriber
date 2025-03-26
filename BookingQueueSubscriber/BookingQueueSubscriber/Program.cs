@@ -31,13 +31,17 @@ public class Program
 
     private static IHostBuilder CreateHostBuilder()
     {
-        return new HostBuilder()
+        return Host.CreateDefaultBuilder()
             .ConfigureAppConfiguration(ConfigureAppConfiguration)
             .ConfigureServices((hostContext, services) =>
             {
                 var configuration = hostContext.Configuration;
 
                 RegisterServices(services, configuration);
+            })
+            .ConfigureLogging(logging =>
+            {
+                logging.AddConsole();
             });
     }
     
