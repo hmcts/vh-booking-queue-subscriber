@@ -4,7 +4,6 @@ using VideoApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using VideoApi.Contract.Responses;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using BookingQueueSubscriber.Services.Models;
 using VideoApi.Contract.Enums;
 
 namespace BookingQueueSubscriber.UnitTests.MessageHandlers
@@ -16,20 +15,29 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         private Guid _conferenceId = Guid.NewGuid();
         private const string SipAddress = "SipAddress";
         private const string Endpoint = "JvsEndpointName";
-        private readonly DefenceAdvocate _defenceAdvocate1 = new("rep1Username@email.com", "rep1ContactEmail@email.com");
-        private readonly DefenceAdvocate _defenceAdvocate2 = new("rep2Username@email.com", "rep2ContactEmail@email.com");
-        private readonly DefenceAdvocate _defenceAdvocate3 = new("rep3Username@email.com", "rep3ContactEmail@email.com");
-        private EndpointUpdatedIntegrationEvent GetIntegrationEventValid(DefenceAdvocate defenceAdvocate)
+
+        private readonly ParticipantResponse _endpointRepresentative1 = new() { Id = Guid.NewGuid(), Username = "rep1Username", ContactEmail = "rep1ContactEmail" };
+        private readonly ParticipantResponse _endpointRepresentative2 = new() { Id = Guid.NewGuid(), Username = "rep2Username@email.com", ContactEmail = "rep2ContactEmail@email.com" };
+        private readonly ParticipantResponse _endpointRepresentative3 = new() { Id = Guid.NewGuid(), Username = "rep3Username@email.com", ContactEmail = "rep3ContactEmail@email.com" };
+
+        private EndpointUpdatedIntegrationEvent GetIntegrationEventValid() => GetIntegrationEventValid(new List<ParticipantResponse>());
+
+        private EndpointUpdatedIntegrationEvent GetIntegrationEventValid(ParticipantResponse endpointRepresentative) => GetIntegrationEventValid(new List<ParticipantResponse> { endpointRepresentative });
+        
+        private EndpointUpdatedIntegrationEvent GetIntegrationEventValid(List<ParticipantResponse> endpointRepresentatives)
         {
             return new EndpointUpdatedIntegrationEvent
             {
                 HearingId = _hearingId,
                 Sip = SipAddress,
                 DisplayName = Endpoint,
-                DefenceAdvocate = defenceAdvocate?.ContactEmail
+                ParticipantsLinked = endpointRepresentatives.Select(x => x.ContactEmail).ToList(),
             };
         }
-        private List<EndpointResponse> GetEndpointsForConference(DefenceAdvocate defenceAdvocate, EndpointState state = EndpointState.Connected)
+        
+        private List<EndpointResponse> GetEndpointsForConference(ParticipantResponse endpointRepresentative, EndpointState state = EndpointState.Connected) => GetEndpointsForConference(new List<ParticipantResponse> { endpointRepresentative }, state);
+        
+        private List<EndpointResponse> GetEndpointsForConference(List<ParticipantResponse> endpointRepresentatives, EndpointState state = EndpointState.Connected)
         {
             return new List<EndpointResponse>
             {
@@ -37,8 +45,8 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 {
                     Id = _hearingId,
                     SipAddress = SipAddress,
-                    DisplayName = "endpointName",
-                    DefenceAdvocate = defenceAdvocate?.Username,
+                    DisplayName = Endpoint,
+                    LinkedParticipants = endpointRepresentatives,
                     Status = state,
                     Pin = "Pin",
                     CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false }
@@ -59,17 +67,17 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         new()
                         {
-                            Id = Guid.NewGuid(),
-                            Username = _defenceAdvocate1.Username,
-                            ContactEmail = _defenceAdvocate1.ContactEmail,
+                            Id = _endpointRepresentative1.Id,
+                            Username = _endpointRepresentative1.Username,
+                            ContactEmail = _endpointRepresentative1.ContactEmail,
                             CurrentRoom = new RoomResponse {Id = 1, Label = "Private Consultation Room", Locked = false},
                             CurrentStatus = ParticipantState.InConsultation
                         },
                         new()
                         {
-                            Id = Guid.NewGuid(),
-                            Username = _defenceAdvocate2.Username,
-                            ContactEmail = _defenceAdvocate2.ContactEmail,
+                            Id = _endpointRepresentative2.Id,
+                            Username = _endpointRepresentative2.Username,
+                            ContactEmail = _endpointRepresentative2.ContactEmail,
                             CurrentRoom = new RoomResponse {Id = 1, Label = "Private Consultation Room", Locked = false},
                             CurrentStatus = ParticipantState.InConsultation
                         }
@@ -77,17 +85,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 });
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_defenceAdvocate1));
-        }
-
-        [Test]
-        public async Task should_throw_exception_when_retry_limit_is_reached()
-        {
-            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate3);
-            var handler = async () => { await messageHandler.HandleAsync(integrationEvent); };
-            await handler.Should().ThrowAsync<ArgumentException>();
+                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1));
         }
         
         [Test]
@@ -99,7 +97,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
 
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate1);
+            var integrationEvent = GetIntegrationEventValid(_endpointRepresentative1);
             await messageHandler.HandleAsync(integrationEvent);
 
             _logger.Verify(x => x.Log(
@@ -118,19 +116,11 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
 
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate1);
+            var integrationEvent = GetIntegrationEventValid(_endpointRepresentative1);
             await messageHandler.HandleAsync(integrationEvent);
 
-            _logger.Verify(x => x.Log(
-                It.Is<LogLevel>(log => log == LogLevel.Error),
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((@object, @type) => @object.ToString().Contains("Unable to find defence advocate email by hearing id")),
-                It.Is<Exception>(x => x == null),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Never);
-
             VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<UpdateEndpointRequest>()), Times.Once);
-            VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(),
-                It.IsAny<UpdateConferenceEndpointsRequest>()), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(), It.IsAny<UpdateConferenceEndpointsRequest>()), Times.Once);
         }
         
                 
@@ -139,16 +129,14 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             //Arrange
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate2);
+            var integrationEvent = GetIntegrationEventValid(_endpointRepresentative2);
             
             //Act
             await messageHandler.HandleAsync(integrationEvent);
             
             //Assert
-            VideoWebServiceMock.Verify(x 
-                => x.PushLinkedNewParticipantToEndpoint(_conferenceId, _defenceAdvocate2.Username, Endpoint), Times.Once);
-            VideoWebServiceMock.Verify(x 
-                => x.PushUnlinkedParticipantFromEndpoint(_conferenceId, _defenceAdvocate1.Username, Endpoint), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushLinkedNewParticipantToEndpoint(_conferenceId, _endpointRepresentative2.Username, Endpoint), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushUnlinkedParticipantFromEndpoint(_conferenceId, _endpointRepresentative1.Username, Endpoint), Times.Once);
         }      
         
         [Test]
@@ -156,26 +144,31 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         {
             //Arrange
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-            var integrationEvent = GetIntegrationEventValid(null);
+            var integrationEvent = GetIntegrationEventValid();
             
             //Act
             await messageHandler.HandleAsync(integrationEvent);
             
-            //Arrage
-            VideoWebServiceMock.Verify(x 
-                => x.PushLinkedNewParticipantToEndpoint(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            VideoWebServiceMock.Verify(x 
-                => x.PushUnlinkedParticipantFromEndpoint(_conferenceId, _defenceAdvocate1.Username, Endpoint), Times.Once);
-
+            //Arrange
+            VideoWebServiceMock.Verify(x => x.PushLinkedNewParticipantToEndpoint(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            VideoWebServiceMock.Verify(x => x.PushUnlinkedParticipantFromEndpoint(_conferenceId, _endpointRepresentative1.Username, Endpoint), Times.Once);
         }           
         
         [Test]
         public async Task Should_handle_rep_being_changed_whilst_in_a_consultation_without_new_rep()
         {
             //Arrange
+            var rep2 = new ParticipantResponse()
+            {
+                Id = _endpointRepresentative2.Id,
+                Username = _endpointRepresentative2.Username,
+                ContactEmail = _endpointRepresentative2.ContactEmail,
+                CurrentRoom = new RoomResponse { Id = 1, Label = "Private Consultation Room", Locked = false },
+                CurrentStatus = ParticipantState.InConsultation
+            };
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_defenceAdvocate2, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(rep2, EndpointState.InConsultation));
             VideoApiServiceMock
                 .Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse
@@ -186,30 +179,23 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     {
                         new()
                         {
-                            Id = Guid.NewGuid(),
-                            Username = _defenceAdvocate1.Username,
-                            ContactEmail = _defenceAdvocate1.ContactEmail,
+                            Id = _endpointRepresentative1.Id,
+                            Username = _endpointRepresentative1.Username,
+                            ContactEmail = _endpointRepresentative1.ContactEmail,
                             CurrentStatus = ParticipantState.Available
                         },
-                        new()
-                        {
-                            Id = Guid.NewGuid(),
-                            Username = _defenceAdvocate2.Username,
-                            ContactEmail = _defenceAdvocate2.ContactEmail,
-                            CurrentRoom = new RoomResponse {Id = 1, Label = "Private Consultation Room", Locked = false},
-                            CurrentStatus = ParticipantState.InConsultation
-                        }
+                        rep2
                     }
                 });
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate1);
+            var integrationEvent = GetIntegrationEventValid(_endpointRepresentative1);
             
             //Act
             await messageHandler.HandleAsync(integrationEvent);
             
             //Arrange
             VideoWebServiceMock.Verify(x
-                => x.PushCloseConsultationBetweenEndpointAndParticipant(_conferenceId, _defenceAdvocate2.Username, Endpoint), Times.Once);
+                => x.PushCloseConsultationBetweenEndpointAndParticipant(_conferenceId, _endpointRepresentative2.Username, Endpoint), Times.Once);
 
         }
         
@@ -219,10 +205,10 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             //Arrange
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_defenceAdvocate1, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1, EndpointState.InConsultation));
             
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate2);
+            var integrationEvent = GetIntegrationEventValid(_endpointRepresentative2);
             
             //Act
             await messageHandler.HandleAsync(integrationEvent);
@@ -236,28 +222,53 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
         public async Task Should_handle_rep_being_unlinked_whilst_in_a_consultation_with_but_no_new_rep()
         {
             //Arrange
+            _endpointRepresentative1.CurrentStatus = ParticipantState.InConsultation;
+            _endpointRepresentative1.CurrentRoom = new RoomResponse { Id = 1, Label = "Private Consultation Room", Locked = false };
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_defenceAdvocate1, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1, EndpointState.InConsultation));
             
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-            var integrationEvent = GetIntegrationEventValid(null);
+            var integrationEvent = GetIntegrationEventValid();
             
             //Act
             await messageHandler.HandleAsync(integrationEvent);
             
             //Arrange
             VideoWebServiceMock.Verify(x
-                => x.PushCloseConsultationBetweenEndpointAndParticipant(_conferenceId, _defenceAdvocate1.Username, Endpoint), Times.Once);
+                => x.PushCloseConsultationBetweenEndpointAndParticipant(_conferenceId, _endpointRepresentative1.Username, Endpoint), Times.Once);
+        }
+          
+        [Test]
+        public async Task Should_handle_defence_advocate_unchanged()
+        {
+            // Arrange
+            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
+            var integrationEvent = GetIntegrationEventValid(_endpointRepresentative1);
+            
+            // Act
+            await messageHandler.HandleAsync(integrationEvent);
+            
+            // Assert
+            AssertNoNotificationsSent();
         }
         
-        [Test]
-          public async Task Should_log_error_when_cant_find_defence_advocate_but_handle_rest_of_process()
+        [Test(Description = "2 participants linked to endpoint, 1 new participant linked, 1 existing participant unlinked, 1 participant in consultation with endpoint unlinked" +
+                            "but consultation stays open because other participant already linked is in there")]
+        public async Task Should_handle_multiple_reps_being_linked_and_unlinked()
         {
-            //Arrange
+            // Arrange
+            _endpointRepresentative1.CurrentStatus = ParticipantState.InConsultation;
+            _endpointRepresentative1.CurrentRoom = new RoomResponse { Id = 1, Label = "Private Consultation Room", Locked = false };
+            _endpointRepresentative2.CurrentStatus = ParticipantState.InConsultation;
+            _endpointRepresentative2.CurrentRoom = new RoomResponse { Id = 1, Label = "Private Consultation Room", Locked = false };
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_defenceAdvocate2, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(new List<ParticipantResponse>
+                    {
+                        _endpointRepresentative1, _endpointRepresentative2
+                    },
+                    EndpointState.InConsultation));
             VideoApiServiceMock
                 .Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse
@@ -266,53 +277,22 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     HearingId = _hearingId,
                     Participants = new List<ParticipantResponse>()
                     {
-                        new()
-                        {
-                            Id = Guid.NewGuid(),
-                            Username = _defenceAdvocate1.Username,
-                            ContactEmail = _defenceAdvocate1.ContactEmail,
-                            CurrentStatus = ParticipantState.Available
-                        },
-                        new()
-                        {
-                            Id = Guid.NewGuid(),
-                            Username = "",
-                            ContactEmail = "",
-                            CurrentRoom = new RoomResponse {Id = 1, Label = "Private Consultation Room", Locked = false},
-                            CurrentStatus = ParticipantState.InConsultation
-                        }
+                        _endpointRepresentative1,
+                        _endpointRepresentative2,
+                        _endpointRepresentative3
                     }
-                });
+                }); 
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate1);
-            
-            //Act
-            await messageHandler.HandleAsync(integrationEvent);
-
-            //Arrange
-            _logger.Verify(x => x.Log(
-                It.Is<LogLevel>(log => log == LogLevel.Error),
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((@object, @type) => @object.ToString().Contains("Error notifying defence advocates")),
-                It.Is<ArgumentException>(ex => ex.Message.Contains($"Unable to find defence advocate in participant list {_defenceAdvocate2.Username}")),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
-            VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<UpdateEndpointRequest>()), Times.Once);
-            VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(), It.IsAny<UpdateConferenceEndpointsRequest>()), Times.Once);
-
-        }
-          
-        [Test]
-        public async Task Should_handle_defence_advocate_unchanged()
-        {
-            // Arrange
-            var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
-            var integrationEvent = GetIntegrationEventValid(_defenceAdvocate1);
+            var integrationEvent = GetIntegrationEventValid(new List<ParticipantResponse> { _endpointRepresentative2, _endpointRepresentative3 });
             
             // Act
             await messageHandler.HandleAsync(integrationEvent);
             
             // Assert
-            AssertNoNotificationsSent();
+            VideoWebServiceMock.Verify(x => x.PushLinkedNewParticipantToEndpoint(_conferenceId, _endpointRepresentative3.Username, Endpoint), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushLinkedNewParticipantToEndpoint(_conferenceId, _endpointRepresentative2.Username, Endpoint), Times.Never);
+            VideoWebServiceMock.Verify(x => x.PushUnlinkedParticipantFromEndpoint(_conferenceId, _endpointRepresentative1.Username, Endpoint), Times.Once);
+            VideoWebServiceMock.Verify(x => x.PushCloseConsultationBetweenEndpointAndParticipant(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         private void AssertNoNotificationsSent()

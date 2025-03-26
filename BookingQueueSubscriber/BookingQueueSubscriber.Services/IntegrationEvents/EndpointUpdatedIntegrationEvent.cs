@@ -5,7 +5,7 @@ namespace BookingQueueSubscriber.Services.IntegrationEvents
         public Guid HearingId { get; set; }
         public string Sip { get; set; }
         public string DisplayName { get; set; }
-        public string DefenceAdvocate { get; set; }
+        public List<string> ParticipantsLinked { get; set; }
         public ConferenceRole Role { get; set; }
     }
 }

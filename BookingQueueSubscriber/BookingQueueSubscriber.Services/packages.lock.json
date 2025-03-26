@@ -4,11 +4,11 @@
     "net6.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[3.1.21, )",
-        "resolved": "3.1.21",
-        "contentHash": "6tugyKrHa4M958L91M5TgcVqjNgSWPXNbCNaFU/QiMcCg17NMDQBVzBVMa1mXfhwXw/4kb316h5HFhJJrZ/QQQ==",
+        "requested": "[3.2.5-pr-0956-0003, )",
+        "resolved": "3.2.5-pr-0956-0003",
+        "contentHash": "hfrrD9kjslW3pM5qx5/VahZ0KD32sCxwwofrJmGTch1OnxYzJgAsCCJM2pn/gLQjJV1DXCZU34ZE7KZ4ZP/B3g==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.1.21",
+          "BookingsApi.Common.DotNet6": "3.2.5-pr-0956-0003",
           "System.Text.Json": "8.0.5"
         }
       },
@@ -74,17 +74,17 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[3.2.8, )",
-        "resolved": "3.2.8",
-        "contentHash": "ps9PUSm5WOPlFYm03cXLmLpFatqwMpbKpkDeMUX8U5IKZ8gnGox8RY2SI6SueXWFHSmivtsqC7dT50hkNEeHqA==",
+        "requested": "[3.2.10-pr-0729-0009, )",
+        "resolved": "3.2.10-pr-0729-0009",
+        "contentHash": "tJAUcRa7ht2ghHFQv+CcSuKZbWBgO1qW6m+HMIudvPs1Lii+NlgKJo35caMQPbF54DkGNBK0f71f3AxanNZZ4w==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
       },
       "BookingsApi.Common.DotNet6": {
         "type": "Transitive",
-        "resolved": "3.1.21",
-        "contentHash": "thUWbIWuPqoXyY0Hp/qZh/PU84F7Nwi/l78zygkD/kCBuXYduT7JDLnxrw7fBOn4NcHgD/h4xbJjivU1qMOOiQ==",
+        "resolved": "3.2.5-pr-0956-0003",
+        "contentHash": "8ANTtxy5rixtVKPCcBS4jPZk+hMyB1FDlx4HKhSI4lM4yAjN2Un9pdM6TI9G4FqCeov4dKOmZU8shqti9bML3g==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -597,7 +597,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[3.1.21, )",
+          "BookingsApi.Client": "[3.2.5-pr-0956-0003, )",
           "LaunchDarkly.ServerSdk": "[8.6.0, )",
           "Microsoft.ApplicationInsights": "[2.22.0, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",

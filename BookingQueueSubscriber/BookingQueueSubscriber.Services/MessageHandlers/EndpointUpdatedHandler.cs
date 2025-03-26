@@ -34,12 +34,12 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 _logger.LogError("Unable to find conference by hearing id {HearingId}", eventMessage.HearingId);
             else
             {
-                var defenceAdvocate = await HandleEndpointDefenceAdvocateUpdate(conference, eventMessage);
+                var linkedParticipants = await HandleEndpointParticipantsUpdate(conference, eventMessage);
                 await _videoApiService.UpdateEndpointInConference(conference.Id, eventMessage.Sip,
                     new UpdateEndpointRequest
                     {
                         DisplayName = eventMessage.DisplayName,
-                        DefenceAdvocate = defenceAdvocate?.Username,
+                        ParticipantsLinked = linkedParticipants.Select(e => e.Username).ToList(),
                         ConferenceRole = Enum.Parse<ConferenceRole>(eventMessage.Role.ToString())
                     });
 
@@ -54,95 +54,119 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
         }
 
-        private async Task<ParticipantResponse> HandleEndpointDefenceAdvocateUpdate(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
+        private async Task<List<ParticipantResponse>> HandleEndpointParticipantsUpdate(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
         {
-            var newDefenceAdvocate = await FindDefenceAdvocateInConference(conference, endpointEvent);
+            var linkedParticipants = await FindLinkedParticipantsInConference(conference, endpointEvent);
             var endpoints = await _videoApiService.GetEndpointsForConference(conference.Id);
             var endpointBeingUpdated = endpoints.SingleOrDefault(x => x.SipAddress == endpointEvent.Sip);
                 
             try
             {
-                //Has the defence advocate changed?
                 if (endpointBeingUpdated is not null)
                 {
-                    var currentDefenceAdvocate =  GetDefenceAdvocate(conference, endpointBeingUpdated.DefenceAdvocate);
-                    var newDefenceAdvocateContactEmail = endpointEvent.DefenceAdvocate;
-                    if (currentDefenceAdvocate?.ContactEmail != newDefenceAdvocateContactEmail)
-                        await NotifyDefenceAdvocates(conference, endpointEvent, newDefenceAdvocate, endpointBeingUpdated);
+                    var existingIds = endpointBeingUpdated.LinkedParticipants.Select(ep => ep.Id).ToHashSet();
+                    var newIds = linkedParticipants.Select(lp => lp.Id).ToHashSet();
+                    
+                    var newLinkedParticipants = linkedParticipants
+                        .Where(lp => !existingIds.Contains(lp.Id))
+                        .ToList();
+
+                    var linkedParticipantsToRemove = endpointBeingUpdated.LinkedParticipants
+                        .Where(ep => !newIds.Contains(ep.Id))
+                        .ToList();
+
+                    if (newLinkedParticipants.Count > 0 || linkedParticipantsToRemove.Count > 0)
+                        await NotifyLinkedParticipants(conference, endpointBeingUpdated,  linkedParticipants,newLinkedParticipants, linkedParticipantsToRemove);
                 }
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error notifying defence advocates");
             }
-            return newDefenceAdvocate;
+            return linkedParticipants;
         }
 
-        private async Task<ParticipantResponse> FindDefenceAdvocateInConference(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
+        private async Task NotifyLinkedParticipants(ConferenceDetailsResponse conference,
+            EndpointResponse endpoint,
+            List<ParticipantResponse> linkedParticipants,
+            List<ParticipantResponse> newLinkedParticipants,
+            List<ParticipantResponse> linkedParticipantsToRemove)
         {
-            ParticipantResponse newDefenceAdvocate = null;
+            var tasks = new List<Task>();
 
-            if (!string.IsNullOrEmpty(endpointEvent.DefenceAdvocate))
+            // Notify new linked participants
+            if (newLinkedParticipants.Count > 0)
+                tasks.AddRange(newLinkedParticipants.Select(participant => 
+                    _videoWebService.PushLinkedNewParticipantToEndpoint(conference.Id, participant.Username, endpoint.DisplayName)));
+            
+            // Notify unlinked participants
+            if (linkedParticipantsToRemove.Count > 0)
+                tasks.AddRange(linkedParticipantsToRemove.Select(participant =>
+                    _videoWebService.PushUnlinkedParticipantFromEndpoint(conference.Id, participant.Username, endpoint.DisplayName)));
+
+            if (endpoint.Status == EndpointState.InConsultation)
             {
-                for (var retry = 0; retry <= RetryLimit; retry++)
-                {
-                    newDefenceAdvocate = GetDefenceAdvocate(conference, endpointEvent.DefenceAdvocate);
-                    if (newDefenceAdvocate is not null)
-                        break;
-
-                    if (retry == RetryLimit)
-                        throw new ArgumentException(
-                            $"Unable to find defence advocate {endpointEvent.DefenceAdvocate} from EndpointUpdatedIntegrationEvent in conference {conference.Id}");
-
-                    Thread.Sleep(RetrySleep);
-                    //refresh conference details
-                    conference = await _videoApiService.GetConferenceByHearingRefId(conference.HearingId);
-                }
-            }
-
-            return newDefenceAdvocate;
-        }
-
-        private async Task NotifyDefenceAdvocates(ConferenceDetailsResponse conference, 
-            EndpointUpdatedIntegrationEvent endpointEvent, 
-            ParticipantResponse newDefenceAdvocate, 
-            EndpointResponse endpointBeingUpdated)
-        {
-            //Has a new rep been linked
-            if (newDefenceAdvocate is not null)
-                await _videoWebService.PushLinkedNewParticipantToEndpoint(conference.Id, newDefenceAdvocate.Username, endpointEvent.DisplayName);
-
-            //Was there a previously linked Rep
-            if (endpointBeingUpdated.DefenceAdvocate is not null)
-            {
-                var previousDefenceAdvocateName = endpointBeingUpdated.DefenceAdvocate;
-                var oldDefenceAdvocate = GetDefenceAdvocate(conference, previousDefenceAdvocateName) 
-                    ?? throw new ArgumentException($"Unable to find defence advocate in participant list {previousDefenceAdvocateName}");
+                //if old reps are in a private consultation with endpoint, and new/existing reps are not also present in the same room, force closure of the consultation
+                var linkedParticipantsStillInConsultation = linkedParticipants.Any(p => IsParticipantIsInPrivateConsultationWithEndpoint(p, endpoint)); 
+                var participantsToBootInConsultationWithEndpoint = linkedParticipantsToRemove
+                    .Where(p => IsParticipantIsInPrivateConsultationWithEndpoint(p, endpoint))
+                    .ToList();
                 
-                await _videoWebService.PushUnlinkedParticipantFromEndpoint(conference.Id, oldDefenceAdvocate.Username, endpointEvent.DisplayName);
-
-                //if old rep is in a private consultation with endpoint, and new rep is not also present in the same room, force closure of the consultation
-                if (endpointBeingUpdated.Status == EndpointState.InConsultation &&
-                    !IsParticipantIsInPrivateConsultationWithEndpoint(newDefenceAdvocate, endpointBeingUpdated) &&
-                    IsParticipantIsInPrivateConsultationWithEndpoint(oldDefenceAdvocate, endpointBeingUpdated))
+                if (!linkedParticipantsStillInConsultation && participantsToBootInConsultationWithEndpoint.Count > 0)
                 {
-                    await _videoApiService.CloseConsultation(conference.Id, oldDefenceAdvocate.Id);
-                    await _videoWebService.PushCloseConsultationBetweenEndpointAndParticipant(conference.Id, oldDefenceAdvocate.Username, endpointEvent.DisplayName);
+                    tasks.AddRange(participantsToBootInConsultationWithEndpoint.Select(async participant =>
+                    {
+                        await _videoApiService.CloseConsultation(conference.Id, participant.Id);
+                        await _videoWebService.PushCloseConsultationBetweenEndpointAndParticipant(conference.Id, participant.Username, endpoint.DisplayName);
+                    }));
                 }
+                    
             }
-        }
-
-        private static ParticipantResponse GetDefenceAdvocate(ConferenceDetailsResponse conference, string defenceAdvocate)
-        {
-            return conference.Participants.SingleOrDefault(x => x.Username == defenceAdvocate) ??
-                   conference.Participants.SingleOrDefault(x => x.ContactEmail == defenceAdvocate);
+            await Task.WhenAll(tasks);
         }
         
         private static bool IsParticipantIsInPrivateConsultationWithEndpoint(ParticipantResponse participant, EndpointResponse endpoint)
+            => participant is not null && 
+               participant.CurrentStatus == ParticipantState.InConsultation && 
+               participant.CurrentRoom?.Id == endpoint.CurrentRoom?.Id;
+
+        private async Task<List<ParticipantResponse>> FindLinkedParticipantsInConference(ConferenceDetailsResponse conference, EndpointUpdatedIntegrationEvent endpointEvent)
         {
-            return participant is not null &&
-                   participant.CurrentStatus == ParticipantState.InConsultation &&
-                   participant.CurrentRoom?.Id == endpoint.CurrentRoom?.Id;
+            var participants = new List<ParticipantResponse>();
+            if (endpointEvent?.ParticipantsLinked != null)
+                foreach (var linkedParticipant in endpointEvent.ParticipantsLinked)
+                {
+                    var participant = await QueryVideoApiForParticipantData(conference, linkedParticipant);
+                    participants.Add(participant);
+                }
+
+            return participants;
         }
+
+        private async Task<ParticipantResponse> QueryVideoApiForParticipantData(ConferenceDetailsResponse conference, string linkedParticipant)
+        {
+            ParticipantResponse newLinkedParticipant = null;
+            for (var retry = 0; retry <= RetryLimit; retry++)
+            {
+                newLinkedParticipant = GetLinkedParticipant(conference, linkedParticipant);
+                if (newLinkedParticipant is not null)
+                    break;
+
+                if (retry == RetryLimit)
+                    throw new ArgumentException(
+                        $"Unable to find participant linked {linkedParticipant} from EndpointUpdatedIntegrationEvent in conference {conference.Id}");
+
+                Thread.Sleep(RetrySleep);
+                //refresh conference details
+                conference = await _videoApiService.GetConferenceByHearingRefId(conference.HearingId);
+            }
+            return newLinkedParticipant;
+        }
+        
+        private static ParticipantResponse GetLinkedParticipant(ConferenceDetailsResponse conference, string linkedParticipant)
+            => conference.Participants.SingleOrDefault(x => x.Username == linkedParticipant) ??
+               conference.Participants.SingleOrDefault(x => x.ContactEmail == linkedParticipant);
+        
+        
     }
 }
