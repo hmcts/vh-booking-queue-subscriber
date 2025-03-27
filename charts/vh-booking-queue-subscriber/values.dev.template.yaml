@@ -4,7 +4,9 @@ java:
   releaseNameOverride: ${RELEASE_NAME}
   disableTraefikTls: false
   environment:
-    QUEUENAME: booking
+    QUEUENAME: booking-will
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-956.dev.platform.hmcts.net/
+    VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-729.dev.platform.hmcts.net/  
 function:
   releaseNameOverride: ${RELEASE_NAME}
   triggers:

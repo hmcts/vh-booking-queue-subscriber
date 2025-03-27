@@ -26,7 +26,7 @@ namespace BookingQueueSubscriber.Services.Mappers
                 Participants = participants,
                 HearingVenueName = hearingDto.HearingVenueName,
                 AudioRecordingRequired = hearingDto.RecordAudio,
-                Endpoints = PopulateAddEndpointRequests(endpointDtos, participantDtos).ToList(),
+                Endpoints = PopulateAddEndpointRequests(endpointDtos, participants).ToList(),
                 CaseTypeServiceId = hearingDto.CaseTypeServiceId,
                 Supplier = (Supplier)hearingDto.VideoSupplier,
                 ConferenceRoomType = (ConferenceRoomType)hearingDto.ConferenceRoomType,
@@ -36,14 +36,19 @@ namespace BookingQueueSubscriber.Services.Mappers
             return request;
         }
 
-        private static List<AddEndpointRequest> PopulateAddEndpointRequests(IEnumerable<EndpointDto> endpointDtos, IEnumerable<ParticipantDto> participantDtos)
+        private static List<AddEndpointRequest> PopulateAddEndpointRequests(IEnumerable<EndpointDto> endpointDtos, List<ParticipantRequest> participants)
         {
             var addEndpointRequests = new List<AddEndpointRequest>();
             foreach (var endpointDto in endpointDtos)
             {
+                var linkedParticipants = participants
+                    .Where(x => endpointDto.ParticipantsLinked?.Contains(x.ContactEmail) ?? false)
+                    .Select(e => e.Username)
+                    .ToList();
+                
                 addEndpointRequests.Add(new AddEndpointRequest
                 {
-                    DefenceAdvocate = participantDtos.SingleOrDefault(x => x.ContactEmail == endpointDto.DefenceAdvocateContactEmail)?.Username,
+                    ParticipantsLinked = linkedParticipants,
                     DisplayName = endpointDto.DisplayName,
                     Pin = endpointDto.Pin,
                     SipAddress = endpointDto.Sip,
