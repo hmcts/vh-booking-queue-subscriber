@@ -64,19 +64,20 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
             {
                 if (endpointBeingUpdated is not null)
                 {
-                    var existingIds = endpointBeingUpdated.LinkedParticipants.Select(ep => ep.Id).ToHashSet();
                     var newIds = linkedParticipants.Select(lp => lp.Id).ToHashSet();
-                    
+                    var existingIds = endpointBeingUpdated.LinkedParticipantIds.ToHashSet(); 
+
                     var newLinkedParticipants = linkedParticipants
-                        .Where(lp => !existingIds.Contains(lp.Id))
+                        .Where(lp => !existingIds.Contains(lp.Id)) 
                         .ToList();
 
-                    var linkedParticipantsToRemove = endpointBeingUpdated.LinkedParticipants
-                        .Where(ep => !newIds.Contains(ep.Id))
+                    var linkedParticipantsToRemove = conference.Participants
+                        .Where(ep => existingIds.Contains(ep.Id))
+                        .ExceptBy(newIds, ep => ep.Id)            
                         .ToList();
 
                     if (newLinkedParticipants.Count > 0 || linkedParticipantsToRemove.Count > 0)
-                        await NotifyLinkedParticipants(conference, endpointBeingUpdated,  linkedParticipants,newLinkedParticipants, linkedParticipantsToRemove);
+                        await NotifyLinkedParticipants(conference, endpointBeingUpdated, linkedParticipants,newLinkedParticipants, linkedParticipantsToRemove);
                 }
             }
             catch (Exception e)

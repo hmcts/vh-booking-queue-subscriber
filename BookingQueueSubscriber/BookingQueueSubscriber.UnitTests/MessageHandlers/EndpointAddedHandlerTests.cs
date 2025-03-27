@@ -2,7 +2,6 @@ using BookingQueueSubscriber.Services.IntegrationEvents;
 using BookingQueueSubscriber.Services.MessageHandlers;
 using BookingQueueSubscriber.Services.MessageHandlers.Core;
 using BookingQueueSubscriber.Services.MessageHandlers.Dtos;
-using VideoApi.Contract.Enums;
 using VideoApi.Contract.Requests;
 using VideoApi.Contract.Responses;
 using ConferenceRole = VideoApi.Contract.Enums.ConferenceRole;
@@ -25,7 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     Id = Guid.NewGuid(),
                     SipAddress = integrationEvent.Endpoint.Sip,
                     DisplayName = integrationEvent.Endpoint.DisplayName,
-                    LinkedParticipants = integrationEvent.Endpoint.ParticipantsLinked?.Select(x => new ParticipantResponse { Username = x }).ToList(),
+                    LinkedParticipantIds = new List<Guid>(),
                     Pin = integrationEvent.Endpoint.Pin,
                     CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false  }
                 }

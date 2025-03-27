@@ -24,7 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.VideoWebServiceTests
                     {
                         Id = Guid.NewGuid(),
                         Pin = "1234",
-                        LinkedParticipants = new List<ParticipantResponse>(),
+                        LinkedParticipantIds = new List<Guid>(),
                         DisplayName = "newly created endpoint",
                         SipAddress = "133545@something"
                     }

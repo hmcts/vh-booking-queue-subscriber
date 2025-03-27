@@ -2252,8 +2252,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "3.2.10-pr-0729-0009",
-        "contentHash": "tJAUcRa7ht2ghHFQv+CcSuKZbWBgO1qW6m+HMIudvPs1Lii+NlgKJo35caMQPbF54DkGNBK0f71f3AxanNZZ4w==",
+        "resolved": "3.2.11-pr-0729-0012",
+        "contentHash": "bLb3StSxpGP6P0zy8PB7Tfcu/4L/hSYfWXVrx69gQVLAA4Wgf5Y13N77Rx9XBvnLM9QwTQ3zBgJukTLtSlQZUQ==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -2286,7 +2286,7 @@
           "Rixian.Extensions.ApplicationInsights.WorkerService": "[2.1.19, )",
           "System.IdentityModel.Tokens.Jwt": "[6.36.0, )",
           "System.Threading.Tasks.Extensions": "[4.6.0, )",
-          "VideoApi.Client": "[3.2.10-pr-0729-0009, )"
+          "VideoApi.Client": "[3.2.11-pr-0729-0012, )"
         }
       },
       "bookingqueuesubscriber.common": {
@@ -2313,7 +2313,7 @@
           "System.IdentityModel.Tokens.Jwt": "[6.36.0, )",
           "TimeZoneConverter": "[7.0.0, )",
           "UserApi.Client": "[3.1.10, )",
-          "VideoApi.Client": "[3.2.10-pr-0729-0009, )"
+          "VideoApi.Client": "[3.2.11-pr-0729-0012, )"
         }
       }
     }
