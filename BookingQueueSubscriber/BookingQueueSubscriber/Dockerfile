@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 RUN mkdir -p /home/site/wwwroot
 COPY BookingQueueSubscriber .
 RUN dotnet restore --configfile nuget.config BookingQueueSubscriber && dotnet build BookingQueueSubscriber -c Release
@@ -6,8 +6,8 @@ RUN dotnet restore --configfile nuget.config BookingQueueSubscriber && dotnet bu
 FROM build AS publish
 RUN dotnet publish BookingQueueSubscriber -c Release -o /home/site/wwwroot
 
-FROM mcr.microsoft.com/azure-functions/dotnet:4
-ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
-    AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /home/site/wwwroot
+COPY --from=publish /home/site/wwwroot .
 
-COPY --from=publish ["/home/site/wwwroot", "/home/site/wwwroot"]
+ENTRYPOINT ["dotnet", "BookingQueueSubscriber.dll"]

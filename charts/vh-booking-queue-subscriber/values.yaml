@@ -5,7 +5,8 @@ java:
   readinessPath: /health/liveness
   livenessPath: /health/liveness
   startupPath: /health/liveness
-  applicationPort: 8080
+  applicationPort: 8090
+  replicas: 1
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
@@ -74,20 +75,3 @@ java:
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
-function:
-  releaseNameOverride: vh-booking-queue-subscriber
-  scaleType: Object
-  object:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: vh-booking-queue-subscriber
-    pollingInterval: 30
-    cooldownPeriod: 90
-    idleReplicaCount: 1
-    maxReplicaCount: 1
-    minReplicaCount: 1
-  triggerAuth:
-    create: true
-    enabled: true
-    triggerPodIdentityProvider: azure-workload
-  triggers: []

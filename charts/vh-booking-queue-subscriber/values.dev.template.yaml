@@ -5,12 +5,3 @@ java:
   disableTraefikTls: false
   environment:
     QUEUENAME: booking
-function:
-  releaseNameOverride: ${RELEASE_NAME}
-  triggers:
-  - type: azure-servicebus 
-    serviceBusName: "vh-infra-core-dev"
-    queueName: booking
-    messageCount: 1
-  object:
-    name: '${RELEASE_NAME}'
