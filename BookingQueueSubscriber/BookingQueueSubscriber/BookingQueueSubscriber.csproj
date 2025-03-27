@@ -30,7 +30,7 @@
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.36.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
-    <PackageReference Include="VideoApi.Client" Version="3.2.11-pr-0729-0012" />
+    <PackageReference Include="VideoApi.Client" Version="3.2.11-pr-0729-0013" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

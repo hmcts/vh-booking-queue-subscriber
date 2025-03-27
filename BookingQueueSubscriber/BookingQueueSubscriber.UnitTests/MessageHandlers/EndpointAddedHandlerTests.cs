@@ -24,7 +24,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     Id = Guid.NewGuid(),
                     SipAddress = integrationEvent.Endpoint.Sip,
                     DisplayName = integrationEvent.Endpoint.DisplayName,
-                    LinkedParticipantIds = new List<Guid>(),
+                    ParticipantsLinked = new List<string>(),
                     Pin = integrationEvent.Endpoint.Pin,
                     CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false  }
                 }

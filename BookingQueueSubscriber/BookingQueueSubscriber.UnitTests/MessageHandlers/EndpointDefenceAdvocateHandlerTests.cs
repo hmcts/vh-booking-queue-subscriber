@@ -35,9 +35,9 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             };
         }
         
-        private List<EndpointResponse> GetEndpointsForConference(Guid endpointRepresentative, EndpointState state = EndpointState.Connected) => GetEndpointsForConference(new List<Guid>{endpointRepresentative}, state);
+        private List<EndpointResponse> GetEndpointsForConference(string endpointRepresentative, EndpointState state = EndpointState.Connected) => GetEndpointsForConference(new List<string>{endpointRepresentative}, state);
         
-        private List<EndpointResponse> GetEndpointsForConference(List<Guid> endpointRepresentatives, EndpointState state = EndpointState.Connected)
+        private List<EndpointResponse> GetEndpointsForConference(List<string> endpointRepresentatives, EndpointState state = EndpointState.Connected)
         {
             return new List<EndpointResponse>
             {
@@ -46,7 +46,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                     Id = _hearingId,
                     SipAddress = SipAddress,
                     DisplayName = Endpoint,
-                    LinkedParticipantIds = endpointRepresentatives,
+                    ParticipantsLinked = endpointRepresentatives,
                     Status = state,
                     Pin = "Pin",
                     CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false }
@@ -85,7 +85,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 });
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1.Id));
+                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1.Username));
         }
         
         [Test]
@@ -168,7 +168,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             };
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(rep2.Id, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(rep2.Username, EndpointState.InConsultation));
             VideoApiServiceMock
                 .Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse
@@ -205,7 +205,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             //Arrange
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1.Id, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1.Username, EndpointState.InConsultation));
             
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
             var integrationEvent = GetIntegrationEventValid(_endpointRepresentative2);
@@ -226,7 +226,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             _endpointRepresentative1.CurrentRoom = new RoomResponse { Id = 1, Label = "Private Consultation Room", Locked = false };
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1.Id, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(_endpointRepresentative1.Username, EndpointState.InConsultation));
             
             var messageHandler = new EndpointUpdatedHandler(VideoApiServiceMock.Object, VideoWebServiceMock.Object, _logger.Object);
             var integrationEvent = GetIntegrationEventValid();
@@ -264,7 +264,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             _endpointRepresentative2.CurrentRoom = new RoomResponse { Id = 1, Label = "Private Consultation Room", Locked = false };
             VideoApiServiceMock
                 .Setup(e => e.GetEndpointsForConference(It.IsAny<Guid>()))
-                .ReturnsAsync(GetEndpointsForConference(new List<Guid> { _endpointRepresentative1.Id, _endpointRepresentative2.Id }, EndpointState.InConsultation));
+                .ReturnsAsync(GetEndpointsForConference(new List<string> { _endpointRepresentative1.Username, _endpointRepresentative2.Username }, EndpointState.InConsultation));
             VideoApiServiceMock
                 .Setup(x => x.GetConferenceByHearingRefId(It.IsAny<Guid>(), It.IsAny<bool>()))
                 .ReturnsAsync(new ConferenceDetailsResponse

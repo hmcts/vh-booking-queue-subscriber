@@ -74,9 +74,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[3.2.11-pr-0729-0012, )",
-        "resolved": "3.2.11-pr-0729-0012",
-        "contentHash": "bLb3StSxpGP6P0zy8PB7Tfcu/4L/hSYfWXVrx69gQVLAA4Wgf5Y13N77Rx9XBvnLM9QwTQ3zBgJukTLtSlQZUQ==",
+        "requested": "[3.2.11-pr-0729-0013, )",
+        "resolved": "3.2.11-pr-0729-0013",
+        "contentHash": "0XcBYstmU6HHNYFSl/ORpXrBD3vI7kPwj/vYgXROhoCDKPS54V5SlCAk93A1UOQIJn8L4Sd3YSDWBn/N1U0DCw==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }

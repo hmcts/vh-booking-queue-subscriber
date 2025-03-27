@@ -65,14 +65,14 @@ namespace BookingQueueSubscriber.Services.MessageHandlers
                 if (endpointBeingUpdated is not null)
                 {
                     var newIds = linkedParticipants.Select(lp => lp.Id).ToHashSet();
-                    var existingIds = endpointBeingUpdated.LinkedParticipantIds.ToHashSet(); 
+                    var existing = endpointBeingUpdated.ParticipantsLinked.ToHashSet(); 
 
                     var newLinkedParticipants = linkedParticipants
-                        .Where(lp => !existingIds.Contains(lp.Id)) 
+                        .Where(lp => !existing.Contains(lp.Username)) 
                         .ToList();
 
                     var linkedParticipantsToRemove = conference.Participants
-                        .Where(ep => existingIds.Contains(ep.Id))
+                        .Where(ep => existing.Contains(ep.Username))
                         .ExceptBy(newIds, ep => ep.Id)            
                         .ToList();
 
