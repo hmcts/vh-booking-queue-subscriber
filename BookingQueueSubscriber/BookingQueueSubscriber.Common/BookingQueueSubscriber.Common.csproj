@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BookingsApi.Client" Version="3.2.5-pr-0956-0003" />
+        <PackageReference Include="BookingsApi.Client" Version="3.2.5-pr-0956-0006" />
         <PackageReference Include="LaunchDarkly.ServerSdk" Version="8.6.0" />
         <PackageReference Include="Microsoft.ApplicationInsights" Version="2.22.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
