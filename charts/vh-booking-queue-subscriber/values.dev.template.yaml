@@ -3,3 +3,6 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   disableTraefikTls: false
+  environment:
+    QUEUENAME: booking-will
+    VHSERVICES__VIDEOWEBURL: https://vh-video-web-pr-2402.dev.platform.hmcts.net/
