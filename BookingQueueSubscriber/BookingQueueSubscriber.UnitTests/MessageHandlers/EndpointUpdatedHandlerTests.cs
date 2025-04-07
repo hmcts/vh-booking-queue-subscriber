@@ -21,12 +21,12 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
 
             _mockEndpointDetailsResponse = new List<EndpointResponse>
             {
-                new EndpointResponse
+                new()
                 {
                     Id = Guid.NewGuid(),
                     SipAddress = integrationEvent.Sip,
                     DisplayName = integrationEvent.DisplayName,
-                    DefenceAdvocate = integrationEvent.DefenceAdvocate,
+                    ParticipantsLinked = new List<string>(),
                     Pin = "Pin",
                     CurrentRoom = new RoomResponse { Id = 1, Label = "Room Label", Locked = false  },
                     ConferenceRole = ConferenceRole.Host
@@ -62,7 +62,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 It.Is<UpdateEndpointRequest>
                 (
                     request => request.DisplayName == integrationEvent.DisplayName &&
-                               request.DefenceAdvocate == integrationEvent.DefenceAdvocate
+                               request.ParticipantsLinked.SequenceEqual(integrationEvent.ParticipantsLinked) 
                 )), Times.Once);
 
             VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(), 
@@ -76,7 +76,7 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
                 HearingId = HearingId,
                 Sip = Guid.NewGuid().ToString(),
                 DisplayName = "two",
-                DefenceAdvocate = "test@hmcts.net"
+                ParticipantsLinked = new List<string>{"test@hmcts.net"} 
             };
         }
     }

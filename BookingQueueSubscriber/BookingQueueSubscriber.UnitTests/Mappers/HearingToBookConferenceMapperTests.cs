@@ -33,7 +33,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.Endpoints.Count.Should().Be(endpoints.Count);
 
             var firstEndpoint = request.Endpoints.First(x => x.DisplayName == "one");
-            firstEndpoint.DefenceAdvocate.Should().NotBeEmpty();
+            firstEndpoint.ParticipantsLinked.Should().NotBeEmpty();
             firstEndpoint.ConferenceRole.Should().Be(ConferenceRole.Host);
             
             var thirdEndpoint = request.Endpoints.First(x => x.DisplayName == "three");
@@ -79,7 +79,10 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             {
                 new EndpointDto
                 {
-                    DisplayName = "one", Sip = Guid.NewGuid().ToString(), Pin = "1234", DefenceAdvocateContactEmail = rep.ContactEmail,
+                    DisplayName = "one",
+                    Sip = Guid.NewGuid().ToString(), 
+                    Pin = "1234", 
+                    ParticipantsLinked = new List<string> {rep.ContactEmail},
                     Role = Services.MessageHandlers.Dtos.ConferenceRole.Host
                 },
                 new EndpointDto {DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678", Role = Services.MessageHandlers.Dtos.ConferenceRole.Host},
