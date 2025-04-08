@@ -10,7 +10,6 @@
     <ItemGroup>
         <PackageReference Include="BookingsApi.Client" Version="3.2.5" />
         <PackageReference Include="LaunchDarkly.ServerSdk" Version="8.6.0" />
-        <PackageReference Include="Microsoft.ApplicationInsights" Version="2.22.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.67.2" />

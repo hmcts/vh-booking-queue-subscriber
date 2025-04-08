@@ -1,4 +1,5 @@
 using Azure.Messaging.ServiceBus;
+using Azure.Monitor.OpenTelemetry.Exporter;
 using BookingQueueSubscriber.Health;
 using BookingQueueSubscriber.HostedServices;
 using BookingQueueSubscriber.Security;
@@ -12,6 +13,9 @@ using Microsoft.Extensions.Configuration.KeyPerFile;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using NotificationApi.Client;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using UserApi.Client;
 using VideoApi.Client;
 
@@ -31,17 +35,22 @@ public class Program
 
     private static IHostBuilder CreateHostBuilder()
     {
+        IConfiguration config = null;
         return Host.CreateDefaultBuilder()
             .ConfigureAppConfiguration(ConfigureAppConfiguration)
             .ConfigureServices((hostContext, services) =>
             {
-                var configuration = hostContext.Configuration;
-
-                RegisterServices(services, configuration);
+                config = hostContext.Configuration;
+                RegisterServices(services, config);
             })
             .ConfigureLogging(logging =>
             {
-                logging.AddConsole();
+                logging.AddOpenTelemetry(options =>
+                {
+                    options.IncludeFormattedMessage = true;
+                    options.IncludeScopes = true;
+                    options.AddAzureMonitorLogExporter(o => o.ConnectionString = config["ApplicationInsights:ConnectionString"]);
+                });
             });
     }
     
@@ -50,7 +59,6 @@ public class Program
         var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         services.AddSingleton<IMemoryCache>(memoryCache);
         services.AddHttpContextAccessor();
-        services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
         services.Configure<AzureAdConfiguration>(options =>
         {
             configuration.GetSection("AzureAd").Bind(options);
@@ -71,7 +79,6 @@ public class Program
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<NotificationServiceTokenHandler>();
         services.AddTransient<UserServiceTokenHandler>();
-        services.AddApplicationInsightsTelemetryWorkerService();
 
         RegisterMessageHandlers(services);
 
@@ -155,6 +162,25 @@ public class Program
 
         services.AddVhHealthChecks();
         services.AddSingleton<IHostedService, HealthCheckService>();
+        
+        //Telemetry configuration
+        var serviceName = "vh-booking-queue-subscriber";
+        var instrumentationKey = configuration["ApplicationInsights:ConnectionString"];
+        services.AddOpenTelemetry()
+            .WithTracing(builder =>
+            {
+                builder.SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(serviceName))
+                    .AddHttpClientInstrumentation()
+                    .AddAzureMonitorTraceExporter(o => o.ConnectionString = instrumentationKey);
+            })
+            .WithMetrics(builder =>
+            {
+                builder.SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(serviceName))
+                    .AddHttpClientInstrumentation()
+                    .AddAzureMonitorMetricExporter(o => o.ConnectionString = instrumentationKey);
+            });
     }
 
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)

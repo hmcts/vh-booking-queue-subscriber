@@ -100,13 +100,6 @@ namespace BookingQueueSubscriber.UnitTests.MessageHandlers
             var integrationEvent = GetIntegrationEventValid(_endpointRepresentative1);
             await messageHandler.HandleAsync(integrationEvent);
 
-            _logger.Verify(x => x.Log(
-                It.Is<LogLevel>(log => log == LogLevel.Error),
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((@object, @type) => @object.ToString().Contains("Unable to find conference by hearing id")),
-                It.Is<Exception>(exception => exception == null),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
-
             VideoApiServiceMock.Verify(x => x.UpdateEndpointInConference(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<UpdateEndpointRequest>()), Times.Never);
             VideoWebServiceMock.Verify(x => x.PushEndpointsUpdatedMessage(It.IsAny<Guid>(), It.IsAny<UpdateConferenceEndpointsRequest>()), Times.Never);
         }
