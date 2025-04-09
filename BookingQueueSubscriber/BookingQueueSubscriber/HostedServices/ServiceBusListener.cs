@@ -14,14 +14,14 @@ public class ServiceBusListener(
     {
         var bookingQueueItem = args.Message.Body.ToString();
         
-        logger.LogInformation("Processing message {BookingQueueItem}", bookingQueueItem);
+        logger.ProcessingMessage(bookingQueueItem);
         var eventMessage = MessageSerializer.Deserialise<EventMessage>(bookingQueueItem);
 
         var handler = messageHandlerFactory.Get(eventMessage.IntegrationEvent);
-        logger.LogDebug("using handler {Handler}", handler.GetType());
+        logger.UsingHandler(handler.GetType());
 
         await handler.HandleAsync(eventMessage.IntegrationEvent);
-        logger.LogInformation("Process message {MessageId} - {IntegrationEvent}", eventMessage.Id, eventMessage.IntegrationEvent);
+        logger.ProcessMessage(eventMessage.Id, eventMessage.IntegrationEvent);
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
@@ -29,7 +29,7 @@ public class ServiceBusListener(
         serviceBusProcessor.ProcessMessageAsync -= HandleMessage;
         serviceBusProcessor.ProcessErrorAsync -= HandleError;
         
-        logger.LogInformation("Stopping service bus processor");
+        logger.StoppingServiceBusProcessor();
         await serviceBusProcessor.StopProcessingAsync(cancellationToken);
         await serviceBusProcessor.DisposeAsync();
     }
@@ -39,7 +39,7 @@ public class ServiceBusListener(
         serviceBusProcessor.ProcessMessageAsync += HandleMessage;
         serviceBusProcessor.ProcessErrorAsync += HandleError;
         
-        logger.LogInformation("Starting service bus processor");
+        logger.StartingServiceBusProcessor();
         await serviceBusProcessor.StartProcessingAsync(stoppingToken);
     }
     
