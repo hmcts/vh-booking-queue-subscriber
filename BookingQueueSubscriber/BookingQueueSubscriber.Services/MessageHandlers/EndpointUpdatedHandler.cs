@@ -26,8 +26,8 @@ public class EndpointUpdatedHandler(
     {
         var conference = await videoApiService.GetConferenceByHearingRefId(eventMessage.HearingId);
 
-        if (conference == null) 
-            logger.ConferenceNotFoundByHearingId(eventMessage.HearingId);
+        if (conference == null)  
+            logger.LogError("Unable to find conference by hearing id {HearingId}", eventMessage.HearingId);
         else
         {
             var linkedParticipants = await HandleEndpointParticipantsUpdate(conference, eventMessage);

@@ -18,8 +18,4 @@ public static partial class ServiceBusListenerLogger
     
     [LoggerMessage(1005, LogLevel.Information, "Starting service bus processor")]
     public static partial void StartingServiceBusProcessor(this ILogger logger);
-
-    [LoggerMessage(1006, LogLevel.Error, "Error processing message")]
-    public static partial void ErrorProcessingMessage(this ILogger logger, Exception exception);
-
 }

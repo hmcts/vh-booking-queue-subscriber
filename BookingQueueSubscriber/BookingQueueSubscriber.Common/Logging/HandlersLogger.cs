@@ -5,12 +5,6 @@ namespace BookingQueueSubscriber.Common.Logging;
 public static partial class HandlersLogger
 {
     [LoggerMessage(
-        EventId = 3001,
-        Level = LogLevel.Error,
-        Message = "Unable to find conference by hearing id {HearingId}")]
-    public static partial void ConferenceNotFoundByHearingId(this ILogger logger, Guid hearingId);
-    
-    [LoggerMessage(
         EventId = 3002,
         Level = LogLevel.Error,
         Message = "Error notifying participant linked to endpoint")]

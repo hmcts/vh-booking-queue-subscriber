@@ -91,6 +91,15 @@ public class ServiceBusListenerTests
         await errorHandler!(processErrorEventArgs);
 
         // Assert
-        errorHandler.Should().NotBeNull();
+        _mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((o, t) => o.ToString().Contains("Error processing message")),
+                exception,
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()
+            ),
+            Times.Once
+        );
     }
 }

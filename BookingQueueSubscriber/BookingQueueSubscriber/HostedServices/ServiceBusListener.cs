@@ -45,7 +45,7 @@ public class ServiceBusListener(
     
     private Task HandleError(ProcessErrorEventArgs args)
     {
-        logger.ErrorProcessingMessage(args.Exception);
+        logger.LogError(args.Exception, "Error processing message");
         return Task.CompletedTask;
     }
 }
