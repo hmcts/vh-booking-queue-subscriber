@@ -5,3 +5,4 @@ java:
   disableTraefikTls: false
   environment:
     QUEUENAME: booking-will
+    VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-735.dev.platform.hmcts.net/
