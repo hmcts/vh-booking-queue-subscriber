@@ -67,7 +67,7 @@ public class VideoApiService(IVideoApiClient apiClient, ILogger<VideoApiService>
 
     public Task AddEndpointToConference(Guid conferenceId, AddEndpointRequest request)
     {
-        logger.AddingEndpoint( conferenceId);
+        logger.AddingEndpoint(conferenceId);
         return apiClient.AddEndpointToConferenceAsync(conferenceId, request);
     }
 
