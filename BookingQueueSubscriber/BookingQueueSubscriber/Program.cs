@@ -43,10 +43,13 @@ public class Program
                 config = hostContext.Configuration;
                 RegisterServices(services, config);
             })
-            .ConfigureLogging(logging =>
+            .ConfigureLogging(logging=>
             {
+                logging.ClearProviders();
+                logging.AddConsole();
                 logging.AddOpenTelemetry(options =>
                 {
+                    options.ParseStateValues = true;
                     options.IncludeFormattedMessage = true;
                     options.IncludeScopes = true;
                     options.AddAzureMonitorLogExporter(o => o.ConnectionString = config["ApplicationInsights:ConnectionString"]);
