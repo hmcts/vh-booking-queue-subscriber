@@ -176,6 +176,15 @@ public class Program
             .WithMetrics(builder => builder
                 .AddHttpClientInstrumentation()
                 .AddAzureMonitorMetricExporter(o => o.ConnectionString = instrumentationKey));
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddOpenTelemetry(options =>
+            {
+                options.IncludeFormattedMessage = true;
+                options.IncludeScopes = true;
+                options.AddAzureMonitorLogExporter(o => o.ConnectionString = instrumentationKey);
+            });
+        });
     }
 
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
