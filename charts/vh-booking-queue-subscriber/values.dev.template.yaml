@@ -3,4 +3,3 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   disableTraefikTls: false
-  environment:
