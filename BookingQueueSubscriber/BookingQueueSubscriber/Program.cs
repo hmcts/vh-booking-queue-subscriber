@@ -45,12 +45,10 @@ public class Program
             })
             .ConfigureLogging(logging=>
             {
-                logging.ClearProviders();
                 logging.AddConsole();
                 logging.AddOpenTelemetry(options =>
                 {
                     options.ParseStateValues = true;
-                    options.IncludeFormattedMessage = true;
                     options.IncludeScopes = true;
                     options.AddAzureMonitorLogExporter(o => o.ConnectionString = config["ApplicationInsights:ConnectionString"]);
                 });
