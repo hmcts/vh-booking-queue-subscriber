@@ -43,8 +43,9 @@ public class Program
                 config = hostContext.Configuration;
                 RegisterServices(services, config);
             })
-            .ConfigureLogging(logging =>
+            .ConfigureLogging(logging=>
             {
+                logging.AddConsole();
                 logging.AddOpenTelemetry(options =>
                 {
                     options.IncludeFormattedMessage = true;
@@ -164,23 +165,18 @@ public class Program
         services.AddSingleton<IHostedService, HealthCheckService>();
         
         //Telemetry configuration
-        var serviceName = "vh-booking-queue-subscriber";
         var instrumentationKey = configuration["ApplicationInsights:ConnectionString"];
         services.AddOpenTelemetry()
-            .WithTracing(builder =>
-            {
-                builder.SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(serviceName))
-                    .AddHttpClientInstrumentation()
-                    .AddAzureMonitorTraceExporter(o => o.ConnectionString = instrumentationKey);
-            })
-            .WithMetrics(builder =>
-            {
-                builder.SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(serviceName))
-                    .AddHttpClientInstrumentation()
-                    .AddAzureMonitorMetricExporter(o => o.ConnectionString = instrumentationKey);
-            });
+            .ConfigureResource(rb => rb.AddService("vh-booking-queue-subscriber")
+                .AddTelemetrySdk()
+                .AddAttributes(new Dictionary<string, object>
+                    { ["service.instance.id"] = Environment.MachineName }))
+            .WithTracing(builder => builder
+                .AddHttpClientInstrumentation(o => o.RecordException = true)
+                .AddAzureMonitorTraceExporter(o => o.ConnectionString = instrumentationKey))
+            .WithMetrics(builder => builder
+                .AddHttpClientInstrumentation()
+                .AddAzureMonitorMetricExporter(o => o.ConnectionString = instrumentationKey));
     }
 
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
