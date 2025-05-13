@@ -3,5 +3,6 @@ namespace BookingQueueSubscriber.Services.MessageHandlers.Dtos;
 public enum VideoSupplier
 {
     // Kinly = 1,
-    Vodafone = 2
+    Vodafone = 2,
+    Stub = 3
 }

@@ -7,14 +7,15 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
 {
     public class HearingToBookConferenceMapperTests
     {
-        [Test]
-        public void should_map_hearing_dto_to_book_new_conference_request()
+        [TestCase(VideoSupplier.Vodafone)]
+        [TestCase(VideoSupplier.Stub)]
+        public void should_map_hearing_dto_to_book_new_conference_request(VideoSupplier supplier)
         {
-            var hearingDto = CreateHearingDto();
+            var hearingDto = CreateHearingDto(supplier);
             var participants = Builder<ParticipantDto>.CreateListOfSize(4)
-                .TheFirst(1).With(x => x.UserRole = UserRole.Judge.ToString())
-                .TheNext(2).With(x => x.UserRole = UserRole.Individual.ToString())
-                .TheRest().With(x => x.UserRole = UserRole.Representative.ToString())
+                .TheFirst(1).With(x => x.UserRole = nameof(UserRole.Judge))
+                .TheNext(2).With(x => x.UserRole = nameof(UserRole.Individual))
+                .TheRest().With(x => x.UserRole = nameof(UserRole.Representative))
                 .Build();
             var endpoints = CreateEndpoints(participants);
 
@@ -31,6 +32,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.HearingRefId.Should().Be(hearingDto.HearingId);
             request.Participants.Count.Should().Be(participants.Count);
             request.Endpoints.Count.Should().Be(endpoints.Count);
+            request.Supplier.Should().Be((Supplier)hearingDto.VideoSupplier);
 
             var firstEndpoint = request.Endpoints.First(x => x.DisplayName == "one");
             firstEndpoint.ParticipantsLinked.Should().NotBeEmpty();
@@ -52,7 +54,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
             request.AudioPlaybackLanguage.Should().Be(AudioPlaybackLanguage.EnglishAndWelsh);
         }
 
-        private static HearingDto CreateHearingDto()
+        private static HearingDto CreateHearingDto(VideoSupplier supplier = VideoSupplier.Vodafone)
         {
             var dto = new HearingDto
             {
@@ -65,7 +67,7 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
                 HearingVenueName = "MyVenue",
                 RecordAudio = true,
                 CaseTypeServiceId ="ZZY1",
-                VideoSupplier = VideoSupplier.Vodafone,
+                VideoSupplier = supplier,
                 IsVenueWelsh = false
             };
             return dto;
@@ -73,20 +75,20 @@ namespace BookingQueueSubscriber.UnitTests.Mappers
 
         private static List<EndpointDto> CreateEndpoints(IEnumerable<ParticipantDto> participantDtos)
         {
-            var rep = participantDtos.First(x => x.UserRole == UserRole.Representative.ToString());
+            var rep = participantDtos.First(x => x.UserRole == nameof(UserRole.Representative));
 
             return new List<EndpointDto>
             {
-                new EndpointDto
+                new()
                 {
                     DisplayName = "one",
                     Sip = Guid.NewGuid().ToString(), 
                     Pin = "1234", 
-                    ParticipantsLinked = new List<string> {rep.ContactEmail},
+                    ParticipantsLinked = [rep.ContactEmail],
                     Role = Services.MessageHandlers.Dtos.ConferenceRole.Host
                 },
-                new EndpointDto {DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678", Role = Services.MessageHandlers.Dtos.ConferenceRole.Host},
-                new EndpointDto {DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012", Role = Services.MessageHandlers.Dtos.ConferenceRole.Guest}
+                new() {DisplayName = "two", Sip = Guid.NewGuid().ToString(), Pin = "5678", Role = Services.MessageHandlers.Dtos.ConferenceRole.Host},
+                new() {DisplayName = "three", Sip = Guid.NewGuid().ToString(), Pin = "9012", Role = Services.MessageHandlers.Dtos.ConferenceRole.Guest}
             };
         }
     }
