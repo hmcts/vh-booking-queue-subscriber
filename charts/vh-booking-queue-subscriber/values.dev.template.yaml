@@ -5,3 +5,4 @@ java:
   disableTraefikTls: false
   environment:
     QUEUENAME: oliver-booking
+    VHSERVICES__VIDEOAPIURL: https://vh-video-web-pr-740.dev.platform.hmcts.net/
