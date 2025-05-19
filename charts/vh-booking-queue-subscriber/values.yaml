@@ -68,10 +68,10 @@ java:
     Logging__LogLevel__Default: warning
     Logging__LogLevel__Microsoft: warning
     Logging__LogLevel__System: warning
-    QUEUENAME: booking
+    QUEUENAME: booking-will
     VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__ENABLEVIDEOAPISTUB: false
     VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
     VHSERVICES__VIDEOWEBURL: https://vh-video-web.{{ .Values.global.environment }}.platform.hmcts.net/
-    VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    VHSERVICES__USERAPIURL: hhttps://vh-user-api-pr-279.dev.platform.hmcts.net/
