@@ -3,7 +3,3 @@ java:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
   disableTraefikTls: false
-  environment:
-    QUEUENAME: oliver-booking
-    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-964.dev.platform.hmcts.net/
-    VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-740.dev.platform.hmcts.net/
