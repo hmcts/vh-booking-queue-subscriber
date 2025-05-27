@@ -4,11 +4,11 @@
     "net8.0": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[3.2.11, )",
-        "resolved": "3.2.11",
-        "contentHash": "8h3/g8nnA+v9juestWI40jTmbTOoBOLUqXa5ReXdr10GS9nC+MYyxIoWoqxmhWyyR6Td/BYRgurQK5lueDmGrA==",
+        "requested": "[3.2.12, )",
+        "resolved": "3.2.12",
+        "contentHash": "/1hf/kgG1Qx31v0acHUFbgFiY14IreDbpTBDalBTycot/6+oquapEkwcI+NAxs/WyMAuIiim5UmS+Kfhj5yYdw==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.2.11",
+          "BookingsApi.Common": "3.2.12",
           "System.Text.Json": "8.0.5"
         }
       },
@@ -24,15 +24,6 @@
           "LaunchDarkly.InternalSdk": "3.4.0",
           "LaunchDarkly.Logging": "2.0.0",
           "System.Collections.Immutable": "1.7.1"
-        }
-      },
-      "Microsoft.Extensions.Logging.Abstractions": {
-        "type": "Direct",
-        "requested": "[8.0.1, )",
-        "resolved": "8.0.1",
-        "contentHash": "RIFgaqoaINxkM2KTOw72dmilDmTrYA0ns2KW4lDz4gZ2+o6IQ894CzmdL3StM2oh7QQq44nCWiqKqc4qUI9Jmg==",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1"
         }
       },
       "NotificationApi.Client": {
@@ -84,12 +75,17 @@
           "System.Text.Json": "8.0.5"
         }
       },
-      "BookingsApi.Common.DotNet6": {
+      "BookingsApi.Common": {
         "type": "Transitive",
-        "resolved": "3.2.11",
-        "contentHash": "3spVPaFgQ0oAN/VNxiHHD9xUU0DJyGg9tgQyCkmlJx+l9Z/NtSWbHcWSUrKu9ZLPH0ooW+0lQXfJWJ5upRMxjg==",
+        "resolved": "3.2.12",
+        "contentHash": "DvCfT3IyyXw0YBvIUPofBf86cP5RNJ3d7FRL9Qrk/uebNNsiBdkTKAdqnZBbRtYTBUj7OScyefPSX/s0AV64zA==",
         "dependencies": {
-          "System.Text.Json": "8.0.5"
+          "LaunchDarkly.ServerSdk": "8.4.0",
+          "Microsoft.Extensions.Caching.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Configuration.UserSecrets": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.1",
+          "Microsoft.Identity.Client": "4.60.4",
+          "Newtonsoft.Json": "13.0.3"
         }
       },
       "LaunchDarkly.Cache": {
@@ -130,6 +126,14 @@
         "contentHash": "lsLKNqAZ7HIlkdTIrf4FetfRA1SUDE3WlaZQn79aSVkLjYWEhUhkDDK7hORGh4JoA3V2gXN+cIvJQax2uR/ijA==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "6.0.0"
+        }
+      },
+      "Microsoft.Extensions.Caching.Abstractions": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "3KuSxeHoNYdxVYfg2IRZCThcrlJ1XJqIXkAWikCsbm5C/bCjv7G0WoKDyuR98Q+T607QT2Zl5GsbGRkENcV2yQ==",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "8.0.0"
         }
       },
       "Microsoft.Extensions.Configuration": {
@@ -182,10 +186,29 @@
           "System.Text.Json": "8.0.0"
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions": {
+      "Microsoft.Extensions.Configuration.UserSecrets": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "ihDHu2dJYQird9pl2CbdwuNDfvCZdOS0S7SPlNfhPt0B81UTT+yyZKz2pimFZGUp3AfuBRnqUCxB2SjsZKHVUw==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Configuration.Json": "8.0.0",
+          "Microsoft.Extensions.FileProviders.Abstractions": "8.0.0",
+          "Microsoft.Extensions.FileProviders.Physical": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection": {
         "type": "Transitive",
         "resolved": "8.0.1",
-        "contentHash": "fGLiCRLMYd00JYpClraLjJTNKLmMJPnqxMaiRzEBIIvevlzxz33mXy39Lkd48hu1G+N21S7QpaO5ZzKsI6FRuA=="
+        "contentHash": "BmANAnR5Xd4Oqw7yQ75xOAYODybZQRzdeNucg7kS5wWKd2PNnMdYtJ2Vciy0QLylRmv42DGl5+AFL9izA6F1Rw==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2"
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions": {
+        "type": "Transitive",
+        "resolved": "8.0.2",
+        "contentHash": "3iE7UF7MQkCv1cxzCahz+Y/guQbTqieyxyaWKhrRO91itI9cOKO76OHeQDahqG4MmW5umr3CcCvGmK92lWNlbg=="
       },
       "Microsoft.Extensions.FileProviders.Abstractions": {
         "type": "Transitive",
@@ -209,6 +232,33 @@
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "OK+670i7esqlQrPjdIKRbsyMCe9g5kSLpRRQGSr4Q58AOYEe/hCnfLZprh7viNisSUUQZmMrbbuDaIrP+V1ebQ=="
+      },
+      "Microsoft.Extensions.Logging": {
+        "type": "Transitive",
+        "resolved": "8.0.1",
+        "contentHash": "4x+pzsQEbqxhNf1QYRr5TDkLP9UsLT3A6MdRKDDEgrW7h1ljiEPgTNhKYUhNCCAaVpQECVQ+onA91PTPnIp6Lw==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "8.0.1",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2",
+          "Microsoft.Extensions.Options": "8.0.2"
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions": {
+        "type": "Transitive",
+        "resolved": "8.0.2",
+        "contentHash": "nroMDjS7hNBPtkZqVBbSiQaQjWRDxITI8Y7XnDs97rqG3EbzVTNLZQf7bIeUJcaHOV8bca47s1Uxq94+2oGdxA==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2"
+        }
+      },
+      "Microsoft.Extensions.Options": {
+        "type": "Transitive",
+        "resolved": "8.0.2",
+        "contentHash": "dWGKvhFybsaZpGmzkGCbNNwBD1rVlWzrZKANLW/CcbFJpCEceMCGzT7zZwHOGBCbwM0SzBuceMj5HN1LKV1QqA==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Primitives": "8.0.0"
+        }
       },
       "Microsoft.Extensions.Primitives": {
         "type": "Transitive",
@@ -284,7 +334,7 @@
       "bookingqueuesubscriber.common": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "[3.2.11, )",
+          "BookingsApi.Client": "[3.2.12, )",
           "LaunchDarkly.ServerSdk": "[8.6.0, )",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "[8.0.0, )",
           "Microsoft.Extensions.Configuration.Json": "[8.0.0, )",
